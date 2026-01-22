@@ -28,12 +28,12 @@ internal sealed class Context : IDisposable
     /// <summary>
     ///     Gets a value indicating whether the version flag was specified.
     /// </summary>
-    public bool Version { get; private init; }
+    public bool Version { get; private set; }
 
     /// <summary>
     ///     Gets a value indicating whether the help flag was specified.
     /// </summary>
-    public bool Help { get; private init; }
+    public bool Help { get; private set; }
 
     /// <summary>
     ///     Gets a value indicating whether errors have been reported.
@@ -47,7 +47,9 @@ internal sealed class Context : IDisposable
     /// <returns>A new context instance.</returns>
     public static Context Create(string[] args)
     {
-        var context = new Context();
+        var version = false;
+        var help = false;
+        var hasErrors = false;
 
         foreach (var arg in args)
         {
@@ -55,30 +57,37 @@ internal sealed class Context : IDisposable
             {
                 case "--version":
                 case "-v":
-                    context = context with { Version = true };
+                    version = true;
                     break;
 
                 case "--help":
                 case "-h":
                 case "-?":
-                    context = context with { Help = true };
+                    help = true;
                     break;
 
                 default:
                     Console.Error.WriteLine($"Unknown argument: {arg}");
-                    context.HasErrors = true;
+                    hasErrors = true;
                     break;
             }
         }
 
-        return context;
+        return new Context
+        {
+            Version = version,
+            Help = help,
+            HasErrors = hasErrors
+        };
     }
 
     /// <summary>
     ///     Writes a line to the console output.
     /// </summary>
     /// <param name="message">The message to write.</param>
+#pragma warning disable S2325 // Methods should not be static when they may use instance state in the future
     public void WriteLine(string message)
+#pragma warning restore S2325
     {
         Console.WriteLine(message);
     }

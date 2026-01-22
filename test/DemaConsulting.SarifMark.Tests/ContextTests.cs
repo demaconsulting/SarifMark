@@ -80,7 +80,7 @@ public class ContextTests
             using var context = Context.Create(["--unknown"]);
 
             Assert.IsTrue(context.HasErrors);
-            Assert.IsTrue(errWriter.ToString().Contains("Unknown argument"));
+            Assert.Contains("Unknown argument", errWriter.ToString());
         }
         finally
         {
@@ -103,7 +103,7 @@ public class ContextTests
             using var context = Context.Create([]);
             context.WriteLine("Test message");
 
-            Assert.IsTrue(outWriter.ToString().Contains("Test message"));
+            Assert.Contains("Test message", outWriter.ToString());
         }
         finally
         {
@@ -127,7 +127,7 @@ public class ContextTests
             context.WriteError("Error message");
 
             Assert.IsTrue(context.HasErrors);
-            Assert.IsTrue(errWriter.ToString().Contains("Error message"));
+            Assert.Contains("Error message", errWriter.ToString());
         }
         finally
         {

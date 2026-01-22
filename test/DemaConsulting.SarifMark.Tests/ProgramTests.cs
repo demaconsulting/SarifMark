@@ -43,7 +43,7 @@ public class ProgramTests
             var result = InvokeMain([]);
 
             Assert.AreEqual(0, result);
-            Assert.IsTrue(outWriter.ToString().Contains("SarifMark tool"));
+            Assert.Contains("SarifMark tool", outWriter.ToString());
         }
         finally
         {
@@ -66,7 +66,7 @@ public class ProgramTests
             var result = InvokeMain(["--version"]);
 
             Assert.AreEqual(0, result);
-            Assert.IsTrue(outWriter.ToString().Contains("SarifMark version"));
+            Assert.Contains("SarifMark version", outWriter.ToString());
         }
         finally
         {
@@ -89,7 +89,7 @@ public class ProgramTests
             var result = InvokeMain(["--help"]);
 
             Assert.AreEqual(0, result);
-            Assert.IsTrue(outWriter.ToString().Contains("Usage:"));
+            Assert.Contains("Usage:", outWriter.ToString());
         }
         finally
         {
@@ -115,7 +115,7 @@ public class ProgramTests
             var result = InvokeMain(["--unknown"]);
 
             Assert.AreEqual(1, result);
-            Assert.IsTrue(errWriter.ToString().Contains("Unknown argument"));
+            Assert.Contains("Unknown argument", errWriter.ToString());
         }
         finally
         {
