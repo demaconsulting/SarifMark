@@ -1,5 +1,5 @@
 ---
-# yamllint configuration for SonarMark
+# yamllint configuration for SarifMark
 # This configuration defines the rules for YAML file linting
 
 extends: default
