@@ -213,8 +213,8 @@ public record SarifResults
     ///     Appends the header section with custom or default heading and tool information.
     /// </summary>
     /// <param name="sb">The StringBuilder to append to.</param>
-    /// <param name="heading">The markdown heading prefix (e.g., "#", "##").</param>
-    /// <param name="customHeading">Optional custom heading text.</param>
+    /// <param name="heading">The markdown heading prefix (e.g., "#", "##", "###").</param>
+    /// <param name="customHeading">Optional custom heading text. If null, defaults to "[ToolName] Analysis".</param>
     private void AppendHeader(StringBuilder sb, string heading, string? customHeading)
     {
         // Use custom heading or default to "[ToolName] Analysis"
