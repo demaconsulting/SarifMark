@@ -106,31 +106,17 @@ sarifmark --help
 
 SarifMark supports the following command-line options:
 
-### Information Options
-
 - `-v, --version`: Display version information
 - `-?, -h, --help`: Display help message
-
-### Input Options
-
+- `--silent`: Suppress console output
+- `--validate`: Run self-validation tests
+- `--results <file>`: Write validation results to file (.trx or .xml format)
+- `--enforce`: Return non-zero exit code if issues are found in the SARIF file
+- `--log <file>`: Write console output to log file
 - `--sarif <file>`: SARIF file to process (required for analysis)
-
-### Output Options
-
 - `--report <file>`: Export analysis results to markdown file
 - `--report-depth <depth>`: Markdown header depth for report (default: 1)
 - `--heading <text>`: Custom heading for report (default: [ToolName] Analysis)
-- `--log <file>`: Write console output to log file
-- `--silent`: Suppress console output
-
-### Validation Options
-
-- `--validate`: Run self-validation tests
-- `--results <file>`: Write validation results to file (.trx or .xml format)
-
-### Enforcement Options
-
-- `--enforce`: Return non-zero exit code if issues are found in the SARIF file
 
 ## Common Usage Patterns
 

@@ -7,7 +7,7 @@ on:
         type: string
     secrets:
       SONAR_TOKEN:
-        required: false
+        required: true
 
 jobs:
   quality-checks:
@@ -108,30 +108,6 @@ jobs:
           end
           /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
-      - name: Generate SBOM
-        run: >
-          dotnet sbom-tool generate
-          -b src/DemaConsulting.SarifMark/bin/Release
-          -bc src/DemaConsulting.SarifMark
-          -pn DemaConsulting.SarifMark
-          -pv ${{ inputs.version }}
-          -ps DemaConsulting
-          -nsb https://DemaConsulting.com/SarifMark
-          -pm true
-          -li true
-
-      - name: Generate Tests SBOM
-        run: >
-          dotnet sbom-tool generate
-          -b test/DemaConsulting.SarifMark.Tests/bin/Release
-          -bc test/DemaConsulting.SarifMark.Tests
-          -pn DemaConsulting.SarifMark.Tests
-          -pv ${{ inputs.version }}
-          -ps DemaConsulting
-          -nsb https://DemaConsulting.com/SarifMark.Tests
-          -pm true
-          -li true
-
       - name: Create Dotnet Tool
         run: >
           dotnet pack
@@ -152,8 +128,6 @@ jobs:
           path: |
             src/DemaConsulting.SarifMark/bin/Release/*.nupkg
             src/DemaConsulting.SarifMark/bin/Release/*.snupkg
-            src/DemaConsulting.SarifMark/bin/Release/**/manifest.spdx.json
-            src/DemaConsulting.SarifMark/bin/Release/**/manifest.spdx.json.sha256
 
   codeql:
     name: CodeQL Analysis
@@ -339,22 +313,14 @@ jobs:
         shell: pwsh
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          if ($env:SONAR_TOKEN) {
-            echo "Generating SonarCloud quality report..."
-            dotnet sonarmark `
-              --server https://sonarcloud.io `
-              --project-key demaconsulting_SarifMark `
-              --branch ${{ github.ref_name }} `
-              --token "$env:SONAR_TOKEN" `
-              --report docs/quality/sonar-quality.md `
-              --report-depth 1
-          } else {
-            echo "Skipping SonarCloud report - no token available"
-            echo "# SonarCloud Analysis" > docs/quality/sonar-quality.md
-            echo "" >> docs/quality/sonar-quality.md
-            echo "SonarCloud analysis not available for this build." >> docs/quality/sonar-quality.md
-          }
+        run: >
+          dotnet sonarmark
+          --server https://sonarcloud.io
+          --project-key demaconsulting_SarifMark
+          --branch ${{ github.ref_name }}
+          --token "$env:SONAR_TOKEN"
+          --report docs/quality/sonar-quality.md
+          --report-depth 1
 
       - name: Generate Guide HTML with Pandoc
         run: >
