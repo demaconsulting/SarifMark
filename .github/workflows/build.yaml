@@ -306,7 +306,7 @@ jobs:
           sarifmark `
             --sarif codeql-results/csharp.sarif `
             --report docs/quality/codeql-quality.md `
-            --heading "CodeQL Analysis" `
+            --heading "SarifMark CodeQL Analysis" `
             --report-depth 1
 
       - name: Generate SonarCloud Quality Report with SonarMark
