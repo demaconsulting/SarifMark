@@ -243,7 +243,7 @@ public record SarifResults
             foreach (var result in Results)
             {
                 var locationInfo = FormatLocation(result.Uri, result.StartLine);
-                sb.AppendLine($"{locationInfo}: {result.Level} [{result.RuleId}] {result.Message}");
+                sb.AppendLine($"{locationInfo}: {result.Level} [{result.RuleId}] {result.Message}  ");
             }
 
             sb.AppendLine();
