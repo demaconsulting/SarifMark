@@ -18,6 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Reflection;
+
 namespace DemaConsulting.SarifMark;
 
 /// <summary>
@@ -26,9 +28,18 @@ namespace DemaConsulting.SarifMark;
 internal static class Program
 {
     /// <summary>
-    ///     Gets the version string for the SarifMark tool.
+    ///     Gets the application version string.
     /// </summary>
-    private static string Version => typeof(Program).Assembly.GetName().Version?.ToString() ?? "0.0.0";
+    public static string Version
+    {
+        get
+        {
+            var assembly = typeof(Program).Assembly;
+            return assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+                   ?? assembly.GetName().Version?.ToString()
+                   ?? "0.0.0";
+        }
+    }
 
     /// <summary>
     ///     Main entry point for the SarifMark tool.
@@ -39,42 +50,156 @@ internal static class Program
     {
         try
         {
+            // Create context from arguments
             using var context = Context.Create(args);
 
-            if (context.Version)
-            {
-                Console.WriteLine($"SarifMark version {Version}");
-                return 0;
-            }
+            // Run the program logic
+            Run(context);
 
-            if (context.Help || context.HasErrors)
-            {
-                PrintHelp();
-                return context.HasErrors ? 1 : 0;
-            }
-
-            context.WriteLine("SarifMark tool - SARIF report generation");
-            return 0;
+            // Return the exit code from the context
+            return context.ExitCode;
+        }
+        catch (ArgumentException ex)
+        {
+            // Print expected argument exceptions and return error code
+            Console.WriteLine($"Error: {ex.Message}");
+            return 1;
+        }
+        catch (InvalidOperationException ex)
+        {
+            // Print expected operation exceptions and return error code
+            Console.WriteLine($"Error: {ex.Message}");
+            return 1;
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Error: {ex.Message}");
-            return 1;
+            // Print unexpected exceptions and re-throw to generate event logs
+            Console.WriteLine($"Unexpected error: {ex.Message}");
+            throw;
         }
     }
 
     /// <summary>
-    ///     Prints the help message.
+    ///     Runs the program logic based on the provided context.
     /// </summary>
-    private static void PrintHelp()
+    /// <param name="context">The context containing command line arguments and program state.</param>
+    public static void Run(Context context)
     {
-        Console.WriteLine("SarifMark - Tool to create SARIF reports from various static analysis tools");
-        Console.WriteLine();
-        Console.WriteLine("Usage: sarifmark [options]");
-        Console.WriteLine();
-        Console.WriteLine("Options:");
-        Console.WriteLine("  --version       Display version information");
-        Console.WriteLine("  --help          Display this help message");
-        Console.WriteLine();
+        // Priority 1: Version query
+        if (context.Version)
+        {
+            Console.WriteLine(Version);
+            return;
+        }
+
+        // Print application banner
+        PrintBanner(context);
+
+        // Priority 2: Help
+        if (context.Help)
+        {
+            PrintHelp(context);
+            return;
+        }
+
+        // Priority 3: Self-Validation
+        if (context.Validate)
+        {
+            Validation.Run(context);
+            return;
+        }
+
+        // Priority 4: SARIF analysis processing
+        ProcessSarifAnalysis(context);
+    }
+
+    /// <summary>
+    ///     Prints the application banner.
+    /// </summary>
+    /// <param name="context">The context for output.</param>
+    private static void PrintBanner(Context context)
+    {
+        context.WriteLine($"SarifMark version {Version}");
+        context.WriteLine("Copyright (c) DEMA Consulting");
+        context.WriteLine("");
+    }
+
+    /// <summary>
+    ///     Prints usage information.
+    /// </summary>
+    /// <param name="context">The context for output.</param>
+    private static void PrintHelp(Context context)
+    {
+        context.WriteLine("Usage: sarifmark [options]");
+        context.WriteLine("");
+        context.WriteLine("Options:");
+        context.WriteLine("  -v, --version              Display version information");
+        context.WriteLine("  -?, -h, --help             Display this help message");
+        context.WriteLine("  --silent                   Suppress console output");
+        context.WriteLine("  --validate                 Run self-validation");
+        context.WriteLine("  --results <file>           Write validation results to file (.trx or .xml)");
+        context.WriteLine("  --enforce                  Return non-zero exit code if issues found");
+        context.WriteLine("  --log <file>               Write output to log file");
+        context.WriteLine("  --sarif <file>             SARIF file to process");
+        context.WriteLine("  --report <file>            Export analysis results to markdown file");
+        context.WriteLine("  --report-depth <depth>     Markdown header depth for report (default: 1)");
+    }
+
+    /// <summary>
+    ///     Processes SARIF analysis results and generates reports as requested.
+    /// </summary>
+    /// <param name="context">The context containing command line arguments and program state.</param>
+    private static void ProcessSarifAnalysis(Context context)
+    {
+        // Validate required parameters
+        if (string.IsNullOrWhiteSpace(context.SarifFile))
+        {
+            context.WriteError("Error: --sarif parameter is required");
+            return;
+        }
+
+        context.WriteLine($"SARIF File: {context.SarifFile}");
+
+        // Read SARIF results
+        context.WriteLine("Reading SARIF file...");
+        SarifResults sarifResults;
+        try
+        {
+            sarifResults = SarifResults.Read(context.SarifFile);
+            context.WriteLine($"Tool: {sarifResults.ToolName} {sarifResults.ToolVersion}");
+            context.WriteLine($"Results: {sarifResults.ResultCount}");
+        }
+        catch (FileNotFoundException ex)
+        {
+            context.WriteError($"Error: {ex.Message}");
+            return;
+        }
+        catch (InvalidOperationException ex)
+        {
+            context.WriteError($"Error: Failed to read SARIF file: {ex.Message}");
+            return;
+        }
+
+        // Check enforcement if requested
+        if (context.Enforce && sarifResults.ResultCount > 0)
+        {
+            context.WriteError("Error: Issues found in SARIF file");
+        }
+
+        // Export report if requested
+        if (context.ReportFile != null)
+        {
+            context.WriteLine($"Writing report to {context.ReportFile}...");
+            try
+            {
+                var markdown = sarifResults.ToMarkdown(context.ReportDepth);
+                File.WriteAllText(context.ReportFile, markdown);
+                context.WriteLine("Report generated successfully.");
+            }
+            catch (Exception ex)
+            {
+                context.WriteError($"Error: Failed to write report: {ex.Message}");
+            }
+        }
     }
 }
