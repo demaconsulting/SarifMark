@@ -136,7 +136,7 @@ internal static class Validation
                     return "Report file not created";
                 }
 
-                if (reportContent.Contains("MockTool 1.0.0 Analysis") &&
+                if (reportContent.Contains("MockTool Analysis") &&
                     reportContent.Contains("Found 2 results"))
                 {
                     return null;
