@@ -30,6 +30,23 @@ public class IntegrationTests
     private string _testDataPath = string.Empty;
 
     /// <summary>
+    ///     Safely combines two paths, ensuring the second path doesn't contain path traversal sequences.
+    /// </summary>
+    /// <param name="basePath">The base path.</param>
+    /// <param name="relativePath">The relative path to combine.</param>
+    /// <returns>The combined path.</returns>
+    private static string SafePathCombine(string basePath, string relativePath)
+    {
+        // Ensure the relative path doesn't contain path traversal sequences
+        if (relativePath.Contains("..") || Path.IsPathRooted(relativePath))
+        {
+            throw new ArgumentException($"Invalid path component: {relativePath}", nameof(relativePath));
+        }
+
+        return Path.Combine(basePath, relativePath);
+    }
+
+    /// <summary>
     ///     Initialize test by locating the SarifMark DLL and test data.
     /// </summary>
     [TestInitialize]
@@ -38,8 +55,8 @@ public class IntegrationTests
         // The DLL should be in the same directory as the test assembly
         // because the test project references the main project
         var baseDir = AppContext.BaseDirectory;
-        _dllPath = Path.Combine(baseDir, "DemaConsulting.SarifMark.dll");
-        _testDataPath = Path.Combine(baseDir, "TestData");
+        _dllPath = SafePathCombine(baseDir, "DemaConsulting.SarifMark.dll");
+        _testDataPath = SafePathCombine(baseDir, "TestData");
 
         Assert.IsTrue(File.Exists(_dllPath), $"Could not find SarifMark DLL at {_dllPath}");
     }
@@ -138,7 +155,7 @@ public class IntegrationTests
     public void IntegrationTest_ValidSarifFile_ProcessesSuccessfully()
     {
         // Locate the test SARIF file
-        var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
+        var sarifFile = SafePathCombine(_testDataPath, "sample.sarif");
         Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         // Run the application with the SARIF file
@@ -186,11 +203,11 @@ public class IntegrationTests
     public void IntegrationTest_GenerateReport_CreatesReportFile()
     {
         // Locate the test SARIF file
-        var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
+        var sarifFile = SafePathCombine(_testDataPath, "sample.sarif");
         Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         // Create a temporary report file path
-        var reportFile = Path.Combine(Path.GetTempPath(), $"test-report-{Guid.NewGuid()}.md");
+        var reportFile = SafePathCombine(Path.GetTempPath(), $"test-report-{Guid.NewGuid()}.md");
 
         try
         {
@@ -233,7 +250,7 @@ public class IntegrationTests
     public void IntegrationTest_EnforceFlagWithIssues_ReturnsError()
     {
         // Locate the test SARIF file (which has 1 result)
-        var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
+        var sarifFile = SafePathCombine(_testDataPath, "sample.sarif");
         Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         // Run the application with --enforce flag

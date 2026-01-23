@@ -74,6 +74,24 @@ internal static class Validation
     }
 
     /// <summary>
+    ///     Safely combines two paths, ensuring the second path doesn't contain path traversal sequences.
+    /// </summary>
+    /// <param name="basePath">The base path.</param>
+    /// <param name="relativePath">The relative path to combine.</param>
+    /// <returns>The combined path.</returns>
+    /// <exception cref="ArgumentException">Thrown when relativePath contains invalid characters or path traversal sequences.</exception>
+    private static string SafePathCombine(string basePath, string relativePath)
+    {
+        // Ensure the relative path doesn't contain path traversal sequences
+        if (relativePath.Contains("..") || Path.IsPathRooted(relativePath))
+        {
+            throw new ArgumentException($"Invalid path component: {relativePath}", nameof(relativePath));
+        }
+
+        return Path.Combine(basePath, relativePath);
+    }
+
+    /// <summary>
     ///     Prints the validation header with system information.
     /// </summary>
     /// <param name="context">The context for output.</param>
@@ -159,8 +177,8 @@ internal static class Validation
         try
         {
             using var tempDir = new TemporaryDirectory();
-            var logFile = Path.Combine(tempDir.DirectoryPath, "enforcement.log");
-            var sarifFile = Path.Combine(tempDir.DirectoryPath, "test.sarif");
+            var logFile = SafePathCombine(tempDir.DirectoryPath, "enforcement.log");
+            var sarifFile = SafePathCombine(tempDir.DirectoryPath, "test.sarif");
 
             // Create mock SARIF file
             CreateMockSarifFile(sarifFile);
@@ -207,6 +225,7 @@ internal static class Validation
                 context.WriteError($"✗ Enforcement Test - FAILED: Program should have exited with non-zero code");
             }
         }
+        // Catch all exceptions as this is a test framework - any exception should be recorded as a test failure
         catch (Exception ex)
         {
             HandleTestException(test, context, "Enforcement Test", ex);
@@ -238,9 +257,9 @@ internal static class Validation
         try
         {
             using var tempDir = new TemporaryDirectory();
-            var logFile = Path.Combine(tempDir.DirectoryPath, $"{testName}.log");
-            var sarifFile = Path.Combine(tempDir.DirectoryPath, "test.sarif");
-            var reportFile = reportFileName != null ? Path.Combine(tempDir.DirectoryPath, reportFileName) : null;
+            var logFile = SafePathCombine(tempDir.DirectoryPath, $"{testName}.log");
+            var sarifFile = SafePathCombine(tempDir.DirectoryPath, "test.sarif");
+            var reportFile = reportFileName != null ? SafePathCombine(tempDir.DirectoryPath, reportFileName) : null;
 
             // Create mock SARIF file
             CreateMockSarifFile(sarifFile);
@@ -298,6 +317,7 @@ internal static class Validation
                 context.WriteError($"✗ {displayName} - FAILED: Exit code {exitCode}");
             }
         }
+        // Catch all exceptions as this is a test framework - any exception should be recorded as a test failure
         catch (Exception ex)
         {
             HandleTestException(test, context, displayName, ex);
@@ -407,7 +427,7 @@ internal static class Validation
             File.WriteAllText(context.ResultsFile, content);
             context.WriteLine($"Results written to {context.ResultsFile}");
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException)
         {
             context.WriteError($"Error: Failed to write results file: {ex.Message}");
         }
@@ -476,7 +496,7 @@ internal static class Validation
         /// </summary>
         public TemporaryDirectory()
         {
-            DirectoryPath = Path.Combine(Path.GetTempPath(), $"sarifmark_validation_{Guid.NewGuid()}");
+            DirectoryPath = SafePathCombine(Path.GetTempPath(), $"sarifmark_validation_{Guid.NewGuid()}");
 
             try
             {

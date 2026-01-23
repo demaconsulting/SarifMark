@@ -197,7 +197,7 @@ internal static class Program
                 File.WriteAllText(context.ReportFile, markdown);
                 context.WriteLine("Report generated successfully.");
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException)
             {
                 context.WriteError($"Error: Failed to write report: {ex.Message}");
             }
