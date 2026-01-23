@@ -39,6 +39,7 @@ jobs:
     needs: quality-checks
     permissions:
       contents: read
+      pull-requests: write
 
     strategy:
       matrix:
@@ -69,6 +70,19 @@ jobs:
         run: >
           dotnet restore
 
+      - name: Start Sonar Scanner
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: >
+          dotnet dotnet-sonarscanner
+          begin
+          /k:"demaconsulting_SarifMark"
+          /o:"demaconsulting"
+          /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          /d:sonar.host.url="https://sonarcloud.io"
+          /d:sonar.cs.opencover.reportsPaths=**/*.opencover.xml
+          /d:sonar.scanner.scanAll=false
+
       - name: Build
         run: >
           dotnet build
@@ -85,6 +99,14 @@ jobs:
           --collect "XPlat Code Coverage;Format=opencover"
           --logger "trx;LogFilePrefix=${{ matrix.os }}"
           --results-directory test-results
+
+      - name: End Sonar Scanner
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: >
+          dotnet dotnet-sonarscanner
+          end
+          /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
       - name: Generate SBOM
         run: >
