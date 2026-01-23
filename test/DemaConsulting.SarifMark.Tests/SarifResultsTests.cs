@@ -467,4 +467,174 @@ public class SarifResultsTests
         Assert.AreEqual("src/MyClass.cs", results.Results[0].Uri);
         Assert.AreEqual(42, results.Results[0].StartLine);
     }
+
+    /// <summary>
+    ///     Test that ToMarkdown with depth 1 produces correct output.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput()
+    {
+        // Arrange
+        var resultList = new List<SarifResult>
+        {
+            new("CA1001", "warning", "Types that own disposable fields should be disposable", "src/MyClass.cs", 42),
+            new("CA2000", "error", "Dispose objects before losing scope", "src/Program.cs", 15)
+        };
+
+        var results = new SarifResults("TestTool", "1.0.0", resultList);
+
+        // Act
+        var markdown = results.ToMarkdown(1);
+
+        // Assert
+        Assert.IsNotNull(markdown);
+        Assert.Contains("# TestTool 1.0.0 Analysis", markdown);
+        Assert.Contains("## Results", markdown);
+        Assert.Contains("Found 2 results", markdown);
+        Assert.Contains("src/MyClass.cs(42): warning [CA1001] Types that own disposable fields should be disposable", markdown);
+        Assert.Contains("src/Program.cs(15): error [CA2000] Dispose objects before losing scope", markdown);
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown with depth 3 uses correct heading levels.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_ToMarkdown_Depth3_UsesCorrectHeadingLevels()
+    {
+        // Arrange
+        var results = new SarifResults("TestTool", "1.0.0", []);
+
+        // Act
+        var markdown = results.ToMarkdown(3);
+
+        // Assert
+        Assert.Contains("### TestTool 1.0.0 Analysis", markdown);
+        Assert.Contains("#### Results", markdown);
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown with no results shows correct message.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults()
+    {
+        // Arrange
+        var results = new SarifResults("TestTool", "1.0.0", []);
+
+        // Act
+        var markdown = results.ToMarkdown(1);
+
+        // Assert
+        Assert.Contains("Found no results", markdown);
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown with one result uses singular form.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_ToMarkdown_OneResult_UsesSingularForm()
+    {
+        // Arrange
+        var resultList = new List<SarifResult>
+        {
+            new("CA1001", "warning", "Test warning", "src/Test.cs", 10)
+        };
+
+        var results = new SarifResults("TestTool", "1.0.0", resultList);
+
+        // Act
+        var markdown = results.ToMarkdown(1);
+
+        // Assert
+        Assert.Contains("Found 1 result", markdown);
+        Assert.DoesNotContain("Found 1 results", markdown);
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown with depth less than 1 throws exception.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_ToMarkdown_DepthLessThan1_ThrowsArgumentOutOfRangeException()
+    {
+        // Arrange
+        var results = new SarifResults("TestTool", "1.0.0", []);
+
+        // Act & Assert
+        var exception = Assert.Throws<ArgumentOutOfRangeException>(() => results.ToMarkdown(0));
+        Assert.Contains("Depth must be between 1 and 6", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown with depth greater than 6 throws exception.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_ToMarkdown_DepthGreaterThan6_ThrowsArgumentOutOfRangeException()
+    {
+        // Arrange
+        var results = new SarifResults("TestTool", "1.0.0", []);
+
+        // Act & Assert
+        var exception = Assert.Throws<ArgumentOutOfRangeException>(() => results.ToMarkdown(7));
+        Assert.Contains("Depth must be between 1 and 6", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown with maximum depth of 6 produces correct output.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_ToMarkdown_Depth6_ProducesCorrectOutput()
+    {
+        // Arrange
+        var results = new SarifResults("TestTool", "1.0.0", []);
+
+        // Act
+        var markdown = results.ToMarkdown(6);
+
+        // Assert
+        Assert.Contains("###### TestTool 1.0.0 Analysis", markdown);
+        Assert.Contains("###### Results", markdown); // Capped at 6
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown handles result without location information.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation()
+    {
+        // Arrange
+        var resultList = new List<SarifResult>
+        {
+            new("RULE001", "error", "Error without location", null, null)
+        };
+
+        var results = new SarifResults("TestTool", "1.0.0", resultList);
+
+        // Act
+        var markdown = results.ToMarkdown(1);
+
+        // Assert
+        Assert.Contains("(no location): error [RULE001] Error without location", markdown);
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown handles result with URI but no line number.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly()
+    {
+        // Arrange
+        var resultList = new List<SarifResult>
+        {
+            new("RULE002", "warning", "Warning with URI only", "src/File.cs", null)
+        };
+
+        var results = new SarifResults("TestTool", "1.0.0", resultList);
+
+        // Act
+        var markdown = results.ToMarkdown(1);
+
+        // Assert
+        Assert.Contains("src/File.cs: warning [RULE002] Warning with URI only", markdown);
+        Assert.DoesNotContain("src/File.cs(", markdown);
+    }
 }
