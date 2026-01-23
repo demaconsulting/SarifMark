@@ -713,8 +713,8 @@ public class SarifResultsTests
         var markdown = results.ToMarkdown(1);
 
         // Assert - Each result line should end with two spaces for hard line break
-        Assert.Contains("src/MyClass.cs(42): warning [CA1001] First issue  \n", markdown);
-        Assert.Contains("src/Program.cs(15): error [CA2000] Second issue  \n", markdown);
-        Assert.Contains("src/Helper.cs(7): note [CA3001] Third issue  \n", markdown);
+        Assert.Contains($"src/MyClass.cs(42): warning [CA1001] First issue  {Environment.NewLine}", markdown);
+        Assert.Contains($"src/Program.cs(15): error [CA2000] Second issue  {Environment.NewLine}", markdown);
+        Assert.Contains($"src/Helper.cs(7): note [CA3001] Third issue  {Environment.NewLine}", markdown);
     }
 }
