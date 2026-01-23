@@ -221,7 +221,7 @@ public record SarifResults
         var headingText = customHeading ?? $"{ToolName} Analysis";
         sb.AppendLine($"{heading} {headingText}");
         sb.AppendLine();
-        
+
         // Add tool info on separate line
         sb.AppendLine($"**Tool:** {ToolName} {ToolVersion}");
         sb.AppendLine();
