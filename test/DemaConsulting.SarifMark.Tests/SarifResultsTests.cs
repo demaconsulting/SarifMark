@@ -692,4 +692,29 @@ public class SarifResultsTests
         Assert.Contains("# TestTool Analysis", markdown);
         Assert.Contains("**Tool:** TestTool 1.0.0", markdown);
     }
+
+    /// <summary>
+    ///     Test that ToMarkdown enforces line breaks between results.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks()
+    {
+        // Arrange
+        var resultList = new List<SarifResult>
+        {
+            new("CA1001", "warning", "First issue", "src/MyClass.cs", 42),
+            new("CA2000", "error", "Second issue", "src/Program.cs", 15),
+            new("CA3001", "note", "Third issue", "src/Helper.cs", 7)
+        };
+
+        var results = new SarifResults("TestTool", "1.0.0", resultList);
+
+        // Act
+        var markdown = results.ToMarkdown(1);
+
+        // Assert - Each result line should end with two spaces for hard line break
+        Assert.Contains("src/MyClass.cs(42): warning [CA1001] First issue  \n", markdown);
+        Assert.Contains("src/Program.cs(15): error [CA2000] Second issue  \n", markdown);
+        Assert.Contains("src/Helper.cs(7): note [CA3001] Third issue  \n", markdown);
+    }
 }
