@@ -7,6 +7,24 @@
       "commands": [
         "sbom-tool"
       ]
+    },
+    "demaconsulting.pandoctool": {
+      "version": "3.8.3",
+      "commands": [
+        "pandoc"
+      ]
+    },
+    "demaconsulting.weasyprinttool": {
+      "version": "67.0.0",
+      "commands": [
+        "weasyprint"
+      ]
+    },
+    "demaconsulting.sonarmark": {
+      "version": "1.3.0",
+      "commands": [
+        "sonarmark"
+      ]
     }
   }
 }
