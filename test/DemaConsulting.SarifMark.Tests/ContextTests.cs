@@ -121,4 +121,25 @@ public class ContextTests
             Console.SetOut(originalOut);
         }
     }
+
+    /// <summary>
+    ///     Test creating a context with --heading argument.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_HeadingArgument_SetsHeading()
+    {
+        using var context = Context.Create(["--heading", "My Custom Heading"]);
+
+        Assert.AreEqual("My Custom Heading", context.Heading);
+    }
+
+    /// <summary>
+    ///     Test creating a context with --heading but no value throws exception.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_HeadingWithoutValue_ThrowsArgumentException()
+    {
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--heading"]));
+        Assert.Contains("--heading requires", exception.Message);
+    }
 }

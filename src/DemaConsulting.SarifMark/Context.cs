@@ -76,6 +76,11 @@ internal sealed class Context : IDisposable
     public int ReportDepth { get; private init; } = 1;
 
     /// <summary>
+    ///     Gets the custom heading for the report.
+    /// </summary>
+    public string? Heading { get; private init; }
+
+    /// <summary>
     ///     Gets the validation results file path.
     /// </summary>
     public string? ResultsFile { get; private init; }
@@ -113,6 +118,7 @@ internal sealed class Context : IDisposable
             SarifFile = parser.SarifFile,
             ReportFile = parser.ReportFile,
             ReportDepth = parser.ReportDepth,
+            Heading = parser.Heading,
             ResultsFile = parser.ResultsFile
         };
 
@@ -187,6 +193,11 @@ internal sealed class Context : IDisposable
         public int ReportDepth { get; private set; } = 1;
 
         /// <summary>
+        ///     Gets the custom heading for the report.
+        /// </summary>
+        public string? Heading { get; private set; }
+
+        /// <summary>
         ///     Gets the log file path.
         /// </summary>
         public string? LogFile { get; private set; }
@@ -258,6 +269,10 @@ internal sealed class Context : IDisposable
 
                 case "--report-depth":
                     ReportDepth = GetRequiredIntArgument(arg, args, index);
+                    return index + 1;
+
+                case "--heading":
+                    Heading = GetRequiredStringArgument(arg, args, index, "a heading text argument");
                     return index + 1;
 
                 case "--results":
