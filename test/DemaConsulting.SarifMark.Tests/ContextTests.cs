@@ -36,7 +36,7 @@ public class ContextTests
 
         Assert.IsFalse(context.Version);
         Assert.IsFalse(context.Help);
-        Assert.IsFalse(context.HasErrors);
+        Assert.AreEqual(0, context.ExitCode);
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ public class ContextTests
 
         Assert.IsTrue(context.Version);
         Assert.IsFalse(context.Help);
-        Assert.IsFalse(context.HasErrors);
+        Assert.AreEqual(0, context.ExitCode);
     }
 
     /// <summary>
@@ -62,30 +62,17 @@ public class ContextTests
 
         Assert.IsFalse(context.Version);
         Assert.IsTrue(context.Help);
-        Assert.IsFalse(context.HasErrors);
+        Assert.AreEqual(0, context.ExitCode);
     }
 
     /// <summary>
-    ///     Test creating a context with an unknown argument.
+    ///     Test creating a context with an unknown argument throws exception.
     /// </summary>
     [TestMethod]
-    public void Context_Create_UnknownArgument_SetsHasErrorsTrue()
+    public void Context_Create_UnknownArgument_ThrowsArgumentException()
     {
-        var originalErr = Console.Error;
-        try
-        {
-            using var errWriter = new StringWriter();
-            Console.SetError(errWriter);
-
-            using var context = Context.Create(["--unknown"]);
-
-            Assert.IsTrue(context.HasErrors);
-            Assert.Contains("Unknown argument", errWriter.ToString());
-        }
-        finally
-        {
-            Console.SetError(originalErr);
-        }
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--unknown"]));
+        Assert.Contains("Unsupported argument", exception.Message);
     }
 
     /// <summary>
@@ -112,26 +99,26 @@ public class ContextTests
     }
 
     /// <summary>
-    ///     Test WriteError writes to console error stream and sets HasErrors.
+    ///     Test WriteError writes to console error stream and sets exit code.
     /// </summary>
     [TestMethod]
-    public void Context_WriteError_WritesToErrorAndSetsFlag()
+    public void Context_WriteError_WritesToErrorAndSetsExitCode()
     {
-        var originalErr = Console.Error;
+        var originalOut = Console.Out;
         try
         {
-            using var errWriter = new StringWriter();
-            Console.SetError(errWriter);
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
 
             using var context = Context.Create([]);
             context.WriteError("Error message");
 
-            Assert.IsTrue(context.HasErrors);
-            Assert.Contains("Error message", errWriter.ToString());
+            Assert.AreEqual(1, context.ExitCode);
+            Assert.Contains("Error message", outWriter.ToString());
         }
         finally
         {
-            Console.SetError(originalErr);
+            Console.SetOut(originalOut);
         }
     }
 }

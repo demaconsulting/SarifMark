@@ -29,10 +29,10 @@ namespace DemaConsulting.SarifMark.Tests;
 public class ProgramTests
 {
     /// <summary>
-    ///     Test that Main with no arguments returns success.
+    ///     Test that Main with no arguments returns error due to missing sarif parameter.
     /// </summary>
     [TestMethod]
-    public void Program_Main_NoArguments_ReturnsSuccess()
+    public void Program_Main_NoArguments_ReturnsError()
     {
         var originalOut = Console.Out;
         try
@@ -42,8 +42,10 @@ public class ProgramTests
 
             var result = InvokeMain([]);
 
-            Assert.AreEqual(0, result);
-            Assert.Contains("SarifMark tool", outWriter.ToString());
+            Assert.AreEqual(1, result);
+            var output = outWriter.ToString();
+            Assert.Contains("SarifMark version", output);
+            Assert.Contains("--sarif parameter is required", output);
         }
         finally
         {
@@ -52,10 +54,10 @@ public class ProgramTests
     }
 
     /// <summary>
-    ///     Test that Main with --version flag displays version.
+    ///     Test that Main with --version flag displays version only.
     /// </summary>
     [TestMethod]
-    public void Program_Main_VersionFlag_DisplaysVersion()
+    public void Program_Main_VersionFlag_DisplaysVersionOnly()
     {
         var originalOut = Console.Out;
         try
@@ -66,7 +68,9 @@ public class ProgramTests
             var result = InvokeMain(["--version"]);
 
             Assert.AreEqual(0, result);
-            Assert.Contains("SarifMark version", outWriter.ToString());
+            var output = outWriter.ToString();
+            Assert.DoesNotContain("Copyright", output);
+            Assert.DoesNotContain("SarifMark version", output);
         }
         finally
         {
@@ -75,7 +79,7 @@ public class ProgramTests
     }
 
     /// <summary>
-    ///     Test that Main with --help flag displays help.
+    ///     Test that Main with --help flag displays help with banner.
     /// </summary>
     [TestMethod]
     public void Program_Main_HelpFlag_DisplaysHelp()
@@ -89,7 +93,10 @@ public class ProgramTests
             var result = InvokeMain(["--help"]);
 
             Assert.AreEqual(0, result);
-            Assert.Contains("Usage:", outWriter.ToString());
+            var output = outWriter.ToString();
+            Assert.Contains("SarifMark version", output);
+            Assert.Contains("Copyright", output);
+            Assert.Contains("Usage:", output);
         }
         finally
         {
@@ -104,23 +111,19 @@ public class ProgramTests
     public void Program_Main_UnknownArgument_ReturnsError()
     {
         var originalOut = Console.Out;
-        var originalErr = Console.Error;
         try
         {
             using var outWriter = new StringWriter();
-            using var errWriter = new StringWriter();
             Console.SetOut(outWriter);
-            Console.SetError(errWriter);
 
             var result = InvokeMain(["--unknown"]);
 
             Assert.AreEqual(1, result);
-            Assert.Contains("Unknown argument", errWriter.ToString());
+            Assert.Contains("Unsupported argument", outWriter.ToString());
         }
         finally
         {
             Console.SetOut(originalOut);
-            Console.SetError(originalErr);
         }
     }
 
