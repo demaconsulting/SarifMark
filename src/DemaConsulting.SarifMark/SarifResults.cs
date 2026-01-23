@@ -38,21 +38,26 @@ public record SarifResults
     public string ToolVersion { get; }
 
     /// <summary>
+    ///     Gets the collection of results/issues found.
+    /// </summary>
+    public IReadOnlyList<SarifResult> Results { get; }
+
+    /// <summary>
     ///     Gets the total number of results/issues found.
     /// </summary>
-    public int ResultCount { get; }
+    public int ResultCount => Results.Count;
 
     /// <summary>
     ///     Internal constructor for testing purposes.
     /// </summary>
     /// <param name="toolName">The name of the analysis tool.</param>
     /// <param name="toolVersion">The version of the analysis tool.</param>
-    /// <param name="resultCount">The total number of results/issues found.</param>
-    internal SarifResults(string toolName, string toolVersion, int resultCount)
+    /// <param name="results">The collection of results/issues.</param>
+    internal SarifResults(string toolName, string toolVersion, IReadOnlyList<SarifResult> results)
     {
         ToolName = toolName;
         ToolVersion = toolVersion;
-        ResultCount = resultCount;
+        Results = results;
     }
 
     /// <summary>
@@ -121,15 +126,56 @@ public record SarifResults
                 ? toolVersionElement.GetString() ?? "Unknown"
                 : "Unknown";
 
-            // Get results count
-            var resultCount = 0;
+            // Parse results
+            var results = new List<SarifResult>();
             if (firstRun.TryGetProperty("results", out var resultsElement) &&
                 resultsElement.ValueKind == JsonValueKind.Array)
             {
-                resultCount = resultsElement.GetArrayLength();
+                foreach (var resultElement in resultsElement.EnumerateArray())
+                {
+                    var ruleId = resultElement.TryGetProperty("ruleId", out var ruleIdElement)
+                        ? ruleIdElement.GetString() ?? string.Empty
+                        : string.Empty;
+
+                    var level = resultElement.TryGetProperty("level", out var levelElement)
+                        ? levelElement.GetString() ?? "warning"
+                        : "warning";
+
+                    var message = string.Empty;
+                    if (resultElement.TryGetProperty("message", out var messageElement) &&
+                        messageElement.TryGetProperty("text", out var messageTextElement))
+                    {
+                        message = messageTextElement.GetString() ?? string.Empty;
+                    }
+
+                    string? uri = null;
+                    int? startLine = null;
+                    if (resultElement.TryGetProperty("locations", out var locationsElement) &&
+                        locationsElement.ValueKind == JsonValueKind.Array)
+                    {
+                        var firstLocation = locationsElement.EnumerateArray().FirstOrDefault();
+                        if (firstLocation.ValueKind != JsonValueKind.Undefined &&
+                            firstLocation.TryGetProperty("physicalLocation", out var physicalLocationElement))
+                        {
+                            if (physicalLocationElement.TryGetProperty("artifactLocation", out var artifactLocationElement) &&
+                                artifactLocationElement.TryGetProperty("uri", out var uriElement))
+                            {
+                                uri = uriElement.GetString();
+                            }
+
+                            if (physicalLocationElement.TryGetProperty("region", out var regionElement) &&
+                                regionElement.TryGetProperty("startLine", out var startLineElement))
+                            {
+                                startLine = startLineElement.GetInt32();
+                            }
+                        }
+                    }
+
+                    results.Add(new SarifResult(ruleId, level, message, uri, startLine));
+                }
             }
 
-            return new SarifResults(toolName, toolVersion, resultCount);
+            return new SarifResults(toolName, toolVersion, results);
         }
         catch (JsonException ex)
         {

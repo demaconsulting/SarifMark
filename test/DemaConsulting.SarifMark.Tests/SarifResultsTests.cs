@@ -225,6 +225,7 @@ public class SarifResultsTests
         Assert.AreEqual("TestTool", results.ToolName);
         Assert.AreEqual("1.0.0", results.ToolVersion);
         Assert.AreEqual(0, results.ResultCount);
+        Assert.IsEmpty(results.Results);
     }
 
     /// <summary>
@@ -256,6 +257,7 @@ public class SarifResultsTests
         Assert.AreEqual("TestTool", results.ToolName);
         Assert.AreEqual("1.0.0", results.ToolVersion);
         Assert.AreEqual(0, results.ResultCount);
+        Assert.IsEmpty(results.Results);
     }
 
     /// <summary>
@@ -309,6 +311,19 @@ public class SarifResultsTests
         Assert.AreEqual("TestTool", results.ToolName);
         Assert.AreEqual("1.0.0", results.ToolVersion);
         Assert.AreEqual(3, results.ResultCount);
+        Assert.HasCount(3, results.Results);
+        
+        Assert.AreEqual("TEST001", results.Results[0].RuleId);
+        Assert.AreEqual("error", results.Results[0].Level);
+        Assert.AreEqual("Error 1", results.Results[0].Message);
+        
+        Assert.AreEqual("TEST002", results.Results[1].RuleId);
+        Assert.AreEqual("warning", results.Results[1].Level);
+        Assert.AreEqual("Warning 1", results.Results[1].Message);
+        
+        Assert.AreEqual("TEST003", results.Results[2].RuleId);
+        Assert.AreEqual("note", results.Results[2].Level);
+        Assert.AreEqual("Note 1", results.Results[2].Message);
     }
 
     /// <summary>
@@ -338,6 +353,7 @@ public class SarifResultsTests
         Assert.AreEqual("Unknown", results.ToolName);
         Assert.AreEqual("1.0.0", results.ToolVersion);
         Assert.AreEqual(0, results.ResultCount);
+        Assert.IsEmpty(results.Results);
     }
 
     /// <summary>
@@ -367,6 +383,7 @@ public class SarifResultsTests
         Assert.AreEqual("TestTool", results.ToolName);
         Assert.AreEqual("Unknown", results.ToolVersion);
         Assert.AreEqual(0, results.ResultCount);
+        Assert.IsEmpty(results.Results);
     }
 
     /// <summary>
@@ -375,10 +392,79 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_InternalConstructor_CreatesValidInstance()
     {
-        var results = new SarifResults("TestTool", "1.0.0", 5);
+        var resultList = new List<SarifResult>
+        {
+            new("RULE001", "error", "Error message", "file.cs", 10),
+            new("RULE002", "warning", "Warning message", "file.cs", 20),
+            new("RULE003", "note", "Note message", null, null),
+            new("RULE004", "error", "Another error", "other.cs", 5),
+            new("RULE005", "warning", "Another warning", "other.cs", 15)
+        };
+
+        var results = new SarifResults("TestTool", "1.0.0", resultList);
 
         Assert.AreEqual("TestTool", results.ToolName);
         Assert.AreEqual("1.0.0", results.ToolVersion);
         Assert.AreEqual(5, results.ResultCount);
+        Assert.HasCount(5, results.Results);
+        Assert.AreEqual("RULE001", results.Results[0].RuleId);
+        Assert.AreEqual("error", results.Results[0].Level);
+        Assert.AreEqual("Error message", results.Results[0].Message);
+        Assert.AreEqual("file.cs", results.Results[0].Uri);
+        Assert.AreEqual(10, results.Results[0].StartLine);
+    }
+
+    /// <summary>
+    ///     Test that Read successfully parses result with location information.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_Read_WithLocations_ReturnsResultsWithLocationData()
+    {
+        var filePath = Path.Combine(_testDirectory!, "with-locations.sarif");
+        File.WriteAllText(filePath, """
+            {
+                "version": "2.1.0",
+                "runs": [
+                    {
+                        "tool": {
+                            "driver": {
+                                "name": "TestTool",
+                                "version": "1.0.0"
+                            }
+                        },
+                        "results": [
+                            {
+                                "ruleId": "CA1001",
+                                "level": "warning",
+                                "message": {
+                                    "text": "Types that own disposable fields should be disposable"
+                                },
+                                "locations": [
+                                    {
+                                        "physicalLocation": {
+                                            "artifactLocation": {
+                                                "uri": "src/MyClass.cs"
+                                            },
+                                            "region": {
+                                                "startLine": 42
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+            """);
+
+        var results = SarifResults.Read(filePath);
+
+        Assert.AreEqual(1, results.ResultCount);
+        Assert.AreEqual("CA1001", results.Results[0].RuleId);
+        Assert.AreEqual("warning", results.Results[0].Level);
+        Assert.AreEqual("Types that own disposable fields should be disposable", results.Results[0].Message);
+        Assert.AreEqual("src/MyClass.cs", results.Results[0].Uri);
+        Assert.AreEqual(42, results.Results[0].StartLine);
     }
 }
