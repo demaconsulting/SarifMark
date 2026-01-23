@@ -488,7 +488,8 @@ public class SarifResultsTests
 
         // Assert
         Assert.IsNotNull(markdown);
-        Assert.Contains("# TestTool 1.0.0 Analysis", markdown);
+        Assert.Contains("# TestTool Analysis", markdown);
+        Assert.Contains("**Tool:** TestTool 1.0.0", markdown);
         Assert.Contains("## Results", markdown);
         Assert.Contains("Found 2 results", markdown);
         Assert.Contains("src/MyClass.cs(42): warning [CA1001] Types that own disposable fields should be disposable", markdown);
@@ -508,7 +509,8 @@ public class SarifResultsTests
         var markdown = results.ToMarkdown(3);
 
         // Assert
-        Assert.Contains("### TestTool 1.0.0 Analysis", markdown);
+        Assert.Contains("### TestTool Analysis", markdown);
+        Assert.Contains("**Tool:** TestTool 1.0.0", markdown);
         Assert.Contains("#### Results", markdown);
     }
 
@@ -591,7 +593,8 @@ public class SarifResultsTests
         var markdown = results.ToMarkdown(6);
 
         // Assert
-        Assert.Contains("###### TestTool 1.0.0 Analysis", markdown);
+        Assert.Contains("###### TestTool Analysis", markdown);
+        Assert.Contains("**Tool:** TestTool 1.0.0", markdown);
         Assert.Contains("###### Results", markdown); // Capped at 6
     }
 
@@ -636,5 +639,57 @@ public class SarifResultsTests
         // Assert
         Assert.Contains("src/File.cs: warning [RULE002] Warning with URI only", markdown);
         Assert.DoesNotContain("src/File.cs(", markdown);
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown with custom heading uses the provided heading.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_ToMarkdown_CustomHeading_UsesProvidedHeading()
+    {
+        // Arrange
+        var results = new SarifResults("TestTool", "1.0.0", []);
+
+        // Act
+        var markdown = results.ToMarkdown(1, "My Custom Analysis Report");
+
+        // Assert
+        Assert.Contains("# My Custom Analysis Report", markdown);
+        Assert.Contains("**Tool:** TestTool 1.0.0", markdown);
+        Assert.DoesNotContain("# TestTool Analysis", markdown);
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown with null heading uses default heading.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_ToMarkdown_NullHeading_UsesDefaultHeading()
+    {
+        // Arrange
+        var results = new SarifResults("TestTool", "1.0.0", []);
+
+        // Act
+        var markdown = results.ToMarkdown(1, null);
+
+        // Assert
+        Assert.Contains("# TestTool Analysis", markdown);
+        Assert.Contains("**Tool:** TestTool 1.0.0", markdown);
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown without heading parameter uses default heading.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_ToMarkdown_NoHeadingParameter_UsesDefaultHeading()
+    {
+        // Arrange
+        var results = new SarifResults("TestTool", "1.0.0", []);
+
+        // Act
+        var markdown = results.ToMarkdown(1);
+
+        // Assert
+        Assert.Contains("# TestTool Analysis", markdown);
+        Assert.Contains("**Tool:** TestTool 1.0.0", markdown);
     }
 }

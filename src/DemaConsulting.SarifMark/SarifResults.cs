@@ -188,33 +188,42 @@ public record SarifResults
     ///     Converts the SARIF results to markdown format.
     /// </summary>
     /// <param name="depth">The heading depth level (1-6) for the report title.</param>
+    /// <param name="heading">Optional custom heading. If null, defaults to "[ToolName] Analysis".</param>
     /// <returns>Markdown representation of the SARIF results.</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when depth is not between 1 and 6.</exception>
-    public string ToMarkdown(int depth)
+    public string ToMarkdown(int depth, string? heading = null)
     {
         if (depth < 1 || depth > 6)
         {
             throw new ArgumentOutOfRangeException(nameof(depth), depth, "Depth must be between 1 and 6");
         }
 
-        var heading = new string('#', depth);
+        var mainHeading = new string('#', depth);
         var subHeadingDepth = Math.Min(depth + 1, 6);
         var subHeading = new string('#', subHeadingDepth);
         var sb = new StringBuilder();
 
-        AppendHeader(sb, heading);
+        AppendHeader(sb, mainHeading, heading);
         AppendResultsSection(sb, subHeading);
 
         return sb.ToString();
     }
 
     /// <summary>
-    ///     Appends the header section with tool name and version.
+    ///     Appends the header section with custom or default heading and tool information.
     /// </summary>
-    private void AppendHeader(StringBuilder sb, string heading)
+    /// <param name="sb">The StringBuilder to append to.</param>
+    /// <param name="heading">The markdown heading prefix (e.g., "#", "##", "###").</param>
+    /// <param name="customHeading">Optional custom heading text. If null, defaults to "[ToolName] Analysis".</param>
+    private void AppendHeader(StringBuilder sb, string heading, string? customHeading)
     {
-        // Add tool name and version as main heading
-        sb.AppendLine($"{heading} {ToolName} {ToolVersion} Analysis");
+        // Use custom heading or default to "[ToolName] Analysis"
+        var headingText = customHeading ?? $"{ToolName} Analysis";
+        sb.AppendLine($"{heading} {headingText}");
+        sb.AppendLine();
+
+        // Add tool info on separate line
+        sb.AppendLine($"**Tool:** {ToolName} {ToolVersion}");
         sb.AppendLine();
     }
 

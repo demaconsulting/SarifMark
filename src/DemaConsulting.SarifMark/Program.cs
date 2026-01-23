@@ -143,6 +143,7 @@ internal static class Program
         context.WriteLine("  --sarif <file>             SARIF file to process");
         context.WriteLine("  --report <file>            Export analysis results to markdown file");
         context.WriteLine("  --report-depth <depth>     Markdown header depth for report (default: 1)");
+        context.WriteLine("  --heading <text>           Custom heading for report (default: [ToolName] Analysis)");
     }
 
     /// <summary>
@@ -192,7 +193,7 @@ internal static class Program
             context.WriteLine($"Writing report to {context.ReportFile}...");
             try
             {
-                var markdown = sarifResults.ToMarkdown(context.ReportDepth);
+                var markdown = sarifResults.ToMarkdown(context.ReportDepth, context.Heading);
                 File.WriteAllText(context.ReportFile, markdown);
                 context.WriteLine("Report generated successfully.");
             }
