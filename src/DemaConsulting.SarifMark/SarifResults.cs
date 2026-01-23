@@ -18,6 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Text;
 using System.Text.Json;
 
 namespace DemaConsulting.SarifMark;
@@ -181,5 +182,94 @@ public record SarifResults
         {
             throw new InvalidOperationException($"Invalid JSON in SARIF file: {ex.Message}", ex);
         }
+    }
+
+    /// <summary>
+    ///     Converts the SARIF results to markdown format.
+    /// </summary>
+    /// <param name="depth">The heading depth level (1-6) for the report title.</param>
+    /// <returns>Markdown representation of the SARIF results.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when depth is not between 1 and 6.</exception>
+    public string ToMarkdown(int depth)
+    {
+        if (depth < 1 || depth > 6)
+        {
+            throw new ArgumentOutOfRangeException(nameof(depth), depth, "Depth must be between 1 and 6");
+        }
+
+        var heading = new string('#', depth);
+        var subHeadingDepth = Math.Min(depth + 1, 6);
+        var subHeading = new string('#', subHeadingDepth);
+        var sb = new StringBuilder();
+
+        AppendHeader(sb, heading);
+        AppendResultsSection(sb, subHeading);
+
+        return sb.ToString();
+    }
+
+    /// <summary>
+    ///     Appends the header section with tool name and version.
+    /// </summary>
+    private void AppendHeader(StringBuilder sb, string heading)
+    {
+        // Add tool name and version as main heading
+        sb.AppendLine($"{heading} {ToolName} {ToolVersion} Analysis");
+        sb.AppendLine();
+    }
+
+    /// <summary>
+    ///     Appends the results section with count and details.
+    /// </summary>
+    private void AppendResultsSection(StringBuilder sb, string subHeading)
+    {
+        sb.AppendLine($"{subHeading} Results");
+        sb.AppendLine();
+
+        sb.AppendLine(FormatFoundText(Results.Count, "result"));
+        sb.AppendLine();
+
+        if (Results.Count > 0)
+        {
+            foreach (var result in Results)
+            {
+                var locationInfo = FormatLocation(result.Uri, result.StartLine);
+                sb.AppendLine($"{locationInfo}: {result.Level} [{result.RuleId}] {result.Message}");
+            }
+
+            sb.AppendLine();
+        }
+    }
+
+    /// <summary>
+    ///     Formats a count with proper pluralization and "Found" prefix.
+    /// </summary>
+    /// <param name="count">The count value.</param>
+    /// <param name="singularNoun">The singular form of the noun.</param>
+    /// <returns>Formatted text like "Found no results", "Found 1 result", or "Found 5 results".</returns>
+    private static string FormatFoundText(int count, string singularNoun)
+    {
+        return count switch
+        {
+            0 => $"Found no {singularNoun}s",
+            1 => $"Found 1 {singularNoun}",
+            _ => $"Found {count} {singularNoun}s"
+        };
+    }
+
+    /// <summary>
+    ///     Formats the location information for a result.
+    /// </summary>
+    /// <param name="uri">The file URI.</param>
+    /// <param name="startLine">The starting line number.</param>
+    /// <returns>Formatted location string.</returns>
+    private static string FormatLocation(string? uri, int? startLine)
+    {
+        if (string.IsNullOrEmpty(uri))
+        {
+            return "(no location)";
+        }
+
+        return startLine.HasValue ? $"{uri}({startLine})" : uri;
     }
 }
