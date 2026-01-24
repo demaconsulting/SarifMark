@@ -1,0 +1,16 @@
+---
+title: SarifMark Trace Matrix
+subtitle: Requirements Traceability Matrix for the SarifMark Tool
+author: DEMA Consulting
+description: Requirements Traceability Matrix for the SarifMark Tool
+lang: en-US
+keywords:
+  - SarifMark
+  - Trace Matrix
+  - Requirements
+  - Traceability
+  - .NET
+  - YAML
+  - Command-Line Tool
+  - SARIF
+---
