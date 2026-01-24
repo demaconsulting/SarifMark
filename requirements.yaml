@@ -25,22 +25,22 @@ sections:
           - id: "CLI-004"
             title: "The tool shall support silent mode to suppress console output."
             tests:
-              - "Context_Create_NoArguments_ReturnsDefaultContext"
+              - "IntegrationTest_SilentFlag_SuppressesOutput"
 
           - id: "CLI-005"
             title: "The tool shall support writing output to a log file."
             tests:
-              - "Context_WriteLine_WritesToConsole"
+              - "IntegrationTest_LogFile_WritesOutputToFile"
 
           - id: "CLI-006"
             title: "The tool shall support enforcing quality gate checks."
             tests:
-              - "IntegrationTest_ValidSarifFile_ProcessesSuccessfully"
+              - "SarifMark_Enforcement"
 
           - id: "CLI-007"
             title: "The tool shall reject unknown command-line arguments."
             tests:
-              - "Context_Create_UnknownArgument_ThrowsArgumentException"
+              - "IntegrationTest_UnknownArgument_ShowsError"
 
       - title: "SARIF Integration"
         requirements:
@@ -107,29 +107,21 @@ sections:
           - id: "RPT-002"
             title: "The tool shall support configurable markdown heading depth."
             tests:
-              - "SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput"
-              - "SarifResults_ToMarkdown_Depth3_UsesCorrectHeadingLevels"
-              - "SarifResults_ToMarkdown_Depth6_ProducesCorrectOutput"
+              - "IntegrationTest_ReportDepth_IsConfigurable"
 
           - id: "RPT-003"
-            title: "The tool shall validate markdown heading depth range."
-            tests:
-              - "SarifResults_ToMarkdown_DepthLessThan1_ThrowsArgumentOutOfRangeException"
-              - "SarifResults_ToMarkdown_DepthGreaterThan6_ThrowsArgumentOutOfRangeException"
-
-          - id: "RPT-004"
             title: "The tool shall display result counts in reports."
             tests:
               - "SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults"
               - "SarifResults_ToMarkdown_OneResult_UsesSingularForm"
 
-          - id: "RPT-005"
+          - id: "RPT-004"
             title: "The tool shall display location information for results."
             tests:
               - "SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation"
               - "SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly"
 
-          - id: "RPT-006"
+          - id: "RPT-005"
             title: "The tool shall support custom headings in reports."
             tests:
               - "SarifResults_ToMarkdown_CustomHeading_UsesProvidedHeading"
@@ -137,12 +129,7 @@ sections:
               - "SarifResults_ToMarkdown_NoHeadingParameter_UsesDefaultHeading"
               - "Context_Create_HeadingArgument_SetsHeading"
 
-          - id: "RPT-007"
-            title: "The tool shall validate heading parameter usage."
-            tests:
-              - "Context_Create_HeadingWithoutValue_ThrowsArgumentException"
-
-          - id: "RPT-008"
+          - id: "RPT-006"
             title: "The tool shall format multiple results with proper line breaks."
             tests:
               - "SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks"
@@ -202,14 +189,20 @@ sections:
           - id: "PLT-003"
             title: "The tool shall support .NET 8.0 runtime."
             tests:
-              - "8.x@IntegrationTest_ValidateFlag_RunsSelfValidation"
+              - "dotnet8.x@SarifMark_SarifReading"
+              - "dotnet8.x@SarifMark_MarkdownReportGeneration"
+              - "dotnet8.x@SarifMark_Enforcement"
 
           - id: "PLT-004"
             title: "The tool shall support .NET 9.0 runtime."
             tests:
-              - "9.x@IntegrationTest_ValidateFlag_RunsSelfValidation"
+              - "dotnet9.x@SarifMark_SarifReading"
+              - "dotnet9.x@SarifMark_MarkdownReportGeneration"
+              - "dotnet9.x@SarifMark_Enforcement"
 
           - id: "PLT-005"
             title: "The tool shall support .NET 10.0 runtime."
             tests:
-              - "10.x@IntegrationTest_ValidateFlag_RunsSelfValidation"
+              - "dotnet10.x@SarifMark_SarifReading"
+              - "dotnet10.x@SarifMark_MarkdownReportGeneration"
+              - "dotnet10.x@SarifMark_Enforcement"
