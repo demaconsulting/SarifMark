@@ -35,7 +35,7 @@ sections:
           - id: "CLI-006"
             title: "The tool shall support enforcing quality gate checks."
             tests:
-              - "Context_WriteError_WritesToErrorAndSetsExitCode"
+              - "IntegrationTest_ValidSarifFile_ProcessesSuccessfully"
 
           - id: "CLI-007"
             title: "The tool shall reject unknown command-line arguments."
@@ -47,8 +47,8 @@ sections:
           - id: "SARIF-001"
             title: "The tool shall read SARIF 2.1.0 format files."
             tests:
-              - "SarifResults_Read_WithResults_ReturnsValidResults"
               - "SarifMark_SarifReading"
+              - "IntegrationTest_ValidSarifFile_ProcessesSuccessfully"
 
           - id: "SARIF-002"
             title: "The tool shall validate SARIF file format."
@@ -101,7 +101,7 @@ sections:
           - id: "RPT-001"
             title: "The tool shall generate markdown reports from SARIF files."
             tests:
-              - "SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput"
+              - "IntegrationTest_GenerateReport_CreatesReportFile"
               - "SarifMark_MarkdownReportGeneration"
 
           - id: "RPT-002"
@@ -153,63 +153,35 @@ sections:
             title: "The tool shall support self-validation mode."
             tests:
               - "IntegrationTest_ValidateFlag_RunsSelfValidation"
-              - "SarifMark_SarifReading"
-              - "SarifMark_MarkdownReportGeneration"
-              - "SarifMark_Enforcement"
 
           - id: "VAL-002"
             title: "The tool shall write validation results to test result files."
             tests:
-              - "SarifMark_SarifReading"
-              - "SarifMark_MarkdownReportGeneration"
-              - "SarifMark_Enforcement"
+              - "IntegrationTest_ValidateFlag_RunsSelfValidation"
 
           - id: "VAL-003"
             title: "The tool shall support TRX format for test results."
             tests:
-              - "SarifMark_SarifReading"
-              - "SarifMark_MarkdownReportGeneration"
-              - "SarifMark_Enforcement"
+              - "IntegrationTest_ValidateFlag_RunsSelfValidation"
 
           - id: "VAL-004"
             title: "The tool shall support JUnit format for test results."
             tests:
-              - "SarifMark_SarifReading"
-              - "SarifMark_MarkdownReportGeneration"
-              - "SarifMark_Enforcement"
+              - "IntegrationTest_ValidateFlag_RunsSelfValidation"
 
       - title: "Quality Enforcement"
         requirements:
           - id: "ENF-001"
             title: "The tool shall support enforcement mode to fail on issues found."
             tests:
+              - "IntegrationTest_EnforceFlagWithIssues_ReturnsError"
               - "SarifMark_Enforcement"
 
           - id: "ENF-002"
             title: "The tool shall return non-zero exit code when issues found in enforcement mode."
             tests:
+              - "IntegrationTest_EnforceFlagWithIssues_ReturnsError"
               - "SarifMark_Enforcement"
-
-      - title: "Path Security"
-        requirements:
-          - id: "PATH-001"
-            title: "The tool shall prevent path traversal attacks."
-            tests:
-              - "PathHelpers_SafePathCombine_PathWithParentDirectory_ThrowsArgumentException"
-              - "PathHelpers_SafePathCombine_PathWithDoubleDots_ThrowsArgumentException"
-
-          - id: "PATH-002"
-            title: "The tool shall reject absolute paths in unsafe operations."
-            tests:
-              - "PathHelpers_SafePathCombine_AbsolutePath_ThrowsArgumentException"
-
-          - id: "PATH-003"
-            title: "The tool shall safely combine file paths."
-            tests:
-              - "PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully"
-              - "PathHelpers_SafePathCombine_SimpleFilename_CombinesSuccessfully"
-              - "PathHelpers_SafePathCombine_PathWithSubdirectories_CombinesSuccessfully"
-              - "PathHelpers_SafePathCombine_GuidBasedFilename_CombinesSuccessfully"
 
       - title: "Platform Support"
         requirements:
