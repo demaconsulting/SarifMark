@@ -37,7 +37,7 @@ public class SarifResultsTests
     [TestInitialize]
     public void TestInitialize()
     {
-        _testDirectory = Path.Combine(Path.GetTempPath(), $"SarifMarkTests_{Guid.NewGuid()}");
+        _testDirectory = PathHelpers.SafePathCombine(Path.GetTempPath(), $"SarifMarkTests_{Guid.NewGuid()}");
         Directory.CreateDirectory(_testDirectory);
     }
 
@@ -86,7 +86,7 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException()
     {
-        var filePath = Path.Combine(_testDirectory!, "nonexistent.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "nonexistent.sarif");
         Assert.Throws<FileNotFoundException>(() => SarifResults.Read(filePath));
     }
 
@@ -96,7 +96,7 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_InvalidJson_ThrowsInvalidOperationException()
     {
-        var filePath = Path.Combine(_testDirectory!, "invalid.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "invalid.sarif");
         File.WriteAllText(filePath, "{ invalid json }");
 
         var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
@@ -109,7 +109,7 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_MissingVersion_ThrowsInvalidOperationException()
     {
-        var filePath = Path.Combine(_testDirectory!, "missing-version.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "missing-version.sarif");
         File.WriteAllText(filePath, """
             {
                 "runs": []
@@ -126,7 +126,7 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_MissingRuns_ThrowsInvalidOperationException()
     {
-        var filePath = Path.Combine(_testDirectory!, "missing-runs.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "missing-runs.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0"
@@ -143,7 +143,7 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_EmptyRuns_ThrowsInvalidOperationException()
     {
-        var filePath = Path.Combine(_testDirectory!, "empty-runs.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "empty-runs.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -161,7 +161,7 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_MissingTool_ThrowsInvalidOperationException()
     {
-        var filePath = Path.Combine(_testDirectory!, "missing-tool.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "missing-tool.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -181,7 +181,7 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_MissingDriver_ThrowsInvalidOperationException()
     {
-        var filePath = Path.Combine(_testDirectory!, "missing-driver.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "missing-driver.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -203,7 +203,7 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_NoResults_ReturnsValidResults()
     {
-        var filePath = Path.Combine(_testDirectory!, "no-results.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "no-results.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -234,7 +234,7 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_EmptyResults_ReturnsValidResults()
     {
-        var filePath = Path.Combine(_testDirectory!, "empty-results.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "empty-results.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -266,7 +266,7 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_WithResults_ReturnsValidResults()
     {
-        var filePath = Path.Combine(_testDirectory!, "with-results.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "with-results.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -332,7 +332,7 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_MissingToolName_UsesUnknown()
     {
-        var filePath = Path.Combine(_testDirectory!, "missing-tool-name.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "missing-tool-name.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -362,7 +362,7 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_MissingToolVersion_UsesUnknown()
     {
-        var filePath = Path.Combine(_testDirectory!, "missing-tool-version.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "missing-tool-version.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -420,7 +420,7 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_WithLocations_ReturnsResultsWithLocationData()
     {
-        var filePath = Path.Combine(_testDirectory!, "with-locations.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "with-locations.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",

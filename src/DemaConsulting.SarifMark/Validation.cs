@@ -159,8 +159,8 @@ internal static class Validation
         try
         {
             using var tempDir = new TemporaryDirectory();
-            var logFile = Path.Combine(tempDir.DirectoryPath, "enforcement.log");
-            var sarifFile = Path.Combine(tempDir.DirectoryPath, "test.sarif");
+            var logFile = PathHelpers.SafePathCombine(tempDir.DirectoryPath, "enforcement.log");
+            var sarifFile = PathHelpers.SafePathCombine(tempDir.DirectoryPath, "test.sarif");
 
             // Create mock SARIF file
             CreateMockSarifFile(sarifFile);
@@ -207,6 +207,7 @@ internal static class Validation
                 context.WriteError($"✗ Enforcement Test - FAILED: Program should have exited with non-zero code");
             }
         }
+        // Catch all exceptions as this is a test framework - any exception should be recorded as a test failure
         catch (Exception ex)
         {
             HandleTestException(test, context, "Enforcement Test", ex);
@@ -238,9 +239,9 @@ internal static class Validation
         try
         {
             using var tempDir = new TemporaryDirectory();
-            var logFile = Path.Combine(tempDir.DirectoryPath, $"{testName}.log");
-            var sarifFile = Path.Combine(tempDir.DirectoryPath, "test.sarif");
-            var reportFile = reportFileName != null ? Path.Combine(tempDir.DirectoryPath, reportFileName) : null;
+            var logFile = PathHelpers.SafePathCombine(tempDir.DirectoryPath, $"{testName}.log");
+            var sarifFile = PathHelpers.SafePathCombine(tempDir.DirectoryPath, "test.sarif");
+            var reportFile = reportFileName != null ? PathHelpers.SafePathCombine(tempDir.DirectoryPath, reportFileName) : null;
 
             // Create mock SARIF file
             CreateMockSarifFile(sarifFile);
@@ -298,6 +299,7 @@ internal static class Validation
                 context.WriteError($"✗ {displayName} - FAILED: Exit code {exitCode}");
             }
         }
+        // Catch all exceptions as this is a test framework - any exception should be recorded as a test failure
         catch (Exception ex)
         {
             HandleTestException(test, context, displayName, ex);
@@ -407,7 +409,7 @@ internal static class Validation
             File.WriteAllText(context.ResultsFile, content);
             context.WriteLine($"Results written to {context.ResultsFile}");
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException)
         {
             context.WriteError($"Error: Failed to write results file: {ex.Message}");
         }
@@ -476,7 +478,7 @@ internal static class Validation
         /// </summary>
         public TemporaryDirectory()
         {
-            DirectoryPath = Path.Combine(Path.GetTempPath(), $"sarifmark_validation_{Guid.NewGuid()}");
+            DirectoryPath = PathHelpers.SafePathCombine(Path.GetTempPath(), $"sarifmark_validation_{Guid.NewGuid()}");
 
             try
             {
