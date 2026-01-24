@@ -18,13 +18,13 @@ pipelines and documentation workflows.
 
 ## Features
 
-- 📄 **SARIF Processing** - Read and parse SARIF 2.1.0 format files from any compatible static analysis tool
-- 📝 **Markdown Reports** - Generate human-readable markdown reports from SARIF data
+- 📄 **SARIF Processing** - Read and parse SARIF 2.1.0 format files
+- 📝 **Markdown Reports** - Generate human-readable reports from SARIF data
 - 🎯 **Customizable Output** - Configure report depth and custom headings
-- 🚀 **CI/CD Integration** - Enforce quality gates and fail builds based on analysis results
-- 🌐 **Multi-Platform** - Support for .NET 8, 9, and 10 across Windows, Linux, and macOS
-- ✅ **Self-Validation** - Built-in tests to verify functionality without requiring external tools
-- 📊 **Detailed Reporting** - Extract tool information, results, and location data from SARIF files
+- 🚀 **CI/CD Integration** - Enforce quality gates and fail builds on issues
+- 🌐 **Multi-Platform** - Support for .NET 8, 9, and 10
+- ✅ **Self-Validation** - Built-in tests without requiring external tools
+- 📊 **Detailed Reporting** - Extract tool information, results, and locations
 
 ## Installation
 
