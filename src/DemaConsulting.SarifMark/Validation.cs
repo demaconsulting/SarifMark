@@ -74,24 +74,6 @@ internal static class Validation
     }
 
     /// <summary>
-    ///     Safely combines two paths, ensuring the second path doesn't contain path traversal sequences.
-    /// </summary>
-    /// <param name="basePath">The base path.</param>
-    /// <param name="relativePath">The relative path to combine.</param>
-    /// <returns>The combined path.</returns>
-    /// <exception cref="ArgumentException">Thrown when relativePath contains invalid characters or path traversal sequences.</exception>
-    private static string SafePathCombine(string basePath, string relativePath)
-    {
-        // Ensure the relative path doesn't contain path traversal sequences
-        if (relativePath.Contains("..") || Path.IsPathRooted(relativePath))
-        {
-            throw new ArgumentException($"Invalid path component: {relativePath}", nameof(relativePath));
-        }
-
-        return Path.Combine(basePath, relativePath);
-    }
-
-    /// <summary>
     ///     Prints the validation header with system information.
     /// </summary>
     /// <param name="context">The context for output.</param>
@@ -177,8 +159,8 @@ internal static class Validation
         try
         {
             using var tempDir = new TemporaryDirectory();
-            var logFile = SafePathCombine(tempDir.DirectoryPath, "enforcement.log");
-            var sarifFile = SafePathCombine(tempDir.DirectoryPath, "test.sarif");
+            var logFile = PathHelpers.SafePathCombine(tempDir.DirectoryPath, "enforcement.log");
+            var sarifFile = PathHelpers.SafePathCombine(tempDir.DirectoryPath, "test.sarif");
 
             // Create mock SARIF file
             CreateMockSarifFile(sarifFile);
@@ -257,9 +239,9 @@ internal static class Validation
         try
         {
             using var tempDir = new TemporaryDirectory();
-            var logFile = SafePathCombine(tempDir.DirectoryPath, $"{testName}.log");
-            var sarifFile = SafePathCombine(tempDir.DirectoryPath, "test.sarif");
-            var reportFile = reportFileName != null ? SafePathCombine(tempDir.DirectoryPath, reportFileName) : null;
+            var logFile = PathHelpers.SafePathCombine(tempDir.DirectoryPath, $"{testName}.log");
+            var sarifFile = PathHelpers.SafePathCombine(tempDir.DirectoryPath, "test.sarif");
+            var reportFile = reportFileName != null ? PathHelpers.SafePathCombine(tempDir.DirectoryPath, reportFileName) : null;
 
             // Create mock SARIF file
             CreateMockSarifFile(sarifFile);
@@ -496,7 +478,7 @@ internal static class Validation
         /// </summary>
         public TemporaryDirectory()
         {
-            DirectoryPath = SafePathCombine(Path.GetTempPath(), $"sarifmark_validation_{Guid.NewGuid()}");
+            DirectoryPath = PathHelpers.SafePathCombine(Path.GetTempPath(), $"sarifmark_validation_{Guid.NewGuid()}");
 
             try
             {
