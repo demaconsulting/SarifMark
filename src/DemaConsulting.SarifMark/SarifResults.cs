@@ -87,94 +87,9 @@ public record SarifResults
             using var document = JsonDocument.Parse(json);
             var root = document.RootElement;
 
-            // Validate SARIF version
-            if (!root.TryGetProperty("version", out _))
-            {
-                throw new InvalidOperationException("Invalid SARIF file: missing 'version' property.");
-            }
-
-            // Get runs array
-            if (!root.TryGetProperty("runs", out var runsElement) || runsElement.ValueKind != JsonValueKind.Array)
-            {
-                throw new InvalidOperationException("Invalid SARIF file: missing or invalid 'runs' array.");
-            }
-
-            var runs = runsElement.EnumerateArray();
-            if (!runs.Any())
-            {
-                throw new InvalidOperationException("Invalid SARIF file: 'runs' array is empty.");
-            }
-
-            // Get the first run
-            var firstRun = runs.First();
-
-            // Get tool information
-            if (!firstRun.TryGetProperty("tool", out var toolElement))
-            {
-                throw new InvalidOperationException("Invalid SARIF file: missing 'tool' property in run.");
-            }
-
-            if (!toolElement.TryGetProperty("driver", out var driverElement))
-            {
-                throw new InvalidOperationException("Invalid SARIF file: missing 'driver' property in tool.");
-            }
-
-            var toolName = driverElement.TryGetProperty("name", out var nameElement)
-                ? nameElement.GetString() ?? "Unknown"
-                : "Unknown";
-
-            var toolVersion = driverElement.TryGetProperty("version", out var toolVersionElement)
-                ? toolVersionElement.GetString() ?? "Unknown"
-                : "Unknown";
-
-            // Parse results
-            var results = new List<SarifResult>();
-            if (firstRun.TryGetProperty("results", out var resultsElement) &&
-                resultsElement.ValueKind == JsonValueKind.Array)
-            {
-                foreach (var resultElement in resultsElement.EnumerateArray())
-                {
-                    var ruleId = resultElement.TryGetProperty("ruleId", out var ruleIdElement)
-                        ? ruleIdElement.GetString() ?? string.Empty
-                        : string.Empty;
-
-                    var level = resultElement.TryGetProperty("level", out var levelElement)
-                        ? levelElement.GetString() ?? "warning"
-                        : "warning";
-
-                    var message = string.Empty;
-                    if (resultElement.TryGetProperty("message", out var messageElement) &&
-                        messageElement.TryGetProperty("text", out var messageTextElement))
-                    {
-                        message = messageTextElement.GetString() ?? string.Empty;
-                    }
-
-                    string? uri = null;
-                    int? startLine = null;
-                    if (resultElement.TryGetProperty("locations", out var locationsElement) &&
-                        locationsElement.ValueKind == JsonValueKind.Array)
-                    {
-                        var firstLocation = locationsElement.EnumerateArray().FirstOrDefault();
-                        if (firstLocation.ValueKind != JsonValueKind.Undefined &&
-                            firstLocation.TryGetProperty("physicalLocation", out var physicalLocationElement))
-                        {
-                            if (physicalLocationElement.TryGetProperty("artifactLocation", out var artifactLocationElement) &&
-                                artifactLocationElement.TryGetProperty("uri", out var uriElement))
-                            {
-                                uri = uriElement.GetString();
-                            }
-
-                            if (physicalLocationElement.TryGetProperty("region", out var regionElement) &&
-                                regionElement.TryGetProperty("startLine", out var startLineElement))
-                            {
-                                startLine = startLineElement.GetInt32();
-                            }
-                        }
-                    }
-
-                    results.Add(new SarifResult(ruleId, level, message, uri, startLine));
-                }
-            }
+            var firstRun = ValidateSarifStructure(root);
+            var (toolName, toolVersion) = ExtractToolInformation(firstRun);
+            var results = ParseResults(firstRun);
 
             return new SarifResults(toolName, toolVersion, results);
         }
@@ -182,6 +97,180 @@ public record SarifResults
         {
             throw new InvalidOperationException($"Invalid JSON in SARIF file: {ex.Message}", ex);
         }
+    }
+
+    /// <summary>
+    ///     Validates the SARIF file structure and returns the first run element.
+    /// </summary>
+    /// <param name="root">The root JSON element.</param>
+    /// <returns>The first run element.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when the SARIF structure is invalid.</exception>
+    private static JsonElement ValidateSarifStructure(JsonElement root)
+    {
+        if (!root.TryGetProperty("version", out _))
+        {
+            throw new InvalidOperationException("Invalid SARIF file: missing 'version' property.");
+        }
+
+        if (!root.TryGetProperty("runs", out var runsElement) || runsElement.ValueKind != JsonValueKind.Array)
+        {
+            throw new InvalidOperationException("Invalid SARIF file: missing or invalid 'runs' array.");
+        }
+
+        var runs = runsElement.EnumerateArray();
+        if (!runs.Any())
+        {
+            throw new InvalidOperationException("Invalid SARIF file: 'runs' array is empty.");
+        }
+
+        return runs.First();
+    }
+
+    /// <summary>
+    ///     Extracts tool information from a run element.
+    /// </summary>
+    /// <param name="runElement">The run JSON element.</param>
+    /// <returns>A tuple containing the tool name and version.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when tool information is missing.</exception>
+    private static (string ToolName, string ToolVersion) ExtractToolInformation(JsonElement runElement)
+    {
+        if (!runElement.TryGetProperty("tool", out var toolElement))
+        {
+            throw new InvalidOperationException("Invalid SARIF file: missing 'tool' property in run.");
+        }
+
+        if (!toolElement.TryGetProperty("driver", out var driverElement))
+        {
+            throw new InvalidOperationException("Invalid SARIF file: missing 'driver' property in tool.");
+        }
+
+        var toolName = driverElement.TryGetProperty("name", out var nameElement)
+            ? nameElement.GetString() ?? "Unknown"
+            : "Unknown";
+
+        var toolVersion = driverElement.TryGetProperty("version", out var toolVersionElement)
+            ? toolVersionElement.GetString() ?? "Unknown"
+            : "Unknown";
+
+        return (toolName, toolVersion);
+    }
+
+    /// <summary>
+    ///     Parses all results from a run element.
+    /// </summary>
+    /// <param name="runElement">The run JSON element.</param>
+    /// <returns>A list of parsed SARIF results.</returns>
+    private static List<SarifResult> ParseResults(JsonElement runElement)
+    {
+        var results = new List<SarifResult>();
+
+        if (!runElement.TryGetProperty("results", out var resultsElement) ||
+            resultsElement.ValueKind != JsonValueKind.Array)
+        {
+            return results;
+        }
+
+        foreach (var resultElement in resultsElement.EnumerateArray())
+        {
+            results.Add(ParseResult(resultElement));
+        }
+
+        return results;
+    }
+
+    /// <summary>
+    ///     Parses a single result element.
+    /// </summary>
+    /// <param name="resultElement">The result JSON element.</param>
+    /// <returns>A parsed SARIF result.</returns>
+    private static SarifResult ParseResult(JsonElement resultElement)
+    {
+        var ruleId = resultElement.TryGetProperty("ruleId", out var ruleIdElement)
+            ? ruleIdElement.GetString() ?? string.Empty
+            : string.Empty;
+
+        var level = resultElement.TryGetProperty("level", out var levelElement)
+            ? levelElement.GetString() ?? "warning"
+            : "warning";
+
+        var message = ParseMessage(resultElement);
+        var (uri, startLine) = ParseLocation(resultElement);
+
+        return new SarifResult(ruleId, level, message, uri, startLine);
+    }
+
+    /// <summary>
+    ///     Parses the message from a result element.
+    /// </summary>
+    /// <param name="resultElement">The result JSON element.</param>
+    /// <returns>The message text.</returns>
+    private static string ParseMessage(JsonElement resultElement)
+    {
+        if (resultElement.TryGetProperty("message", out var messageElement) &&
+            messageElement.TryGetProperty("text", out var messageTextElement))
+        {
+            return messageTextElement.GetString() ?? string.Empty;
+        }
+
+        return string.Empty;
+    }
+
+    /// <summary>
+    ///     Parses location information from a result element.
+    /// </summary>
+    /// <param name="resultElement">The result JSON element.</param>
+    /// <returns>A tuple containing the URI and start line.</returns>
+    private static (string? Uri, int? StartLine) ParseLocation(JsonElement resultElement)
+    {
+        if (!resultElement.TryGetProperty("locations", out var locationsElement) ||
+            locationsElement.ValueKind != JsonValueKind.Array)
+        {
+            return (null, null);
+        }
+
+        var firstLocation = locationsElement.EnumerateArray().FirstOrDefault();
+        if (firstLocation.ValueKind == JsonValueKind.Undefined ||
+            !firstLocation.TryGetProperty("physicalLocation", out var physicalLocationElement))
+        {
+            return (null, null);
+        }
+
+        var uri = ParseUri(physicalLocationElement);
+        var startLine = ParseStartLine(physicalLocationElement);
+
+        return (uri, startLine);
+    }
+
+    /// <summary>
+    ///     Parses the URI from a physical location element.
+    /// </summary>
+    /// <param name="physicalLocationElement">The physical location JSON element.</param>
+    /// <returns>The URI string or null.</returns>
+    private static string? ParseUri(JsonElement physicalLocationElement)
+    {
+        if (physicalLocationElement.TryGetProperty("artifactLocation", out var artifactLocationElement) &&
+            artifactLocationElement.TryGetProperty("uri", out var uriElement))
+        {
+            return uriElement.GetString();
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    ///     Parses the start line from a physical location element.
+    /// </summary>
+    /// <param name="physicalLocationElement">The physical location JSON element.</param>
+    /// <returns>The start line number or null.</returns>
+    private static int? ParseStartLine(JsonElement physicalLocationElement)
+    {
+        if (physicalLocationElement.TryGetProperty("region", out var regionElement) &&
+            regionElement.TryGetProperty("startLine", out var startLineElement))
+        {
+            return startLineElement.GetInt32();
+        }
+
+        return null;
     }
 
     /// <summary>
