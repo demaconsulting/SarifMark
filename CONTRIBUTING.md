@@ -262,24 +262,13 @@ SarifMark uses [DemaConsulting.ReqStream][reqstream] for requirements traceabili
 
 ## Release Process
 
-Releases are managed by project maintainers using an automated GitHub Actions workflow. The release process includes:
+Releases are managed by project maintainers. The process includes:
 
-1. **Trigger Release Workflow**: Maintainers manually trigger the release workflow via GitHub Actions
-2. **Version Input**: Specify the release version (e.g., `1.0.0`)
-3. **Publish Type**: Choose from:
-   - `none`: Build and test only (dry run)
-   - `release`: Create GitHub release with artifacts and documentation
-   - `publish`: Create GitHub release and publish NuGet package to NuGet.org
-4. **Automated Build**: The workflow automatically:
-   - Builds the project across all supported platforms
-   - Runs all quality checks and tests
-   - Generates documentation
-   - Packages the .NET tool
-5. **Artifact Publication**: Depending on publish type:
-   - GitHub release with NuGet package and PDF documentation
-   - NuGet package published to NuGet.org
-
-The release workflow ensures consistent, high-quality releases with full test coverage and documentation.
+1. Version bump in project files
+2. Tag the release in Git
+3. Build and test across all supported platforms
+4. Publish NuGet package
+5. Create GitHub release with artifacts and release notes
 
 ## Getting Help
 
