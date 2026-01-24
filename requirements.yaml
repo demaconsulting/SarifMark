@@ -1,0 +1,243 @@
+---
+sections:
+  - title: "SarifMark Requirements"
+    sections:
+      - title: "Command-Line Interface"
+        requirements:
+          - id: "CLI-001"
+            title: "The tool shall provide a command-line interface."
+            tests:
+              - "IntegrationTest_VersionFlag_OutputsVersion"
+              - "IntegrationTest_HelpFlag_OutputsUsageInformation"
+
+          - id: "CLI-002"
+            title: "The tool shall display version information when requested."
+            tests:
+              - "IntegrationTest_VersionFlag_OutputsVersion"
+              - "Context_Create_VersionFlag_SetsVersionTrue"
+
+          - id: "CLI-003"
+            title: "The tool shall display help information when requested."
+            tests:
+              - "IntegrationTest_HelpFlag_OutputsUsageInformation"
+              - "Context_Create_HelpFlag_SetsHelpTrue"
+
+          - id: "CLI-004"
+            title: "The tool shall support silent mode to suppress console output."
+            tests:
+              - "Context_Create_NoArguments_ReturnsDefaultContext"
+
+          - id: "CLI-005"
+            title: "The tool shall support writing output to a log file."
+            tests:
+              - "Context_WriteLine_WritesToConsole"
+
+          - id: "CLI-006"
+            title: "The tool shall support enforcing quality gate checks."
+            tests:
+              - "Context_WriteError_WritesToErrorAndSetsExitCode"
+
+          - id: "CLI-007"
+            title: "The tool shall reject unknown command-line arguments."
+            tests:
+              - "Context_Create_UnknownArgument_ThrowsArgumentException"
+
+      - title: "SARIF Integration"
+        requirements:
+          - id: "SARIF-001"
+            title: "The tool shall read SARIF 2.1.0 format files."
+            tests:
+              - "SarifResults_Read_WithResults_ReturnsValidResults"
+              - "SarifMark_SarifReading"
+
+          - id: "SARIF-002"
+            title: "The tool shall validate SARIF file format."
+            tests:
+              - "SarifResults_Read_InvalidJson_ThrowsInvalidOperationException"
+              - "SarifResults_Read_MissingVersion_ThrowsInvalidOperationException"
+              - "SarifResults_Read_MissingRuns_ThrowsInvalidOperationException"
+              - "SarifResults_Read_EmptyRuns_ThrowsInvalidOperationException"
+
+          - id: "SARIF-003"
+            title: "The tool shall extract tool information from SARIF files."
+            tests:
+              - "SarifResults_Read_MissingTool_ThrowsInvalidOperationException"
+              - "SarifResults_Read_MissingDriver_ThrowsInvalidOperationException"
+              - "SarifResults_Read_MissingToolName_UsesUnknown"
+              - "SarifResults_Read_MissingToolVersion_UsesUnknown"
+
+          - id: "SARIF-004"
+            title: "The tool shall extract results from SARIF files."
+            tests:
+              - "SarifResults_Read_NoResults_ReturnsValidResults"
+              - "SarifResults_Read_EmptyResults_ReturnsValidResults"
+              - "SarifResults_Read_WithResults_ReturnsValidResults"
+
+          - id: "SARIF-005"
+            title: "The tool shall extract location information from SARIF results."
+            tests:
+              - "SarifResults_Read_WithLocations_ReturnsResultsWithLocationData"
+
+          - id: "SARIF-006"
+            title: "The tool shall require valid file paths for SARIF input."
+            tests:
+              - "SarifResults_Read_NullPath_ThrowsArgumentException"
+              - "SarifResults_Read_EmptyPath_ThrowsArgumentException"
+              - "SarifResults_Read_WhitespacePath_ThrowsArgumentException"
+              - "SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException"
+
+          - id: "SARIF-007"
+            title: "The tool shall require the --sarif parameter for analysis."
+            tests:
+              - "IntegrationTest_MissingSarifParameter_ShowsError"
+
+          - id: "SARIF-008"
+            title: "The tool shall process valid SARIF files successfully."
+            tests:
+              - "IntegrationTest_ValidSarifFile_ProcessesSuccessfully"
+
+      - title: "Report Generation"
+        requirements:
+          - id: "RPT-001"
+            title: "The tool shall generate markdown reports from SARIF files."
+            tests:
+              - "SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput"
+              - "SarifMark_MarkdownReportGeneration"
+
+          - id: "RPT-002"
+            title: "The tool shall support configurable markdown heading depth."
+            tests:
+              - "SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput"
+              - "SarifResults_ToMarkdown_Depth3_UsesCorrectHeadingLevels"
+              - "SarifResults_ToMarkdown_Depth6_ProducesCorrectOutput"
+
+          - id: "RPT-003"
+            title: "The tool shall validate markdown heading depth range."
+            tests:
+              - "SarifResults_ToMarkdown_DepthLessThan1_ThrowsArgumentOutOfRangeException"
+              - "SarifResults_ToMarkdown_DepthGreaterThan6_ThrowsArgumentOutOfRangeException"
+
+          - id: "RPT-004"
+            title: "The tool shall display result counts in reports."
+            tests:
+              - "SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults"
+              - "SarifResults_ToMarkdown_OneResult_UsesSingularForm"
+
+          - id: "RPT-005"
+            title: "The tool shall display location information for results."
+            tests:
+              - "SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation"
+              - "SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly"
+
+          - id: "RPT-006"
+            title: "The tool shall support custom headings in reports."
+            tests:
+              - "SarifResults_ToMarkdown_CustomHeading_UsesProvidedHeading"
+              - "SarifResults_ToMarkdown_NullHeading_UsesDefaultHeading"
+              - "SarifResults_ToMarkdown_NoHeadingParameter_UsesDefaultHeading"
+              - "Context_Create_HeadingArgument_SetsHeading"
+
+          - id: "RPT-007"
+            title: "The tool shall validate heading parameter usage."
+            tests:
+              - "Context_Create_HeadingWithoutValue_ThrowsArgumentException"
+
+          - id: "RPT-008"
+            title: "The tool shall format multiple results with proper line breaks."
+            tests:
+              - "SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks"
+
+      - title: "Validation and Testing"
+        requirements:
+          - id: "VAL-001"
+            title: "The tool shall support self-validation mode."
+            tests:
+              - "IntegrationTest_ValidateFlag_RunsSelfValidation"
+              - "SarifMark_SarifReading"
+              - "SarifMark_MarkdownReportGeneration"
+              - "SarifMark_Enforcement"
+
+          - id: "VAL-002"
+            title: "The tool shall write validation results to test result files."
+            tests:
+              - "SarifMark_SarifReading"
+              - "SarifMark_MarkdownReportGeneration"
+              - "SarifMark_Enforcement"
+
+          - id: "VAL-003"
+            title: "The tool shall support TRX format for test results."
+            tests:
+              - "SarifMark_SarifReading"
+              - "SarifMark_MarkdownReportGeneration"
+              - "SarifMark_Enforcement"
+
+          - id: "VAL-004"
+            title: "The tool shall support JUnit format for test results."
+            tests:
+              - "SarifMark_SarifReading"
+              - "SarifMark_MarkdownReportGeneration"
+              - "SarifMark_Enforcement"
+
+      - title: "Quality Enforcement"
+        requirements:
+          - id: "ENF-001"
+            title: "The tool shall support enforcement mode to fail on issues found."
+            tests:
+              - "SarifMark_Enforcement"
+
+          - id: "ENF-002"
+            title: "The tool shall return non-zero exit code when issues found in enforcement mode."
+            tests:
+              - "SarifMark_Enforcement"
+
+      - title: "Path Security"
+        requirements:
+          - id: "PATH-001"
+            title: "The tool shall prevent path traversal attacks."
+            tests:
+              - "PathHelpers_SafePathCombine_PathWithParentDirectory_ThrowsArgumentException"
+              - "PathHelpers_SafePathCombine_PathWithDoubleDots_ThrowsArgumentException"
+
+          - id: "PATH-002"
+            title: "The tool shall reject absolute paths in unsafe operations."
+            tests:
+              - "PathHelpers_SafePathCombine_AbsolutePath_ThrowsArgumentException"
+
+          - id: "PATH-003"
+            title: "The tool shall safely combine file paths."
+            tests:
+              - "PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully"
+              - "PathHelpers_SafePathCombine_SimpleFilename_CombinesSuccessfully"
+              - "PathHelpers_SafePathCombine_PathWithSubdirectories_CombinesSuccessfully"
+              - "PathHelpers_SafePathCombine_GuidBasedFilename_CombinesSuccessfully"
+
+      - title: "Platform Support"
+        requirements:
+          - id: "PLT-001"
+            title: "The tool shall run on Windows operating systems."
+            tests:
+              - "windows-latest@IntegrationTest_VersionFlag_OutputsVersion"
+              - "windows-latest@IntegrationTest_HelpFlag_OutputsUsageInformation"
+              - "windows-latest@IntegrationTest_ValidateFlag_RunsSelfValidation"
+
+          - id: "PLT-002"
+            title: "The tool shall run on Linux operating systems."
+            tests:
+              - "ubuntu-latest@IntegrationTest_VersionFlag_OutputsVersion"
+              - "ubuntu-latest@IntegrationTest_HelpFlag_OutputsUsageInformation"
+              - "ubuntu-latest@IntegrationTest_ValidateFlag_RunsSelfValidation"
+
+          - id: "PLT-003"
+            title: "The tool shall support .NET 8.0 runtime."
+            tests:
+              - "8.x@IntegrationTest_ValidateFlag_RunsSelfValidation"
+
+          - id: "PLT-004"
+            title: "The tool shall support .NET 9.0 runtime."
+            tests:
+              - "9.x@IntegrationTest_ValidateFlag_RunsSelfValidation"
+
+          - id: "PLT-005"
+            title: "The tool shall support .NET 10.0 runtime."
+            tests:
+              - "10.x@IntegrationTest_ValidateFlag_RunsSelfValidation"

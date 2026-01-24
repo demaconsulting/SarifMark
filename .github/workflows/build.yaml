@@ -299,6 +299,15 @@ jobs:
       - name: Restore Tools
         run: dotnet tool restore
 
+      - name: Generate Requirements Report and Trace Matrix
+        run: >
+          dotnet reqstream
+          --requirements requirements.yaml
+          --tests "test-results/**/*.trx"
+          --report docs/requirements/requirements.md
+          --matrix docs/tracematrix/tracematrix.md
+          --enforce
+
       - name: Generate CodeQL Quality Report with SarifMark
         shell: pwsh
         run: |
@@ -361,6 +370,34 @@ jobs:
           --pdf-variant pdf/a-3u
           docs/quality/quality.html
           "docs/SarifMark Code Quality.pdf"
+
+      - name: Generate Requirements HTML with Pandoc
+        run: >
+          dotnet pandoc
+          --defaults docs/requirements/definition.yaml
+          --filter node_modules/.bin/mermaid-filter.cmd
+          --output docs/requirements/requirements.html
+
+      - name: Generate Requirements PDF with Weasyprint
+        run: >
+          dotnet weasyprint
+          --pdf-variant pdf/a-3u
+          docs/requirements/requirements.html
+          "docs/SarifMark Requirements.pdf"
+
+      - name: Generate Trace Matrix HTML with Pandoc
+        run: >
+          dotnet pandoc
+          --defaults docs/tracematrix/definition.yaml
+          --filter node_modules/.bin/mermaid-filter.cmd
+          --output docs/tracematrix/tracematrix.html
+
+      - name: Generate Trace Matrix PDF with Weasyprint
+        run: >
+          dotnet weasyprint
+          --pdf-variant pdf/a-3u
+          docs/tracematrix/tracematrix.html
+          "docs/SarifMark Trace Matrix.pdf"
 
       - name: Upload documentation
         uses: actions/upload-artifact@v6

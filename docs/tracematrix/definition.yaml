@@ -1,0 +1,9 @@
+---
+resource-path:
+  - docs/tracematrix
+  - docs/template
+input-files:
+  - docs/tracematrix/tracematrix.md
+template: template.html
+table-of-contents: true
+number-sections: false
