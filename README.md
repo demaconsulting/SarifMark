@@ -5,6 +5,8 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/demaconsulting/SarifMark?style=plastic)](https://github.com/demaconsulting/SarifMark/graphs/contributors)
 [![License](https://img.shields.io/github/license/demaconsulting/SarifMark?style=plastic)](https://github.com/demaconsulting/SarifMark/blob/main/LICENSE)
 [![Build](https://img.shields.io/github/actions/workflow/status/demaconsulting/SarifMark/build_on_push.yaml)](https://github.com/demaconsulting/SarifMark/actions/workflows/build_on_push.yaml)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=demaconsulting_SarifMark&metric=alert_status)](https://sonarcloud.io/dashboard?id=demaconsulting_SarifMark)
+[![Security](https://sonarcloud.io/api/project_badges/measure?project=demaconsulting_SarifMark&metric=security_rating)](https://sonarcloud.io/dashboard?id=demaconsulting_SarifMark)
 [![NuGet](https://img.shields.io/nuget/v/DemaConsulting.SarifMark?style=plastic)](https://www.nuget.org/packages/DemaConsulting.SarifMark)
 
 SARIF Report Generation Tool
