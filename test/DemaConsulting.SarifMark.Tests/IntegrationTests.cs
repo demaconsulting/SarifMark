@@ -250,4 +250,140 @@ public class IntegrationTests
         // Verify error message
         Assert.Contains("Issues found in SARIF file", output);
     }
+
+    /// <summary>
+    ///     Test that silent flag suppresses console output.
+    /// </summary>
+    [TestMethod]
+    public void IntegrationTest_SilentFlag_SuppressesOutput()
+    {
+        // Locate the test SARIF file
+        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
+        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+
+        // Run the application with --silent flag
+        var exitCode = Runner.Run(
+            out var output,
+            "dotnet",
+            _dllPath,
+            "--silent",
+            "--sarif", sarifFile);
+
+        // Verify success
+        Assert.AreEqual(0, exitCode);
+
+        // Verify console output is suppressed (no banner or normal messages)
+        Assert.DoesNotContain("SarifMark version", output);
+        Assert.DoesNotContain("Copyright", output);
+    }
+
+    /// <summary>
+    ///     Test that log file parameter writes output to file.
+    /// </summary>
+    [TestMethod]
+    public void IntegrationTest_LogFile_WritesOutputToFile()
+    {
+        // Locate the test SARIF file
+        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
+        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+
+        // Create a temporary log file path
+        var logFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
+
+        try
+        {
+            // Run the application with --log flag
+            var exitCode = Runner.Run(
+                out _,
+                "dotnet",
+                _dllPath,
+                "--log", logFile,
+                "--sarif", sarifFile);
+
+            // Verify success
+            Assert.AreEqual(0, exitCode);
+
+            // Verify log file was created
+            Assert.IsTrue(File.Exists(logFile), "Log file was not created");
+
+            // Verify log file contains expected content
+            var logContent = File.ReadAllText(logFile);
+            Assert.Contains("SarifMark version", logContent);
+            Assert.Contains("SARIF File:", logContent);
+            Assert.Contains("Tool: TestTool", logContent);
+        }
+        finally
+        {
+            // Clean up the temporary log file
+            if (File.Exists(logFile))
+            {
+                File.Delete(logFile);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Test that unknown arguments are rejected with error.
+    /// </summary>
+    [TestMethod]
+    public void IntegrationTest_UnknownArgument_ShowsError()
+    {
+        // Run the application with an unknown argument
+        var exitCode = Runner.Run(
+            out var output,
+            "dotnet",
+            _dllPath,
+            "--unknown-flag");
+
+        // Verify error exit code
+        Assert.AreEqual(1, exitCode);
+
+        // Verify error message
+        Assert.Contains("Error:", output);
+        Assert.Contains("unknown-flag", output);
+    }
+
+    /// <summary>
+    ///     Test that report depth parameter is configurable.
+    /// </summary>
+    [TestMethod]
+    public void IntegrationTest_ReportDepth_IsConfigurable()
+    {
+        // Locate the test SARIF file
+        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
+        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+
+        // Create a temporary report file path
+        var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-report-depth-{Guid.NewGuid()}.md");
+
+        try
+        {
+            // Run the application with custom report depth
+            var exitCode = Runner.Run(
+                out _,
+                "dotnet",
+                _dllPath,
+                "--sarif", sarifFile,
+                "--report", reportFile,
+                "--report-depth", "3");
+
+            // Verify success
+            Assert.AreEqual(0, exitCode);
+
+            // Verify report file was created
+            Assert.IsTrue(File.Exists(reportFile), "Report file was not created");
+
+            // Verify report uses the specified depth (level 3 heading)
+            var reportContent = File.ReadAllText(reportFile);
+            Assert.Contains("### TestTool Analysis", reportContent);
+        }
+        finally
+        {
+            // Clean up the temporary report file
+            if (File.Exists(reportFile))
+            {
+                File.Delete(reportFile);
+            }
+        }
+    }
 }

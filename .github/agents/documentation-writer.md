@@ -21,6 +21,8 @@ update, and maintain high-quality documentation that is clear, accurate, and hel
 - Update CONTRIBUTING.md with relevant development information
 - Maintain SECURITY.md with security policies and reporting procedures
 - Keep AGENTS.md up to date with agent configurations
+- Maintain requirements documentation in `requirements.yaml`
+- Update requirements when features are added or changed
 
 ### Documentation Standards
 
@@ -53,6 +55,16 @@ update, and maintain high-quality documentation that is clear, accurate, and hel
 - **Code Examples**: Use proper formatting for examples
 - **CLI Usage**: Document all command-line options and arguments
 - **API Documentation**: Use clear descriptions and examples
+- **Requirements**: Keep `requirements.yaml` synchronized with features and tests
+
+### Requirements Management
+
+- **Requirements File**: `requirements.yaml` contains all project requirements
+- **Test Linkage**: All requirements must be linked to test methods that validate them
+- **Self-Validation**: Prefer linking to self-validation tests (e.g., `SarifMark_*`) over unit tests
+- **Test Naming**: Use the convention `ClassName_Method_Scenario_ExpectedBehavior` for clarity
+- **Enforcement**: Requirements are enforced via the `dotnet reqstream --enforce` command in CI/CD
+- **Updates**: When adding features, add corresponding requirements; when adding tests, link them to requirements
 
 ### Technical Accuracy
 

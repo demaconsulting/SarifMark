@@ -21,6 +21,7 @@ project infrastructure is well-maintained.
 - Review and merge pull requests
 - Triage and prioritize issues
 - Ensure project documentation is up to date
+- Maintain requirements in `requirements.yaml` and ensure they're linked to tests
 
 ### Dependency Management
 
@@ -67,6 +68,17 @@ Located in `.github/workflows/`:
 - **`.yamllint.yaml`**: YAML linting rules
 - **`.config/dotnet-tools.json`**: Dotnet tools manifest
 - **`DemaConsulting.SarifMark.sln`**: Solution file
+- **`requirements.yaml`**: Project requirements with test linkage
+
+### Requirements Management
+
+- **Requirements File**: `requirements.yaml` defines all project requirements
+- **ReqStream Tool**: Use `dotnet reqstream` to generate requirements reports and trace matrices
+- **Enforcement**: The `--enforce` flag ensures all requirements are linked to passing tests
+- **Documentation**: Requirements are published as "SarifMark Requirements.pdf" and "SarifMark Trace Matrix.pdf"
+- **Maintenance**: Keep requirements synchronized with features and tests
+- **Test Linkage**: All requirements must be linked to test methods that validate them
+- **Preference**: Link to self-validation tests first, integration tests second, unit tests as last resort
 
 ### Quality Standards
 
@@ -77,6 +89,7 @@ Located in `.github/workflows/`:
 - Markdown linting must pass
 - Spell checking must pass
 - YAML linting must pass
+- Requirements enforcement must pass
 
 ## Release Process
 
@@ -97,6 +110,7 @@ Before merging changes:
 4. **Static Analysis**: No new warnings or errors
 5. **Code Review**: Changes reviewed by maintainers
 6. **Security Scanning**: No new security vulnerabilities
+7. **Requirements Enforcement**: All requirements linked to passing tests
 
 ## Best Practices
 

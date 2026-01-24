@@ -42,6 +42,7 @@ SarifMark/
 ├── CODE_OF_CONDUCT.md            # Code of Conduct
 ├── LICENSE                       # MIT License
 ├── README.md                     # Project documentation
+├── requirements.yaml             # Project requirements
 └── SECURITY.md                   # Security policy
 ```
 
@@ -52,6 +53,18 @@ SarifMark/
 - **`.markdownlint.json`**: Markdown linting rules
 - **`.yamllint.yaml`**: YAML linting rules
 - **`DemaConsulting.SarifMark.sln`**: Solution file containing all projects
+- **`requirements.yaml`**: Project requirements with test linkage
+
+## Requirements Management
+
+SarifMark uses DemaConsulting.ReqStream for requirements management:
+
+- **Requirements File**: `requirements.yaml` contains all project requirements
+- **Test Linkage**: All requirements must be linked to test methods that validate them
+- **Self-Validation**: Prefer linking to self-validation tests (e.g., `SarifMark_*`) over unit tests
+- **Enforcement**: Requirements are enforced via `dotnet reqstream --enforce` in CI/CD
+- **Documentation**: Requirements are published as "SarifMark Requirements.pdf" and "SarifMark Trace Matrix.pdf"
+- **Updates**: When adding features, add corresponding requirements; when adding tests, link them to requirements
 
 ## Testing Guidelines
 
@@ -154,6 +167,8 @@ Before completing any task, you **MUST** perform these checks in order and ensur
    - **Spell Check**: Run cspell on all changed files - must pass with zero errors
    - **YAML**: Run yamllint on all changed `.yaml` or `.yml` files - must pass with zero errors
    - These linters run in CI and will fail the build if not passing
+5. **Requirements Enforcement**: Verify all requirements have test linkage by running
+   `dotnet reqstream --requirements requirements.yaml --tests "test-results/**/*.trx" --enforce` - must pass
 
 ## Project-Specific Guidelines
 
