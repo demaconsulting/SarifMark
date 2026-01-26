@@ -717,4 +717,70 @@ public class SarifResultsTests
         Assert.Contains($"src/Program.cs(15): error [CA2000] Second issue  {Environment.NewLine}", markdown);
         Assert.Contains($"src/Helper.cs(7): note [CA3001] Third issue  {Environment.NewLine}", markdown);
     }
+
+    /// <summary>
+    ///     Test that Read excludes suppressed results from the results collection.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_Read_WithSuppressedResults_ExcludesSuppressedResults()
+    {
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "with-suppressions.sarif");
+        File.WriteAllText(filePath, """
+            {
+                "version": "2.1.0",
+                "runs": [
+                    {
+                        "tool": {
+                            "driver": {
+                                "name": "TestTool",
+                                "version": "1.0.0"
+                            }
+                        },
+                        "results": [
+                            {
+                                "ruleId": "TEST001",
+                                "level": "warning",
+                                "message": {
+                                    "text": "Unsuppressed warning"
+                                }
+                            },
+                            {
+                                "ruleId": "TEST002",
+                                "level": "warning",
+                                "message": {
+                                    "text": "Suppressed warning"
+                                },
+                                "suppressions": [
+                                    {
+                                        "kind": "inSource",
+                                        "justification": "This is intentional"
+                                    }
+                                ]
+                            },
+                            {
+                                "ruleId": "TEST003",
+                                "level": "error",
+                                "message": {
+                                    "text": "Another unsuppressed error"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+            """);
+
+        var results = SarifResults.Read(filePath);
+
+        Assert.AreEqual("TestTool", results.ToolName);
+        Assert.AreEqual("1.0.0", results.ToolVersion);
+        Assert.AreEqual(2, results.ResultCount);
+        Assert.HasCount(2, results.Results);
+        
+        Assert.AreEqual("TEST001", results.Results[0].RuleId);
+        Assert.AreEqual("Unsuppressed warning", results.Results[0].Message);
+        
+        Assert.AreEqual("TEST003", results.Results[1].RuleId);
+        Assert.AreEqual("Another unsuppressed error", results.Results[1].Message);
+    }
 }

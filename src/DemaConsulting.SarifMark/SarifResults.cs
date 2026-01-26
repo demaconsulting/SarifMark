@@ -156,7 +156,7 @@ public record SarifResults
     }
 
     /// <summary>
-    ///     Parses all results from a run element.
+    ///     Parses all results from a run element, excluding suppressed results.
     /// </summary>
     /// <param name="runElement">The run JSON element.</param>
     /// <returns>A list of parsed SARIF results.</returns>
@@ -172,10 +172,32 @@ public record SarifResults
 
         foreach (var resultElement in resultsElement.EnumerateArray())
         {
+            // Skip suppressed results
+            if (IsSuppressed(resultElement))
+            {
+                continue;
+            }
+
             results.Add(ParseResult(resultElement));
         }
 
         return results;
+    }
+
+    /// <summary>
+    ///     Determines if a result is suppressed.
+    /// </summary>
+    /// <param name="resultElement">The result JSON element.</param>
+    /// <returns>True if the result has suppressions; otherwise, false.</returns>
+    private static bool IsSuppressed(JsonElement resultElement)
+    {
+        if (resultElement.TryGetProperty("suppressions", out var suppressionsElement) &&
+            suppressionsElement.ValueKind == JsonValueKind.Array)
+        {
+            return suppressionsElement.EnumerateArray().Any();
+        }
+
+        return false;
     }
 
     /// <summary>
