@@ -21,4 +21,4 @@
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("DemaConsulting.SarifMark.Tests")]
-[assembly: Parallelize(Scope = ExecutionScope.ClassLevel)]
+[assembly: Parallelize(Workers = 1, Scope = ExecutionScope.MethodLevel)]
