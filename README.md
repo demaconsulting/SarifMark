@@ -163,14 +163,12 @@ Example report structure:
 
 **Tool:** MockTool 1.0.0
 
-**Results:** 2
-
 ## Results
 
 Found 2 results
 
-src/Program.cs(42): warning TEST001: Test issue 1
-src/Helper.cs(15): error TEST002: Test issue 2
+src/Program.cs(42): warning [TEST001] Test issue 1
+src/Helper.cs(15): error [TEST002] Test issue 2
 ```
 
 ## Contributing
