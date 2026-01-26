@@ -44,7 +44,7 @@ internal static class PathHelpers
         // 1. relativePath doesn't contain ".." (path traversal)
         // 2. relativePath is not an absolute path (IsPathRooted check)
         // This ensures the combined path will always be under basePath
-        // lgtm[cs/path-combine]
+        // codeql[cs/path-combine] Safe usage after validation prevents path traversal
         return Path.Combine(basePath, relativePath);
     }
 }

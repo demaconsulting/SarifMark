@@ -144,7 +144,7 @@ internal sealed class Context : IDisposable
         // Catch all exceptions to wrap them with context about which file failed to open.
         // This is intentional to provide better error messages to users regardless of the
         // underlying exception type (IOException, UnauthorizedAccessException, etc.)
-        // lgtm[cs/catch-of-all-exceptions]
+        // codeql[cs/catch-of-all-exceptions] Intentional generic catch to provide context for file operation errors
         catch (Exception ex)
         {
             throw new InvalidOperationException($"Failed to open log file '{logFile}': {ex.Message}", ex);
