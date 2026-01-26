@@ -215,11 +215,10 @@ The generated markdown reports include:
 - **Tool Information**: Name and version of the analysis tool
 - **Summary**: Count of results found
 - **Results Details**: Detailed information about each finding, including:
-  - Rule ID and description
-  - Severity level
   - File location and line number
-  - Code snippet (if available)
-  - Remediation guidance (if available)
+  - Severity level
+  - Rule ID
+  - Issue message
 
 ## Exit Codes
 
