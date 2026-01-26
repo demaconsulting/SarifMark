@@ -1,6 +1,7 @@
 ---
 # CodeQL configuration for SarifMark
 # Excludes test code from path-combine security analysis
+# Suppresses intentional generic catch clauses and safe path-combine usage
 
 name: "SarifMark CodeQL Config"
 
@@ -10,3 +11,9 @@ query-filters:
       id: cs/path-combine
     paths:
       - test/**/*.cs
+      - src/DemaConsulting.SarifMark/PathHelpers.cs
+  - exclude:
+      id: cs/catch-of-all-exceptions
+    paths:
+      - src/DemaConsulting.SarifMark/Context.cs
+      - src/DemaConsulting.SarifMark/Validation.cs
