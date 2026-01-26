@@ -141,7 +141,9 @@ internal sealed class Context : IDisposable
         {
             _logWriter = new StreamWriter(logFile, append: false);
         }
-        // Catch all exceptions to wrap them with context about which file failed to open
+        // Catch all exceptions to wrap them with context about which file failed to open.
+        // This is intentional to provide better error messages to users regardless of the
+        // underlying exception type (IOException, UnauthorizedAccessException, etc.)
         catch (Exception ex)
         {
             throw new InvalidOperationException($"Failed to open log file '{logFile}': {ex.Message}", ex);

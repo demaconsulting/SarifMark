@@ -40,6 +40,10 @@ internal static class PathHelpers
             throw new ArgumentException($"Invalid path component: {relativePath}", nameof(relativePath));
         }
 
+        // This call to Path.Combine is safe because we've validated that:
+        // 1. relativePath doesn't contain ".." (path traversal)
+        // 2. relativePath is not an absolute path (IsPathRooted check)
+        // This ensures the combined path will always be under basePath
         return Path.Combine(basePath, relativePath);
     }
 }

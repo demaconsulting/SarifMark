@@ -207,7 +207,8 @@ internal static class Validation
                 context.WriteError($"✗ Enforcement Test - FAILED: Program should have exited with non-zero code");
             }
         }
-        // Catch all exceptions as this is a test framework - any exception should be recorded as a test failure
+        // Catch all exceptions as this is a test framework - any exception should be recorded as a test failure.
+        // This is intentional to ensure robust test execution and reporting regardless of exception type.
         catch (Exception ex)
         {
             HandleTestException(test, context, "Enforcement Test", ex);
@@ -299,7 +300,8 @@ internal static class Validation
                 context.WriteError($"✗ {displayName} - FAILED: Exit code {exitCode}");
             }
         }
-        // Catch all exceptions as this is a test framework - any exception should be recorded as a test failure
+        // Catch all exceptions as this is a test framework - any exception should be recorded as a test failure.
+        // This is intentional to ensure robust test execution and reporting regardless of exception type.
         catch (Exception ex)
         {
             HandleTestException(test, context, displayName, ex);
