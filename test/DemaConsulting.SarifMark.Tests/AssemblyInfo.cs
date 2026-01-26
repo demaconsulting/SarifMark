@@ -21,4 +21,4 @@
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("DemaConsulting.SarifMark.Tests")]
-[assembly: Parallelize(Workers = 1)]
+[assembly: DoNotParallelize]
