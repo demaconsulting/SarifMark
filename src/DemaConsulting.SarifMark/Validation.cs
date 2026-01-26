@@ -209,8 +209,7 @@ internal static class Validation
         }
         // Catch all exceptions as this is a test framework - any exception should be recorded as a test failure.
         // This is intentional to ensure robust test execution and reporting regardless of exception type.
-        // codeql[cs/catch-of-all-exceptions] Intentional generic catch in test framework to record all failures
-        catch (Exception ex)
+        catch (Exception ex) // codeql[cs/catch-of-all-exceptions] Intentional generic catch in test framework to record all failures
         {
             HandleTestException(test, context, "Enforcement Test", ex);
         }
@@ -303,8 +302,7 @@ internal static class Validation
         }
         // Catch all exceptions as this is a test framework - any exception should be recorded as a test failure.
         // This is intentional to ensure robust test execution and reporting regardless of exception type.
-        // codeql[cs/catch-of-all-exceptions] Intentional generic catch in test framework to record all failures
-        catch (Exception ex)
+        catch (Exception ex) // codeql[cs/catch-of-all-exceptions] Intentional generic catch in test framework to record all failures
         {
             HandleTestException(test, context, displayName, ex);
         }
