@@ -137,7 +137,7 @@ internal static class Validation
                 }
 
                 if (reportContent.Contains("MockTool Analysis") &&
-                    reportContent.Contains("Found 2 results"))
+                    reportContent.Contains("Found 2 issues"))
                 {
                     return null;
                 }
