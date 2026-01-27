@@ -148,11 +148,50 @@ public record SarifResults
             ? nameElement.GetString() ?? "Unknown"
             : "Unknown";
 
-        var toolVersion = driverElement.TryGetProperty("version", out var toolVersionElement)
-            ? toolVersionElement.GetString() ?? "Unknown"
-            : "Unknown";
+        var toolVersion = ExtractToolVersion(driverElement);
 
         return (toolName, toolVersion);
+    }
+
+    /// <summary>
+    ///     Extracts the tool version from a driver element.
+    ///     Checks multiple version fields in priority order: version, semanticVersion, dottedQuadFileVersion.
+    /// </summary>
+    /// <param name="driverElement">The driver JSON element.</param>
+    /// <returns>The tool version string, or "Unknown" if no version field is found.</returns>
+    private static string ExtractToolVersion(JsonElement driverElement)
+    {
+        // Priority 1: version field
+        if (driverElement.TryGetProperty("version", out var versionElement))
+        {
+            var version = versionElement.GetString();
+            if (!string.IsNullOrWhiteSpace(version))
+            {
+                return version;
+            }
+        }
+
+        // Priority 2: semanticVersion field
+        if (driverElement.TryGetProperty("semanticVersion", out var semanticVersionElement))
+        {
+            var semanticVersion = semanticVersionElement.GetString();
+            if (!string.IsNullOrWhiteSpace(semanticVersion))
+            {
+                return semanticVersion;
+            }
+        }
+
+        // Priority 3: dottedQuadFileVersion field
+        if (driverElement.TryGetProperty("dottedQuadFileVersion", out var dottedQuadElement))
+        {
+            var dottedQuadVersion = dottedQuadElement.GetString();
+            if (!string.IsNullOrWhiteSpace(dottedQuadVersion))
+            {
+                return dottedQuadVersion;
+            }
+        }
+
+        return "Unknown";
     }
 
     /// <summary>

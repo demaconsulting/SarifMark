@@ -387,6 +387,197 @@ public class SarifResultsTests
     }
 
     /// <summary>
+    ///     Test that Read uses semanticVersion field when version field is missing.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_Read_SemanticVersionField_ReturnsSemanticVersion()
+    {
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "semantic-version.sarif");
+        File.WriteAllText(filePath, """
+            {
+                "version": "2.1.0",
+                "runs": [
+                    {
+                        "tool": {
+                            "driver": {
+                                "name": "CodeQL",
+                                "semanticVersion": "2.15.0"
+                            }
+                        }
+                    }
+                ]
+            }
+            """);
+
+        var results = SarifResults.Read(filePath);
+
+        Assert.AreEqual("CodeQL", results.ToolName);
+        Assert.AreEqual("2.15.0", results.ToolVersion);
+        Assert.AreEqual(0, results.ResultCount);
+        Assert.IsEmpty(results.Results);
+    }
+
+    /// <summary>
+    ///     Test that Read uses dottedQuadFileVersion field when version and semanticVersion are missing.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_Read_DottedQuadFileVersionField_ReturnsDottedQuadFileVersion()
+    {
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "dotted-quad-version.sarif");
+        File.WriteAllText(filePath, """
+            {
+                "version": "2.1.0",
+                "runs": [
+                    {
+                        "tool": {
+                            "driver": {
+                                "name": "TestTool",
+                                "dottedQuadFileVersion": "3.0.0.0"
+                            }
+                        }
+                    }
+                ]
+            }
+            """);
+
+        var results = SarifResults.Read(filePath);
+
+        Assert.AreEqual("TestTool", results.ToolName);
+        Assert.AreEqual("3.0.0.0", results.ToolVersion);
+        Assert.AreEqual(0, results.ResultCount);
+        Assert.IsEmpty(results.Results);
+    }
+
+    /// <summary>
+    ///     Test that Read prioritizes version field over semanticVersion.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_Read_VersionAndSemanticVersion_PrioritizesVersion()
+    {
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "version-priority.sarif");
+        File.WriteAllText(filePath, """
+            {
+                "version": "2.1.0",
+                "runs": [
+                    {
+                        "tool": {
+                            "driver": {
+                                "name": "TestTool",
+                                "version": "1.0.0",
+                                "semanticVersion": "2.0.0"
+                            }
+                        }
+                    }
+                ]
+            }
+            """);
+
+        var results = SarifResults.Read(filePath);
+
+        Assert.AreEqual("TestTool", results.ToolName);
+        Assert.AreEqual("1.0.0", results.ToolVersion);
+        Assert.AreEqual(0, results.ResultCount);
+        Assert.IsEmpty(results.Results);
+    }
+
+    /// <summary>
+    ///     Test that Read prioritizes semanticVersion field over dottedQuadFileVersion.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_Read_SemanticAndDottedQuad_PrioritizesSemanticVersion()
+    {
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "semantic-priority.sarif");
+        File.WriteAllText(filePath, """
+            {
+                "version": "2.1.0",
+                "runs": [
+                    {
+                        "tool": {
+                            "driver": {
+                                "name": "TestTool",
+                                "semanticVersion": "2.0.0",
+                                "dottedQuadFileVersion": "3.0.0.0"
+                            }
+                        }
+                    }
+                ]
+            }
+            """);
+
+        var results = SarifResults.Read(filePath);
+
+        Assert.AreEqual("TestTool", results.ToolName);
+        Assert.AreEqual("2.0.0", results.ToolVersion);
+        Assert.AreEqual(0, results.ResultCount);
+        Assert.IsEmpty(results.Results);
+    }
+
+    /// <summary>
+    ///     Test that Read handles all three version fields with correct priority.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_Read_AllVersionFields_PrioritizesVersion()
+    {
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "all-versions.sarif");
+        File.WriteAllText(filePath, """
+            {
+                "version": "2.1.0",
+                "runs": [
+                    {
+                        "tool": {
+                            "driver": {
+                                "name": "TestTool",
+                                "version": "1.0.0",
+                                "semanticVersion": "2.0.0",
+                                "dottedQuadFileVersion": "3.0.0.0"
+                            }
+                        }
+                    }
+                ]
+            }
+            """);
+
+        var results = SarifResults.Read(filePath);
+
+        Assert.AreEqual("TestTool", results.ToolName);
+        Assert.AreEqual("1.0.0", results.ToolVersion);
+        Assert.AreEqual(0, results.ResultCount);
+        Assert.IsEmpty(results.Results);
+    }
+
+    /// <summary>
+    ///     Test that Read handles empty version field and falls back to semanticVersion.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_Read_EmptyVersionField_FallsBackToSemanticVersion()
+    {
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "empty-version.sarif");
+        File.WriteAllText(filePath, """
+            {
+                "version": "2.1.0",
+                "runs": [
+                    {
+                        "tool": {
+                            "driver": {
+                                "name": "TestTool",
+                                "version": "",
+                                "semanticVersion": "2.0.0"
+                            }
+                        }
+                    }
+                ]
+            }
+            """);
+
+        var results = SarifResults.Read(filePath);
+
+        Assert.AreEqual("TestTool", results.ToolName);
+        Assert.AreEqual("2.0.0", results.ToolVersion);
+        Assert.AreEqual(0, results.ResultCount);
+        Assert.IsEmpty(results.Results);
+    }
+
+    /// <summary>
     ///     Test internal constructor for testing purposes.
     /// </summary>
     [TestMethod]
