@@ -318,11 +318,13 @@ jobs:
           --report-depth 1
 
       - name: Display CodeQL Quality Report
+        shell: bash
         run: |
           echo "=== CodeQL Quality Report ==="
           cat docs/quality/codeql-quality.md
 
       - name: Generate SonarCloud Quality Report with SonarMark
+        shell: bash
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >
@@ -335,6 +337,7 @@ jobs:
           --report-depth 1
 
       - name: Display SonarCloud Quality Report
+        shell: bash
         run: |
           echo "=== SonarCloud Quality Report ==="
           cat docs/quality/sonar-quality.md
