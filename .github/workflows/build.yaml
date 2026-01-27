@@ -344,6 +344,13 @@ jobs:
           echo "=== SonarCloud Quality Report ==="
           Get-Content docs/quality/sonar-quality.md
 
+      - name: Set build date
+        shell: pwsh
+        run: |
+          $buildDate = Get-Date -Format 'yyyy-MM-dd'
+          echo "BUILD_DATE=$buildDate" >> $env:GITHUB_ENV
+          echo "Build date: $buildDate"
+
       - name: Generate Guide HTML with Pandoc
         shell: pwsh
         run: >
@@ -351,7 +358,7 @@ jobs:
           --defaults docs/guide/definition.yaml
           --filter node_modules/.bin/mermaid-filter.cmd
           --metadata version="${{ inputs.version }}"
-          --metadata date="$(Get-Date -Format 'yyyy-MM-dd')"
+          --metadata date="${{ env.BUILD_DATE }}"
           --output docs/guide/guide.html
 
       - name: Generate Guide PDF with Weasyprint
@@ -368,7 +375,7 @@ jobs:
           --defaults docs/quality/definition.yaml
           --filter node_modules/.bin/mermaid-filter.cmd
           --metadata version="${{ inputs.version }}"
-          --metadata date="$(Get-Date -Format 'yyyy-MM-dd')"
+          --metadata date="${{ env.BUILD_DATE }}"
           --output docs/quality/quality.html
 
       - name: Generate Code Quality PDF with Weasyprint
@@ -385,7 +392,7 @@ jobs:
           --defaults docs/requirements/definition.yaml
           --filter node_modules/.bin/mermaid-filter.cmd
           --metadata version="${{ inputs.version }}"
-          --metadata date="$(Get-Date -Format 'yyyy-MM-dd')"
+          --metadata date="${{ env.BUILD_DATE }}"
           --output docs/requirements/requirements.html
 
       - name: Generate Requirements PDF with Weasyprint
@@ -402,7 +409,7 @@ jobs:
           --defaults docs/tracematrix/definition.yaml
           --filter node_modules/.bin/mermaid-filter.cmd
           --metadata version="${{ inputs.version }}"
-          --metadata date="$(Get-Date -Format 'yyyy-MM-dd')"
+          --metadata date="${{ env.BUILD_DATE }}"
           --output docs/tracematrix/tracematrix.html
 
       - name: Generate Trace Matrix PDF with Weasyprint
