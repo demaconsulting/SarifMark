@@ -354,7 +354,7 @@ public record SarifResults
         var sb = new StringBuilder();
 
         AppendHeader(sb, mainHeading, heading);
-        AppendResultsSection(sb, subHeading);
+        AppendIssuesSection(sb, subHeading);
 
         return sb.ToString();
     }
@@ -380,7 +380,7 @@ public record SarifResults
     /// <summary>
     ///     Appends the issues section with count and details.
     /// </summary>
-    private void AppendResultsSection(StringBuilder sb, string subHeading)
+    private void AppendIssuesSection(StringBuilder sb, string subHeading)
     {
         sb.AppendLine($"{subHeading} Issues");
         sb.AppendLine();
