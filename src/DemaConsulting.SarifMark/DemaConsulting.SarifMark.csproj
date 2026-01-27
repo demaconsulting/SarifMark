@@ -19,6 +19,7 @@
     <PackageProjectUrl>https://github.com/demaconsulting/SarifMark</PackageProjectUrl>
     <RepositoryUrl>https://github.com/demaconsulting/SarifMark</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>Icon.png</PackageIcon>
     <PackageTags>sarif;static-analysis;reports</PackageTags>
     <Copyright>Copyright DEMA Consulting</Copyright>
     <Title>SarifMark Tool</Title>
@@ -65,6 +66,7 @@
 
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\Icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
