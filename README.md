@@ -153,8 +153,8 @@ The generated markdown report includes:
 
 1. **Report Header** - Custom heading or tool name with "Analysis" suffix
 2. **Tool Information** - Tool name and version extracted from SARIF file
-3. **Results Summary** - Count of issues found in the analysis
-4. **Results List** - Detailed list of results in compiler-style format with file, line, level, rule ID, and message
+3. **Issues Summary** - Count of issues found in the analysis
+4. **Issues List** - Detailed list of issues in compiler-style format with file, line, level, rule ID, and message
 
 Example report structure:
 
@@ -163,9 +163,9 @@ Example report structure:
 
 **Tool:** MockTool 1.0.0
 
-## Results
+## Issues
 
-Found 2 results
+Found 2 issues
 
 src/Program.cs(42): warning [TEST001] Test issue 1
 src/Helper.cs(15): error [TEST002] Test issue 2

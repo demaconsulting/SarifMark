@@ -154,7 +154,7 @@ Fail the build if any issues are found:
 sarifmark --sarif analysis.sarif --report report.md --enforce
 ```
 
-The command will exit with a non-zero exit code if the SARIF file contains any results.
+The command will exit with a non-zero exit code if the SARIF file contains any issues.
 
 ### Run Self-Validation
 
@@ -213,8 +213,8 @@ sarifmark --sarif other-tool.sarif --report other-report.md --heading "Other Too
 The generated markdown reports include:
 
 - **Tool Information**: Name and version of the analysis tool
-- **Summary**: Count of results found
-- **Results Details**: Detailed information about each finding, including:
+- **Summary**: Count of issues found
+- **Issues Details**: Detailed information about each finding, including:
   - File location and line number
   - Severity level
   - Rule ID
