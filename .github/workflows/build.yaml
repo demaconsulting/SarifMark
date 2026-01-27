@@ -289,12 +289,12 @@ jobs:
         run: npm install
 
       - name: Install SarifMark from package
-        shell: pwsh
+        shell: bash
         run: |
           echo "Installing SarifMark version ${{ inputs.version }}"
-          dotnet tool install --global `
-            --add-source packages `
-            --version ${{ inputs.version }} `
+          dotnet tool install --global \
+            --add-source packages \
+            --version ${{ inputs.version }} \
             DemaConsulting.SarifMark
 
       - name: Restore Tools
@@ -310,23 +310,19 @@ jobs:
           --enforce
 
       - name: Generate CodeQL Quality Report with SarifMark
-        shell: pwsh
-        run: |
-          echo "Generating CodeQL quality report..."
-          sarifmark `
-            --sarif codeql-results/csharp.sarif `
-            --report docs/quality/codeql-quality.md `
-            --heading "SarifMark CodeQL Analysis" `
-            --report-depth 1
+        run: >
+          sarifmark
+          --sarif codeql-results/csharp.sarif
+          --report docs/quality/codeql-quality.md
+          --heading "SarifMark CodeQL Analysis"
+          --report-depth 1
 
       - name: Display CodeQL Quality Report
-        shell: pwsh
         run: |
           echo "=== CodeQL Quality Report ==="
-          Get-Content docs/quality/codeql-quality.md
+          cat docs/quality/codeql-quality.md
 
       - name: Generate SonarCloud Quality Report with SonarMark
-        shell: pwsh
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >
@@ -334,15 +330,14 @@ jobs:
           --server https://sonarcloud.io
           --project-key demaconsulting_SarifMark
           --branch ${{ github.ref_name }}
-          --token "$env:SONAR_TOKEN"
+          --token "$SONAR_TOKEN"
           --report docs/quality/sonar-quality.md
           --report-depth 1
 
       - name: Display SonarCloud Quality Report
-        shell: pwsh
         run: |
           echo "=== SonarCloud Quality Report ==="
-          Get-Content docs/quality/sonar-quality.md
+          cat docs/quality/sonar-quality.md
 
       - name: Generate Guide HTML with Pandoc
         run: >
