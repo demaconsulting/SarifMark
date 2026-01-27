@@ -66,6 +66,16 @@ sections:
               - "SarifResults_Read_MissingToolName_UsesUnknown"
               - "SarifResults_Read_MissingToolVersion_UsesUnknown"
 
+          - id: "SARIF-003a"
+            title: "The tool shall support multiple version fields with priority: version, semanticVersion, dottedQuadFileVersion."
+            tests:
+              - "SarifResults_Read_SemanticVersionField_ReturnsSemanticVersion"
+              - "SarifResults_Read_DottedQuadFileVersionField_ReturnsDottedQuadFileVersion"
+              - "SarifResults_Read_VersionAndSemanticVersion_PrioritizesVersion"
+              - "SarifResults_Read_SemanticAndDottedQuad_PrioritizesSemanticVersion"
+              - "SarifResults_Read_AllVersionFields_PrioritizesVersion"
+              - "SarifResults_Read_EmptyVersionField_FallsBackToSemanticVersion"
+
           - id: "SARIF-004"
             title: "The tool shall extract results from SARIF files."
             tests:
