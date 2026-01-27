@@ -378,14 +378,14 @@ public record SarifResults
     }
 
     /// <summary>
-    ///     Appends the results section with count and details.
+    ///     Appends the issues section with count and details.
     /// </summary>
     private void AppendResultsSection(StringBuilder sb, string subHeading)
     {
-        sb.AppendLine($"{subHeading} Results");
+        sb.AppendLine($"{subHeading} Issues");
         sb.AppendLine();
 
-        sb.AppendLine(FormatFoundText(Results.Count, "result"));
+        sb.AppendLine(FormatFoundText(Results.Count, "issue"));
         sb.AppendLine();
 
         if (Results.Count > 0)
@@ -405,7 +405,7 @@ public record SarifResults
     /// </summary>
     /// <param name="count">The count value.</param>
     /// <param name="singularNoun">The singular form of the noun.</param>
-    /// <returns>Formatted text like "Found no results", "Found 1 result", or "Found 5 results".</returns>
+    /// <returns>Formatted text like "Found no issues", "Found 1 issue", or "Found 5 issues".</returns>
     private static string FormatFoundText(int count, string singularNoun)
     {
         return count switch

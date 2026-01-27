@@ -681,8 +681,8 @@ public class SarifResultsTests
         Assert.IsNotNull(markdown);
         Assert.Contains("# TestTool Analysis", markdown);
         Assert.Contains("**Tool:** TestTool 1.0.0", markdown);
-        Assert.Contains("## Results", markdown);
-        Assert.Contains("Found 2 results", markdown);
+        Assert.Contains("## Issues", markdown);
+        Assert.Contains("Found 2 issues", markdown);
         Assert.Contains("src/MyClass.cs(42): warning [CA1001] Types that own disposable fields should be disposable", markdown);
         Assert.Contains("src/Program.cs(15): error [CA2000] Dispose objects before losing scope", markdown);
     }
@@ -702,7 +702,7 @@ public class SarifResultsTests
         // Assert
         Assert.Contains("### TestTool Analysis", markdown);
         Assert.Contains("**Tool:** TestTool 1.0.0", markdown);
-        Assert.Contains("#### Results", markdown);
+        Assert.Contains("#### Issues", markdown);
     }
 
     /// <summary>
@@ -718,7 +718,7 @@ public class SarifResultsTests
         var markdown = results.ToMarkdown(1);
 
         // Assert
-        Assert.Contains("Found no results", markdown);
+        Assert.Contains("Found no issues", markdown);
     }
 
     /// <summary>
@@ -739,8 +739,8 @@ public class SarifResultsTests
         var markdown = results.ToMarkdown(1);
 
         // Assert
-        Assert.Contains("Found 1 result", markdown);
-        Assert.DoesNotContain("Found 1 results", markdown);
+        Assert.Contains("Found 1 issue", markdown);
+        Assert.DoesNotContain("Found 1 issues", markdown);
     }
 
     /// <summary>
@@ -786,7 +786,7 @@ public class SarifResultsTests
         // Assert
         Assert.Contains("###### TestTool Analysis", markdown);
         Assert.Contains("**Tool:** TestTool 1.0.0", markdown);
-        Assert.Contains("###### Results", markdown); // Capped at 6
+        Assert.Contains("###### Issues", markdown); // Capped at 6
     }
 
     /// <summary>
