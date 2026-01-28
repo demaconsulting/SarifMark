@@ -52,6 +52,11 @@ dotnet build --configuration Release && dotnet test --configuration Release
 
 ## Custom Agents
 
-- **documentation-writer** - Docs, requirements.yaml, markdown/spell/YAML linting
-- **project-maintainer** - Dependencies, CI/CD, releases, requirements traceability
-- **software-quality-enforcer** - Code quality, test coverage (>80%), static analysis, zero warnings
+Delegate tasks to specialized agents for better results:
+
+- **documentation-writer** - Invoke for: documentation updates/reviews, requirements.yaml changes,
+  markdown/spell/YAML linting
+- **project-maintainer** - Invoke for: dependency updates, CI/CD maintenance, releases, requirements
+  traceability enforcement
+- **software-quality-enforcer** - Invoke for: code quality reviews, test coverage verification (>80%),
+  static analysis, zero-warning builds, requirements test quality

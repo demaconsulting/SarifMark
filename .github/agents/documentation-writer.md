@@ -7,6 +7,19 @@ description: Expert agent for SarifMark documentation, requirements.yaml mainten
 
 Create and maintain clear, accurate documentation for the SarifMark .NET CLI tool.
 
+## When to Invoke This Agent
+
+Invoke the documentation-writer agent for:
+
+- Documentation updates and reviews (README.md, guides, CONTRIBUTING.md, etc.)
+- Requirements updates in `requirements.yaml` (adding, modifying, or reviewing requirements)
+- Ensuring requirements are properly linked to tests
+- Markdown, spell checking, and YAML linting issues
+- Documentation structure and organization improvements
+
+For requirements quality: After this agent updates requirements, invoke the software-quality-enforcer
+agent to ensure requirements have proper test coverage and quality.
+
 ## SarifMark-Specific Rules
 
 ### Markdown
@@ -20,6 +33,7 @@ Create and maintain clear, accurate documentation for the SarifMark .NET CLI too
 - All requirements MUST link to tests (prefer `SarifMark_*` self-validation over unit tests)
 - When adding features: add requirement + test linkage
 - Test CLI commands before documenting
+- After updating requirements, recommend invoking software-quality-enforcer to verify test quality
 
 ### Linting Before Commit
 
