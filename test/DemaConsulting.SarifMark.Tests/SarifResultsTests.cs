@@ -312,15 +312,15 @@ public class SarifResultsTests
         Assert.AreEqual("1.0.0", results.ToolVersion);
         Assert.AreEqual(3, results.ResultCount);
         Assert.HasCount(3, results.Results);
-        
+
         Assert.AreEqual("TEST001", results.Results[0].RuleId);
         Assert.AreEqual("error", results.Results[0].Level);
         Assert.AreEqual("Error 1", results.Results[0].Message);
-        
+
         Assert.AreEqual("TEST002", results.Results[1].RuleId);
         Assert.AreEqual("warning", results.Results[1].Level);
         Assert.AreEqual("Warning 1", results.Results[1].Message);
-        
+
         Assert.AreEqual("TEST003", results.Results[2].RuleId);
         Assert.AreEqual("note", results.Results[2].Level);
         Assert.AreEqual("Note 1", results.Results[2].Message);
@@ -967,10 +967,10 @@ public class SarifResultsTests
         Assert.AreEqual("1.0.0", results.ToolVersion);
         Assert.AreEqual(2, results.ResultCount);
         Assert.HasCount(2, results.Results);
-        
+
         Assert.AreEqual("TEST001", results.Results[0].RuleId);
         Assert.AreEqual("Unsuppressed warning", results.Results[0].Message);
-        
+
         Assert.AreEqual("TEST003", results.Results[1].RuleId);
         Assert.AreEqual("Another unsuppressed error", results.Results[1].Message);
     }
