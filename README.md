@@ -63,6 +63,30 @@ Run the tool:
 dotnet sarifmark --version
 ```
 
+### Update
+
+To update to the latest version:
+
+```bash
+# Global installation
+dotnet tool update --global DemaConsulting.SarifMark
+
+# Local installation
+dotnet tool update DemaConsulting.SarifMark
+```
+
+### Compatibility
+
+| Component | Version | Status |
+| :-------- | :------ | :----- |
+| .NET SDK | 8.0 | ✅ Supported |
+| .NET SDK | 9.0 | ✅ Supported |
+| .NET SDK | 10.0 | ✅ Supported |
+| SARIF Format | 2.1.0 | ✅ Supported |
+| OS | Windows | ✅ Supported |
+| OS | Linux | ✅ Supported |
+| OS | macOS | ✅ Supported |
+
 ## Usage
 
 ### Basic Usage
