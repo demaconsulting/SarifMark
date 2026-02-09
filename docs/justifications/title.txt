@@ -1,0 +1,15 @@
+---
+title: SarifMark Requirements Justifications
+subtitle: Rationale and Justification for SarifMark Requirements
+author: DEMA Consulting
+description: Requirements Justifications for the SarifMark Tool
+lang: en-US
+keywords:
+  - SarifMark
+  - Requirements
+  - Justifications
+  - .NET
+  - YAML
+  - Command-Line Tool
+  - SARIF
+---

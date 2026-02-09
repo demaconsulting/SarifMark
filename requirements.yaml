@@ -1,208 +1,304 @@
 ---
 sections:
-  - title: "SarifMark Requirements"
+  - title: SarifMark Requirements
     sections:
-      - title: "Command-Line Interface"
+      - title: Command-Line Interface
         requirements:
-          - id: "CLI-001"
-            title: "The tool shall provide a command-line interface."
+          - id: CLI-001
+            title: The tool shall provide a command-line interface.
+            justification: >-
+              A command-line interface enables automation, scripting, and integration into CI/CD pipelines,
+              making the tool suitable for DevOps workflows and batch processing scenarios.
             tests:
-              - "IntegrationTest_VersionFlag_OutputsVersion"
-              - "IntegrationTest_HelpFlag_OutputsUsageInformation"
+              - IntegrationTest_VersionFlag_OutputsVersion
+              - IntegrationTest_HelpFlag_OutputsUsageInformation
 
-          - id: "CLI-002"
-            title: "The tool shall display version information when requested."
+          - id: CLI-002
+            title: The tool shall display version information when requested.
+            justification: >-
+              Version information allows users to identify the tool version for troubleshooting, compatibility
+              verification, and ensuring consistent behavior across different environments.
             tests:
-              - "IntegrationTest_VersionFlag_OutputsVersion"
-              - "Context_Create_VersionFlag_SetsVersionTrue"
+              - IntegrationTest_VersionFlag_OutputsVersion
+              - Context_Create_VersionFlag_SetsVersionTrue
 
-          - id: "CLI-003"
-            title: "The tool shall display help information when requested."
+          - id: CLI-003
+            title: The tool shall display help information when requested.
+            justification: >-
+              Help information improves discoverability and usability by providing users with guidance on
+              available options, parameters, and usage patterns without consulting external documentation.
             tests:
-              - "IntegrationTest_HelpFlag_OutputsUsageInformation"
-              - "Context_Create_HelpFlag_SetsHelpTrue"
+              - IntegrationTest_HelpFlag_OutputsUsageInformation
+              - Context_Create_HelpFlag_SetsHelpTrue
 
-          - id: "CLI-004"
-            title: "The tool shall support silent mode to suppress console output."
+          - id: CLI-004
+            title: The tool shall support silent mode to suppress console output.
+            justification: >-
+              Silent mode enables cleaner integration into automated workflows and CI/CD pipelines where console
+              noise needs to be minimized, while still allowing log files to capture detailed information.
             tests:
-              - "IntegrationTest_SilentFlag_SuppressesOutput"
+              - IntegrationTest_SilentFlag_SuppressesOutput
 
-          - id: "CLI-005"
-            title: "The tool shall support writing output to a log file."
+          - id: CLI-005
+            title: The tool shall support writing output to a log file.
+            justification: >-
+              Log file support enables persistent record-keeping, debugging, and audit trails, especially valuable
+              in automated environments where console output may not be readily available.
             tests:
-              - "IntegrationTest_LogFile_WritesOutputToFile"
+              - IntegrationTest_LogFile_WritesOutputToFile
 
-          - id: "CLI-006"
-            title: "The tool shall support enforcing quality gate checks."
+          - id: CLI-006
+            title: The tool shall support enforcing quality gate checks.
+            justification: >-
+              Quality gate enforcement enables the tool to act as a quality gate in CI/CD pipelines, failing
+              builds when issues are detected and ensuring code quality standards are maintained.
             tests:
-              - "SarifMark_Enforcement"
+              - SarifMark_Enforcement
 
-          - id: "CLI-007"
-            title: "The tool shall reject unknown command-line arguments."
+          - id: CLI-007
+            title: The tool shall reject unknown command-line arguments.
+            justification: >-
+              Rejecting unknown arguments prevents silent failures from typos or incorrect parameters, ensuring
+              users receive immediate feedback about misconfigured commands.
             tests:
-              - "IntegrationTest_UnknownArgument_ShowsError"
+              - IntegrationTest_UnknownArgument_ShowsError
 
-      - title: "SARIF Integration"
+      - title: SARIF Integration
         requirements:
-          - id: "SARIF-001"
-            title: "The tool shall read SARIF 2.1.0 format files."
+          - id: SARIF-001
+            title: The tool shall read SARIF 2.1.0 format files.
+            justification: >-
+              Support for SARIF 2.1.0 is essential as it is the standard format for static analysis results,
+              enabling interoperability with a wide range of analysis tools and platforms.
             tests:
-              - "SarifMark_SarifReading"
-              - "IntegrationTest_ValidSarifFile_ProcessesSuccessfully"
+              - SarifMark_SarifReading
+              - IntegrationTest_ValidSarifFile_ProcessesSuccessfully
 
-          - id: "SARIF-002"
-            title: "The tool shall validate SARIF file format."
+          - id: SARIF-002
+            title: The tool shall validate SARIF file format.
+            justification: >-
+              Format validation ensures the tool processes only well-formed SARIF files, preventing runtime
+              errors and providing clear feedback when inputs are malformed or corrupted.
             tests:
-              - "SarifResults_Read_InvalidJson_ThrowsInvalidOperationException"
-              - "SarifResults_Read_MissingVersion_ThrowsInvalidOperationException"
-              - "SarifResults_Read_MissingRuns_ThrowsInvalidOperationException"
-              - "SarifResults_Read_EmptyRuns_ThrowsInvalidOperationException"
+              - SarifResults_Read_InvalidJson_ThrowsInvalidOperationException
+              - SarifResults_Read_MissingVersion_ThrowsInvalidOperationException
+              - SarifResults_Read_MissingRuns_ThrowsInvalidOperationException
+              - SarifResults_Read_EmptyRuns_ThrowsInvalidOperationException
 
-          - id: "SARIF-003"
-            title: "The tool shall extract tool information from SARIF files."
+          - id: SARIF-003
+            title: The tool shall extract tool information from SARIF files.
+            justification: >-
+              Extracting tool information enables reports to identify which analysis tool generated the results,
+              providing context and traceability for findings in the generated documentation.
             tests:
-              - "SarifResults_Read_MissingTool_ThrowsInvalidOperationException"
-              - "SarifResults_Read_MissingDriver_ThrowsInvalidOperationException"
-              - "SarifResults_Read_MissingToolName_UsesUnknown"
-              - "SarifResults_Read_MissingToolVersion_UsesUnknown"
+              - SarifResults_Read_MissingTool_ThrowsInvalidOperationException
+              - SarifResults_Read_MissingDriver_ThrowsInvalidOperationException
+              - SarifResults_Read_MissingToolName_UsesUnknown
+              - SarifResults_Read_MissingToolVersion_UsesUnknown
 
-          - id: "SARIF-004"
-            title: "The tool shall extract results from SARIF files."
+          - id: SARIF-004
+            title: The tool shall extract results from SARIF files.
+            justification: >-
+              Result extraction is the core functionality that enables conversion of analysis findings into
+              readable markdown reports, making issues accessible to developers and stakeholders.
             tests:
-              - "SarifResults_Read_NoResults_ReturnsValidResults"
-              - "SarifResults_Read_EmptyResults_ReturnsValidResults"
-              - "SarifResults_Read_WithResults_ReturnsValidResults"
+              - SarifResults_Read_NoResults_ReturnsValidResults
+              - SarifResults_Read_EmptyResults_ReturnsValidResults
+              - SarifResults_Read_WithResults_ReturnsValidResults
 
-          - id: "SARIF-005"
-            title: "The tool shall extract location information from SARIF results."
+          - id: SARIF-005
+            title: The tool shall extract location information from SARIF results.
+            justification: >-
+              Location information allows users to quickly identify where issues exist in their codebase,
+              improving the actionability of analysis results by pinpointing specific files and lines.
             tests:
-              - "SarifResults_Read_WithLocations_ReturnsResultsWithLocationData"
+              - SarifResults_Read_WithLocations_ReturnsResultsWithLocationData
 
-          - id: "SARIF-006"
-            title: "The tool shall require valid file paths for SARIF input."
+          - id: SARIF-006
+            title: The tool shall require valid file paths for SARIF input.
+            justification: >-
+              Path validation ensures clear error messages when files are missing or incorrectly specified,
+              improving user experience and preventing confusing runtime failures.
             tests:
-              - "SarifResults_Read_NullPath_ThrowsArgumentException"
-              - "SarifResults_Read_EmptyPath_ThrowsArgumentException"
-              - "SarifResults_Read_WhitespacePath_ThrowsArgumentException"
-              - "SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException"
+              - SarifResults_Read_NullPath_ThrowsArgumentException
+              - SarifResults_Read_EmptyPath_ThrowsArgumentException
+              - SarifResults_Read_WhitespacePath_ThrowsArgumentException
+              - SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException
 
-          - id: "SARIF-007"
-            title: "The tool shall require the --sarif parameter for analysis."
+          - id: SARIF-007
+            title: The tool shall require the --sarif parameter for analysis.
+            justification: >-
+              Requiring explicit SARIF file specification ensures intentional operation and prevents accidental
+              execution without proper input, improving tool safety and predictability.
             tests:
-              - "IntegrationTest_MissingSarifParameter_ShowsError"
+              - IntegrationTest_MissingSarifParameter_ShowsError
 
-          - id: "SARIF-008"
-            title: "The tool shall process valid SARIF files successfully."
+          - id: SARIF-008
+            title: The tool shall process valid SARIF files successfully.
+            justification: >-
+              Successful processing of valid SARIF files is the fundamental capability that enables the tool to
+              fulfill its primary purpose of converting analysis results to markdown documentation.
             tests:
-              - "IntegrationTest_ValidSarifFile_ProcessesSuccessfully"
+              - IntegrationTest_ValidSarifFile_ProcessesSuccessfully
 
-      - title: "Report Generation"
+      - title: Report Generation
         requirements:
-          - id: "RPT-001"
-            title: "The tool shall generate markdown reports from SARIF files."
+          - id: RPT-001
+            title: The tool shall generate markdown reports from SARIF files.
+            justification: >-
+              Markdown report generation transforms machine-readable SARIF into human-readable documentation,
+              enabling better understanding and communication of analysis results across development teams.
             tests:
-              - "IntegrationTest_GenerateReport_CreatesReportFile"
-              - "SarifMark_MarkdownReportGeneration"
+              - IntegrationTest_GenerateReport_CreatesReportFile
+              - SarifMark_MarkdownReportGeneration
 
-          - id: "RPT-002"
-            title: "The tool shall support configurable markdown heading depth."
+          - id: RPT-002
+            title: The tool shall support configurable markdown heading depth.
+            justification: >-
+              Configurable heading depth allows reports to integrate seamlessly into existing documentation
+              hierarchies, preventing heading level conflicts when reports are embedded in larger documents.
             tests:
-              - "IntegrationTest_ReportDepth_IsConfigurable"
+              - IntegrationTest_ReportDepth_IsConfigurable
 
-          - id: "RPT-003"
-            title: "The tool shall display result counts in reports."
+          - id: RPT-003
+            title: The tool shall display result counts in reports.
+            justification: >-
+              Result counts provide a quick summary of analysis findings, helping users understand the scope of
+              issues at a glance and track improvements over time.
             tests:
-              - "SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults"
-              - "SarifResults_ToMarkdown_OneResult_UsesSingularForm"
+              - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
+              - SarifResults_ToMarkdown_OneResult_UsesSingularForm
 
-          - id: "RPT-004"
-            title: "The tool shall display location information for results."
+          - id: RPT-004
+            title: The tool shall display location information for results.
+            justification: >-
+              Displaying location information enables developers to quickly navigate to the source of issues,
+              making the reports actionable and reducing time spent searching for problematic code.
             tests:
-              - "SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation"
-              - "SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly"
+              - SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
+              - SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
 
-          - id: "RPT-005"
-            title: "The tool shall support custom headings in reports."
+          - id: RPT-005
+            title: The tool shall support custom headings in reports.
+            justification: >-
+              Custom headings allow users to tailor reports to their documentation standards and naming
+              conventions, improving consistency across project documentation.
             tests:
-              - "SarifResults_ToMarkdown_CustomHeading_UsesProvidedHeading"
-              - "SarifResults_ToMarkdown_NullHeading_UsesDefaultHeading"
-              - "SarifResults_ToMarkdown_NoHeadingParameter_UsesDefaultHeading"
-              - "Context_Create_HeadingArgument_SetsHeading"
+              - SarifResults_ToMarkdown_CustomHeading_UsesProvidedHeading
+              - SarifResults_ToMarkdown_NullHeading_UsesDefaultHeading
+              - SarifResults_ToMarkdown_NoHeadingParameter_UsesDefaultHeading
+              - Context_Create_HeadingArgument_SetsHeading
 
-          - id: "RPT-006"
-            title: "The tool shall format multiple results with proper line breaks."
+          - id: RPT-006
+            title: The tool shall format multiple results with proper line breaks.
+            justification: >-
+              Proper line breaks between results ensure readability and visual separation in generated markdown,
+              making it easier to distinguish between different findings in the report.
             tests:
-              - "SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks"
+              - SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks
 
-      - title: "Validation and Testing"
+      - title: Validation and Testing
         requirements:
-          - id: "VAL-001"
-            title: "The tool shall support self-validation mode."
+          - id: VAL-001
+            title: The tool shall support self-validation mode.
+            justification: >-
+              Self-validation mode enables verification that the tool operates correctly in the user's
+              environment, ensuring proper installation and configuration.
             tests:
-              - "IntegrationTest_ValidateFlag_RunsSelfValidation"
+              - IntegrationTest_ValidateFlag_RunsSelfValidation
 
-          - id: "VAL-002"
-            title: "The tool shall write validation results to test result files."
+          - id: VAL-002
+            title: The tool shall write validation results to test result files.
+            justification: >-
+              Writing test results to files enables integration with CI/CD systems and provides persistent
+              records of validation outcomes for tracking quality trends and compliance.
             tests:
-              - "IntegrationTest_ValidateFlag_RunsSelfValidation"
+              - IntegrationTest_ValidateFlag_RunsSelfValidation
 
-          - id: "VAL-003"
-            title: "The tool shall support TRX format for test results."
+          - id: VAL-003
+            title: The tool shall support TRX format for test results.
+            justification: >-
+              TRX format support enables integration with Microsoft testing ecosystems and Azure DevOps,
+              providing native compatibility with Visual Studio and .NET tooling.
             tests:
-              - "IntegrationTest_ValidateFlag_RunsSelfValidation"
+              - IntegrationTest_ValidateFlag_RunsSelfValidation
 
-          - id: "VAL-004"
-            title: "The tool shall support JUnit format for test results."
+          - id: VAL-004
+            title: The tool shall support JUnit format for test results.
+            justification: >-
+              JUnit format support enables broad compatibility with CI/CD platforms like Jenkins, GitHub Actions,
+              and GitLab CI, which commonly use this standard format for test reporting.
             tests:
-              - "IntegrationTest_ValidateFlag_RunsSelfValidation"
+              - IntegrationTest_ValidateFlag_RunsSelfValidation
 
-      - title: "Quality Enforcement"
+      - title: Quality Enforcement
         requirements:
-          - id: "ENF-001"
-            title: "The tool shall support enforcement mode to fail on issues found."
+          - id: ENF-001
+            title: The tool shall support enforcement mode to fail on issues found.
+            justification: >-
+              Enforcement mode enables the tool to act as a quality gate in CI/CD pipelines, preventing code
+              with analysis issues from being merged or deployed, thereby maintaining code quality standards.
             tests:
-              - "IntegrationTest_EnforceFlagWithIssues_ReturnsError"
-              - "SarifMark_Enforcement"
+              - IntegrationTest_EnforceFlagWithIssues_ReturnsError
+              - SarifMark_Enforcement
 
-          - id: "ENF-002"
-            title: "The tool shall return non-zero exit code when issues found in enforcement mode."
+          - id: ENF-002
+            title: The tool shall return non-zero exit code when issues found in enforcement mode.
+            justification: >-
+              Non-zero exit codes signal failure to CI/CD systems and scripts, enabling automated build failures
+              and preventing the progression of problematic code through deployment pipelines.
             tests:
-              - "IntegrationTest_EnforceFlagWithIssues_ReturnsError"
-              - "SarifMark_Enforcement"
+              - IntegrationTest_EnforceFlagWithIssues_ReturnsError
+              - SarifMark_Enforcement
 
-      - title: "Platform Support"
+      - title: Platform Support
         requirements:
-          - id: "PLT-001"
-            title: "The tool shall run on Windows operating systems."
+          - id: PLT-001
+            title: The tool shall run on Windows operating systems.
+            justification: >-
+              Windows support ensures the tool is accessible to developers using Microsoft platforms, which are
+              prevalent in enterprise environments and .NET development ecosystems.
             tests:
-              - "windows-latest@IntegrationTest_VersionFlag_OutputsVersion"
-              - "windows-latest@IntegrationTest_HelpFlag_OutputsUsageInformation"
-              - "windows-latest@IntegrationTest_ValidateFlag_RunsSelfValidation"
+              - windows@IntegrationTest_VersionFlag_OutputsVersion
+              - windows@IntegrationTest_HelpFlag_OutputsUsageInformation
+              - windows@IntegrationTest_ValidateFlag_RunsSelfValidation
 
-          - id: "PLT-002"
-            title: "The tool shall run on Linux operating systems."
+          - id: PLT-002
+            title: The tool shall run on Linux operating systems.
+            justification: >-
+              Linux support is essential for cloud-native development and CI/CD pipelines, as most modern build
+              systems and container environments run on Linux.
             tests:
-              - "ubuntu-latest@IntegrationTest_VersionFlag_OutputsVersion"
-              - "ubuntu-latest@IntegrationTest_HelpFlag_OutputsUsageInformation"
-              - "ubuntu-latest@IntegrationTest_ValidateFlag_RunsSelfValidation"
+              - ubuntu@IntegrationTest_VersionFlag_OutputsVersion
+              - ubuntu@IntegrationTest_HelpFlag_OutputsUsageInformation
+              - ubuntu@IntegrationTest_ValidateFlag_RunsSelfValidation
 
-          - id: "PLT-003"
-            title: "The tool shall support .NET 8.0 runtime."
+          - id: PLT-003
+            title: The tool shall support .NET 8.0 runtime.
+            justification: >-
+              .NET 8.0 support ensures compatibility with the current Long-Term Support release, providing
+              stability and widespread adoption for enterprise users.
             tests:
-              - "dotnet8.x@SarifMark_SarifReading"
-              - "dotnet8.x@SarifMark_MarkdownReportGeneration"
-              - "dotnet8.x@SarifMark_Enforcement"
+              - dotnet8.x@SarifMark_SarifReading
+              - dotnet8.x@SarifMark_MarkdownReportGeneration
+              - dotnet8.x@SarifMark_Enforcement
 
-          - id: "PLT-004"
-            title: "The tool shall support .NET 9.0 runtime."
+          - id: PLT-004
+            title: The tool shall support .NET 9.0 runtime.
+            justification: >-
+              .NET 9.0 support enables users to leverage the latest .NET features and performance improvements,
+              ensuring the tool remains current with the .NET ecosystem.
             tests:
-              - "dotnet9.x@SarifMark_SarifReading"
-              - "dotnet9.x@SarifMark_MarkdownReportGeneration"
-              - "dotnet9.x@SarifMark_Enforcement"
+              - dotnet9.x@SarifMark_SarifReading
+              - dotnet9.x@SarifMark_MarkdownReportGeneration
+              - dotnet9.x@SarifMark_Enforcement
 
-          - id: "PLT-005"
-            title: "The tool shall support .NET 10.0 runtime."
+          - id: PLT-005
+            title: The tool shall support .NET 10.0 runtime.
+            justification: >-
+              .NET 10.0 support provides forward compatibility and ensures the tool remains viable as users adopt
+              future .NET versions, extending the tool's lifespan and relevance.
             tests:
-              - "dotnet10.x@SarifMark_SarifReading"
-              - "dotnet10.x@SarifMark_MarkdownReportGeneration"
-              - "dotnet10.x@SarifMark_Enforcement"
+              - dotnet10.x@SarifMark_SarifReading
+              - dotnet10.x@SarifMark_MarkdownReportGeneration
+              - dotnet10.x@SarifMark_Enforcement
