@@ -202,8 +202,8 @@ sections:
           - id: VAL-001
             title: The tool shall support self-validation mode.
             justification: >-
-              Self-validation mode enables automated verification of requirements through integration tests,
-              ensuring the tool meets its specifications and maintains quality through continuous integration.
+              Self-validation mode enables verification that the tool operates correctly in the user's
+              environment, ensuring proper installation and configuration.
             tests:
               - IntegrationTest_ValidateFlag_RunsSelfValidation
 
@@ -259,9 +259,9 @@ sections:
               Windows support ensures the tool is accessible to developers using Microsoft platforms, which are
               prevalent in enterprise environments and .NET development ecosystems.
             tests:
-              - windows-latest@IntegrationTest_VersionFlag_OutputsVersion
-              - windows-latest@IntegrationTest_HelpFlag_OutputsUsageInformation
-              - windows-latest@IntegrationTest_ValidateFlag_RunsSelfValidation
+              - windows@IntegrationTest_VersionFlag_OutputsVersion
+              - windows@IntegrationTest_HelpFlag_OutputsUsageInformation
+              - windows@IntegrationTest_ValidateFlag_RunsSelfValidation
 
           - id: PLT-002
             title: The tool shall run on Linux operating systems.
@@ -269,9 +269,9 @@ sections:
               Linux support is essential for cloud-native development and CI/CD pipelines, as most modern build
               systems and container environments run on Linux.
             tests:
-              - ubuntu-latest@IntegrationTest_VersionFlag_OutputsVersion
-              - ubuntu-latest@IntegrationTest_HelpFlag_OutputsUsageInformation
-              - ubuntu-latest@IntegrationTest_ValidateFlag_RunsSelfValidation
+              - ubuntu@IntegrationTest_VersionFlag_OutputsVersion
+              - ubuntu@IntegrationTest_HelpFlag_OutputsUsageInformation
+              - ubuntu@IntegrationTest_ValidateFlag_RunsSelfValidation
 
           - id: PLT-003
             title: The tool shall support .NET 8.0 runtime.
