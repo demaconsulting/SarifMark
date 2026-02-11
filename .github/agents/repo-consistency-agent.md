@@ -5,25 +5,25 @@ description: Ensures downstream repositories remain consistent with the Template
 
 # Repo Consistency Agent - SarifMark
 
-Maintain consistency between SarifMark and the [TemplateDotNetTool][TemplateDotNetTool] template.
+Maintain consistency between SarifMark and the TemplateDotNetTool template at <https://github.com/demaconsulting/TemplateDotNetTool>.
 
 ## When to Invoke This Agent
 
 Invoke the repo-consistency-agent for:
 
-- Periodic reviews of SarifMark based on the [TemplateDotNetTool][TemplateDotNetTool] template
+- Periodic reviews of SarifMark based on the TemplateDotNetTool template
 - Checking if SarifMark follows the latest template patterns
 - Identifying drift from template standards
-- Recommending updates to bring SarifMark back in sync with [TemplateDotNetTool][TemplateDotNetTool]
+- Recommending updates to bring SarifMark back in sync with TemplateDotNetTool
 
-**Note**: This agent should NOT be invoked for the [TemplateDotNetTool][TemplateDotNetTool] repository itself,
+**Note**: This agent should NOT be invoked for the TemplateDotNetTool repository itself (<https://github.com/demaconsulting/TemplateDotNetTool>),
 as that would try to ensure the repository is consistent with itself (implicitly a no-op).
 
 ## Responsibilities
 
 ### Consistency Checks
 
-The agent reviews the following areas for consistency with the [TemplateDotNetTool][TemplateDotNetTool] template:
+The agent reviews the following areas for consistency with the TemplateDotNetTool template:
 
 #### GitHub Configuration
 
@@ -46,7 +46,7 @@ The agent reviews the following areas for consistency with the [TemplateDotNetTo
 
 #### Documentation
 
-- **README Structure**: Follows [TemplateDotNetTool][TemplateDotNetTool] README.md pattern (badges, features, installation,
+- **README Structure**: Follows TemplateDotNetTool README.md pattern (badges, features, installation,
   usage, structure, CI/CD, documentation, license)
 - **Standard Files**: Presence and structure of:
   - `CONTRIBUTING.md`
@@ -83,14 +83,14 @@ The agent reviews the following areas for consistency with the [TemplateDotNetTo
 
 ### Review Process
 
-1. **Identify Differences**: Compare SarifMark repository structure with [TemplateDotNetTool][TemplateDotNetTool] template
+1. **Identify Differences**: Compare SarifMark repository structure with TemplateDotNetTool template
 2. **Assess Impact**: Determine if differences are intentional variations or drift
 3. **Recommend Updates**: Suggest specific files or patterns that should be updated
 4. **Respect Customizations**: Recognize valid project-specific customizations
 
 ### What NOT to Flag
 
-- Project-specific naming (SarifMark vs [TemplateDotNetTool][TemplateDotNetTool], package IDs, repository URLs)
+- Project-specific naming (SarifMark vs TemplateDotNetTool, package IDs, repository URLs)
 - Project-specific spell check exceptions in `.cspell.json`
 - Workflow variations for specific project needs
 - Additional requirements or features beyond the template
@@ -106,19 +106,17 @@ The agent reviews the following areas for consistency with the [TemplateDotNetTo
 
 ## Usage Pattern
 
-This agent is used to keep SarifMark consistent with [TemplateDotNetTool][TemplateDotNetTool]:
+This agent is used to keep SarifMark consistent with TemplateDotNetTool:
 
 1. Access the SarifMark repository
-2. Invoke repo-consistency-agent to review consistency with the [TemplateDotNetTool][TemplateDotNetTool] template
+2. Invoke repo-consistency-agent to review consistency with the TemplateDotNetTool template (<https://github.com/demaconsulting/TemplateDotNetTool>)
 3. Review agent recommendations
 4. Apply relevant changes using appropriate specialized agents
 5. Test changes to ensure they don't break existing functionality
 
 ## Key Principles
 
-- **Template Evolution**: As [TemplateDotNetTool][TemplateDotNetTool] evolves, this agent helps SarifMark stay current
+- **Template Evolution**: As TemplateDotNetTool evolves, this agent helps SarifMark stay current
 - **Respect Customization**: Not all differences are problems - some are valid customizations
 - **Incremental Adoption**: SarifMark can adopt template changes incrementally
 - **Documentation**: When recommending changes, explain why they align with best practices
-
-[TemplateDotNetTool]: https://github.com/demaconsulting/TemplateDotNetTool
