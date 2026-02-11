@@ -2,6 +2,15 @@
 
 Project-specific guidance for agents working on SarifMark - a .NET CLI tool for creating markdown reports from SARIF files.
 
+## Available Specialized Agents
+
+- **Requirements Agent** - Develops requirements and ensures test coverage linkage
+- **Technical Writer** - Creates accurate documentation following regulatory best practices
+- **Software Developer** - Writes production code and self-validation tests in literate style
+- **Test Developer** - Creates unit and integration tests following AAA pattern
+- **Code Quality Agent** - Enforces linting, static analysis, and security standards
+- **Repo Consistency Agent** - Ensures downstream repositories remain consistent with template patterns
+
 ## Tech Stack
 
 - C# 12, .NET 8.0/9.0/10.0, MSTest, dotnet CLI, NuGet
@@ -10,7 +19,7 @@ Project-specific guidance for agents working on SarifMark - a .NET CLI tool for 
 
 - **`requirements.yaml`** - All requirements with test linkage (enforced via `dotnet reqstream --enforce`)
 - **`.editorconfig`** - Code style (file-scoped namespaces, 4-space indent, UTF-8+BOM, LF endings)
-- **`.cspell.json`, `.markdownlint.json`, `.yamllint.yaml`** - Linting configs
+- **`.cspell.json`, `.markdownlint-cli2.jsonc`, `.yamllint.yaml`** - Linting configs
 
 ## Requirements (SarifMark-Specific)
 
