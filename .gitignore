@@ -45,7 +45,6 @@ TestResults/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 *.trx
-*.xml
 test-results/
 
 # Code coverage reports
@@ -64,11 +63,6 @@ artifacts/
 
 # Benchmark Results
 BenchmarkDotNet.Artifacts/
-
-# .NET Core
-project.lock.json
-project.fragment.lock.json
-artifacts/
 
 # Python
 __pycache__/
