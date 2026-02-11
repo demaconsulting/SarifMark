@@ -54,9 +54,15 @@ dotnet build --configuration Release && dotnet test --configuration Release
 
 Delegate tasks to specialized agents for better results:
 
-- **documentation-writer** - Invoke for: documentation updates/reviews, requirements.yaml changes,
-  markdown/spell/YAML linting
-- **project-maintainer** - Invoke for: dependency updates, CI/CD maintenance, releases, requirements
-  traceability enforcement
-- **software-quality-enforcer** - Invoke for: code quality reviews, test coverage verification (>80%),
-  static analysis, zero-warning builds, requirements test quality
+- **requirements-agent** - Invoke for: creating/reviewing requirements in requirements.yaml, ensuring
+  proper test coverage linkage, determining test strategy (unit/integration/self-validation)
+- **technical-writer** - Invoke for: documentation updates/reviews, markdown/spell/YAML linting,
+  regulatory documentation best practices
+- **repo-consistency-agent** - Invoke for: ensuring SarifMark stays consistent with TemplateDotNetTool
+  template patterns, identifying drift from template standards
+- **code-quality-agent** - Invoke for: linting issues, static analysis, security scanning, quality
+  gates enforcement, requirements traceability verification
+- **software-developer** - Invoke for: production code features, self-validation tests (SarifMark_*),
+  code refactoring, literate programming style
+- **test-developer** - Invoke for: unit tests, integration tests, test coverage improvement, AAA
+  pattern compliance
