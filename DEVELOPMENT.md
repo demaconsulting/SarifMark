@@ -91,9 +91,13 @@ SarifMark/
 
 ## Resources
 
-- [AGENTS.md](AGENTS.md) - Agent-specific guidance
-- [CONTRIBUTING.md](CONTRIBUTING.md) - Detailed contribution guide
-- [README.md](README.md) - Project overview
+- [AGENTS.md][agents] - Agent-specific guidance
+- [CONTRIBUTING.md][contributing] - Detailed contribution guide
+- [README.md][readme] - Project overview
+
+[agents]: AGENTS.md
+[contributing]: CONTRIBUTING.md
+[readme]: README.md
 
 [dotnet-sdk]: https://dotnet.microsoft.com/download
 [nodejs]: https://nodejs.org/
