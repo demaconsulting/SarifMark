@@ -6,6 +6,7 @@
     "Blockquotes",
     "buildnotes",
     "camelcase",
+    "CodeQL",
     "Checkmarx",
     "copilot",
     "cspell",
@@ -28,6 +29,7 @@
     "LINQ",
     "maintainer",
     "markdownlint",
+    "mermaid",
     "mstest",
     "myterm",
     "ncipollo",
@@ -45,8 +47,10 @@
     "SBOM",
     "Semgrep",
     "semver",
+    "slnx",
     "snupkg",
     "spdx",
+    "streetsidesoftware",
     "testname",
     "tracematrix",
     "triaging",
@@ -69,6 +73,7 @@
     "*.trx",
     "*.spdx.json",
     "package-lock.json",
-    "yarn.lock"
+    "yarn.lock",
+    "AGENT_REPORT_*.md"
   ]
 }
