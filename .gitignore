@@ -93,3 +93,6 @@ docs/quality/*.html
 
 # Agent reports (not to be committed)
 AGENT_REPORT_*.md
+*REPORT*.md
+*REFERENCE*.md
+*CONSISTENCY*.md
