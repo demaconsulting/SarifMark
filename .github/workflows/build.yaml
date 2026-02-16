@@ -19,22 +19,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Run markdown linter
-        uses: DavidAnson/markdownlint-cli2-action@v22
-        with:
-          globs: '**/*.md'
-
-      - name: Run spell checker
-        uses: streetsidesoftware/cspell-action@v8
-        with:
-          files: '**/*.{md,cs}'
-          incremental_files_only: false
-
-      - name: Run YAML linter
-        uses: ibiqlik/action-yamllint@v3
-        with:
-          config_file: .yamllint.yaml
-
       - name: Setup dotnet
         uses: actions/setup-dotnet@v5
         with:
@@ -56,6 +40,22 @@ jobs:
         with:
           name: version-capture-quality
           path: versionmark-quality.json
+
+      - name: Run markdown linter
+        uses: DavidAnson/markdownlint-cli2-action@v22
+        with:
+          globs: '**/*.md'
+
+      - name: Run spell checker
+        uses: streetsidesoftware/cspell-action@v8
+        with:
+          files: '**/*.{md,cs}'
+          incremental_files_only: false
+
+      - name: Run YAML linter
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          config_file: .yamllint.yaml
 
   build:
     name: Build ${{ matrix.os }}
@@ -299,6 +299,12 @@ jobs:
           JOB_ID="int-${OS_SHORT}-${DOTNET_SHORT}"
           dotnet versionmark --capture --job-id "${JOB_ID}" -- dotnet git versionmark
           echo "✓ Tool versions captured"
+
+      - name: Upload version capture
+        uses: actions/upload-artifact@v6
+        with:
+          name: version-capture-${{ matrix.os }}-dotnet${{ matrix.dotnet-version }}
+          path: versionmark-int-*.json
 
       - name: Upload integration test results
         if: always()
