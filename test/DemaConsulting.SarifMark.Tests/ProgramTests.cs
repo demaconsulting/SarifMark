@@ -34,14 +34,17 @@ public class ProgramTests
     [TestMethod]
     public void Program_Main_NoArguments_ReturnsError()
     {
+        // Arrange
         var originalOut = Console.Out;
         try
         {
             using var outWriter = new StringWriter();
             Console.SetOut(outWriter);
 
+            // Act
             var result = InvokeMain([]);
 
+            // Assert
             Assert.AreEqual(1, result);
             var output = outWriter.ToString();
             Assert.Contains("SarifMark version", output);
@@ -59,14 +62,17 @@ public class ProgramTests
     [TestMethod]
     public void Program_Main_VersionFlag_DisplaysVersionOnly()
     {
+        // Arrange
         var originalOut = Console.Out;
         try
         {
             using var outWriter = new StringWriter();
             Console.SetOut(outWriter);
 
+            // Act
             var result = InvokeMain(["--version"]);
 
+            // Assert
             Assert.AreEqual(0, result);
             var output = outWriter.ToString();
             Assert.DoesNotContain("Copyright", output);
@@ -84,14 +90,17 @@ public class ProgramTests
     [TestMethod]
     public void Program_Main_HelpFlag_DisplaysHelp()
     {
+        // Arrange
         var originalOut = Console.Out;
         try
         {
             using var outWriter = new StringWriter();
             Console.SetOut(outWriter);
 
+            // Act
             var result = InvokeMain(["--help"]);
 
+            // Assert
             Assert.AreEqual(0, result);
             var output = outWriter.ToString();
             Assert.Contains("SarifMark version", output);
@@ -110,14 +119,17 @@ public class ProgramTests
     [TestMethod]
     public void Program_Main_UnknownArgument_ReturnsError()
     {
+        // Arrange
         var originalOut = Console.Out;
         try
         {
             using var outWriter = new StringWriter();
             Console.SetOut(outWriter);
 
+            // Act
             var result = InvokeMain(["--unknown"]);
 
+            // Assert
             Assert.AreEqual(1, result);
             Assert.Contains("Unsupported argument", outWriter.ToString());
         }

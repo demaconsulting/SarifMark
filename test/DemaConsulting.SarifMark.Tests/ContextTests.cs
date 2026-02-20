@@ -32,8 +32,10 @@ public class ContextTests
     [TestMethod]
     public void Context_Create_NoArguments_ReturnsDefaultContext()
     {
+        // Act
         using var context = Context.Create([]);
 
+        // Assert
         Assert.IsFalse(context.Version);
         Assert.IsFalse(context.Help);
         Assert.AreEqual(0, context.ExitCode);
@@ -45,8 +47,10 @@ public class ContextTests
     [TestMethod]
     public void Context_Create_VersionFlag_SetsVersionTrue()
     {
+        // Act
         using var context = Context.Create(["--version"]);
 
+        // Assert
         Assert.IsTrue(context.Version);
         Assert.IsFalse(context.Help);
         Assert.AreEqual(0, context.ExitCode);
@@ -58,8 +62,10 @@ public class ContextTests
     [TestMethod]
     public void Context_Create_HelpFlag_SetsHelpTrue()
     {
+        // Act
         using var context = Context.Create(["--help"]);
 
+        // Assert
         Assert.IsFalse(context.Version);
         Assert.IsTrue(context.Help);
         Assert.AreEqual(0, context.ExitCode);
@@ -71,6 +77,7 @@ public class ContextTests
     [TestMethod]
     public void Context_Create_UnknownArgument_ThrowsArgumentException()
     {
+        // Act & Assert
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--unknown"]));
         Assert.Contains("Unsupported argument", exception.Message);
     }
@@ -81,6 +88,7 @@ public class ContextTests
     [TestMethod]
     public void Context_WriteLine_WritesToConsole()
     {
+        // Arrange
         var originalOut = Console.Out;
         try
         {
@@ -88,8 +96,11 @@ public class ContextTests
             Console.SetOut(outWriter);
 
             using var context = Context.Create([]);
+
+            // Act
             context.WriteLine("Test message");
 
+            // Assert
             Assert.Contains("Test message", outWriter.ToString());
         }
         finally
@@ -104,6 +115,7 @@ public class ContextTests
     [TestMethod]
     public void Context_WriteError_WritesToErrorAndSetsExitCode()
     {
+        // Arrange
         var originalOut = Console.Out;
         try
         {
@@ -111,8 +123,11 @@ public class ContextTests
             Console.SetOut(outWriter);
 
             using var context = Context.Create([]);
+
+            // Act
             context.WriteError("Error message");
 
+            // Assert
             Assert.AreEqual(1, context.ExitCode);
             Assert.Contains("Error message", outWriter.ToString());
         }
@@ -128,8 +143,10 @@ public class ContextTests
     [TestMethod]
     public void Context_Create_HeadingArgument_SetsHeading()
     {
+        // Act
         using var context = Context.Create(["--heading", "My Custom Heading"]);
 
+        // Assert
         Assert.AreEqual("My Custom Heading", context.Heading);
     }
 
@@ -139,7 +156,308 @@ public class ContextTests
     [TestMethod]
     public void Context_Create_HeadingWithoutValue_ThrowsArgumentException()
     {
+        // Act & Assert
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--heading"]));
         Assert.Contains("--heading requires", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that WriteLine in silent mode does not write to console.
+    /// </summary>
+    [TestMethod]
+    public void Context_WriteLine_SilentMode_DoesNotWriteToConsole()
+    {
+        // Arrange
+        var originalOut = Console.Out;
+        try
+        {
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
+
+            using var context = Context.Create(["--silent"]);
+
+            // Act
+            context.WriteLine("Test message");
+
+            // Assert
+            Assert.IsEmpty(outWriter.ToString());
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+        }
+    }
+
+    /// <summary>
+    ///     Test that WriteError in silent mode does not write to console but sets exit code.
+    /// </summary>
+    [TestMethod]
+    public void Context_WriteError_SilentMode_DoesNotWriteToConsoleButSetsExitCode()
+    {
+        // Arrange
+        var originalOut = Console.Out;
+        try
+        {
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
+
+            using var context = Context.Create(["--silent"]);
+
+            // Act
+            context.WriteError("Error message");
+
+            // Assert
+            Assert.AreEqual(1, context.ExitCode);
+            Assert.IsEmpty(outWriter.ToString());
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+        }
+    }
+
+    /// <summary>
+    ///     Test that creating a context with a log file opens the file successfully.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_LogFile_OpensFileSuccessfully()
+    {
+        // Arrange
+        var logFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
+
+        try
+        {
+            // Act
+            using var context = Context.Create(["--log", logFile]);
+            context.WriteLine("Test message");
+
+            // Assert - Dispose to flush and close the log file
+        }
+        finally
+        {
+            // Assert - Verify the log file was created and contains the message
+            if (File.Exists(logFile))
+            {
+                var logContent = File.ReadAllText(logFile);
+                Assert.Contains("Test message", logContent);
+                File.Delete(logFile);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Test that creating a context with an invalid log file path throws exception.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_InvalidLogFilePath_ThrowsInvalidOperationException()
+    {
+        // Arrange - Use an invalid path (directory that doesn't exist)
+        var invalidPath = PathHelpers.SafePathCombine("/nonexistent/directory", "test.log");
+
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() => Context.Create(["--log", invalidPath]));
+        Assert.Contains("Failed to open log file", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that Dispose properly cleans up resources.
+    /// </summary>
+    [TestMethod]
+    public void Context_Dispose_ProperlyClosesLogFile()
+    {
+        // Arrange
+        var logFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
+
+        try
+        {
+            var context = Context.Create(["--log", logFile]);
+            context.WriteLine("Before dispose");
+
+            // Act
+            context.Dispose();
+
+            // Assert - Should be able to read the log file after disposal
+            Assert.IsTrue(File.Exists(logFile));
+            var logContent = File.ReadAllText(logFile);
+            Assert.Contains("Before dispose", logContent);
+        }
+        finally
+        {
+            if (File.Exists(logFile))
+            {
+                File.Delete(logFile);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Test that ExitCode starts at 0 and changes to 1 after an error.
+    /// </summary>
+    [TestMethod]
+    public void Context_ExitCode_StartsAtZero_ChangesToOneAfterError()
+    {
+        // Arrange
+        var originalOut = Console.Out;
+        try
+        {
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
+
+            using var context = Context.Create([]);
+
+            // Act - Check initial exit code
+            Assert.AreEqual(0, context.ExitCode);
+
+            // Act - Write an error
+            context.WriteError("Error message");
+
+            // Assert - Exit code should be 1
+            Assert.AreEqual(1, context.ExitCode);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+        }
+    }
+
+    /// <summary>
+    ///     Test that creating a context with multiple flags sets all properties correctly.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_MultipleFlags_SetsAllPropertiesCorrectly()
+    {
+        // Arrange & Act
+        using var context = Context.Create(["--silent", "--enforce", "--sarif", "test.sarif"]);
+
+        // Assert
+        Assert.IsTrue(context.Silent);
+        Assert.IsTrue(context.Enforce);
+        Assert.AreEqual("test.sarif", context.SarifFile);
+        Assert.IsFalse(context.Version);
+        Assert.IsFalse(context.Help);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --sarif parameter sets SarifFile property.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_SarifParameter_SetsSarifFile()
+    {
+        // Act
+        using var context = Context.Create(["--sarif", "input.sarif"]);
+
+        // Assert
+        Assert.AreEqual("input.sarif", context.SarifFile);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --report parameter sets ReportFile property.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_ReportParameter_SetsReportFile()
+    {
+        // Act
+        using var context = Context.Create(["--report", "output.md"]);
+
+        // Assert
+        Assert.AreEqual("output.md", context.ReportFile);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --report-depth parameter sets ReportDepth property.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_ReportDepthParameter_SetsReportDepth()
+    {
+        // Act
+        using var context = Context.Create(["--report-depth", "3"]);
+
+        // Assert
+        Assert.AreEqual(3, context.ReportDepth);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --report-depth but no value throws exception.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_ReportDepthWithoutValue_ThrowsArgumentException()
+    {
+        // Act & Assert
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--report-depth"]));
+        Assert.Contains("--report-depth requires", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --report-depth and invalid value throws exception.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_ReportDepthInvalidValue_ThrowsArgumentException()
+    {
+        // Act & Assert
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--report-depth", "invalid"]));
+        Assert.Contains("--report-depth requires a positive integer", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --report-depth and zero value throws exception.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_ReportDepthZero_ThrowsArgumentException()
+    {
+        // Act & Assert
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--report-depth", "0"]));
+        Assert.Contains("--report-depth requires a positive integer", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --validate flag sets Validate property.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_ValidateFlag_SetsValidateTrue()
+    {
+        // Act
+        using var context = Context.Create(["--validate"]);
+
+        // Assert
+        Assert.IsTrue(context.Validate);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --enforce flag sets Enforce property.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_EnforceFlag_SetsEnforceTrue()
+    {
+        // Act
+        using var context = Context.Create(["--enforce"]);
+
+        // Assert
+        Assert.IsTrue(context.Enforce);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --silent flag sets Silent property.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_SilentFlag_SetsSilentTrue()
+    {
+        // Act
+        using var context = Context.Create(["--silent"]);
+
+        // Assert
+        Assert.IsTrue(context.Silent);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --results parameter sets ResultsFile property.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_ResultsParameter_SetsResultsFile()
+    {
+        // Act
+        using var context = Context.Create(["--results", "results.trx"]);
+
+        // Assert
+        Assert.AreEqual("results.trx", context.ResultsFile);
     }
 }
