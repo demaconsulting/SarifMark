@@ -236,7 +236,7 @@ SARIF (Static Analysis Results Interchange Format) is a standard format for the 
 designed to be easily integrated into development workflows and provides a consistent structure for representing
 analysis results from different tools.
 
-For more information, visit the [SARIF website](https://sarifweb.azurewebsites.net/).
+For more information, visit the [SARIF website][sarif-web].
 
 ### Which static analysis tools produce SARIF output?
 
@@ -307,9 +307,9 @@ dotnet tool update DemaConsulting.SarifMark
 
 ### Where can I find more help?
 
-- **GitHub Issues**: <https://github.com/demaconsulting/SarifMark/issues>
-- **GitHub Discussions**: <https://github.com/demaconsulting/SarifMark/discussions>
-- **Documentation**: <https://github.com/demaconsulting/SarifMark>
+- **GitHub Issues**: [GitHub Issues][issues]
+- **GitHub Discussions**: [GitHub Discussions][discussions]
+- **Documentation**: [Documentation][docs]
 
 ## Troubleshooting
 
@@ -336,9 +336,14 @@ using the SARIF validator.
 
 For issues, questions, or contributions:
 
-- **GitHub Issues**: <https://github.com/demaconsulting/SarifMark/issues>
-- **Documentation**: <https://github.com/demaconsulting/SarifMark>
+- **GitHub Issues**: [GitHub Issues][issues]
+- **Documentation**: [Documentation][docs]
 
 ## License
 
 SarifMark is released under the MIT License. See the LICENSE file in the repository for details.
+
+[sarif-web]: https://sarifweb.azurewebsites.net/
+[issues]: https://github.com/demaconsulting/SarifMark/issues
+[discussions]: https://github.com/demaconsulting/SarifMark/discussions
+[docs]: https://github.com/demaconsulting/SarifMark
