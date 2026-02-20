@@ -1,15 +1,25 @@
-# SarifMark Usage Guide
+# Introduction
 
 This guide provides comprehensive documentation for using SarifMark to generate markdown reports from SARIF (Static
 Analysis Results Interchange Format) files.
 
-## Introduction
+## Purpose
 
 SarifMark is a .NET command-line tool that reads SARIF files produced by various static analysis tools and generates
 comprehensive markdown reports. It's designed to integrate seamlessly into CI/CD pipelines for automated quality
 reporting.
 
-### Key Features
+## Scope
+
+This guide covers:
+
+- Installation and setup of SarifMark
+- Command-line options and usage patterns
+- CI/CD pipeline integration examples
+- Report format and customization
+- Troubleshooting common issues
+
+## Key Features
 
 - **SARIF Processing**: Read and parse SARIF files from any compatible static analysis tool
 - **Markdown Reports**: Generate human-readable markdown reports from SARIF data
@@ -18,15 +28,15 @@ reporting.
 - **Enforcement Mode**: Support for failing builds based on analysis results
 - **Multi-Platform**: Works on Windows, Linux, and macOS with .NET 8, 9, or 10
 
-## Installation
+# Installation
 
-### Prerequisites
+## Prerequisites
 
 - [.NET SDK][dotnet-download] 8.0, 9.0, or 10.0
 
 [dotnet-download]: https://dotnet.microsoft.com/download
 
-### Global Installation
+## Global Installation
 
 Install SarifMark as a global .NET tool for system-wide access:
 
@@ -40,7 +50,7 @@ Verify the installation:
 sarifmark --version
 ```
 
-### Local Installation
+## Local Installation
 
 For team projects, install SarifMark as a local tool to ensure version consistency:
 
@@ -58,7 +68,7 @@ Run the locally installed tool:
 dotnet sarifmark --version
 ```
 
-### Update
+## Update
 
 To update to the latest version:
 
@@ -70,9 +80,9 @@ dotnet tool update --global DemaConsulting.SarifMark
 dotnet tool update DemaConsulting.SarifMark
 ```
 
-## Getting Started
+# Getting Started
 
-### Basic Usage
+## Basic Usage
 
 The simplest way to use SarifMark is to process a SARIF file and generate a markdown report:
 
@@ -86,7 +96,7 @@ This command:
 2. Extracts tool information and results
 3. Generates a markdown report in `report.md`
 
-### Display Version
+## Display Version
 
 To display the version of SarifMark:
 
@@ -94,7 +104,7 @@ To display the version of SarifMark:
 sarifmark --version
 ```
 
-### Display Help
+## Display Help
 
 To display help information:
 
@@ -102,7 +112,7 @@ To display help information:
 sarifmark --help
 ```
 
-## Command-Line Options
+# Command-Line Options
 
 SarifMark supports the following command-line options:
 
@@ -118,9 +128,9 @@ SarifMark supports the following command-line options:
 - `--report-depth <depth>`: Markdown header depth for report (default: 1)
 - `--heading <text>`: Custom heading for report (default: [ToolName] Analysis)
 
-## Common Usage Patterns
+# Common Usage Patterns
 
-### Generate Basic Report
+## Generate Basic Report
 
 Process a SARIF file and generate a markdown report:
 
@@ -128,7 +138,7 @@ Process a SARIF file and generate a markdown report:
 sarifmark --sarif codeql-results.sarif --report quality-report.md
 ```
 
-### Custom Report Heading
+## Custom Report Heading
 
 Use a custom heading in the generated report:
 
@@ -136,7 +146,7 @@ Use a custom heading in the generated report:
 sarifmark --sarif analysis.sarif --report report.md --heading "Security Analysis Results"
 ```
 
-### Adjust Report Depth
+## Adjust Report Depth
 
 Control the markdown header depth in the report:
 
@@ -146,7 +156,7 @@ sarifmark --sarif analysis.sarif --report report.md --report-depth 2
 
 This is useful when including the report in a larger document where you want the sections to be at a deeper level.
 
-### Enforce Quality Gates
+## Enforce Quality Gates
 
 Fail the build if any issues are found:
 
@@ -156,7 +166,7 @@ sarifmark --sarif analysis.sarif --report report.md --enforce
 
 The command will exit with a non-zero exit code if the SARIF file contains any issues.
 
-### Run Self-Validation
+## Run Self-Validation
 
 Run the built-in validation tests:
 
@@ -170,7 +180,7 @@ Generate a test results file:
 sarifmark --validate --results validation-results.trx
 ```
 
-### Silent Mode with Log File
+## Silent Mode with Log File
 
 Suppress console output while saving to a log file:
 
@@ -178,9 +188,9 @@ Suppress console output while saving to a log file:
 sarifmark --sarif analysis.sarif --report report.md --silent --log sarifmark.log
 ```
 
-## Integration Examples
+# Integration Examples
 
-### CI/CD Pipeline Integration
+## CI/CD Pipeline Integration
 
 SarifMark can be easily integrated into CI/CD pipelines. Here's an example GitHub Actions workflow:
 
@@ -196,7 +206,7 @@ SarifMark can be easily integrated into CI/CD pipelines. Here's an example GitHu
     sarifmark --sarif results.sarif --report quality-report.md --enforce
 ```
 
-### Multiple SARIF Files
+## Multiple SARIF Files
 
 Process multiple SARIF files from different tools:
 
@@ -208,7 +218,7 @@ sarifmark --sarif codeql.sarif --report codeql-report.md --heading "CodeQL Analy
 sarifmark --sarif other-tool.sarif --report other-report.md --heading "Other Tool Analysis"
 ```
 
-## Report Format
+# Report Format
 
 The generated markdown reports include:
 
@@ -220,7 +230,7 @@ The generated markdown reports include:
   - Rule ID
   - Issue message
 
-## Exit Codes
+# Exit Codes
 
 SarifMark uses the following exit codes:
 
@@ -228,9 +238,9 @@ SarifMark uses the following exit codes:
 - `1`: Error (invalid arguments, file not found, processing error)
 - Non-zero (with `--enforce`): Issues found in SARIF file
 
-## Frequently Asked Questions
+# Frequently Asked Questions
 
-### What is SARIF?
+## What is SARIF?
 
 SARIF (Static Analysis Results Interchange Format) is a standard format for the output of static analysis tools. It's
 designed to be easily integrated into development workflows and provides a consistent structure for representing
@@ -238,7 +248,7 @@ analysis results from different tools.
 
 For more information, visit the [SARIF website][sarif-web].
 
-### Which static analysis tools produce SARIF output?
+## Which static analysis tools produce SARIF output?
 
 Many popular static analysis tools support SARIF output, including:
 
@@ -252,21 +262,21 @@ Many popular static analysis tools support SARIF output, including:
 
 Check your tool's documentation for SARIF export options.
 
-### Can I process multiple SARIF files at once?
+## Can I process multiple SARIF files at once?
 
 Currently, SarifMark processes one SARIF file at a time. To process multiple files, run the tool multiple times with
 different input and output files. You can combine the reports manually or use a script to merge them.
 
-### How do I use SarifMark in a CI/CD pipeline?
+## How do I use SarifMark in a CI/CD pipeline?
 
-See the [Integration Examples](#integration-examples) section above for CI/CD integration examples. The key steps are:
+See the Integration Examples section for CI/CD integration examples. The key steps are:
 
 1. Run your static analysis tool to generate a SARIF file
 2. Install SarifMark in your pipeline
 3. Run SarifMark to generate a report
 4. Optionally use `--enforce` to fail the build if issues are found
 
-### What happens when I use the --enforce flag?
+## What happens when I use the --enforce flag?
 
 When you use the `--enforce` flag, SarifMark will:
 
@@ -276,7 +286,7 @@ When you use the `--enforce` flag, SarifMark will:
 
 This is useful in CI/CD pipelines to fail builds when quality issues are detected.
 
-### Can I customize the report format?
+## Can I customize the report format?
 
 Yes, you can customize:
 
@@ -287,13 +297,13 @@ Yes, you can customize:
 The report content format is standardized but these options allow you to integrate reports into different documentation
 structures.
 
-### What .NET versions are supported?
+## What .NET versions are supported?
 
 SarifMark supports .NET 8.0, 9.0, and 10.0. You need at least one of these SDK versions installed to use the tool.
 The tool is built as a multi-targeted package, so it will automatically use the appropriate version based on your
 installed .NET runtime.
 
-### How do I update SarifMark?
+## How do I update SarifMark?
 
 To update to the latest version:
 
@@ -305,41 +315,41 @@ dotnet tool update --global DemaConsulting.SarifMark
 dotnet tool update DemaConsulting.SarifMark
 ```
 
-### Where can I find more help?
+## Where can I find more help?
 
 - **GitHub Issues**: [GitHub Issues][issues]
 - **GitHub Discussions**: [GitHub Discussions][discussions]
 - **Documentation**: [Documentation][docs]
 
-## Troubleshooting
+# Troubleshooting
 
-### SARIF File Not Found
+## SARIF File Not Found
 
 **Error**: `Error: SARIF file not found: analysis.sarif`
 
 **Solution**: Verify the path to the SARIF file is correct and the file exists.
 
-### Invalid SARIF Format
+## Invalid SARIF Format
 
 **Error**: `Error: Failed to read SARIF file`
 
 **Solution**: Ensure the SARIF file is valid and conforms to the SARIF specification. You can validate SARIF files
 using the SARIF validator.
 
-### Missing --sarif Parameter
+## Missing --sarif Parameter
 
 **Error**: `Error: --sarif parameter is required`
 
 **Solution**: Provide the `--sarif` parameter with the path to your SARIF file.
 
-## Support
+# Support
 
 For issues, questions, or contributions:
 
 - **GitHub Issues**: [GitHub Issues][issues]
 - **Documentation**: [Documentation][docs]
 
-## License
+# License
 
 SarifMark is released under the MIT License. See the LICENSE file in the repository for details.
 
