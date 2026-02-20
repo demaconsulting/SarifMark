@@ -380,6 +380,8 @@ public record SarifResults
     /// <summary>
     ///     Appends the issues section with count and details.
     /// </summary>
+    /// <param name="sb">The StringBuilder to append to.</param>
+    /// <param name="subHeading">The markdown heading prefix for the Issues section.</param>
     private void AppendIssuesSection(StringBuilder sb, string subHeading)
     {
         sb.AppendLine($"{subHeading} Issues");
