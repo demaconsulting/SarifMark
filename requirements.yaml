@@ -1,3 +1,28 @@
+# Requirements Testing Strategy
+#
+# This project uses three categories of tests to verify requirements:
+#
+# 1. Unit Tests - Run locally via "dotnet test"
+# 2. Self-Validation Tests - Run locally via "--validate"
+# 3. Platform Tests - Run via CI/CD across OS/runtime matrix
+#
+# NOTE: Running "reqstream --enforce" with only local test results (unit tests
+# and local self-validation) is expected to show some unsatisfied requirements.
+# Platform-specific requirements require test results from CI/CD runs across
+# the full OS and runtime matrix.
+#
+# Test links can include a source filter prefix (e.g. "windows@", "ubuntu@",
+# "dotnet8.x@") to restrict which test results count as evidence for a
+# requirement. This is critical for platform and framework requirements -
+# removing these filters invalidates the evidence-based proof.
+#
+# Source filter prefixes:
+#   windows@TestName    - proves the test passed on a Windows platform
+#   ubuntu@TestName     - proves the test passed on a Linux (Ubuntu) platform
+#   dotnet8.x@TestName  - proves the self-validation test ran with .NET 8.x runtime
+#   dotnet9.x@TestName  - proves the self-validation test ran with .NET 9.x runtime
+#   dotnet10.x@TestName - proves the self-validation test ran with .NET 10.x runtime
+#
 ---
 sections:
   - title: SarifMark Requirements
@@ -257,53 +282,48 @@ sections:
             title: The tool shall run on Windows operating systems.
             justification: >-
               Windows support ensures the tool is accessible to developers using Microsoft platforms, which are
-              prevalent in enterprise environments and .NET development ecosystems. This is validated by
-              running integration tests on Windows runners in CI/CD.
+              prevalent in enterprise environments and .NET development ecosystems.
             tests:
-              - IntegrationTest_VersionFlag_OutputsVersion
-              - IntegrationTest_HelpFlag_OutputsUsageInformation
-              - IntegrationTest_ValidateFlag_RunsSelfValidation
+              - windows@IntegrationTest_VersionFlag_OutputsVersion
+              - windows@IntegrationTest_HelpFlag_OutputsUsageInformation
+              - windows@IntegrationTest_ValidateFlag_RunsSelfValidation
 
           - id: PLT-002
             title: The tool shall run on Linux operating systems.
             justification: >-
               Linux support is essential for cloud-native development and CI/CD pipelines, as most modern build
-              systems and container environments run on Linux. This is validated by running integration tests
-              on Ubuntu runners in CI/CD.
+              systems and container environments run on Linux.
             tests:
-              - IntegrationTest_VersionFlag_OutputsVersion
-              - IntegrationTest_HelpFlag_OutputsUsageInformation
-              - IntegrationTest_ValidateFlag_RunsSelfValidation
+              - ubuntu@IntegrationTest_VersionFlag_OutputsVersion
+              - ubuntu@IntegrationTest_HelpFlag_OutputsUsageInformation
+              - ubuntu@IntegrationTest_ValidateFlag_RunsSelfValidation
 
           - id: PLT-003
             title: The tool shall support .NET 8.0 runtime.
             justification: >-
               .NET 8.0 support ensures compatibility with the current Long-Term Support release, providing
-              stability and widespread adoption for enterprise users. This is validated by running self-validation
-              tests on .NET 8.0 in CI/CD.
+              stability and widespread adoption for enterprise users.
             tests:
-              - SarifMark_SarifReading
-              - SarifMark_MarkdownReportGeneration
-              - SarifMark_Enforcement
+              - dotnet8.x@SarifMark_SarifReading
+              - dotnet8.x@SarifMark_MarkdownReportGeneration
+              - dotnet8.x@SarifMark_Enforcement
 
           - id: PLT-004
             title: The tool shall support .NET 9.0 runtime.
             justification: >-
               .NET 9.0 support enables users to leverage the latest .NET features and performance improvements,
-              ensuring the tool remains current with the .NET ecosystem. This is validated by running
-              self-validation tests on .NET 9.0 in CI/CD.
+              ensuring the tool remains current with the .NET ecosystem.
             tests:
-              - SarifMark_SarifReading
-              - SarifMark_MarkdownReportGeneration
-              - SarifMark_Enforcement
+              - dotnet9.x@SarifMark_SarifReading
+              - dotnet9.x@SarifMark_MarkdownReportGeneration
+              - dotnet9.x@SarifMark_Enforcement
 
           - id: PLT-005
             title: The tool shall support .NET 10.0 runtime.
             justification: >-
               .NET 10.0 support provides forward compatibility and ensures the tool remains viable as users adopt
-              future .NET versions, extending the tool's lifespan and relevance. This is validated by running
-              self-validation tests on .NET 10.0 in CI/CD.
+              future .NET versions, extending the tool's lifespan and relevance.
             tests:
-              - SarifMark_SarifReading
-              - SarifMark_MarkdownReportGeneration
-              - SarifMark_Enforcement
+              - dotnet10.x@SarifMark_SarifReading
+              - dotnet10.x@SarifMark_MarkdownReportGeneration
+              - dotnet10.x@SarifMark_Enforcement
