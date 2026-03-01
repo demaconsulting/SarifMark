@@ -105,6 +105,9 @@ internal sealed class Context : IDisposable
     /// <exception cref="ArgumentException">Thrown when arguments are invalid.</exception>
     public static Context Create(string[] args)
     {
+        // Validate input
+        ArgumentNullException.ThrowIfNull(args);
+
         var parser = new ArgumentParser();
         parser.ParseArguments(args);
 
@@ -216,6 +219,9 @@ internal sealed class Context : IDisposable
         /// <param name="args">Command-line arguments.</param>
         public void ParseArguments(string[] args)
         {
+            // Validate input
+            ArgumentNullException.ThrowIfNull(args);
+
             int i = 0;
             while (i < args.Length)
             {
