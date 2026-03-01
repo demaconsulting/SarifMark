@@ -27,6 +27,30 @@ namespace DemaConsulting.SarifMark.Tests;
 public class PathHelpersTests
 {
     /// <summary>
+    ///     Test that SafePathCombine throws ArgumentNullException for null base path.
+    /// </summary>
+    [TestMethod]
+    public void PathHelpers_SafePathCombine_NullBasePath_ThrowsArgumentNullException()
+    {
+        // Act & Assert
+        var exception = Assert.Throws<ArgumentNullException>(() =>
+            PathHelpers.SafePathCombine(null!, "file.txt"));
+        Assert.AreEqual("basePath", exception.ParamName);
+    }
+
+    /// <summary>
+    ///     Test that SafePathCombine throws ArgumentNullException for null relative path.
+    /// </summary>
+    [TestMethod]
+    public void PathHelpers_SafePathCombine_NullRelativePath_ThrowsArgumentNullException()
+    {
+        // Act & Assert
+        var exception = Assert.Throws<ArgumentNullException>(() =>
+            PathHelpers.SafePathCombine("/home/user", null!));
+        Assert.AreEqual("relativePath", exception.ParamName);
+    }
+
+    /// <summary>
     ///     Test that SafePathCombine successfully combines valid paths.
     /// </summary>
     [TestMethod]
