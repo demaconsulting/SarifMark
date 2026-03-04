@@ -116,11 +116,11 @@ public class ContextTests
     public void Context_WriteError_WritesToErrorAndSetsExitCode()
     {
         // Arrange
-        var originalOut = Console.Out;
+        var originalError = Console.Error;
         try
         {
-            using var outWriter = new StringWriter();
-            Console.SetOut(outWriter);
+            using var errWriter = new StringWriter();
+            Console.SetError(errWriter);
 
             using var context = Context.Create([]);
 
@@ -129,11 +129,11 @@ public class ContextTests
 
             // Assert
             Assert.AreEqual(1, context.ExitCode);
-            Assert.Contains("Error message", outWriter.ToString());
+            Assert.Contains("Error message", errWriter.ToString());
         }
         finally
         {
-            Console.SetOut(originalOut);
+            Console.SetError(originalError);
         }
     }
 
@@ -195,11 +195,11 @@ public class ContextTests
     public void Context_WriteError_SilentMode_DoesNotWriteToConsoleButSetsExitCode()
     {
         // Arrange
-        var originalOut = Console.Out;
+        var originalError = Console.Error;
         try
         {
-            using var outWriter = new StringWriter();
-            Console.SetOut(outWriter);
+            using var errWriter = new StringWriter();
+            Console.SetError(errWriter);
 
             using var context = Context.Create(["--silent"]);
 
@@ -208,11 +208,11 @@ public class ContextTests
 
             // Assert
             Assert.AreEqual(1, context.ExitCode);
-            Assert.IsEmpty(outWriter.ToString());
+            Assert.IsEmpty(errWriter.ToString());
         }
         finally
         {
-            Console.SetOut(originalOut);
+            Console.SetError(originalError);
         }
     }
 

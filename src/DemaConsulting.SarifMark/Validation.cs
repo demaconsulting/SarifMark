@@ -105,7 +105,6 @@ internal static class Validation
             context,
             testResults,
             "SarifMark_SarifReading",
-            "SARIF File Reading Test",
             null,
             (logContent, _) =>
             {
@@ -130,7 +129,6 @@ internal static class Validation
             context,
             testResults,
             "SarifMark_MarkdownReportGeneration",
-            "Markdown Report Generation Test",
             "sarif-report.md",
             (logContent, reportContent) =>
             {
@@ -194,27 +192,27 @@ internal static class Validation
                 if (logContent.Contains("Error: Issues found in SARIF file"))
                 {
                     test.Outcome = DemaConsulting.TestResults.TestOutcome.Passed;
-                    context.WriteLine($"✓ Enforcement Test - PASSED");
+                    context.WriteLine($"✓ SarifMark_Enforcement - Passed");
                 }
                 else
                 {
                     test.Outcome = DemaConsulting.TestResults.TestOutcome.Failed;
                     test.ErrorMessage = "Expected error message not found";
-                    context.WriteError($"✗ Enforcement Test - FAILED: Expected error message not found");
+                    context.WriteError($"✗ SarifMark_Enforcement - Failed: Expected error message not found");
                 }
             }
             else
             {
                 test.Outcome = DemaConsulting.TestResults.TestOutcome.Failed;
                 test.ErrorMessage = "Program should have exited with non-zero code";
-                context.WriteError($"✗ Enforcement Test - FAILED: Program should have exited with non-zero code");
+                context.WriteError($"✗ SarifMark_Enforcement - Failed: Program should have exited with non-zero code");
             }
         }
         // Catch all exceptions as this is a test framework - any exception should be recorded as a test failure.
         // This is intentional to ensure robust test execution and reporting regardless of exception type.
         catch (Exception ex)
         {
-            HandleTestException(test, context, "Enforcement Test", ex);
+            HandleTestException(test, context, "SarifMark_Enforcement", ex);
         }
 
         FinalizeTestResult(test, startTime, testResults);
@@ -226,14 +224,12 @@ internal static class Validation
     /// <param name="context">The context for output.</param>
     /// <param name="testResults">The test results collection.</param>
     /// <param name="testName">The name of the test.</param>
-    /// <param name="displayName">The display name for console output.</param>
     /// <param name="reportFileName">Optional report file name to generate.</param>
     /// <param name="validator">Function to validate test results. Returns null on success or error message on failure.</param>
     private static void RunValidationTest(
         Context context,
         DemaConsulting.TestResults.TestResults testResults,
         string testName,
-        string displayName,
         string? reportFileName,
         Func<string, string?, string?> validator)
     {
@@ -287,27 +283,27 @@ internal static class Validation
                 if (errorMessage == null)
                 {
                     test.Outcome = DemaConsulting.TestResults.TestOutcome.Passed;
-                    context.WriteLine($"✓ {displayName} - PASSED");
+                    context.WriteLine($"✓ {testName} - Passed");
                 }
                 else
                 {
                     test.Outcome = DemaConsulting.TestResults.TestOutcome.Failed;
                     test.ErrorMessage = errorMessage;
-                    context.WriteError($"✗ {displayName} - FAILED: {errorMessage}");
+                    context.WriteError($"✗ {testName} - Failed: {errorMessage}");
                 }
             }
             else
             {
                 test.Outcome = DemaConsulting.TestResults.TestOutcome.Failed;
                 test.ErrorMessage = $"Program exited with code {exitCode}";
-                context.WriteError($"✗ {displayName} - FAILED: Exit code {exitCode}");
+                context.WriteError($"✗ {testName} - Failed: Exit code {exitCode}");
             }
         }
         // Catch all exceptions as this is a test framework - any exception should be recorded as a test failure.
         // This is intentional to ensure robust test execution and reporting regardless of exception type.
         catch (Exception ex)
         {
-            HandleTestException(test, context, displayName, ex);
+            HandleTestException(test, context, testName, ex);
         }
 
         FinalizeTestResult(test, startTime, testResults);
@@ -465,7 +461,7 @@ internal static class Validation
     {
         test.Outcome = DemaConsulting.TestResults.TestOutcome.Failed;
         test.ErrorMessage = $"Exception: {ex.Message}";
-        context.WriteError($"✗ {testName} - FAILED: {ex.Message}");
+        context.WriteError($"✗ {testName} - Failed: {ex.Message}");
     }
 
     /// <summary>

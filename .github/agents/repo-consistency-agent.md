@@ -81,6 +81,33 @@ The agent reviews the following areas for consistency with the TemplateDotNetToo
   - `quality/` (auto-generated)
 - **Definition Files**: `definition.yaml` files for document generation
 
+### Tracking Template Evolution
+
+To ensure SarifMark benefits from recent template improvements, review recent pull requests merged into
+the template repository:
+
+1. **List Recent PRs**: Retrieve recently merged PRs from `demaconsulting/TemplateDotNetTool`
+   - Review the last 10-20 PRs to identify template improvements
+
+2. **Identify Propagatable Changes**: For each PR, determine if changes should apply to SarifMark:
+   - Focus on structural changes (workflows, agents, configurations) over content-specific changes
+   - Note changes to `.github/`, linting configurations, project patterns, and documentation
+     structure
+
+3. **Check Downstream Application**: Verify if identified changes exist in SarifMark:
+   - Check if similar files/patterns exist in SarifMark
+   - Compare file contents between template and SarifMark
+   - Look for similar PR titles or commit messages in SarifMark repository history
+
+4. **Recommend Missing Updates**: For changes not yet applied, include them in the consistency
+   review with:
+   - Description of the template change (reference PR number)
+   - Explanation of benefits for SarifMark
+   - Specific files or patterns that need updating
+
+This technique ensures SarifMark doesn't miss important template improvements and helps maintain
+long-term consistency.
+
 ### Review Process
 
 1. **Identify Differences**: Compare SarifMark repository structure with TemplateDotNetTool template
