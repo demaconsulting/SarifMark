@@ -171,7 +171,7 @@ sections:
 
       - title: Report Generation
         requirements:
-          - id: SarifMark-Report-Markdown
+          - id: SarifMark-Rpt-Markdown
             title: The tool shall generate markdown reports from SARIF files.
             justification: >-
               Markdown report generation transforms machine-readable SARIF into human-readable documentation,
@@ -180,7 +180,7 @@ sections:
               - IntegrationTest_GenerateReport_CreatesReportFile
               - SarifMark_MarkdownReportGeneration
 
-          - id: SarifMark-Report-Depth
+          - id: SarifMark-Rpt-Depth
             title: The tool shall support configurable markdown heading depth.
             justification: >-
               Configurable heading depth allows reports to integrate seamlessly into existing documentation
@@ -188,7 +188,7 @@ sections:
             tests:
               - IntegrationTest_ReportDepth_IsConfigurable
 
-          - id: SarifMark-Report-Counts
+          - id: SarifMark-Rpt-Counts
             title: The tool shall display result counts in reports.
             justification: >-
               Result counts provide a quick summary of analysis findings, helping users understand the scope of
@@ -197,7 +197,7 @@ sections:
               - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
               - SarifResults_ToMarkdown_OneResult_UsesSingularForm
 
-          - id: SarifMark-Report-Locations
+          - id: SarifMark-Rpt-Locations
             title: The tool shall display location information for results.
             justification: >-
               Displaying location information enables developers to quickly navigate to the source of issues,
@@ -206,7 +206,7 @@ sections:
               - SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
               - SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
 
-          - id: SarifMark-Report-Headings
+          - id: SarifMark-Rpt-Headings
             title: The tool shall support custom headings in reports.
             justification: >-
               Custom headings allow users to tailor reports to their documentation standards and naming
@@ -217,7 +217,7 @@ sections:
               - SarifResults_ToMarkdown_NoHeadingParameter_UsesDefaultHeading
               - Context_Create_HeadingArgument_SetsHeading
 
-          - id: SarifMark-Report-LineBreaks
+          - id: SarifMark-Rpt-LineBreaks
             title: The tool shall format multiple results with proper line breaks.
             justification: >-
               Proper line breaks between results ensure readability and visual separation in generated markdown,
@@ -281,7 +281,7 @@ sections:
 
       - title: Platform Support
         requirements:
-          - id: SarifMark-Platform-Windows
+          - id: SarifMark-Plt-Windows
             title: The tool shall run on Windows operating systems.
             justification: >-
               Windows support ensures the tool is accessible to developers using Microsoft platforms, which are
@@ -291,7 +291,7 @@ sections:
               - windows@IntegrationTest_HelpFlag_OutputsUsageInformation
               - windows@IntegrationTest_ValidateFlag_RunsSelfValidation
 
-          - id: SarifMark-Platform-Linux
+          - id: SarifMark-Plt-Linux
             title: The tool shall run on Linux operating systems.
             justification: >-
               Linux support is essential for cloud-native development and CI/CD pipelines, as most modern build
@@ -301,7 +301,7 @@ sections:
               - ubuntu@IntegrationTest_HelpFlag_OutputsUsageInformation
               - ubuntu@IntegrationTest_ValidateFlag_RunsSelfValidation
 
-          - id: SarifMark-Platform-Net8
+          - id: SarifMark-Plt-Net8
             title: The tool shall support .NET 8.0 runtime.
             justification: >-
               .NET 8.0 support ensures compatibility with the current Long-Term Support release, providing
@@ -311,7 +311,7 @@ sections:
               - dotnet8.x@SarifMark_MarkdownReportGeneration
               - dotnet8.x@SarifMark_Enforcement
 
-          - id: SarifMark-Platform-Net9
+          - id: SarifMark-Plt-Net9
             title: The tool shall support .NET 9.0 runtime.
             justification: >-
               .NET 9.0 support enables users to leverage the latest .NET features and performance improvements,
@@ -321,7 +321,7 @@ sections:
               - dotnet9.x@SarifMark_MarkdownReportGeneration
               - dotnet9.x@SarifMark_Enforcement
 
-          - id: SarifMark-Platform-Net10
+          - id: SarifMark-Plt-Net10
             title: The tool shall support .NET 10.0 runtime.
             justification: >-
               .NET 10.0 support provides forward compatibility and ensures the tool remains viable as users adopt
@@ -330,3 +330,67 @@ sections:
               - dotnet10.x@SarifMark_SarifReading
               - dotnet10.x@SarifMark_MarkdownReportGeneration
               - dotnet10.x@SarifMark_Enforcement
+
+      - title: OTS Software
+        requirements:
+          - id: SarifMark-OTS-MSTest
+            title: MSTest shall execute unit tests and report results.
+            justification: >-
+              MSTest (MSTest.TestFramework and MSTest.TestAdapter) is the unit-testing framework used by the
+              project. It discovers and runs all test methods and writes TRX result files that feed into coverage
+              reporting and requirements traceability. Passing tests confirm the framework is functioning correctly.
+            tags: [ots]
+            tests:
+              - SarifResults_Read_NoResults_ReturnsValidResults
+              - SarifResults_Read_WithResults_ReturnsValidResults
+              - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
+              - Context_Create_VersionFlag_SetsVersionTrue
+              - Context_Create_HelpFlag_SetsHelpTrue
+
+          - id: SarifMark-OTS-ReqStream
+            title: ReqStream shall enforce that every requirement is linked to passing test evidence.
+            justification: >-
+              DemaConsulting.ReqStream processes requirements.yaml and the TRX test-result files to produce a
+              requirements report, justifications document, and traceability matrix. When run with --enforce, it
+              exits with a non-zero code if any requirement lacks test evidence, making unproven requirements a
+              build-breaking condition. A successful pipeline run with --enforce proves all requirements are
+              covered and that ReqStream is functioning.
+            tags: [ots]
+            tests:
+              - ReqStream_EnforcementMode
+
+          - id: SarifMark-OTS-BuildMark
+            title: BuildMark shall generate build-notes documentation from GitHub Actions metadata.
+            justification: >-
+              DemaConsulting.BuildMark queries the GitHub API to capture workflow run details and renders them as
+              a markdown build-notes document included in the release artifacts. It runs as part of the same CI
+              pipeline that produces the TRX test results, so a successful pipeline run is evidence that BuildMark
+              executed without error.
+            tags: [ots]
+            tests:
+              - BuildMark_MarkdownReportGeneration
+
+          - id: SarifMark-OTS-VersionMark
+            title: VersionMark shall publish captured tool-version information.
+            justification: >-
+              DemaConsulting.VersionMark reads version metadata for each dotnet tool used in the pipeline and
+              writes a versions markdown document included in the release artifacts. It runs in the same CI
+              pipeline that produces the TRX test results, so a successful pipeline run is evidence that
+              VersionMark executed without error.
+            tags: [ots]
+            tests:
+              - VersionMark_CapturesVersions
+              - VersionMark_GeneratesMarkdownReport
+
+          - id: SarifMark-OTS-SonarMark
+            title: SonarMark shall generate a SonarCloud quality report.
+            justification: >-
+              DemaConsulting.SonarMark retrieves quality-gate and metrics data from SonarCloud and renders it as
+              a markdown document included in the release artifacts. It runs in the same CI pipeline that produces
+              the TRX test results, so a successful pipeline run is evidence that SonarMark executed without error.
+            tags: [ots]
+            tests:
+              - SonarMark_QualityGateRetrieval
+              - SonarMark_IssuesRetrieval
+              - SonarMark_HotSpotsRetrieval
+              - SonarMark_MarkdownReportGeneration
