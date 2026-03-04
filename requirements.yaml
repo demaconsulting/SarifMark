@@ -32,7 +32,7 @@ sections:
     sections:
       - title: Command-Line Interface
         requirements:
-          - id: CLI-001
+          - id: SarifMark-Cli-Interface
             title: The tool shall provide a command-line interface.
             justification: >-
               A command-line interface enables automation, scripting, and integration into CI/CD pipelines,
@@ -41,7 +41,7 @@ sections:
               - IntegrationTest_VersionFlag_OutputsVersion
               - IntegrationTest_HelpFlag_OutputsUsageInformation
 
-          - id: CLI-002
+          - id: SarifMark-Cli-Version
             title: The tool shall display version information when requested.
             justification: >-
               Version information allows users to identify the tool version for troubleshooting, compatibility
@@ -50,7 +50,7 @@ sections:
               - IntegrationTest_VersionFlag_OutputsVersion
               - Context_Create_VersionFlag_SetsVersionTrue
 
-          - id: CLI-003
+          - id: SarifMark-Cli-Help
             title: The tool shall display help information when requested.
             justification: >-
               Help information improves discoverability and usability by providing users with guidance on
@@ -59,7 +59,7 @@ sections:
               - IntegrationTest_HelpFlag_OutputsUsageInformation
               - Context_Create_HelpFlag_SetsHelpTrue
 
-          - id: CLI-004
+          - id: SarifMark-Cli-Silent
             title: The tool shall support silent mode to suppress console output.
             justification: >-
               Silent mode enables cleaner integration into automated workflows and CI/CD pipelines where console
@@ -67,7 +67,7 @@ sections:
             tests:
               - IntegrationTest_SilentFlag_SuppressesOutput
 
-          - id: CLI-005
+          - id: SarifMark-Cli-Log
             title: The tool shall support writing output to a log file.
             justification: >-
               Log file support enables persistent record-keeping, debugging, and audit trails, especially valuable
@@ -75,7 +75,7 @@ sections:
             tests:
               - IntegrationTest_LogFile_WritesOutputToFile
 
-          - id: CLI-006
+          - id: SarifMark-Cli-Enforce
             title: The tool shall support enforcing quality gate checks.
             justification: >-
               Quality gate enforcement enables the tool to act as a quality gate in CI/CD pipelines, failing
@@ -83,7 +83,7 @@ sections:
             tests:
               - SarifMark_Enforcement
 
-          - id: CLI-007
+          - id: SarifMark-Cli-InvalidArgs
             title: The tool shall reject unknown command-line arguments.
             justification: >-
               Rejecting unknown arguments prevents silent failures from typos or incorrect parameters, ensuring
@@ -93,7 +93,7 @@ sections:
 
       - title: SARIF Integration
         requirements:
-          - id: SARIF-001
+          - id: SarifMark-Sarif-Reading
             title: The tool shall read SARIF 2.1.0 format files.
             justification: >-
               Support for SARIF 2.1.0 is essential as it is the standard format for static analysis results,
@@ -102,7 +102,7 @@ sections:
               - SarifMark_SarifReading
               - IntegrationTest_ValidSarifFile_ProcessesSuccessfully
 
-          - id: SARIF-002
+          - id: SarifMark-Sarif-Validation
             title: The tool shall validate SARIF file format.
             justification: >-
               Format validation ensures the tool processes only well-formed SARIF files, preventing runtime
@@ -113,7 +113,7 @@ sections:
               - SarifResults_Read_MissingRuns_ThrowsInvalidOperationException
               - SarifResults_Read_EmptyRuns_ThrowsInvalidOperationException
 
-          - id: SARIF-003
+          - id: SarifMark-Sarif-ToolInfo
             title: The tool shall extract tool information from SARIF files.
             justification: >-
               Extracting tool information enables reports to identify which analysis tool generated the results,
@@ -124,7 +124,7 @@ sections:
               - SarifResults_Read_MissingToolName_UsesUnknown
               - SarifResults_Read_MissingToolVersion_UsesUnknown
 
-          - id: SARIF-004
+          - id: SarifMark-Sarif-Results
             title: The tool shall extract results from SARIF files.
             justification: >-
               Result extraction is the core functionality that enables conversion of analysis findings into
@@ -134,7 +134,7 @@ sections:
               - SarifResults_Read_EmptyResults_ReturnsValidResults
               - SarifResults_Read_WithResults_ReturnsValidResults
 
-          - id: SARIF-005
+          - id: SarifMark-Sarif-Locations
             title: The tool shall extract location information from SARIF results.
             justification: >-
               Location information allows users to quickly identify where issues exist in their codebase,
@@ -142,7 +142,7 @@ sections:
             tests:
               - SarifResults_Read_WithLocations_ReturnsResultsWithLocationData
 
-          - id: SARIF-006
+          - id: SarifMark-Sarif-FilePaths
             title: The tool shall require valid file paths for SARIF input.
             justification: >-
               Path validation ensures clear error messages when files are missing or incorrectly specified,
@@ -153,7 +153,7 @@ sections:
               - SarifResults_Read_WhitespacePath_ThrowsArgumentException
               - SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException
 
-          - id: SARIF-007
+          - id: SarifMark-Sarif-Required
             title: The tool shall require the --sarif parameter for analysis.
             justification: >-
               Requiring explicit SARIF file specification ensures intentional operation and prevents accidental
@@ -161,7 +161,7 @@ sections:
             tests:
               - IntegrationTest_MissingSarifParameter_ShowsError
 
-          - id: SARIF-008
+          - id: SarifMark-Sarif-Processing
             title: The tool shall process valid SARIF files successfully.
             justification: >-
               Successful processing of valid SARIF files is the fundamental capability that enables the tool to
@@ -171,7 +171,7 @@ sections:
 
       - title: Report Generation
         requirements:
-          - id: RPT-001
+          - id: SarifMark-Report-Markdown
             title: The tool shall generate markdown reports from SARIF files.
             justification: >-
               Markdown report generation transforms machine-readable SARIF into human-readable documentation,
@@ -180,7 +180,7 @@ sections:
               - IntegrationTest_GenerateReport_CreatesReportFile
               - SarifMark_MarkdownReportGeneration
 
-          - id: RPT-002
+          - id: SarifMark-Report-Depth
             title: The tool shall support configurable markdown heading depth.
             justification: >-
               Configurable heading depth allows reports to integrate seamlessly into existing documentation
@@ -188,7 +188,7 @@ sections:
             tests:
               - IntegrationTest_ReportDepth_IsConfigurable
 
-          - id: RPT-003
+          - id: SarifMark-Report-Counts
             title: The tool shall display result counts in reports.
             justification: >-
               Result counts provide a quick summary of analysis findings, helping users understand the scope of
@@ -197,7 +197,7 @@ sections:
               - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
               - SarifResults_ToMarkdown_OneResult_UsesSingularForm
 
-          - id: RPT-004
+          - id: SarifMark-Report-Locations
             title: The tool shall display location information for results.
             justification: >-
               Displaying location information enables developers to quickly navigate to the source of issues,
@@ -206,7 +206,7 @@ sections:
               - SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
               - SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
 
-          - id: RPT-005
+          - id: SarifMark-Report-Headings
             title: The tool shall support custom headings in reports.
             justification: >-
               Custom headings allow users to tailor reports to their documentation standards and naming
@@ -217,7 +217,7 @@ sections:
               - SarifResults_ToMarkdown_NoHeadingParameter_UsesDefaultHeading
               - Context_Create_HeadingArgument_SetsHeading
 
-          - id: RPT-006
+          - id: SarifMark-Report-LineBreaks
             title: The tool shall format multiple results with proper line breaks.
             justification: >-
               Proper line breaks between results ensure readability and visual separation in generated markdown,
@@ -227,7 +227,7 @@ sections:
 
       - title: Validation and Testing
         requirements:
-          - id: VAL-001
+          - id: SarifMark-Val-Mode
             title: The tool shall support self-validation mode.
             justification: >-
               Self-validation mode enables verification that the tool operates correctly in the user's
@@ -235,7 +235,7 @@ sections:
             tests:
               - IntegrationTest_ValidateFlag_RunsSelfValidation
 
-          - id: VAL-002
+          - id: SarifMark-Val-ResultFiles
             title: The tool shall write validation results to test result files.
             justification: >-
               Writing test results to files enables integration with CI/CD systems and provides persistent
@@ -243,7 +243,7 @@ sections:
             tests:
               - IntegrationTest_ValidateFlag_RunsSelfValidation
 
-          - id: VAL-003
+          - id: SarifMark-Val-TrxFormat
             title: The tool shall support TRX format for test results.
             justification: >-
               TRX format support enables integration with Microsoft testing ecosystems and Azure DevOps,
@@ -251,7 +251,7 @@ sections:
             tests:
               - IntegrationTest_ValidateFlag_RunsSelfValidation
 
-          - id: VAL-004
+          - id: SarifMark-Val-JUnitFormat
             title: The tool shall support JUnit format for test results.
             justification: >-
               JUnit format support enables broad compatibility with CI/CD platforms like Jenkins, GitHub Actions,
@@ -261,7 +261,7 @@ sections:
 
       - title: Quality Enforcement
         requirements:
-          - id: ENF-001
+          - id: SarifMark-Enf-Mode
             title: The tool shall support enforcement mode to fail on issues found.
             justification: >-
               Enforcement mode enables the tool to act as a quality gate in CI/CD pipelines, preventing code
@@ -270,7 +270,7 @@ sections:
               - IntegrationTest_EnforceFlagWithIssues_ReturnsError
               - SarifMark_Enforcement
 
-          - id: ENF-002
+          - id: SarifMark-Enf-ExitCode
             title: The tool shall return non-zero exit code when issues found in enforcement mode.
             justification: >-
               Non-zero exit codes signal failure to CI/CD systems and scripts, enabling automated build failures
@@ -281,7 +281,7 @@ sections:
 
       - title: Platform Support
         requirements:
-          - id: PLT-001
+          - id: SarifMark-Platform-Windows
             title: The tool shall run on Windows operating systems.
             justification: >-
               Windows support ensures the tool is accessible to developers using Microsoft platforms, which are
@@ -291,7 +291,7 @@ sections:
               - windows@IntegrationTest_HelpFlag_OutputsUsageInformation
               - windows@IntegrationTest_ValidateFlag_RunsSelfValidation
 
-          - id: PLT-002
+          - id: SarifMark-Platform-Linux
             title: The tool shall run on Linux operating systems.
             justification: >-
               Linux support is essential for cloud-native development and CI/CD pipelines, as most modern build
@@ -301,7 +301,7 @@ sections:
               - ubuntu@IntegrationTest_HelpFlag_OutputsUsageInformation
               - ubuntu@IntegrationTest_ValidateFlag_RunsSelfValidation
 
-          - id: PLT-003
+          - id: SarifMark-Platform-Net8
             title: The tool shall support .NET 8.0 runtime.
             justification: >-
               .NET 8.0 support ensures compatibility with the current Long-Term Support release, providing
@@ -311,7 +311,7 @@ sections:
               - dotnet8.x@SarifMark_MarkdownReportGeneration
               - dotnet8.x@SarifMark_Enforcement
 
-          - id: PLT-004
+          - id: SarifMark-Platform-Net9
             title: The tool shall support .NET 9.0 runtime.
             justification: >-
               .NET 9.0 support enables users to leverage the latest .NET features and performance improvements,
@@ -321,7 +321,7 @@ sections:
               - dotnet9.x@SarifMark_MarkdownReportGeneration
               - dotnet9.x@SarifMark_Enforcement
 
-          - id: PLT-005
+          - id: SarifMark-Platform-Net10
             title: The tool shall support .NET 10.0 runtime.
             justification: >-
               .NET 10.0 support provides forward compatibility and ensures the tool remains viable as users adopt
