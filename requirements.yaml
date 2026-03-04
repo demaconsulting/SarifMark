@@ -171,7 +171,7 @@ sections:
 
       - title: Report Generation
         requirements:
-          - id: SarifMark-Report-Markdown
+          - id: SarifMark-Rpt-Markdown
             title: The tool shall generate markdown reports from SARIF files.
             justification: >-
               Markdown report generation transforms machine-readable SARIF into human-readable documentation,
@@ -180,7 +180,7 @@ sections:
               - IntegrationTest_GenerateReport_CreatesReportFile
               - SarifMark_MarkdownReportGeneration
 
-          - id: SarifMark-Report-Depth
+          - id: SarifMark-Rpt-Depth
             title: The tool shall support configurable markdown heading depth.
             justification: >-
               Configurable heading depth allows reports to integrate seamlessly into existing documentation
@@ -188,7 +188,7 @@ sections:
             tests:
               - IntegrationTest_ReportDepth_IsConfigurable
 
-          - id: SarifMark-Report-Counts
+          - id: SarifMark-Rpt-Counts
             title: The tool shall display result counts in reports.
             justification: >-
               Result counts provide a quick summary of analysis findings, helping users understand the scope of
@@ -197,7 +197,7 @@ sections:
               - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
               - SarifResults_ToMarkdown_OneResult_UsesSingularForm
 
-          - id: SarifMark-Report-Locations
+          - id: SarifMark-Rpt-Locations
             title: The tool shall display location information for results.
             justification: >-
               Displaying location information enables developers to quickly navigate to the source of issues,
@@ -206,7 +206,7 @@ sections:
               - SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
               - SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
 
-          - id: SarifMark-Report-Headings
+          - id: SarifMark-Rpt-Headings
             title: The tool shall support custom headings in reports.
             justification: >-
               Custom headings allow users to tailor reports to their documentation standards and naming
@@ -217,7 +217,7 @@ sections:
               - SarifResults_ToMarkdown_NoHeadingParameter_UsesDefaultHeading
               - Context_Create_HeadingArgument_SetsHeading
 
-          - id: SarifMark-Report-LineBreaks
+          - id: SarifMark-Rpt-LineBreaks
             title: The tool shall format multiple results with proper line breaks.
             justification: >-
               Proper line breaks between results ensure readability and visual separation in generated markdown,
@@ -281,7 +281,7 @@ sections:
 
       - title: Platform Support
         requirements:
-          - id: SarifMark-Platform-Windows
+          - id: SarifMark-Plt-Windows
             title: The tool shall run on Windows operating systems.
             justification: >-
               Windows support ensures the tool is accessible to developers using Microsoft platforms, which are
@@ -291,7 +291,7 @@ sections:
               - windows@IntegrationTest_HelpFlag_OutputsUsageInformation
               - windows@IntegrationTest_ValidateFlag_RunsSelfValidation
 
-          - id: SarifMark-Platform-Linux
+          - id: SarifMark-Plt-Linux
             title: The tool shall run on Linux operating systems.
             justification: >-
               Linux support is essential for cloud-native development and CI/CD pipelines, as most modern build
@@ -301,7 +301,7 @@ sections:
               - ubuntu@IntegrationTest_HelpFlag_OutputsUsageInformation
               - ubuntu@IntegrationTest_ValidateFlag_RunsSelfValidation
 
-          - id: SarifMark-Platform-Net8
+          - id: SarifMark-Plt-Net8
             title: The tool shall support .NET 8.0 runtime.
             justification: >-
               .NET 8.0 support ensures compatibility with the current Long-Term Support release, providing
@@ -311,7 +311,7 @@ sections:
               - dotnet8.x@SarifMark_MarkdownReportGeneration
               - dotnet8.x@SarifMark_Enforcement
 
-          - id: SarifMark-Platform-Net9
+          - id: SarifMark-Plt-Net9
             title: The tool shall support .NET 9.0 runtime.
             justification: >-
               .NET 9.0 support enables users to leverage the latest .NET features and performance improvements,
@@ -321,7 +321,7 @@ sections:
               - dotnet9.x@SarifMark_MarkdownReportGeneration
               - dotnet9.x@SarifMark_Enforcement
 
-          - id: SarifMark-Platform-Net10
+          - id: SarifMark-Plt-Net10
             title: The tool shall support .NET 10.0 runtime.
             justification: >-
               .NET 10.0 support provides forward compatibility and ensures the tool remains viable as users adopt
