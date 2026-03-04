@@ -195,6 +195,41 @@ src/Program.cs(42): warning [TEST001] Test issue 1
 src/Helper.cs(15): error [TEST002] Test issue 2
 ```
 
+## Self Validation
+
+Running self-validation produces a report containing the following information:
+
+```text
+# DEMA Consulting SarifMark
+
+| Information         | Value                                              |
+| :------------------ | :------------------------------------------------- |
+| SarifMark Version   | <version>                                          |
+| Machine Name        | <machine-name>                                     |
+| OS Version          | <os-version>                                       |
+| DotNet Runtime      | <dotnet-runtime-version>                           |
+| Time Stamp          | <timestamp> UTC                                    |
+
+✓ SarifMark_SarifReading - Passed
+✓ SarifMark_MarkdownReportGeneration - Passed
+✓ SarifMark_Enforcement - Passed
+
+Total Tests: 3
+Passed: 3
+Failed: 0
+```
+
+Each test in the report proves:
+
+- **`SarifMark_SarifReading`** - SARIF file reading and parsing works correctly.
+- **`SarifMark_MarkdownReportGeneration`** - Markdown report generation from SARIF data works correctly.
+- **`SarifMark_Enforcement`** - Enforcement mode returns a non-zero exit code when issues are found.
+
+See the [Usage Guide](https://github.com/demaconsulting/SarifMark/blob/main/docs/guide/guide.md) for more details
+on the self-validation tests.
+
+On validation failure the tool will exit with a non-zero exit code.
+
 ## Contributing
 
 Contributions are welcome! We appreciate your interest in improving SarifMark.
@@ -209,6 +244,8 @@ For bug reports, feature requests, and questions, please use [GitHub Issues](htt
 
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/demaconsulting/SarifMark/blob/main/LICENSE)
 file for details.
+
+By contributing to this project, you agree that your contributions will be licensed under the MIT License.
 
 ## Support
 

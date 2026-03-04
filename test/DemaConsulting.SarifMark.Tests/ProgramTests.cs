@@ -36,23 +36,26 @@ public class ProgramTests
     {
         // Arrange
         var originalOut = Console.Out;
+        var originalError = Console.Error;
         try
         {
             using var outWriter = new StringWriter();
+            using var errWriter = new StringWriter();
             Console.SetOut(outWriter);
+            Console.SetError(errWriter);
 
             // Act
             var result = InvokeMain([]);
 
             // Assert
             Assert.AreEqual(1, result);
-            var output = outWriter.ToString();
-            Assert.Contains("SarifMark version", output);
-            Assert.Contains("--sarif parameter is required", output);
+            Assert.Contains("SarifMark version", outWriter.ToString());
+            Assert.Contains("--sarif parameter is required", errWriter.ToString());
         }
         finally
         {
             Console.SetOut(originalOut);
+            Console.SetError(originalError);
         }
     }
 
@@ -120,22 +123,22 @@ public class ProgramTests
     public void Program_Main_UnknownArgument_ReturnsError()
     {
         // Arrange
-        var originalOut = Console.Out;
+        var originalError = Console.Error;
         try
         {
-            using var outWriter = new StringWriter();
-            Console.SetOut(outWriter);
+            using var errWriter = new StringWriter();
+            Console.SetError(errWriter);
 
             // Act
             var result = InvokeMain(["--unknown"]);
 
             // Assert
             Assert.AreEqual(1, result);
-            Assert.Contains("Unsupported argument", outWriter.ToString());
+            Assert.Contains("Unsupported argument", errWriter.ToString());
         }
         finally
         {
-            Console.SetOut(originalOut);
+            Console.SetError(originalError);
         }
     }
 

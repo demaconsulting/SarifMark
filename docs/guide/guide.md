@@ -166,19 +166,62 @@ sarifmark --sarif analysis.sarif --report report.md --enforce
 
 The command will exit with a non-zero exit code if the SARIF file contains any issues.
 
-## Run Self-Validation
+## Self-Validation
 
-Run the built-in validation tests:
+Self-validation produces a report demonstrating that SarifMark is functioning correctly. This is useful in
+regulated industries where tool validation evidence is required.
+
+### Running Validation
+
+To perform self-validation:
 
 ```bash
 sarifmark --validate
 ```
 
-Generate a test results file:
+To save validation results to a file:
 
 ```bash
 sarifmark --validate --results validation-results.trx
 ```
+
+The results file format is determined by the file extension: `.trx` for TRX (MSTest) format,
+or `.xml` for JUnit format.
+
+### Validation Report
+
+The validation report contains the tool version, machine name, operating system version,
+.NET runtime version, timestamp, and test results.
+
+Example validation report:
+
+```text
+# DEMA Consulting SarifMark
+
+| Information         | Value                                              |
+| :------------------ | :------------------------------------------------- |
+| SarifMark Version   | 1.0.0                                              |
+| Machine Name        | BUILD-SERVER                                       |
+| OS Version          | Ubuntu 22.04.3 LTS                                 |
+| DotNet Runtime      | .NET 10.0.0                                        |
+| Time Stamp          | 2024-01-15 10:30:00 UTC                            |
+
+✓ SarifMark_SarifReading - Passed
+✓ SarifMark_MarkdownReportGeneration - Passed
+✓ SarifMark_Enforcement - Passed
+
+Total Tests: 3
+Passed: 3
+Failed: 0
+```
+
+### Validation Tests
+
+Each test proves specific functionality works correctly:
+
+- **`SarifMark_SarifReading`** - SARIF file reading and parsing works correctly.
+- **`SarifMark_MarkdownReportGeneration`** - Markdown report generation from SARIF data works correctly.
+- **`SarifMark_Enforcement`** - Enforcement mode returns a non-zero exit code when issues are found.
 
 ## Silent Mode with Log File
 
