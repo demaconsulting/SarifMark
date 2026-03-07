@@ -28,6 +28,20 @@ This guide covers:
 - **Enforcement Mode**: Support for failing builds based on analysis results
 - **Multi-Platform**: Works on Windows, Linux, and macOS with .NET 8, 9, or 10
 
+# Continuous Compliance
+
+This tool follows the [Continuous Compliance][continuous-compliance] methodology, which ensures
+compliance evidence is generated automatically on every CI run.
+
+## Key Practices
+
+- **Requirements Traceability**: Every requirement is linked to passing tests, and a trace matrix is
+  auto-generated on each release
+- **Linting Enforcement**: markdownlint, cspell, and yamllint are enforced before any build proceeds
+- **Automated Audit Documentation**: Each release ships with generated requirements, justifications,
+  trace matrix, and quality reports
+- **CodeQL and SonarCloud**: Security and quality analysis runs on every build
+
 # Installation
 
 ## Prerequisites
@@ -400,3 +414,4 @@ SarifMark is released under the MIT License. See the LICENSE file in the reposit
 [issues]: https://github.com/demaconsulting/SarifMark/issues
 [discussions]: https://github.com/demaconsulting/SarifMark/discussions
 [docs]: https://github.com/demaconsulting/SarifMark
+[continuous-compliance]: https://github.com/demaconsulting/ContinuousCompliance

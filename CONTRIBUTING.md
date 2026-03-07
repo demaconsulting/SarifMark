@@ -79,6 +79,13 @@ We follow a standard GitHub workflow for contributions:
    dotnet test --configuration Release
    ```
 
+5. Run self-validation tests:
+
+   ```bash
+   dotnet run --project src/DemaConsulting.SarifMark \
+     --configuration Release --framework net10.0 --no-build -- --validate
+   ```
+
 ## Coding Standards
 
 ### General Guidelines
@@ -151,7 +158,7 @@ Examples:
 ### Running Tests
 
 ```bash
-# Run all tests
+# Run all unit tests
 dotnet test --configuration Release
 
 # Run specific test
@@ -159,6 +166,14 @@ dotnet test --filter "FullyQualifiedName~YourTestName"
 
 # Run with coverage
 dotnet test --collect "XPlat Code Coverage"
+```
+
+#### Self-Validation Tests
+
+```bash
+# Run self-validation tests
+dotnet run --project src/DemaConsulting.SarifMark \
+  --configuration Release --framework net10.0 --no-build -- --validate
 ```
 
 ## Documentation
@@ -171,7 +186,10 @@ All markdown files must follow these rules (enforced by markdownlint):
 - Use ATX-style headers (`# Header`)
 - Lists must be surrounded by blank lines
 - Use reference-style links: `[text][ref]` with `[ref]: url` at document end
-- **Exception**: `README.md` uses absolute URLs (it's included in the NuGet package)
+- **Exceptions**:
+  - `README.md` uses absolute URLs (it's included in the NuGet package)
+  - AI agent markdown files (`.github/agents/*.md`) use inline links `[text](url)` so URLs
+    are visible in agent context
 
 ### Spell Checking
 
