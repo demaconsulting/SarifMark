@@ -24,9 +24,14 @@ pipelines and documentation workflows.
 - 📝 **Markdown Reports** - Generate human-readable reports from SARIF data
 - 🎯 **Customizable Output** - Configure report depth and custom headings
 - 🚀 **CI/CD Integration** - Enforce quality gates and fail builds on issues
-- 🌐 **Multi-Platform** - Support for .NET 8, 9, and 10
+- 🌐 **Multi-Platform** - Builds and runs on Windows, Linux, and macOS with .NET 8, 9, and 10
 - ✅ **Self-Validation** - Built-in tests without requiring external tools
 - 📊 **Detailed Reporting** - Extract tool information, results, and locations
+- 🔍 **Linting Enforcement** - markdownlint, cspell, and yamllint enforced on every CI run
+- 📋 **Continuous Compliance** - Compliance evidence generated automatically on every CI run,
+  following the [Continuous Compliance](https://github.com/demaconsulting/ContinuousCompliance) methodology
+- ☁️ **SonarCloud Integration** - Quality gate and security analysis on every build
+- 🔗 **Requirements Traceability** - Requirements linked to passing tests with auto-generated trace matrix
 
 ## Installation
 

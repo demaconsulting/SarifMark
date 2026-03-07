@@ -11,6 +11,18 @@ Project-specific guidance for agents working on SarifMark - a .NET CLI tool for 
 - **Code Quality Agent** - Enforces linting, static analysis, and security standards
 - **Repo Consistency Agent** - Ensures downstream repositories remain consistent with template patterns
 
+## Agent Selection Guide
+
+- Fix a bug → **Software Developer**
+- Add a new feature → **Requirements Agent** → **Software Developer** → **Test Developer**
+- Write a test → **Test Developer**
+- Fix linting or static analysis issues → **Code Quality Agent**
+- Update documentation → **Technical Writer**
+- Add or update requirements → **Requirements Agent**
+- Ensure test coverage linkage in `requirements.yaml` → **Requirements Agent**
+- Run security scanning or address CodeQL alerts → **Code Quality Agent**
+- Propagate template changes → **Repo Consistency Agent**
+
 ## Tech Stack
 
 - C# (latest), .NET 8.0/9.0/10.0, MSTest, dotnet CLI, NuGet
@@ -24,6 +36,7 @@ Project-specific guidance for agents working on SarifMark - a .NET CLI tool for 
 ## Requirements (SarifMark-Specific)
 
 - Link ALL requirements to tests (prefer `SarifMark_*` self-validation over unit tests)
+- Not all tests need to be linked to requirements (tests may exist for corner cases, design testing, failure-testing, etc.)
 - Enforced in CI: `dotnet reqstream --requirements requirements.yaml --tests "test-results/**/*.trx" --enforce`
 - When adding features: add requirement + link to test
 
@@ -34,6 +47,7 @@ evidence. This is critical for platform and framework requirements - **do not re
 
 - `windows@TestName` - proves the test passed on a Windows platform
 - `ubuntu@TestName` - proves the test passed on a Linux (Ubuntu) platform
+- `macos@TestName` - proves the test passed on a macOS platform
 - `net8.0@TestName` - proves the test passed under the .NET 8 target framework
 - `net9.0@TestName` - proves the test passed under the .NET 9 target framework
 - `net10.0@TestName` - proves the test passed under the .NET 10 target framework
