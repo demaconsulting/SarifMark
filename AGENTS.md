@@ -9,6 +9,7 @@ Project-specific guidance for agents working on SarifMark - a .NET CLI tool for 
 - **Software Developer** - Writes production code and self-validation tests in literate style
 - **Test Developer** - Creates unit and integration tests following AAA pattern
 - **Code Quality Agent** - Enforces linting, static analysis, and security standards
+- **Code Review Agent** - Assists in performing formal file reviews
 - **Repo Consistency Agent** - Ensures downstream repositories remain consistent with template patterns
 
 ## Agent Selection Guide
@@ -21,6 +22,7 @@ Project-specific guidance for agents working on SarifMark - a .NET CLI tool for 
 - Add or update requirements → **Requirements Agent**
 - Ensure test coverage linkage in `requirements.yaml` → **Requirements Agent**
 - Run security scanning or address CodeQL alerts → **Code Quality Agent**
+- Perform a formal file review → **Code Review Agent**
 - Propagate template changes → **Repo Consistency Agent**
 
 ## Tech Stack
@@ -99,6 +101,8 @@ Delegate tasks to specialized agents for better results:
   template patterns, identifying drift from template standards
 - **code-quality-agent** - Invoke for: linting issues, static analysis, security scanning, quality
   gates enforcement, requirements traceability verification
+- **code-review-agent** - Invoke for: performing formal reviews of named review-sets, producing
+  review evidence for the Continuous Compliance pipeline
 - **software-developer** - Invoke for: production code features, self-validation tests (SarifMark_*),
   code refactoring, literate programming style
 - **test-developer** - Invoke for: unit tests, integration tests, test coverage improvement, AAA
