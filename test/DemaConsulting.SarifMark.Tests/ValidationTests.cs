@@ -49,10 +49,11 @@ public class ValidationTests
         var logFile = CreateTempFile(".log");
         try
         {
-            using var context = Context.Create(["--silent", "--log", logFile]);
-
-            // Act
-            Validation.Run(context);
+            using (var context = Context.Create(["--silent", "--log", logFile]))
+            {
+                // Act
+                Validation.Run(context);
+            }
 
             // Assert - log must contain the header table with system-information fields
             var logContent = File.ReadAllText(logFile);
@@ -77,10 +78,11 @@ public class ValidationTests
         var logFile = CreateTempFile(".log");
         try
         {
-            using var context = Context.Create(["--silent", "--log", logFile]);
-
-            // Act
-            Validation.Run(context);
+            using (var context = Context.Create(["--silent", "--log", logFile]))
+            {
+                // Act
+                Validation.Run(context);
+            }
 
             // Assert - log must contain each test name with a passing indicator
             var logContent = File.ReadAllText(logFile);
@@ -109,10 +111,11 @@ public class ValidationTests
         var logFile = CreateTempFile(".log");
         try
         {
-            using var context = Context.Create(["--silent", "--log", logFile]);
-
-            // Act
-            Validation.Run(context);
+            using (var context = Context.Create(["--silent", "--log", logFile]))
+            {
+                // Act
+                Validation.Run(context);
+            }
 
             // Assert - log must contain the three-line summary with correct counts
             var logContent = File.ReadAllText(logFile);
@@ -140,11 +143,12 @@ public class ValidationTests
         var trxFile = CreateTempFile(".trx");
         try
         {
-            using var context = Context.Create(
-                ["--silent", "--log", logFile, "--results", trxFile]);
-
-            // Act
-            Validation.Run(context);
+            using (var context = Context.Create(
+                ["--silent", "--log", logFile, "--results", trxFile]))
+            {
+                // Act
+                Validation.Run(context);
+            }
 
             // Assert - the .trx file must exist and contain TRX XML markers
             Assert.IsTrue(File.Exists(trxFile), "TRX results file should have been created");
@@ -172,11 +176,12 @@ public class ValidationTests
         var xmlFile = CreateTempFile(".xml");
         try
         {
-            using var context = Context.Create(
-                ["--silent", "--log", logFile, "--results", xmlFile]);
-
-            // Act
-            Validation.Run(context);
+            using (var context = Context.Create(
+                ["--silent", "--log", logFile, "--results", xmlFile]))
+            {
+                // Act
+                Validation.Run(context);
+            }
 
             // Assert - the .xml file must exist and contain JUnit XML markers
             Assert.IsTrue(File.Exists(xmlFile), "JUnit XML results file should have been created");
