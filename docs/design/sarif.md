@@ -60,6 +60,9 @@ The static `Read` method loads and parses a SARIF file:
 6. Delegates to `ParseResults` to iterate and parse all non-suppressed results. This
    satisfies `SarifMark-Sarif-Results` and `SarifMark-Sarif-Reading`.
 
+Together, steps 1–6 form the complete pipeline for processing a valid SARIF file, satisfying
+`SarifMark-Sarif-Processing`.
+
 ### Version Extraction
 
 `ExtractToolVersion` checks three fields in priority order: `version`,
