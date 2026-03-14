@@ -43,6 +43,7 @@ reviews:
       - "docs/reqstream/validation.yaml"
       - "docs/design/validation.md"
       - "src/**/Validation.cs"
+      - "test/**/ValidationTests.cs"
 
   - id: SarifMark-Utilities-Review
     title: Review of SarifMark Utilities
