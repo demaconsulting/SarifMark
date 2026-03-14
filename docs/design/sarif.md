@@ -95,3 +95,12 @@ satisfies `SarifMark-Rpt-Locations`.
 
 Each result is formatted as a single line ending with two trailing spaces (`  `), which
 forces a hard line break in rendered markdown. This satisfies `SarifMark-Rpt-LineBreaks`.
+
+## CLI Integration
+
+The requirement `SarifMark-Sarif-Required` (the tool shall require the `--sarif` parameter
+for analysis) is enforced at the command-line layer rather than within this library. The
+`ProcessSarifAnalysis` method in `Program.cs` validates that `--sarif` is provided before
+invoking the SARIF reading layer. See [command-line.md] for full details.
+
+[command-line.md]: command-line.md
