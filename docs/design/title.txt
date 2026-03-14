@@ -1,0 +1,15 @@
+---
+title: SarifMark
+subtitle: Design Documentation
+author: DEMA Consulting
+description: Design documentation for the SarifMark .NET tool for generating markdown reports from SARIF files
+lang: en-US
+keywords:
+  - SarifMark
+  - Design
+  - C#
+  - .NET
+  - CLI Tool
+  - SARIF
+  - Static Analysis
+---

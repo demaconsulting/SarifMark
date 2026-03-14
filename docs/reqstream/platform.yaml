@@ -1,0 +1,65 @@
+---
+sections:
+  - title: SarifMark Requirements
+    sections:
+      - title: Platform Support
+        requirements:
+          - id: SarifMark-Plt-Windows
+            title: The tool shall run on Windows operating systems.
+            justification: >-
+              Windows support ensures the tool is accessible to developers using Microsoft platforms, which are
+              prevalent in enterprise environments and .NET development ecosystems.
+            tests:
+              - windows@IntegrationTest_VersionFlag_OutputsVersion
+              - windows@IntegrationTest_HelpFlag_OutputsUsageInformation
+              - windows@IntegrationTest_ValidateFlag_RunsSelfValidation
+
+          - id: SarifMark-Plt-Linux
+            title: The tool shall run on Linux operating systems.
+            justification: >-
+              Linux support is essential for cloud-native development and CI/CD pipelines, as most modern build
+              systems and container environments run on Linux.
+            tests:
+              - ubuntu@IntegrationTest_VersionFlag_OutputsVersion
+              - ubuntu@IntegrationTest_HelpFlag_OutputsUsageInformation
+              - ubuntu@IntegrationTest_ValidateFlag_RunsSelfValidation
+
+          - id: SarifMark-Plt-MacOS
+            title: The tool shall run on macOS operating systems.
+            justification: >-
+              macOS support ensures the tool is accessible to developers using Apple platforms, which are widely
+              used in software development environments.
+            tests:
+              - macos@IntegrationTest_VersionFlag_OutputsVersion
+              - macos@IntegrationTest_HelpFlag_OutputsUsageInformation
+              - macos@IntegrationTest_ValidateFlag_RunsSelfValidation
+
+          - id: SarifMark-Plt-Net8
+            title: The tool shall support .NET 8.0 runtime.
+            justification: >-
+              .NET 8.0 support ensures compatibility with the current Long-Term Support release, providing
+              stability and widespread adoption for enterprise users.
+            tests:
+              - dotnet8.x@SarifMark_SarifReading
+              - dotnet8.x@SarifMark_MarkdownReportGeneration
+              - dotnet8.x@SarifMark_Enforcement
+
+          - id: SarifMark-Plt-Net9
+            title: The tool shall support .NET 9.0 runtime.
+            justification: >-
+              .NET 9.0 support enables users to leverage the latest .NET features and performance improvements,
+              ensuring the tool remains current with the .NET ecosystem.
+            tests:
+              - dotnet9.x@SarifMark_SarifReading
+              - dotnet9.x@SarifMark_MarkdownReportGeneration
+              - dotnet9.x@SarifMark_Enforcement
+
+          - id: SarifMark-Plt-Net10
+            title: The tool shall support .NET 10.0 runtime.
+            justification: >-
+              .NET 10.0 support provides forward compatibility and ensures the tool remains viable as users adopt
+              future .NET versions, extending the tool's lifespan and relevance.
+            tests:
+              - dotnet10.x@SarifMark_SarifReading
+              - dotnet10.x@SarifMark_MarkdownReportGeneration
+              - dotnet10.x@SarifMark_Enforcement

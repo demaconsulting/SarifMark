@@ -1,0 +1,59 @@
+---
+sections:
+  - title: SarifMark Requirements
+    sections:
+      - title: Report Generation
+        requirements:
+          - id: SarifMark-Rpt-Markdown
+            title: The tool shall generate markdown reports from SARIF files.
+            justification: >-
+              Markdown report generation transforms machine-readable SARIF into human-readable documentation,
+              enabling better understanding and communication of analysis results across development teams.
+            tests:
+              - IntegrationTest_GenerateReport_CreatesReportFile
+              - SarifMark_MarkdownReportGeneration
+
+          - id: SarifMark-Rpt-Depth
+            title: The tool shall support configurable markdown heading depth.
+            justification: >-
+              Configurable heading depth allows reports to integrate seamlessly into existing documentation
+              hierarchies, preventing heading level conflicts when reports are embedded in larger documents.
+            tests:
+              - IntegrationTest_ReportDepth_IsConfigurable
+
+          - id: SarifMark-Rpt-Counts
+            title: The tool shall display result counts in reports.
+            justification: >-
+              Result counts provide a quick summary of analysis findings, helping users understand the scope of
+              issues at a glance and track improvements over time.
+            tests:
+              - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
+              - SarifResults_ToMarkdown_OneResult_UsesSingularForm
+
+          - id: SarifMark-Rpt-Locations
+            title: The tool shall display location information for results.
+            justification: >-
+              Displaying location information enables developers to quickly navigate to the source of issues,
+              making the reports actionable and reducing time spent searching for problematic code.
+            tests:
+              - SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
+              - SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
+
+          - id: SarifMark-Rpt-Headings
+            title: The tool shall support custom headings in reports.
+            justification: >-
+              Custom headings allow users to tailor reports to their documentation standards and naming
+              conventions, improving consistency across project documentation.
+            tests:
+              - SarifResults_ToMarkdown_CustomHeading_UsesProvidedHeading
+              - SarifResults_ToMarkdown_NullHeading_UsesDefaultHeading
+              - SarifResults_ToMarkdown_NoHeadingParameter_UsesDefaultHeading
+              - Context_Create_HeadingArgument_SetsHeading
+
+          - id: SarifMark-Rpt-LineBreaks
+            title: The tool shall format multiple results with proper line breaks.
+            justification: >-
+              Proper line breaks between results ensure readability and visual separation in generated markdown,
+              making it easier to distinguish between different findings in the report.
+            tests:
+              - SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks

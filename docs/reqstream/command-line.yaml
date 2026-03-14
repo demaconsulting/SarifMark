@@ -1,0 +1,64 @@
+---
+sections:
+  - title: SarifMark Requirements
+    sections:
+      - title: Command-Line Interface
+        requirements:
+          - id: SarifMark-Cli-Interface
+            title: The tool shall provide a command-line interface.
+            justification: >-
+              A command-line interface enables automation, scripting, and integration into CI/CD pipelines,
+              making the tool suitable for DevOps workflows and batch processing scenarios.
+            tests:
+              - IntegrationTest_VersionFlag_OutputsVersion
+              - IntegrationTest_HelpFlag_OutputsUsageInformation
+
+          - id: SarifMark-Cli-Version
+            title: The tool shall display version information when requested.
+            justification: >-
+              Version information allows users to identify the tool version for troubleshooting, compatibility
+              verification, and ensuring consistent behavior across different environments.
+            tests:
+              - IntegrationTest_VersionFlag_OutputsVersion
+              - Context_Create_VersionFlag_SetsVersionTrue
+
+          - id: SarifMark-Cli-Help
+            title: The tool shall display help information when requested.
+            justification: >-
+              Help information improves discoverability and usability by providing users with guidance on
+              available options, parameters, and usage patterns without consulting external documentation.
+            tests:
+              - IntegrationTest_HelpFlag_OutputsUsageInformation
+              - Context_Create_HelpFlag_SetsHelpTrue
+
+          - id: SarifMark-Cli-Silent
+            title: The tool shall support silent mode to suppress console output.
+            justification: >-
+              Silent mode enables cleaner integration into automated workflows and CI/CD pipelines where console
+              noise needs to be minimized, while still allowing log files to capture detailed information.
+            tests:
+              - IntegrationTest_SilentFlag_SuppressesOutput
+
+          - id: SarifMark-Cli-Log
+            title: The tool shall support writing output to a log file.
+            justification: >-
+              Log file support enables persistent record-keeping, debugging, and audit trails, especially valuable
+              in automated environments where console output may not be readily available.
+            tests:
+              - IntegrationTest_LogFile_WritesOutputToFile
+
+          - id: SarifMark-Cli-Enforce
+            title: The tool shall support enforcing quality gate checks.
+            justification: >-
+              Quality gate enforcement enables the tool to act as a quality gate in CI/CD pipelines, failing
+              builds when issues are detected and ensuring code quality standards are maintained.
+            tests:
+              - SarifMark_Enforcement
+
+          - id: SarifMark-Cli-InvalidArgs
+            title: The tool shall reject unknown command-line arguments.
+            justification: >-
+              Rejecting unknown arguments prevents silent failures from typos or incorrect parameters, ensuring
+              users receive immediate feedback about misconfigured commands.
+            tests:
+              - IntegrationTest_UnknownArgument_ShowsError

@@ -1,0 +1,81 @@
+---
+sections:
+  - title: SarifMark Requirements
+    sections:
+      - title: SARIF Integration
+        requirements:
+          - id: SarifMark-Sarif-Reading
+            title: The tool shall read SARIF 2.1.0 format files.
+            justification: >-
+              Support for SARIF 2.1.0 is essential as it is the standard format for static analysis results,
+              enabling interoperability with a wide range of analysis tools and platforms.
+            tests:
+              - SarifMark_SarifReading
+              - IntegrationTest_ValidSarifFile_ProcessesSuccessfully
+
+          - id: SarifMark-Sarif-Validation
+            title: The tool shall validate SARIF file format.
+            justification: >-
+              Format validation ensures the tool processes only well-formed SARIF files, preventing runtime
+              errors and providing clear feedback when inputs are malformed or corrupted.
+            tests:
+              - SarifResults_Read_InvalidJson_ThrowsInvalidOperationException
+              - SarifResults_Read_MissingVersion_ThrowsInvalidOperationException
+              - SarifResults_Read_MissingRuns_ThrowsInvalidOperationException
+              - SarifResults_Read_EmptyRuns_ThrowsInvalidOperationException
+
+          - id: SarifMark-Sarif-ToolInfo
+            title: The tool shall extract tool information from SARIF files.
+            justification: >-
+              Extracting tool information enables reports to identify which analysis tool generated the results,
+              providing context and traceability for findings in the generated documentation.
+            tests:
+              - SarifResults_Read_MissingTool_ThrowsInvalidOperationException
+              - SarifResults_Read_MissingDriver_ThrowsInvalidOperationException
+              - SarifResults_Read_MissingToolName_UsesUnknown
+              - SarifResults_Read_MissingToolVersion_UsesUnknown
+
+          - id: SarifMark-Sarif-Results
+            title: The tool shall extract results from SARIF files.
+            justification: >-
+              Result extraction is the core functionality that enables conversion of analysis findings into
+              readable markdown reports, making issues accessible to developers and stakeholders.
+            tests:
+              - SarifResults_Read_NoResults_ReturnsValidResults
+              - SarifResults_Read_EmptyResults_ReturnsValidResults
+              - SarifResults_Read_WithResults_ReturnsValidResults
+
+          - id: SarifMark-Sarif-Locations
+            title: The tool shall extract location information from SARIF results.
+            justification: >-
+              Location information allows users to quickly identify where issues exist in their codebase,
+              improving the actionability of analysis results by pinpointing specific files and lines.
+            tests:
+              - SarifResults_Read_WithLocations_ReturnsResultsWithLocationData
+
+          - id: SarifMark-Sarif-FilePaths
+            title: The tool shall require valid file paths for SARIF input.
+            justification: >-
+              Path validation ensures clear error messages when files are missing or incorrectly specified,
+              improving user experience and preventing confusing runtime failures.
+            tests:
+              - SarifResults_Read_NullPath_ThrowsArgumentException
+              - SarifResults_Read_EmptyPath_ThrowsArgumentException
+              - SarifResults_Read_WhitespacePath_ThrowsArgumentException
+              - SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException
+
+          - id: SarifMark-Sarif-Required
+            title: The tool shall require the --sarif parameter for analysis.
+            justification: >-
+              Requiring explicit SARIF file specification ensures intentional operation and prevents accidental
+              execution without proper input, improving tool safety and predictability.
+            tests:
+              - IntegrationTest_MissingSarifParameter_ShowsError
+
+          - id: SarifMark-Sarif-Processing
+            title: The tool shall process valid SARIF files successfully.
+            justification: >-
+              Successful processing of valid SARIF files is the fundamental capability that enables the tool to
+              fulfill its primary purpose of converting analysis results to markdown documentation.
+            tests:
+              - IntegrationTest_ValidSarifFile_ProcessesSuccessfully
