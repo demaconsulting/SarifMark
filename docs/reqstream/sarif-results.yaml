@@ -1,0 +1,141 @@
+---
+sections:
+  - title: Internal Functionality
+    sections:
+      - title: SarifResults Record
+        requirements:
+          - id: SarifMark-SRs-Properties
+            title: The SarifResults record shall expose ToolName, ToolVersion, Results, and ResultCount properties.
+            justification: >-
+              Exposing these four properties provides consumers with all the information needed to generate
+              a complete report without exposing raw JSON nodes, keeping the public surface area clean and
+              intentional.
+            tags: [internal]
+            tests:
+              - SarifResults_Read_NoResults_ReturnsValidResults
+
+          - id: SarifMark-SRs-ValidatePath
+            title: The Read method shall validate that the file path is non-null, non-empty, and refers to an existing file.
+            justification: >-
+              Early path validation produces clear, actionable error messages before any I/O is attempted,
+              improving diagnostic quality and preventing confusing low-level exceptions from propagating
+              to the caller.
+            tags: [internal]
+            tests:
+              - SarifResults_Read_NullPath_ThrowsArgumentException
+              - SarifResults_Read_EmptyPath_ThrowsArgumentException
+              - SarifResults_Read_WhitespacePath_ThrowsArgumentException
+              - SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException
+
+          - id: SarifMark-SRs-ValidateStructure
+            title: The Read method shall validate that the SARIF document contains the required version and runs fields.
+            justification: >-
+              Structural validation at read time ensures that downstream processing always operates on
+              well-formed data, preventing cryptic null-reference errors and producing informative
+              exceptions that guide users to fix malformed input files.
+            tags: [internal]
+            tests:
+              - SarifResults_Read_InvalidJson_ThrowsInvalidOperationException
+              - SarifResults_Read_MissingVersion_ThrowsInvalidOperationException
+              - SarifResults_Read_MissingRuns_ThrowsInvalidOperationException
+              - SarifResults_Read_EmptyRuns_ThrowsInvalidOperationException
+
+          - id: SarifMark-SRs-ExtractTool
+            title: The Read method shall extract tool name and version from the driver node, requiring both tool and driver elements to be present.
+            justification: >-
+              Requiring the tool and driver nodes and extracting a name and version from them ensures that
+              every generated report correctly identifies its source tool, while gracefully substituting
+              "Unknown" when optional fields are absent.
+            tags: [internal]
+            tests:
+              - SarifResults_Read_MissingTool_ThrowsInvalidOperationException
+              - SarifResults_Read_MissingDriver_ThrowsInvalidOperationException
+              - SarifResults_Read_MissingToolName_UsesUnknown
+              - SarifResults_Read_MissingToolVersion_UsesUnknown
+
+          - id: SarifMark-SRs-VersionPriority
+            title: The ExtractToolVersion helper shall check version, then semanticVersion, then dottedQuadFileVersion, and fall back to Unknown.
+            justification: >-
+              The defined priority order matches the SARIF specification's preference ordering and ensures
+              that the most semantically meaningful version string is always selected when multiple version
+              fields are present in the driver node.
+            tags: [internal]
+            tests:
+              - SarifResults_Read_SemanticVersionField_ReturnsSemanticVersion
+              - SarifResults_Read_DottedQuadFileVersionField_ReturnsDottedQuadFileVersion
+              - SarifResults_Read_VersionAndSemanticVersion_PrioritizesVersion
+              - SarifResults_Read_SemanticAndDottedQuad_PrioritizesSemanticVersion
+              - SarifResults_Read_AllVersionFields_PrioritizesVersion
+              - SarifResults_Read_EmptyVersionField_FallsBackToSemanticVersion
+
+          - id: SarifMark-SRs-ParseResults
+            title: The ParseResults helper shall iterate all results entries and collect them into the Results collection.
+            justification: >-
+              Iterating every entry in the results array, including empty arrays and missing results nodes,
+              ensures that the collection accurately reflects the SARIF file contents and that no findings
+              are silently dropped during parsing.
+            tags: [internal]
+            tests:
+              - SarifResults_Read_NoResults_ReturnsValidResults
+              - SarifResults_Read_EmptyResults_ReturnsValidResults
+              - SarifResults_Read_WithResults_ReturnsValidResults
+              - SarifResults_Read_WithLocations_ReturnsResultsWithLocationData
+
+          - id: SarifMark-SRs-FilterSuppressions
+            title: The ParseResults helper shall skip results that carry a suppression entry.
+            justification: >-
+              Filtering suppressed results mirrors standard SARIF tooling behaviour and ensures that
+              intentionally suppressed findings do not appear in generated reports, preventing noise and
+              correctly representing the effective set of active issues.
+            tags: [internal]
+            tests:
+              - SarifResults_Read_WithSuppressedResults_ExcludesSuppressedResults
+
+          - id: SarifMark-SRs-ToMarkdown
+            title: The ToMarkdown method shall generate a complete markdown report including heading, tool info, result count, and all results.
+            justification: >-
+              Generating the full report from a single method call provides a cohesive output document and
+              ensures that heading, tool attribution, count summary, and result details are always emitted
+              together in a consistent format.
+            tags: [internal]
+            tests:
+              - SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput
+              - SarifResults_ToMarkdown_CustomHeading_UsesProvidedHeading
+              - SarifResults_ToMarkdown_NullHeading_UsesDefaultHeading
+              - SarifResults_ToMarkdown_NoHeadingParameter_UsesDefaultHeading
+              - SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks
+
+          - id: SarifMark-SRs-ValidateDepth
+            title: The ToMarkdown method shall validate that the depth argument is between 1 and 6 inclusive.
+            justification: >-
+              Restricting depth to the valid markdown heading range of 1–6 prevents generation of invalid
+              markdown syntax and ensures that the output heading levels are always accepted by standard
+              markdown renderers.
+            tags: [internal]
+            tests:
+              - SarifResults_ToMarkdown_DepthLessThan1_ThrowsArgumentOutOfRangeException
+              - SarifResults_ToMarkdown_DepthGreaterThan6_ThrowsArgumentOutOfRangeException
+              - SarifResults_ToMarkdown_Depth3_UsesCorrectHeadingLevels
+              - SarifResults_ToMarkdown_Depth6_ProducesCorrectOutput
+
+          - id: SarifMark-SRs-FormatLocation
+            title: The FormatLocation helper shall return a no-location indicator, a URI-only string, or a URI with line number depending on available data.
+            justification: >-
+              Producing the most precise location string the data supports ensures reports are as actionable
+              as possible, while gracefully degrading to partial or absent location information without
+              requiring special handling from callers.
+            tags: [internal]
+            tests:
+              - SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
+              - SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
+
+          - id: SarifMark-SRs-FormatCount
+            title: The FormatFoundText helper shall return "Found X issues" for zero or plural counts and "Found 1 issue" for exactly one result.
+            justification: >-
+              Correct singular and plural forms produce grammatically accurate summaries that improve
+              readability and convey the right sense of magnitude, which is particularly important for
+              single-issue results where "1 issues" would be confusing.
+            tags: [internal]
+            tests:
+              - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
+              - SarifResults_ToMarkdown_OneResult_UsesSingularForm

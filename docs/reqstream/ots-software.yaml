@@ -11,7 +11,7 @@ sections:
               project. It discovers and runs all test methods and writes TRX result files that feed into coverage
               reporting and requirements traceability. Passing tests confirm the framework is functioning
               correctly.
-            tags: [ots]
+            tags: [public, ots]
             tests:
               - SarifResults_Read_NoResults_ReturnsValidResults
               - SarifResults_Read_WithResults_ReturnsValidResults
@@ -27,7 +27,7 @@ sections:
               exits with a non-zero code if any requirement lacks test evidence, making unproven requirements a
               build-breaking condition. A successful pipeline run with --enforce proves all requirements are
               covered and that ReqStream is functioning.
-            tags: [ots]
+            tags: [public, ots]
             tests:
               - ReqStream_EnforcementMode
 
@@ -38,7 +38,7 @@ sections:
               a markdown build-notes document included in the release artifacts. It runs as part of the same CI
               pipeline that produces the TRX test results, so a successful pipeline run is evidence that BuildMark
               executed without error.
-            tags: [ots]
+            tags: [public, ots]
             tests:
               - BuildMark_MarkdownReportGeneration
 
@@ -49,7 +49,7 @@ sections:
               writes a versions markdown document included in the release artifacts. It runs in the same CI
               pipeline that produces the TRX test results, so a successful pipeline run is evidence that
               VersionMark executed without error.
-            tags: [ots]
+            tags: [public, ots]
             tests:
               - VersionMark_CapturesVersions
               - VersionMark_GeneratesMarkdownReport
@@ -61,7 +61,7 @@ sections:
               a markdown document included in the release artifacts. It runs in the same CI pipeline that
               produces the TRX test results, so a successful pipeline run is evidence that SonarMark executed
               without error.
-            tags: [ots]
+            tags: [public, ots]
             tests:
               - SonarMark_QualityGateRetrieval
               - SonarMark_IssuesRetrieval
@@ -75,7 +75,7 @@ sections:
               produce a review plan and review report documenting file review coverage and currency. It runs in
               the same CI pipeline that produces the TRX test results, so a successful pipeline run is evidence
               that ReviewMark executed without error.
-            tags: [ots]
+            tags: [public, ots]
             tests:
               - ReviewMark_ReviewPlanGeneration
               - ReviewMark_ReviewReportGeneration

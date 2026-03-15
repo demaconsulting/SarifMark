@@ -9,6 +9,7 @@ sections:
             justification: >-
               A command-line interface enables automation, scripting, and integration into CI/CD pipelines,
               making the tool suitable for DevOps workflows and batch processing scenarios.
+            tags: [public]
             tests:
               - IntegrationTest_VersionFlag_OutputsVersion
               - IntegrationTest_HelpFlag_OutputsUsageInformation
@@ -18,6 +19,7 @@ sections:
             justification: >-
               Version information allows users to identify the tool version for troubleshooting, compatibility
               verification, and ensuring consistent behavior across different environments.
+            tags: [public]
             tests:
               - IntegrationTest_VersionFlag_OutputsVersion
               - Context_Create_VersionFlag_SetsVersionTrue
@@ -27,6 +29,7 @@ sections:
             justification: >-
               Help information improves discoverability and usability by providing users with guidance on
               available options, parameters, and usage patterns without consulting external documentation.
+            tags: [public]
             tests:
               - IntegrationTest_HelpFlag_OutputsUsageInformation
               - Context_Create_HelpFlag_SetsHelpTrue
@@ -36,6 +39,7 @@ sections:
             justification: >-
               Silent mode enables cleaner integration into automated workflows and CI/CD pipelines where console
               noise needs to be minimized, while still allowing log files to capture detailed information.
+            tags: [public]
             tests:
               - IntegrationTest_SilentFlag_SuppressesOutput
 
@@ -44,6 +48,7 @@ sections:
             justification: >-
               Log file support enables persistent record-keeping, debugging, and audit trails, especially valuable
               in automated environments where console output may not be readily available.
+            tags: [public]
             tests:
               - IntegrationTest_LogFile_WritesOutputToFile
 
@@ -52,6 +57,7 @@ sections:
             justification: >-
               Quality gate enforcement enables the tool to act as a quality gate in CI/CD pipelines, failing
               builds when issues are detected and ensuring code quality standards are maintained.
+            tags: [public]
             tests:
               - SarifMark_Enforcement
 
@@ -60,5 +66,6 @@ sections:
             justification: >-
               Rejecting unknown arguments prevents silent failures from typos or incorrect parameters, ensuring
               users receive immediate feedback about misconfigured commands.
+            tags: [public]
             tests:
               - IntegrationTest_UnknownArgument_ShowsError

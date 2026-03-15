@@ -1,0 +1,180 @@
+---
+sections:
+  - title: Internal Functionality
+    sections:
+      - title: Context Class
+        requirements:
+          - id: SarifMark-Ctx-Create
+            title: The Context class shall be created via a static factory method.
+            justification: >-
+              A static factory method centralises argument parsing and object initialisation, ensuring that
+              every Context instance is fully configured before use and preventing partially constructed
+              objects from reaching the rest of the application.
+            tags: [internal]
+            tests:
+              - Context_Create_NoArguments_ReturnsDefaultContext
+
+          - id: SarifMark-Ctx-VersionFlag
+            title: The Create method shall parse the -v and --version flags and set the Version property to true.
+            justification: >-
+              Recognising both short and long form of the version flag provides a consistent command-line
+              experience aligned with common POSIX conventions, making the tool approachable to users
+              familiar with standard Unix utilities.
+            tags: [internal]
+            tests:
+              - Context_Create_VersionFlag_SetsVersionTrue
+
+          - id: SarifMark-Ctx-HelpFlag
+            title: The Create method shall parse the -?, -h, and --help flags and set the Help property to true.
+            justification: >-
+              Supporting multiple help flag aliases accommodates different user conventions and shell
+              environments, ensuring the help option is easily discoverable regardless of user background.
+            tags: [internal]
+            tests:
+              - Context_Create_HelpFlag_SetsHelpTrue
+
+          - id: SarifMark-Ctx-SilentFlag
+            title: The Create method shall parse the --silent flag and suppress console output when set.
+            justification: >-
+              Silent mode allows the tool to be embedded in pipelines and scripts without polluting stdout,
+              while still allowing the caller to inspect the exit code and any log file for diagnostic
+              information.
+            tags: [internal]
+            tests:
+              - Context_Create_SilentFlag_SetsSilentTrue
+              - Context_WriteLine_SilentMode_DoesNotWriteToConsole
+              - Context_WriteError_SilentMode_DoesNotWriteToConsoleButSetsExitCode
+
+          - id: SarifMark-Ctx-ValidateFlag
+            title: The Create method shall parse the --validate flag and set the Validate property to true.
+            justification: >-
+              The validate flag activates self-validation mode, enabling the tool to exercise its own core
+              functionality and report pass/fail results, which is essential for verifying correct installation
+              in new environments.
+            tags: [internal]
+            tests:
+              - Context_Create_ValidateFlag_SetsValidateTrue
+
+          - id: SarifMark-Ctx-EnforceFlag
+            title: The Create method shall parse the --enforce flag and set the Enforce property to true.
+            justification: >-
+              The enforce flag enables quality gate behaviour so the tool can signal build failure when SARIF
+              results are present, making it suitable for integration into CI/CD pipelines.
+            tags: [internal]
+            tests:
+              - Context_Create_EnforceFlag_SetsEnforceTrue
+
+          - id: SarifMark-Ctx-SarifParam
+            title: The Create method shall parse the --sarif parameter and set the SarifFile property.
+            justification: >-
+              Capturing the SARIF file path in a dedicated property decouples argument parsing from file
+              processing, allowing downstream code to operate on a validated, named value rather than raw
+              argument strings.
+            tags: [internal]
+            tests:
+              - Context_Create_SarifParameter_SetsSarifFile
+
+          - id: SarifMark-Ctx-ReportParam
+            title: The Create method shall parse the --report parameter and set the ReportFile property.
+            justification: >-
+              A dedicated report file property gives the application a clear output target and allows callers
+              to omit the flag when only console output is required, keeping the interface flexible.
+            tags: [internal]
+            tests:
+              - Context_Create_ReportParameter_SetsReportFile
+
+          - id: SarifMark-Ctx-ReportDepthParam
+            title: The Create method shall parse the --report-depth parameter, validate it is a positive integer, and set the ReportDepth property.
+            justification: >-
+              Validating the depth value at parse time prevents invalid heading levels from propagating into
+              markdown generation, and defaulting to 1 ensures sensible behaviour when the parameter is
+              omitted.
+            tags: [internal]
+            tests:
+              - Context_Create_ReportDepthParameter_SetsReportDepth
+              - Context_Create_ReportDepthWithoutValue_ThrowsArgumentException
+              - Context_Create_ReportDepthInvalidValue_ThrowsArgumentException
+              - Context_Create_ReportDepthZero_ThrowsArgumentException
+
+          - id: SarifMark-Ctx-HeadingParam
+            title: The Create method shall parse the --heading parameter and set the Heading property.
+            justification: >-
+              Capturing the custom heading in a named property keeps downstream report generation free of
+              argument-parsing logic and ensures consistent propagation of user-specified headings to the
+              output formatter.
+            tags: [internal]
+            tests:
+              - Context_Create_HeadingArgument_SetsHeading
+              - Context_Create_HeadingWithoutValue_ThrowsArgumentException
+
+          - id: SarifMark-Ctx-ResultsParam
+            title: The Create method shall parse the --results parameter and set the ResultsFile property.
+            justification: >-
+              Storing the results file path in a dedicated property cleanly separates argument parsing from
+              validation output logic, making it straightforward to direct test result output to the correct
+              file during self-validation.
+            tags: [internal]
+            tests:
+              - Context_Create_ResultsParameter_SetsResultsFile
+
+          - id: SarifMark-Ctx-LogParam
+            title: The Create method shall parse the --log parameter and open the specified log file for writing.
+            justification: >-
+              Opening the log file during Context creation ensures that all subsequent output, including early
+              diagnostic messages, is captured in the file and that file access errors are reported before any
+              processing begins.
+            tags: [internal]
+            tests:
+              - Context_Create_LogFile_OpensFileSuccessfully
+              - Context_Create_InvalidLogFilePath_ThrowsInvalidOperationException
+
+          - id: SarifMark-Ctx-UnknownArgs
+            title: The ArgumentParser inner class shall throw ArgumentException for any unrecognised argument.
+            justification: >-
+              Rejecting unknown arguments at parse time prevents silent misconfiguration caused by typos or
+              renamed flags, giving users immediate and actionable feedback about incorrect command usage.
+            tags: [internal]
+            tests:
+              - Context_Create_UnknownArgument_ThrowsArgumentException
+
+          - id: SarifMark-Ctx-WriteLine
+            title: The WriteLine method shall write to the console unless silent mode is active and shall write to the log file when open.
+            justification: >-
+              Routing output through a single method enforces consistent silent-mode behaviour and log file
+              capture across all callers, eliminating the need for each component to manage its own output
+              gating.
+            tags: [internal]
+            tests:
+              - Context_WriteLine_WritesToConsole
+              - Context_WriteLine_SilentMode_DoesNotWriteToConsole
+
+          - id: SarifMark-Ctx-WriteError
+            title: The WriteError method shall write to stderr and set the ExitCode to 1.
+            justification: >-
+              Writing errors to stderr separates diagnostic output from the regular output stream, and
+              automatically setting the exit code ensures that callers receive a non-zero status without
+              requiring explicit exit code management throughout the codebase.
+            tags: [internal]
+            tests:
+              - Context_WriteError_WritesToErrorAndSetsExitCode
+              - Context_WriteError_SilentMode_DoesNotWriteToConsoleButSetsExitCode
+
+          - id: SarifMark-Ctx-ExitCode
+            title: The ExitCode property shall start at zero and change to one after the first call to WriteError.
+            justification: >-
+              A default exit code of zero ensures success is the initial assumption, while transitioning to
+              one on the first error provides a clean binary success/failure signal compatible with
+              standard shell scripting conventions.
+            tags: [internal]
+            tests:
+              - Context_ExitCode_StartsAtZero_ChangesToOneAfterError
+
+          - id: SarifMark-Ctx-Dispose
+            title: The Dispose method shall close the log StreamWriter when one is open.
+            justification: >-
+              Explicitly closing the StreamWriter on disposal ensures all buffered log content is flushed to
+              disk and file handles are released promptly, preventing data loss and resource leaks in
+              long-running or automated scenarios.
+            tags: [internal]
+            tests:
+              - Context_Dispose_ProperlyClosesLogFile

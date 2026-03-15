@@ -9,6 +9,7 @@ sections:
             justification: >-
               Markdown report generation transforms machine-readable SARIF into human-readable documentation,
               enabling better understanding and communication of analysis results across development teams.
+            tags: [public]
             tests:
               - IntegrationTest_GenerateReport_CreatesReportFile
               - SarifMark_MarkdownReportGeneration
@@ -18,6 +19,7 @@ sections:
             justification: >-
               Configurable heading depth allows reports to integrate seamlessly into existing documentation
               hierarchies, preventing heading level conflicts when reports are embedded in larger documents.
+            tags: [public]
             tests:
               - IntegrationTest_ReportDepth_IsConfigurable
 
@@ -26,6 +28,7 @@ sections:
             justification: >-
               Result counts provide a quick summary of analysis findings, helping users understand the scope of
               issues at a glance and track improvements over time.
+            tags: [public]
             tests:
               - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
               - SarifResults_ToMarkdown_OneResult_UsesSingularForm
@@ -35,6 +38,7 @@ sections:
             justification: >-
               Displaying location information enables developers to quickly navigate to the source of issues,
               making the reports actionable and reducing time spent searching for problematic code.
+            tags: [public]
             tests:
               - SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
               - SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
@@ -44,6 +48,7 @@ sections:
             justification: >-
               Custom headings allow users to tailor reports to their documentation standards and naming
               conventions, improving consistency across project documentation.
+            tags: [public]
             tests:
               - SarifResults_ToMarkdown_CustomHeading_UsesProvidedHeading
               - SarifResults_ToMarkdown_NullHeading_UsesDefaultHeading
@@ -55,5 +60,6 @@ sections:
             justification: >-
               Proper line breaks between results ensure readability and visual separation in generated markdown,
               making it easier to distinguish between different findings in the report.
+            tags: [public]
             tests:
               - SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks

@@ -19,3 +19,9 @@ includes:
   - docs/reqstream/validation.yaml
   - docs/reqstream/platform.yaml
   - docs/reqstream/ots-software.yaml
+  - docs/reqstream/program.yaml
+  - docs/reqstream/context.yaml
+  - docs/reqstream/sarif-result.yaml
+  - docs/reqstream/sarif-results.yaml
+  - docs/reqstream/validation-class.yaml
+  - docs/reqstream/path-helpers.yaml
