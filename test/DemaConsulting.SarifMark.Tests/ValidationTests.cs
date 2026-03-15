@@ -166,6 +166,42 @@ public class ValidationTests
     }
 
     /// <summary>
+    ///     Tests that when a results file path with an unsupported extension is supplied, an error is reported.
+    /// </summary>
+    [TestMethod]
+    public void Validation_Run_WithUnsupportedResultsFileExtension_WritesError()
+    {
+        // Arrange - supply a .json results path (not a supported format)
+        var logFile = CreateTempFile(".log");
+        var jsonFile = CreateTempFile(".json");
+        try
+        {
+            int exitCode;
+            using (var context = Context.Create(
+                ["--silent", "--log", logFile, "--results", jsonFile]))
+            {
+                // Act
+                Validation.Run(context);
+                exitCode = context.ExitCode;
+            }
+
+            // Assert - error must be reported and no results file created
+            Assert.AreEqual(1, exitCode,
+                "Exit code should be 1 when an unsupported results file extension is used");
+            var logContent = File.ReadAllText(logFile);
+            Assert.Contains("Unsupported results file format", logContent,
+                "Log should contain the unsupported format error message");
+            Assert.IsFalse(File.Exists(jsonFile),
+                "Results file should not be created for an unsupported extension");
+        }
+        finally
+        {
+            SafeDeleteFile(logFile);
+            SafeDeleteFile(jsonFile);
+        }
+    }
+
+    /// <summary>
     ///     Tests that when a .xml results file path is supplied the file is created and contains JUnit XML content.
     /// </summary>
     [TestMethod]

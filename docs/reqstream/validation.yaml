@@ -18,7 +18,8 @@ sections:
               Writing test results to files enables integration with CI/CD systems and provides persistent
               records of validation outcomes for tracking quality trends and compliance.
             tests:
-              - IntegrationTest_ValidateFlag_RunsSelfValidation
+              - Validation_Run_WithTrxResultsFile_WritesResultsFile
+              - Validation_Run_WithXmlResultsFile_WritesResultsFile
 
           - id: SarifMark-Val-TrxFormat
             title: The tool shall support TRX format for test results.
@@ -26,7 +27,7 @@ sections:
               TRX format support enables integration with Microsoft testing ecosystems and Azure DevOps,
               providing native compatibility with Visual Studio and .NET tooling.
             tests:
-              - IntegrationTest_ValidateFlag_RunsSelfValidation
+              - Validation_Run_WithTrxResultsFile_WritesResultsFile
 
           - id: SarifMark-Val-JUnitFormat
             title: The tool shall support JUnit format for test results.
@@ -34,7 +35,7 @@ sections:
               JUnit format support enables broad compatibility with CI/CD platforms like Jenkins, GitHub Actions,
               and GitLab CI, which commonly use this standard format for test reporting.
             tests:
-              - IntegrationTest_ValidateFlag_RunsSelfValidation
+              - Validation_Run_WithXmlResultsFile_WritesResultsFile
 
       - title: Quality Enforcement
         requirements:

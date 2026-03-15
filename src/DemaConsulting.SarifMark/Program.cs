@@ -46,7 +46,7 @@ internal static class Program
     /// </summary>
     /// <param name="args">Command-line arguments.</param>
     /// <returns>Exit code: 0 for success, non-zero for failure.</returns>
-    private static int Main(string[] args)
+    internal static int Main(string[] args)
     {
         try
         {

@@ -83,7 +83,7 @@ arguments throw `ArgumentException`, satisfying `SarifMark-Cli-InvalidArgs`.
 
 `WriteLine` writes to `Console.Out` unless `Silent` is set, and also writes to the log
 file if one was opened. `WriteError` additionally sets `_hasErrors = true` (making
-`ExitCode` return 1) and writes to `Console.Error` in red. This satisfies
+`ExitCode` return 1) and, unless `Silent` is set, writes to `Console.Error` in red. This satisfies
 `SarifMark-Cli-Silent` and `SarifMark-Enf-ExitCode`.
 
 ### Log File

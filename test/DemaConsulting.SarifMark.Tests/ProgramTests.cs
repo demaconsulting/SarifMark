@@ -18,8 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Reflection;
-
 namespace DemaConsulting.SarifMark.Tests;
 
 /// <summary>
@@ -45,7 +43,7 @@ public class ProgramTests
             Console.SetError(errWriter);
 
             // Act
-            var result = InvokeMain([]);
+            var result = Program.Main([]);
 
             // Assert
             Assert.AreEqual(1, result);
@@ -73,7 +71,7 @@ public class ProgramTests
             Console.SetOut(outWriter);
 
             // Act
-            var result = InvokeMain(["--version"]);
+            var result = Program.Main(["--version"]);
 
             // Assert
             Assert.AreEqual(0, result);
@@ -101,7 +99,7 @@ public class ProgramTests
             Console.SetOut(outWriter);
 
             // Act
-            var result = InvokeMain(["--help"]);
+            var result = Program.Main(["--help"]);
 
             // Assert
             Assert.AreEqual(0, result);
@@ -130,7 +128,7 @@ public class ProgramTests
             Console.SetError(errWriter);
 
             // Act
-            var result = InvokeMain(["--unknown"]);
+            var result = Program.Main(["--unknown"]);
 
             // Assert
             Assert.AreEqual(1, result);
@@ -140,18 +138,5 @@ public class ProgramTests
         {
             Console.SetError(originalError);
         }
-    }
-
-    /// <summary>
-    ///     Invokes the Main method using reflection.
-    /// </summary>
-    /// <param name="args">Command-line arguments.</param>
-    /// <returns>The exit code returned by Main.</returns>
-    private static int InvokeMain(string[] args)
-    {
-        var programType = typeof(Program).Assembly.GetType("DemaConsulting.SarifMark.Program");
-        var mainMethod = programType?.GetMethod("Main", BindingFlags.Static | BindingFlags.NonPublic);
-        var result = mainMethod?.Invoke(null, [args]);
-        return result is int exitCode ? exitCode : -1;
     }
 }

@@ -60,6 +60,9 @@ The static `Read` method loads and parses a SARIF file:
 6. Delegates to `ParseResults` to iterate and parse all non-suppressed results. This
    satisfies `SarifMark-Sarif-Results` and `SarifMark-Sarif-Reading`.
 
+Together, steps 1–6 form the complete pipeline for processing a valid SARIF file, satisfying
+`SarifMark-Sarif-Processing`.
+
 ### Version Extraction
 
 `ExtractToolVersion` checks three fields in priority order: `version`,
@@ -95,3 +98,12 @@ satisfies `SarifMark-Rpt-Locations`.
 
 Each result is formatted as a single line ending with two trailing spaces (`  `), which
 forces a hard line break in rendered markdown. This satisfies `SarifMark-Rpt-LineBreaks`.
+
+## CLI Integration
+
+The requirement `SarifMark-Sarif-Required` (the tool shall require the `--sarif` parameter
+for analysis) is enforced at the command-line layer rather than within this library. The
+`ProcessSarifAnalysis` method in `Program.cs` validates that `--sarif` is provided before
+invoking the SARIF reading layer. See [command-line.md] for full details.
+
+[command-line.md]: command-line.md
