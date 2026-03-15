@@ -2,29 +2,26 @@
 
 ## Overview
 
-The utilities layer provides an internal support class used across the tool: `PathHelpers`
-for safe path operations. It defends against path-traversal vulnerabilities when
-constructing file paths from partially-trusted input.
+The utilities layer provides internal support classes used across the tool. It currently
+consists of a single class: [`PathHelpers`][path-helpers-md], which defends against
+path-traversal vulnerabilities when constructing file paths from partially-trusted input.
 
-## PathHelpers Class
+## PathHelpers
 
-The `PathHelpers` class (`PathHelpers.cs`) exposes a single static method,
-`SafePathCombine`, designed to guard against path-traversal attacks when building file
-paths from input that may not be fully trusted.
+`PathHelpers` is a static internal class exposing a single method, `SafePathCombine`. It
+is used by `Validation.TemporaryDirectory` when constructing paths inside a temporary
+directory from `Guid`-based file names.
 
-### SafePathCombine Method
+`SafePathCombine` applies two layers of validation to guard against path-traversal attacks:
 
-`SafePathCombine` takes a `basePath` and a `relativePath` and returns a combined path,
-subject to two layers of validation:
+1. **Pre-combination check** — rejects paths containing `".."` or rooted (absolute) paths.
+2. **Post-combination check** — resolves both paths with `Path.GetFullPath` and verifies
+   the result still sits under the base path.
 
-1. **Pre-combination check**: rejects `relativePath` if it contains `".."` or is a rooted
-   (absolute) path.
-2. **Post-combination check**: resolves both paths with `Path.GetFullPath` and calls
-   `Path.GetRelativePath` to verify the combined path still sits under `basePath`.
+See [path-helpers.md] for class-level details.
 
-If either check fails, `ArgumentException` is thrown. This defense-in-depth approach
-guards against edge-cases that might bypass the initial string check while remaining
-straightforward to audit.
+## Class Details
 
-`PathHelpers` is used by `Validation` when constructing paths inside temporary directories
-for self-validation tests.
+- [PathHelpers class][path-helpers-md] — safe path combination with traversal defense
+
+[path-helpers-md]: path-helpers.md
