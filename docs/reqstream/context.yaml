@@ -7,7 +7,7 @@ sections:
           - id: SarifMark-Ctx-Create
             title: The Context class shall be created via a static factory method.
             justification: >-
-              A static factory method centralises argument parsing and object initialisation, ensuring that
+              A static factory method centralizes argument parsing and object initialization, ensuring that
               every Context instance is fully configured before use and preventing partially constructed
               objects from reaching the rest of the application.
             tags: [internal]
@@ -17,7 +17,7 @@ sections:
           - id: SarifMark-Ctx-VersionFlag
             title: The Create method shall parse the -v and --version flags and set the Version property to true.
             justification: >-
-              Recognising both short and long form of the version flag provides a consistent command-line
+              Recognizing both short and long form of the version flag provides a consistent command-line
               experience aligned with common POSIX conventions, making the tool approachable to users
               familiar with standard Unix utilities.
             tags: [internal]
@@ -58,7 +58,7 @@ sections:
           - id: SarifMark-Ctx-EnforceFlag
             title: The Create method shall parse the --enforce flag and set the Enforce property to true.
             justification: >-
-              The enforce flag enables quality gate behaviour so the tool can signal build failure when SARIF
+              The enforce flag enables quality gate behavior so the tool can signal build failure when SARIF
               results are present, making it suitable for integration into CI/CD pipelines.
             tags: [internal]
             tests:
@@ -84,10 +84,10 @@ sections:
               - Context_Create_ReportParameter_SetsReportFile
 
           - id: SarifMark-Ctx-ReportDepthParam
-            title: The Create method shall parse the --report-depth parameter, validate it is a positive integer, and set the ReportDepth property.
+            title: The Create method shall parse --report-depth, validate it is a positive integer, and set ReportDepth.
             justification: >-
               Validating the depth value at parse time prevents invalid heading levels from propagating into
-              markdown generation, and defaulting to 1 ensures sensible behaviour when the parameter is
+              markdown generation, and defaulting to 1 ensures sensible behavior when the parameter is
               omitted.
             tags: [internal]
             tests:
@@ -129,7 +129,7 @@ sections:
               - Context_Create_InvalidLogFilePath_ThrowsInvalidOperationException
 
           - id: SarifMark-Ctx-UnknownArgs
-            title: The ArgumentParser inner class shall throw ArgumentException for any unrecognised argument.
+            title: The ArgumentParser inner class shall throw ArgumentException for any unrecognized argument.
             justification: >-
               Rejecting unknown arguments at parse time prevents silent misconfiguration caused by typos or
               renamed flags, giving users immediate and actionable feedback about incorrect command usage.
@@ -138,9 +138,9 @@ sections:
               - Context_Create_UnknownArgument_ThrowsArgumentException
 
           - id: SarifMark-Ctx-WriteLine
-            title: The WriteLine method shall write to the console unless silent mode is active and shall write to the log file when open.
+            title: The WriteLine method shall write to the console unless silent and to the log file when open.
             justification: >-
-              Routing output through a single method enforces consistent silent-mode behaviour and log file
+              Routing output through a single method enforces consistent silent-mode behavior and log file
               capture across all callers, eliminating the need for each component to manage its own output
               gating.
             tags: [internal]

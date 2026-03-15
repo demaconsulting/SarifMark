@@ -5,7 +5,7 @@ sections:
       - title: Validation Class
         requirements:
           - id: SarifMark-Vld-Run
-            title: The Run method shall orchestrate validation by executing the header, all tests, the summary, and the results file in sequence.
+            title: The Run method shall orchestrate the header, all tests, summary, and results file in sequence.
             justification: >-
               Sequencing these four phases in a fixed order ensures that every validation run produces a
               consistent, complete report regardless of individual test outcomes, giving users a reliable
@@ -28,14 +28,14 @@ sections:
             title: The PrintValidationHeader method shall emit a system information table before the tests run.
             justification: >-
               Printing platform and runtime details before any tests execute ensures that validation
-              results can always be contextualised with the environment in which they were collected,
+              results can always be contextualized with the environment in which they were collected,
               aiding reproducibility and cross-environment comparison.
             tags: [internal]
             tests:
               - Validation_Run_ValidContext_PrintsValidationHeader
 
           - id: SarifMark-Vld-SarifReadingTest
-            title: The RunSarifReadingTest method shall verify end-to-end SARIF reading within the self-validation suite.
+            title: The RunSarifReadingTest method shall verify end-to-end SARIF reading in the self-validation suite.
             justification: >-
               Including a SARIF reading test in self-validation confirms that the installed tool can parse
               real SARIF data in the target environment, catching issues that may not surface in unit tests
@@ -45,7 +45,7 @@ sections:
               - Validation_Run_ValidContext_RunsAllTests
 
           - id: SarifMark-Vld-ReportGenerationTest
-            title: The RunMarkdownReportGenerationTest method shall verify end-to-end markdown report generation within the self-validation suite.
+            title: The RunMarkdownReportGenerationTest method shall verify end-to-end markdown report generation.
             justification: >-
               Validating report generation as a self-contained test confirms that the full pipeline from
               SARIF input to markdown output operates correctly in the deployment environment, providing
@@ -55,7 +55,7 @@ sections:
               - Validation_Run_ValidContext_RunsAllTests
 
           - id: SarifMark-Vld-EnforcementTest
-            title: The RunEnforcementTest method shall verify enforcement mode behaviour within the self-validation suite.
+            title: The RunEnforcementTest method shall verify enforcement mode behavior in the self-validation suite.
             justification: >-
               Testing enforcement mode during self-validation ensures that the quality gate capability
               functions correctly in the installed environment, confirming that the tool will correctly
@@ -75,10 +75,10 @@ sections:
               - Validation_Run_ValidContext_PrintsSummary
 
           - id: SarifMark-Vld-ResultsFile
-            title: The WriteResultsFile method shall write a TRX file for .trx extensions, a JUnit XML file for .xml extensions, and report an error for other extensions.
+            title: The WriteResultsFile method shall write TRX for .trx, JUnit XML for .xml, or error otherwise.
             justification: >-
-              Supporting both TRX and JUnit formats maximises CI/CD platform compatibility, and reporting
-              an error for unrecognised extensions prevents silent data loss when callers specify an
+              Supporting both TRX and JUnit formats maximizes CI/CD platform compatibility, and reporting
+              an error for unrecognized extensions prevents silent data loss when callers specify an
               unsupported output format.
             tags: [internal]
             tests:
@@ -87,10 +87,10 @@ sections:
               - Validation_Run_WithUnsupportedResultsFileExtension_WritesError
 
           - id: SarifMark-Vld-TempDir
-            title: The TemporaryDirectory helper shall create a temporary directory on construction and delete it on disposal.
+            title: The TemporaryDirectory helper shall create a temporary directory and delete it on disposal.
             justification: >-
               Creating and cleaning up temporary directories through a disposable helper ensures that
-              test isolation is maintained and that test artefacts do not accumulate on disk across
+              test isolation is maintained and that test artifacts do not accumulate on disk across
               repeated validation runs.
             tags: [internal]
             tests:

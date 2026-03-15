@@ -38,11 +38,11 @@ sections:
               - Program_Main_UnknownArgument_ReturnsError
 
           - id: SarifMark-Prg-Run
-            title: The Run method shall dispatch commands in priority order Version, Banner, Help, Validate, then SarifAnalysis.
+            title: The Run method shall dispatch commands in priority order.
             justification: >-
               Priority-ordered dispatch ensures that informational flags such as version and help are always
               honoured before attempting expensive operations, giving users predictable and deterministic
-              command behaviour regardless of argument ordering.
+              command behavior regardless of argument ordering.
             tags: [internal]
             tests:
               - Program_Main_VersionFlag_DisplaysVersionOnly
@@ -68,7 +68,7 @@ sections:
               - Program_Main_HelpFlag_DisplaysHelp
 
           - id: SarifMark-Prg-SarifAnalysis
-            title: The ProcessSarifAnalysis method shall validate the --sarif parameter, read the SARIF file, optionally enforce, and write the report.
+            title: The ProcessSarifAnalysis method shall validate --sarif and orchestrate SARIF processing.
             justification: >-
               Combining path validation, SARIF reading, enforcement checking, and report writing in one method
               establishes a clear pipeline for the primary use case and ensures that each step is gated on the

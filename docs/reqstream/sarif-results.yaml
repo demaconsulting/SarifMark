@@ -15,7 +15,7 @@ sections:
               - SarifResults_Read_NoResults_ReturnsValidResults
 
           - id: SarifMark-SRs-ValidatePath
-            title: The Read method shall validate that the file path is non-null, non-empty, and refers to an existing file.
+            title: The Read method shall validate the file path is non-null, non-empty, and the file exists.
             justification: >-
               Early path validation produces clear, actionable error messages before any I/O is attempted,
               improving diagnostic quality and preventing confusing low-level exceptions from propagating
@@ -41,7 +41,7 @@ sections:
               - SarifResults_Read_EmptyRuns_ThrowsInvalidOperationException
 
           - id: SarifMark-SRs-ExtractTool
-            title: The Read method shall extract tool name and version from the driver node, requiring both tool and driver elements to be present.
+            title: The Read method shall extract tool name and version from the driver node.
             justification: >-
               Requiring the tool and driver nodes and extracting a name and version from them ensures that
               every generated report correctly identifies its source tool, while gracefully substituting
@@ -54,7 +54,7 @@ sections:
               - SarifResults_Read_MissingToolVersion_UsesUnknown
 
           - id: SarifMark-SRs-VersionPriority
-            title: The ExtractToolVersion helper shall check version, then semanticVersion, then dottedQuadFileVersion, and fall back to Unknown.
+            title: The ExtractToolVersion helper shall use version priority order and fall back to Unknown.
             justification: >-
               The defined priority order matches the SARIF specification's preference ordering and ensures
               that the most semantically meaningful version string is always selected when multiple version
@@ -69,7 +69,7 @@ sections:
               - SarifResults_Read_EmptyVersionField_FallsBackToSemanticVersion
 
           - id: SarifMark-SRs-ParseResults
-            title: The ParseResults helper shall iterate all results entries and collect them into the Results collection.
+            title: The ParseResults helper shall collect all result entries into the Results collection.
             justification: >-
               Iterating every entry in the results array, including empty arrays and missing results nodes,
               ensures that the collection accurately reflects the SARIF file contents and that no findings
@@ -84,7 +84,7 @@ sections:
           - id: SarifMark-SRs-FilterSuppressions
             title: The ParseResults helper shall skip results that carry a suppression entry.
             justification: >-
-              Filtering suppressed results mirrors standard SARIF tooling behaviour and ensures that
+              Filtering suppressed results mirrors standard SARIF tooling behavior and ensures that
               intentionally suppressed findings do not appear in generated reports, preventing noise and
               correctly representing the effective set of active issues.
             tags: [internal]
@@ -92,7 +92,7 @@ sections:
               - SarifResults_Read_WithSuppressedResults_ExcludesSuppressedResults
 
           - id: SarifMark-SRs-ToMarkdown
-            title: The ToMarkdown method shall generate a complete markdown report including heading, tool info, result count, and all results.
+            title: The ToMarkdown method shall generate a complete markdown report with heading, tool info, and results.
             justification: >-
               Generating the full report from a single method call provides a cohesive output document and
               ensures that heading, tool attribution, count summary, and result details are always emitted
@@ -119,7 +119,7 @@ sections:
               - SarifResults_ToMarkdown_Depth6_ProducesCorrectOutput
 
           - id: SarifMark-SRs-FormatLocation
-            title: The FormatLocation helper shall return a no-location indicator, a URI-only string, or a URI with line number depending on available data.
+            title: The FormatLocation helper shall return the most precise location string the data supports.
             justification: >-
               Producing the most precise location string the data supports ensures reports are as actionable
               as possible, while gracefully degrading to partial or absent location information without
@@ -130,7 +130,7 @@ sections:
               - SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
 
           - id: SarifMark-SRs-FormatCount
-            title: The FormatFoundText helper shall return "Found X issues" for zero or plural counts and "Found 1 issue" for exactly one result.
+            title: The FormatFoundText helper shall use singular form for one result and plural form otherwise.
             justification: >-
               Correct singular and plural forms produce grammatically accurate summaries that improve
               readability and convey the right sense of magnitude, which is particularly important for

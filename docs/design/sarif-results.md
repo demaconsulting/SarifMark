@@ -1,0 +1,130 @@
+# SarifResults Record
+
+## Overview
+
+The `SarifResults` record (`SarifResults.cs`) is the primary public type for working with SARIF
+file content. It holds the tool metadata and the parsed list of results, and exposes both the
+`Read` static method for file loading and the `ToMarkdown` method for report generation.
+
+## Record Design
+
+`SarifResults` is a `record` with an `internal` constructor. External consumers obtain instances
+only through `Read`; the record is immutable once constructed.
+
+## Properties
+
+| Property      | Type                         | Description                             |
+|---------------|------------------------------|-----------------------------------------|
+| `ToolName`    | `string`                     | Name of the analysis tool               |
+| `ToolVersion` | `string`                     | Version of the analysis tool            |
+| `Results`     | `IReadOnlyList<SarifResult>` | Collection of non-suppressed results    |
+| `ResultCount` | `int`                        | Total number of results (derived count) |
+
+These satisfy requirement `SarifMark-SRs-Properties`.
+
+## Read Method
+
+The static `Read(string filePath)` method loads and parses a SARIF 2.1.0 file through a
+six-step pipeline:
+
+1. **Path validation** — throws `ArgumentException` if `filePath` is null, empty, or
+   whitespace. This satisfies `SarifMark-SRs-ValidatePath`.
+2. **File existence** — throws `FileNotFoundException` if the file does not exist on disk.
+   This satisfies `SarifMark-SRs-ValidatePath`.
+3. **JSON parsing** — reads the file with `File.ReadAllText` and parses it with
+   `JsonDocument.Parse`. A `JsonException` is translated to `InvalidOperationException`.
+   This satisfies `SarifMark-SRs-ValidateStructure`.
+4. **Structure validation** — delegates to `ValidateSarifStructure` to verify the `version`
+   and `runs` fields and return the first run element. This satisfies
+   `SarifMark-SRs-ValidateStructure`.
+5. **Tool extraction** — delegates to `ExtractToolInformation` to retrieve `ToolName` and
+   `ToolVersion` from `tool.driver`. This satisfies `SarifMark-SRs-ExtractTool`.
+6. **Result parsing** — delegates to `ParseResults` to iterate all non-suppressed results.
+   This satisfies `SarifMark-SRs-ParseResults` and `SarifMark-SRs-FilterSuppressions`.
+
+Together, steps 1–6 form the complete SARIF reading pipeline.
+
+## ValidateSarifStructure Method
+
+`ValidateSarifStructure` verifies that the root JSON element contains:
+
+- A `version` property (any value is accepted; absence throws `InvalidOperationException`).
+- A `runs` array that is non-empty (absence or empty array throws `InvalidOperationException`).
+
+It returns the first element of the `runs` array for further processing. This satisfies
+requirement `SarifMark-SRs-ValidateStructure`.
+
+## ExtractToolInformation Method
+
+`ExtractToolInformation` navigates from the run element to `tool.driver`, throwing
+`InvalidOperationException` if either `tool` or `driver` is absent. It reads the `name` property
+from `driver`, defaulting to `"Unknown"` if absent, then delegates to `ExtractToolVersion` for the
+version string. This satisfies requirement `SarifMark-SRs-ExtractTool`.
+
+## ExtractToolVersion Method
+
+`ExtractToolVersion` checks three fields in the `driver` JSON element in priority order:
+
+| Priority | JSON field               |
+|----------|--------------------------|
+| 1        | `version`                |
+| 2        | `semanticVersion`        |
+| 3        | `dottedQuadFileVersion`  |
+
+The first field whose value is non-null and non-whitespace is returned. If none of the three fields
+yields a value, `"Unknown"` is returned. This satisfies requirement `SarifMark-SRs-VersionPriority`.
+
+## ParseResults Method
+
+`ParseResults` iterates the `results` JSON array within the run element. If the array is absent or
+not an array, an empty list is returned. For each element, `IsSuppressed` checks whether a
+non-empty `suppressions` array is present; suppressed entries are skipped. Each remaining element
+is parsed into a `SarifResult` record. This satisfies requirements `SarifMark-SRs-ParseResults`
+and `SarifMark-SRs-FilterSuppressions`.
+
+## ToMarkdown Method
+
+`ToMarkdown(int depth, string? heading = null)` generates a markdown string from the results:
+
+1. **Depth validation** — throws `ArgumentOutOfRangeException` if `depth` is less than 1 or
+   greater than 6. This satisfies `SarifMark-SRs-ValidateDepth`.
+2. **Header** — calls `AppendHeader` to emit the main heading (using `heading` if provided, or
+   `"[ToolName] Analysis"` by default) followed by a `**Tool:**` line with name and version.
+   The sub-heading level is `min(depth + 1, 6)`.
+3. **Issues section** — calls `AppendIssuesSection` to emit the `Issues` sub-heading, the
+   result count formatted by `FormatFoundText`, and one line per result formatted by
+   `FormatLocation`.
+
+This satisfies requirement `SarifMark-SRs-ToMarkdown`.
+
+## FormatLocation Method
+
+`FormatLocation(string? uri, int? startLine)` produces the location prefix for each result line:
+
+| `uri`        | `startLine`  | Output              |
+|--------------|--------------|---------------------|
+| null / empty | any          | `(no location)`     |
+| set          | null         | `uri`               |
+| set          | set          | `uri(startLine)`    |
+
+This satisfies requirement `SarifMark-SRs-FormatLocation`.
+
+## FormatFoundText Method
+
+`FormatFoundText(int count, string singularNoun)` produces a grammatically correct summary:
+
+| `count` | Output                        |
+|---------|-------------------------------|
+| `0`     | Found no {singularNoun}s      |
+| `1`     | Found 1 {singularNoun}        |
+| `> 1`   | Found {count} {singularNoun}s |
+
+This satisfies requirement `SarifMark-SRs-FormatCount`.
+
+## Cross-References
+
+See [sarif-result.md] for the `SarifResult` record that `ParseResults` produces. See
+[program.md] for how `Read` and `ToMarkdown` are called from `ProcessSarifAnalysis`.
+
+[sarif-result.md]: sarif-result.md
+[program.md]: program.md
