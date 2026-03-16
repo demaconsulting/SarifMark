@@ -30,6 +30,7 @@ reviews:
       - "docs/reqstream/command-line.yaml"
       - "docs/reqstream/program.yaml"
       - "docs/reqstream/context.yaml"
+      - "docs/design/introduction.md"
       - "docs/design/command-line.md"
       - "src/**/Program.cs"
       - "src/**/Context.cs"
@@ -49,6 +50,7 @@ reviews:
       - "src/**/SarifResult.cs"
       - "src/**/SarifResults.cs"
       - "test/**/SarifResultsTests.cs"
+      - "test/**/IntegrationTests.cs"
 
   - id: SarifMark-Report-Concept-Review
     title: Review of SarifMark Report Generation Concept
@@ -68,6 +70,7 @@ reviews:
       - "docs/design/validation.md"
       - "src/**/Validation.cs"
       - "test/**/ValidationTests.cs"
+      - "test/**/IntegrationTests.cs"
 
   - id: SarifMark-Platform-Concept-Review
     title: Review of SarifMark Platform and OTS Software
@@ -104,6 +107,7 @@ reviews:
       - "docs/reqstream/sarif-result.yaml"
       - "docs/design/sarif-result.md"
       - "src/**/SarifResult.cs"
+      - "test/**/SarifResultsTests.cs"
 
   - id: SarifMark-SarifResults-Class-Review
     title: Review of SarifMark SarifResults Record
@@ -125,6 +129,7 @@ reviews:
     title: Review of SarifMark PathHelpers Class
     paths:
       - "docs/reqstream/path-helpers.yaml"
+      - "docs/design/utilities.md"
       - "docs/design/path-helpers.md"
       - "src/**/PathHelpers.cs"
       - "test/**/PathHelpersTests.cs"
