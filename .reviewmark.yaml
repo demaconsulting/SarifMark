@@ -16,16 +16,16 @@ evidence-source:
   location: https://raw.githubusercontent.com/demaconsulting/SarifMark/reviews/index.json
 
 # Review sets grouping files by logical unit of review.
-# Public concept reviews cover the externally-visible behaviour of each feature area.
-# Class reviews cover the internal design and implementation of each individual class.
+# Subsystem reviews cover the externally-visible behaviour of each feature subsystem.
+# Software unit reviews cover the internal design and implementation of each individual class.
 reviews:
 
   # ---------------------------------------------------------------------------
-  # Public Concept Reviews
+  # Subsystem Reviews
   # ---------------------------------------------------------------------------
 
-  - id: SarifMark-CommandLine-Concept-Review
-    title: Review of SarifMark Command-Line Interface Concept
+  - id: SarifMark-CommandLine-Subsystem-Review
+    title: Review of SarifMark Command-Line Interface Subsystem
     paths:
       - "docs/reqstream/command-line.yaml"
       - "docs/reqstream/program.yaml"
@@ -40,8 +40,8 @@ reviews:
       - "test/**/Runner.cs"
       - "test/**/AssemblyInfo.cs"
 
-  - id: SarifMark-Sarif-Concept-Review
-    title: Review of SarifMark SARIF Reading Concept
+  - id: SarifMark-Sarif-Subsystem-Review
+    title: Review of SarifMark SARIF Reading Subsystem
     paths:
       - "docs/reqstream/sarif.yaml"
       - "docs/reqstream/sarif-result.yaml"
@@ -52,8 +52,8 @@ reviews:
       - "test/**/SarifResultsTests.cs"
       - "test/**/IntegrationTests.cs"
 
-  - id: SarifMark-Report-Concept-Review
-    title: Review of SarifMark Report Generation Concept
+  - id: SarifMark-Report-Subsystem-Review
+    title: Review of SarifMark Report Generation Subsystem
     paths:
       - "docs/reqstream/report.yaml"
       - "docs/reqstream/sarif-results.yaml"
@@ -62,8 +62,8 @@ reviews:
       - "test/**/SarifResultsTests.cs"
       - "test/**/IntegrationTests.cs"
 
-  - id: SarifMark-Validation-Concept-Review
-    title: Review of SarifMark Self-Validation Concept
+  - id: SarifMark-Validation-Subsystem-Review
+    title: Review of SarifMark Self-Validation Subsystem
     paths:
       - "docs/reqstream/validation.yaml"
       - "docs/reqstream/validation-class.yaml"
@@ -72,18 +72,18 @@ reviews:
       - "test/**/ValidationTests.cs"
       - "test/**/IntegrationTests.cs"
 
-  - id: SarifMark-Platform-Concept-Review
+  - id: SarifMark-Platform-Subsystem-Review
     title: Review of SarifMark Platform and OTS Software
     paths:
       - "docs/reqstream/platform.yaml"
       - "docs/reqstream/ots-software.yaml"
 
   # ---------------------------------------------------------------------------
-  # Class Reviews
+  # Software Unit Reviews
   # ---------------------------------------------------------------------------
 
-  - id: SarifMark-Program-Class-Review
-    title: Review of SarifMark Program Class
+  - id: SarifMark-Program-SoftwareUnit-Review
+    title: Review of SarifMark Program Software Unit
     paths:
       - "docs/reqstream/program.yaml"
       - "docs/design/program.md"
@@ -93,40 +93,40 @@ reviews:
       - "test/**/Runner.cs"
       - "test/**/AssemblyInfo.cs"
 
-  - id: SarifMark-Context-Class-Review
-    title: Review of SarifMark Context Class
+  - id: SarifMark-Context-SoftwareUnit-Review
+    title: Review of SarifMark Context Software Unit
     paths:
       - "docs/reqstream/context.yaml"
       - "docs/design/context.md"
       - "src/**/Context.cs"
       - "test/**/ContextTests.cs"
 
-  - id: SarifMark-SarifResult-Class-Review
-    title: Review of SarifMark SarifResult Record
+  - id: SarifMark-SarifResult-SoftwareUnit-Review
+    title: Review of SarifMark SarifResult Software Unit
     paths:
       - "docs/reqstream/sarif-result.yaml"
       - "docs/design/sarif-result.md"
       - "src/**/SarifResult.cs"
       - "test/**/SarifResultsTests.cs"
 
-  - id: SarifMark-SarifResults-Class-Review
-    title: Review of SarifMark SarifResults Record
+  - id: SarifMark-SarifResults-SoftwareUnit-Review
+    title: Review of SarifMark SarifResults Software Unit
     paths:
       - "docs/reqstream/sarif-results.yaml"
       - "docs/design/sarif-results.md"
       - "src/**/SarifResults.cs"
       - "test/**/SarifResultsTests.cs"
 
-  - id: SarifMark-Validation-Class-Review
-    title: Review of SarifMark Validation Class
+  - id: SarifMark-Validation-SoftwareUnit-Review
+    title: Review of SarifMark Validation Software Unit
     paths:
       - "docs/reqstream/validation-class.yaml"
       - "docs/design/validation.md"
       - "src/**/Validation.cs"
       - "test/**/ValidationTests.cs"
 
-  - id: SarifMark-PathHelpers-Class-Review
-    title: Review of SarifMark PathHelpers Class
+  - id: SarifMark-PathHelpers-SoftwareUnit-Review
+    title: Review of SarifMark PathHelpers Software Unit
     paths:
       - "docs/reqstream/path-helpers.yaml"
       - "docs/design/utilities.md"
