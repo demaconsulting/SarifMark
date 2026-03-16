@@ -37,14 +37,14 @@ matching condition:
 | 4        | *(default)*        | Run SARIF analysis processing       |
 
 This satisfies requirements `SarifMark-Cli-Version`, `SarifMark-Cli-Help`, and
-`SarifMark-Val-Mode`.
+`SarifMark-Validate-Mode`.
 
 ## SARIF Analysis Orchestration
 
 When no informational flag is set, `Program.ProcessSarifAnalysis` validates that `--sarif`
 is provided, reads and processes the SARIF file, optionally enforces a quality gate, and
 optionally writes a markdown report. This satisfies requirements `SarifMark-Sarif-Required`,
-`SarifMark-Enf-Mode`, and `SarifMark-Rpt-Markdown`.
+`SarifMark-Enforce-Mode`, and `SarifMark-Report-Markdown`.
 
 ## Class Details
 

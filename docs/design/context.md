@@ -10,7 +10,7 @@ files it reads and writes, and whether any errors have been reported.
 
 `Context` is declared `sealed` and implements `IDisposable`. The constructor is private; all
 instances are created through the `Create` static factory method. This ensures every `Context` is
-fully initialized before use. This satisfies requirement `SarifMark-Ctx-Create`.
+fully initialized before use. This satisfies requirement `SarifMark-Context-Create`.
 
 ## Create Factory Method
 
@@ -22,7 +22,7 @@ fully initialized before use. This satisfies requirement `SarifMark-Ctx-Create`.
 4. If a log file was specified, calls `OpenLogFile`.
 5. Returns the fully configured instance.
 
-This satisfies requirements `SarifMark-Ctx-Create` through `SarifMark-Ctx-LogParam`.
+This satisfies requirements `SarifMark-Context-Create` through `SarifMark-Context-LogParam`.
 
 ## Properties
 
@@ -40,10 +40,10 @@ This satisfies requirements `SarifMark-Ctx-Create` through `SarifMark-Ctx-LogPar
 | `ResultsFile` | `string?` | `null`  | `--results <file>`       | Path for the self-validation results file   |
 | `ExitCode`    | `int`     | `0`/`1` | *(derived)*              | 0 until `WriteError` is called, then 1      |
 
-These properties satisfy requirements `SarifMark-Ctx-VersionFlag`, `SarifMark-Ctx-HelpFlag`,
-`SarifMark-Ctx-SilentFlag`, `SarifMark-Ctx-ValidateFlag`, `SarifMark-Ctx-EnforceFlag`,
-`SarifMark-Ctx-SarifParam`, `SarifMark-Ctx-ReportParam`, `SarifMark-Ctx-ReportDepthParam`,
-`SarifMark-Ctx-HeadingParam`, `SarifMark-Ctx-ResultsParam`, and `SarifMark-Ctx-ExitCode`.
+These properties satisfy requirements `SarifMark-Context-VersionFlag`, `SarifMark-Context-HelpFlag`,
+`SarifMark-Context-SilentFlag`, `SarifMark-Context-ValidateFlag`, `SarifMark-Context-EnforceFlag`,
+`SarifMark-Context-SarifParam`, `SarifMark-Context-ReportParam`, `SarifMark-Context-ReportDepthParam`,
+`SarifMark-Context-HeadingParam`, `SarifMark-Context-ResultsParam`, and `SarifMark-Context-ExitCode`.
 
 ## ArgumentParser Inner Class
 
@@ -53,24 +53,24 @@ each to `ParseArgument`. Value-bearing flags (e.g. `--sarif`, `--report-depth`) 
 following token as their argument value.
 
 Any unrecognized token causes `ParseArgument` to throw `ArgumentException` with a message
-identifying the unsupported argument. This satisfies requirement `SarifMark-Ctx-UnknownArgs`.
+identifying the unsupported argument. This satisfies requirement `SarifMark-Context-UnknownArgs`.
 
 `--report-depth` requires a positive integer value; non-integer or non-positive values also throw
-`ArgumentException`. This satisfies requirement `SarifMark-Ctx-ReportDepthParam`.
+`ArgumentException`. This satisfies requirement `SarifMark-Context-ReportDepthParam`.
 
 ## WriteLine Method
 
 `WriteLine(string message)` writes to `Console.Out` unless `Silent` is `true`. If a log file is
 open, the message is also written to the log `StreamWriter` regardless of the `Silent` flag. This
-satisfies requirement `SarifMark-Ctx-WriteLine`.
+satisfies requirement `SarifMark-Context-WriteLine`.
 
 ## WriteError Method
 
 `WriteError(string message)` unconditionally sets the private `_hasErrors` flag to `true`, which
 causes `ExitCode` to return `1`. Unless `Silent` is `true`, it writes the message to
 `Console.Error` with the console foreground color temporarily set to red. If a log file is open,
-the message is also written there. This satisfies requirements `SarifMark-Ctx-WriteError` and
-`SarifMark-Ctx-ExitCode`.
+the message is also written there. This satisfies requirements `SarifMark-Context-WriteError` and
+`SarifMark-Context-ExitCode`.
 
 ## OpenLogFile Method
 
@@ -78,13 +78,13 @@ the message is also written there. This satisfies requirements `SarifMark-Ctx-Wr
 `AutoFlush = true`, ensuring log entries are flushed to disk immediately even if the process
 terminates unexpectedly. If the file cannot be opened for any reason, the underlying exception is
 caught and wrapped in an `InvalidOperationException` with a message that identifies the failing
-file path. This satisfies requirement `SarifMark-Ctx-LogParam`.
+file path. This satisfies requirement `SarifMark-Context-LogParam`.
 
 ## Dispose Method
 
 `Dispose()` disposes the log `StreamWriter` if one was opened and sets the reference to `null`.
 This ensures file handles are released and any remaining buffered content is flushed on disposal.
-This satisfies requirement `SarifMark-Ctx-Dispose`.
+This satisfies requirement `SarifMark-Context-Dispose`.
 
 ## Cross-References
 

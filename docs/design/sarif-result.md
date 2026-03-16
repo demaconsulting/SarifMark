@@ -11,7 +11,7 @@ to identify, describe, and locate a result in a generated markdown report.
 `SarifResult` is declared as a `record`, making all instances immutable by default. The constructor
 is `internal`, so the type cannot be directly instantiated by external consumers; instances are
 only produced by the `SarifResults.Read` parsing pipeline. This satisfies requirement
-`SarifMark-SR-Internal`.
+`SarifMark-SarifResult-Internal`.
 
 ## Properties
 
@@ -24,8 +24,8 @@ only produced by the `SarifResults.Read` parsing pipeline. This satisfies requir
 | `StartLine` | `int?`    | Yes      | Starting line number within the file, if available |
 
 `Uri` and `StartLine` are both nullable because the SARIF specification does not require location
-data for every result. Their optionality satisfies requirements `SarifMark-SR-Uri` and
-`SarifMark-SR-StartLine`. The full set of properties satisfies requirement `SarifMark-SR-Properties`.
+data for every result. Their optionality satisfies requirements `SarifMark-SarifResult-Uri` and
+`SarifMark-SarifResult-StartLine`. The full set of properties satisfies requirement `SarifMark-SarifResult-Properties`.
 
 ## Construction
 

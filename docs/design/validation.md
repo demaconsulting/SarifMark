@@ -5,7 +5,7 @@
 The self-validation layer provides built-in verification of the tool's core functionality.
 It is invoked when the `--validate` flag is passed and can write results to a TRX or
 JUnit XML file when `--results` is also provided. This satisfies requirements
-`SarifMark-Val-Mode` and `SarifMark-Val-ResultFiles`.
+`SarifMark-Validate-Mode` and `SarifMark-Validate-ResultFiles`.
 
 ## Validation Class
 
@@ -48,7 +48,7 @@ The test name is `SarifMark_SarifReading`, satisfying `SarifMark-Sarif-Reading`.
 4. Calls `Program.Run` and verifies exit code is 0.
 5. Checks the report file contains `"MockTool Analysis"` and `"Found 2 issues"`.
 
-The test name is `SarifMark_MarkdownReportGeneration`, satisfying `SarifMark-Rpt-Markdown`.
+The test name is `SarifMark_MarkdownReportGeneration`, satisfying `SarifMark-Report-Markdown`.
 
 ### RunEnforcementTest
 
@@ -61,8 +61,8 @@ The test name is `SarifMark_MarkdownReportGeneration`, satisfying `SarifMark-Rpt
 4. Calls `Program.Run` and verifies exit code is non-zero.
 5. Checks the log contains `"Error: Issues found in SARIF file"`.
 
-The test name is `SarifMark_Enforcement`, satisfying `SarifMark-Enf-Mode` and
-`SarifMark-Enf-ExitCode`.
+The test name is `SarifMark_Enforcement`, satisfying `SarifMark-Enforce-Mode` and
+`SarifMark-Enforce-ExitCode`.
 
 ### RunValidationTest
 
@@ -87,8 +87,8 @@ validation logic distinct and independently readable.
 
 `WriteResultsFile` inspects the file extension of `context.ResultsFile`:
 
-- `.trx` → `TrxSerializer.Serialize`. This satisfies `SarifMark-Val-TrxFormat`.
-- `.xml` → `JUnitSerializer.Serialize`. This satisfies `SarifMark-Val-JUnitFormat`.
+- `.trx` → `TrxSerializer.Serialize`. This satisfies `SarifMark-Validate-TrxFormat`.
+- `.xml` → `JUnitSerializer.Serialize`. This satisfies `SarifMark-Validate-JUnitFormat`.
 - Other → writes an error via `context.WriteError`.
 
 On success, writes `"Results written to <path>"` via `context.WriteLine`. Catches

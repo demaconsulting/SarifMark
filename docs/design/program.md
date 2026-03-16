@@ -10,7 +10,7 @@ appropriate subsystem, and handles top-level exception translation.
 
 The static `Version` property reads the assembly's `AssemblyInformationalVersionAttribute` at
 runtime. If that attribute is absent it falls back to the `AssemblyVersion`; if that is also
-unavailable it returns `"0.0.0"`. This satisfies requirement `SarifMark-Prg-Version`.
+unavailable it returns `"0.0.0"`. This satisfies requirement `SarifMark-Program-Version`.
 
 ## Main Method
 
@@ -23,7 +23,7 @@ unavailable it returns `"0.0.0"`. This satisfies requirement `SarifMark-Prg-Vers
 `ArgumentException` and `InvalidOperationException` are caught, written to `Console.Error`, and
 translated to exit code 1. Any other exception prints its message to `Console.Error` and is
 then re-thrown so the runtime generates an event-log entry. This satisfies requirements
-`SarifMark-Prg-Main` and `SarifMark-Prg-Main-Exceptions`.
+`SarifMark-Program-Main` and `SarifMark-Program-Main-Exceptions`.
 
 ## Run Method
 
@@ -38,14 +38,14 @@ returns after the first matching condition.
 | 3        | `context.Validate` | Call `Validation.Run` and return       |
 | 4        | *(default)*        | Call `ProcessSarifAnalysis` and return |
 
-This satisfies requirement `SarifMark-Prg-Run`.
+This satisfies requirement `SarifMark-Program-Run`.
 
 ## PrintBanner Method
 
 `PrintBanner` is a private helper called by `Run` immediately after the version check. It writes
 two lines to the context output: the tool version string (e.g. `SarifMark version 1.2.3`) and the
 copyright notice (`Copyright (c) DEMA Consulting`), followed by a blank line. This satisfies
-requirement `SarifMark-Prg-Banner`.
+requirement `SarifMark-Program-Banner`.
 
 ## PrintHelp Method
 
@@ -64,7 +64,7 @@ to the context output, listing every supported option with its flag syntax and a
 - `--report-depth <depth>` — markdown header depth for the report (default: 1)
 - `--heading <text>` — custom heading for the report (default: `[ToolName] Analysis`)
 
-This satisfies requirement `SarifMark-Prg-Help`.
+This satisfies requirement `SarifMark-Program-Help`.
 
 ## ProcessSarifAnalysis Method
 
@@ -86,7 +86,7 @@ execution sequence is:
    `UnauthorizedAccessException`, `ArgumentException`, and `NotSupportedException` are caught and
    routed through `context.WriteError`.
 
-This satisfies requirement `SarifMark-Prg-SarifAnalysis`.
+This satisfies requirement `SarifMark-Program-SarifAnalysis`.
 
 ## Cross-References
 

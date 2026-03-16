@@ -16,7 +16,7 @@ directory from `Guid`-based file names.
 ### Null Checks
 
 Both `basePath` and `relativePath` are validated with `ArgumentNullException.ThrowIfNull` before
-any other processing. This satisfies requirement `SarifMark-PH-NullCheck`.
+any other processing. This satisfies requirement `SarifMark-PathHelpers-NullCheck`.
 
 ### Pre-Combination Check
 
@@ -26,8 +26,8 @@ Before calling `Path.Combine`, the method inspects `relativePath` directly:
 - If `Path.IsPathRooted(relativePath)` returns `true`, `ArgumentException` is thrown.
 
 These checks reject the most common path-traversal patterns before any file-system operations
-are performed. This satisfies requirements `SarifMark-PH-PreCombineCheck` and
-`SarifMark-PH-RootedCheck`.
+are performed. This satisfies requirements `SarifMark-PathHelpers-PreCombineCheck` and
+`SarifMark-PathHelpers-RootedCheck`.
 
 ### Path Combination
 
@@ -41,12 +41,12 @@ As a defense-in-depth measure, the method resolves both paths using `Path.GetFul
 calls `Path.GetRelativePath(fullBasePath, fullCombinedPath)`. If the resulting relative string
 starts with `".."` or is itself rooted, `ArgumentException` is thrown. This second check catches
 any edge cases that might survive the pre-combination string test on a given operating system.
-This satisfies requirement `SarifMark-PH-PostCombineCheck`.
+This satisfies requirement `SarifMark-PathHelpers-PostCombineCheck`.
 
 ### Return Value
 
 On success, the non-resolved combined path (the direct result of `Path.Combine`) is returned.
-This satisfies requirement `SarifMark-PH-SafeCombine`.
+This satisfies requirement `SarifMark-PathHelpers-SafeCombine`.
 
 ## Cross-References
 

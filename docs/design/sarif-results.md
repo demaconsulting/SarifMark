@@ -20,7 +20,7 @@ only through `Read`; the record is immutable once constructed.
 | `Results`     | `IReadOnlyList<SarifResult>` | Collection of non-suppressed results    |
 | `ResultCount` | `int`                        | Total number of results (derived count) |
 
-These satisfy requirement `SarifMark-SRs-Properties`.
+These satisfy requirement `SarifMark-SarifResults-Properties`.
 
 ## Read Method
 
@@ -28,19 +28,19 @@ The static `Read(string filePath)` method loads and parses a SARIF 2.1.0 file th
 six-step pipeline:
 
 1. **Path validation** — throws `ArgumentException` if `filePath` is null, empty, or
-   whitespace. This satisfies `SarifMark-SRs-ValidatePath`.
+   whitespace. This satisfies `SarifMark-SarifResults-ValidatePath`.
 2. **File existence** — throws `FileNotFoundException` if the file does not exist on disk.
-   This satisfies `SarifMark-SRs-ValidatePath`.
+   This satisfies `SarifMark-SarifResults-ValidatePath`.
 3. **JSON parsing** — reads the file with `File.ReadAllText` and parses it with
    `JsonDocument.Parse`. A `JsonException` is translated to `InvalidOperationException`.
-   This satisfies `SarifMark-SRs-ValidateStructure`.
+   This satisfies `SarifMark-SarifResults-ValidateStructure`.
 4. **Structure validation** — delegates to `ValidateSarifStructure` to verify the `version`
    and `runs` fields and return the first run element. This satisfies
-   `SarifMark-SRs-ValidateStructure`.
+   `SarifMark-SarifResults-ValidateStructure`.
 5. **Tool extraction** — delegates to `ExtractToolInformation` to retrieve `ToolName` and
-   `ToolVersion` from `tool.driver`. This satisfies `SarifMark-SRs-ExtractTool`.
+   `ToolVersion` from `tool.driver`. This satisfies `SarifMark-SarifResults-ExtractTool`.
 6. **Result parsing** — delegates to `ParseResults` to iterate all non-suppressed results.
-   This satisfies `SarifMark-SRs-ParseResults` and `SarifMark-SRs-FilterSuppressions`.
+   This satisfies `SarifMark-SarifResults-ParseResults` and `SarifMark-SarifResults-FilterSuppressions`.
 
 Together, steps 1–6 form the complete SARIF reading pipeline.
 
@@ -52,14 +52,14 @@ Together, steps 1–6 form the complete SARIF reading pipeline.
 - A `runs` array that is non-empty (absence or empty array throws `InvalidOperationException`).
 
 It returns the first element of the `runs` array for further processing. This satisfies
-requirement `SarifMark-SRs-ValidateStructure`.
+requirement `SarifMark-SarifResults-ValidateStructure`.
 
 ## ExtractToolInformation Method
 
 `ExtractToolInformation` navigates from the run element to `tool.driver`, throwing
 `InvalidOperationException` if either `tool` or `driver` is absent. It reads the `name` property
 from `driver`, defaulting to `"Unknown"` if absent, then delegates to `ExtractToolVersion` for the
-version string. This satisfies requirement `SarifMark-SRs-ExtractTool`.
+version string. This satisfies requirement `SarifMark-SarifResults-ExtractTool`.
 
 ## ExtractToolVersion Method
 
@@ -72,22 +72,22 @@ version string. This satisfies requirement `SarifMark-SRs-ExtractTool`.
 | 3        | `dottedQuadFileVersion`  |
 
 The first field whose value is non-null and non-whitespace is returned. If none of the three fields
-yields a value, `"Unknown"` is returned. This satisfies requirement `SarifMark-SRs-VersionPriority`.
+yields a value, `"Unknown"` is returned. This satisfies requirement `SarifMark-SarifResults-VersionPriority`.
 
 ## ParseResults Method
 
 `ParseResults` iterates the `results` JSON array within the run element. If the array is absent or
 not an array, an empty list is returned. For each element, `IsSuppressed` checks whether a
 non-empty `suppressions` array is present; suppressed entries are skipped. Each remaining element
-is parsed into a `SarifResult` record. This satisfies requirements `SarifMark-SRs-ParseResults`
-and `SarifMark-SRs-FilterSuppressions`.
+is parsed into a `SarifResult` record. This satisfies requirements `SarifMark-SarifResults-ParseResults`
+and `SarifMark-SarifResults-FilterSuppressions`.
 
 ## ToMarkdown Method
 
 `ToMarkdown(int depth, string? heading = null)` generates a markdown string from the results:
 
 1. **Depth validation** — throws `ArgumentOutOfRangeException` if `depth` is less than 1 or
-   greater than 6. This satisfies `SarifMark-SRs-ValidateDepth`.
+   greater than 6. This satisfies `SarifMark-SarifResults-ValidateDepth`.
 2. **Header** — calls `AppendHeader` to emit the main heading (using `heading` if provided, or
    `"[ToolName] Analysis"` by default) followed by a `**Tool:**` line with name and version.
    The sub-heading level is `min(depth + 1, 6)`.
@@ -95,7 +95,7 @@ and `SarifMark-SRs-FilterSuppressions`.
    result count formatted by `FormatFoundText`, and one line per result formatted by
    `FormatLocation`.
 
-This satisfies requirement `SarifMark-SRs-ToMarkdown`.
+This satisfies requirement `SarifMark-SarifResults-ToMarkdown`.
 
 ## FormatLocation Method
 
@@ -107,7 +107,7 @@ This satisfies requirement `SarifMark-SRs-ToMarkdown`.
 | set          | null         | `uri`               |
 | set          | set          | `uri(startLine)`    |
 
-This satisfies requirement `SarifMark-SRs-FormatLocation`.
+This satisfies requirement `SarifMark-SarifResults-FormatLocation`.
 
 ## FormatFoundText Method
 
@@ -119,7 +119,7 @@ This satisfies requirement `SarifMark-SRs-FormatLocation`.
 | `1`     | Found 1 {singularNoun}        |
 | `> 1`   | Found {count} {singularNoun}s |
 
-This satisfies requirement `SarifMark-SRs-FormatCount`.
+This satisfies requirement `SarifMark-SarifResults-FormatCount`.
 
 ## Cross-References
 

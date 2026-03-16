@@ -9,9 +9,9 @@ markdown reports from the extracted results. It consists of two records:
 logic). This layer satisfies requirements `SarifMark-Sarif-Reading`,
 `SarifMark-Sarif-Validation`, `SarifMark-Sarif-ToolInfo`, `SarifMark-Sarif-Results`,
 `SarifMark-Sarif-Locations`, `SarifMark-Sarif-FilePaths`, `SarifMark-Sarif-Required`,
-`SarifMark-Sarif-Processing`, `SarifMark-Rpt-Markdown`, `SarifMark-Rpt-Depth`,
-`SarifMark-Rpt-Counts`, `SarifMark-Rpt-Locations`, `SarifMark-Rpt-Headings`, and
-`SarifMark-Rpt-LineBreaks`.
+`SarifMark-Sarif-Processing`, `SarifMark-Report-Markdown`, `SarifMark-Report-Depth`,
+`SarifMark-Report-Counts`, `SarifMark-Report-Locations`, `SarifMark-Report-Headings`, and
+`SarifMark-Report-LineBreaks`.
 
 ## Architecture
 
@@ -46,8 +46,8 @@ The SARIF and reporting layer uses a two-record design:
 `SarifResults.ToMarkdown` generates a markdown string from the loaded results. It
 validates the heading depth (1–6), emits a configurable heading with tool attribution, and
 formats each result with location information and result counts. This satisfies
-`SarifMark-Rpt-Markdown`, `SarifMark-Rpt-Depth`, `SarifMark-Rpt-Headings`,
-`SarifMark-Rpt-Counts`, `SarifMark-Rpt-Locations`, and `SarifMark-Rpt-LineBreaks`.
+`SarifMark-Report-Markdown`, `SarifMark-Report-Depth`, `SarifMark-Report-Headings`,
+`SarifMark-Report-Counts`, `SarifMark-Report-Locations`, and `SarifMark-Report-LineBreaks`.
 
 ## CLI Integration
 
