@@ -99,13 +99,14 @@ This satisfies requirement `SarifMark-SarifResults-ToMarkdown`.
 
 ## FormatLocation Method
 
-`FormatLocation(string? uri, int? startLine)` produces the location prefix for each result line:
+`FormatLocation(string? uri, int? startLine)` produces the location prefix for each result line,
+treating a `uri` that is `null`, empty, or consists only of whitespace as missing:
 
-| `uri`        | `startLine`  | Output              |
-|--------------|--------------|---------------------|
-| null / empty | any          | `(no location)`     |
-| set          | null         | `uri`               |
-| set          | set          | `uri(startLine)`    |
+| `uri`                     | `startLine`  | Output           |
+|---------------------------|--------------|------------------|
+| null / empty / whitespace | any          | `(no location)`  |
+| set                       | null         | `uri`            |
+| set                       | set          | `uri(startLine)` |
 
 This satisfies requirement `SarifMark-SarifResults-FormatLocation`.
 
