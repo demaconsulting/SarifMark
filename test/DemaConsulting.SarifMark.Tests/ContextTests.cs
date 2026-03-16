@@ -263,6 +263,8 @@ public class ContextTests
     {
         // Arrange
         var logFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
+        bool logFileExists = false;
+        string? logContent = null;
 
         try
         {
@@ -271,15 +273,33 @@ public class ContextTests
             context.WriteLine("Test message");
 
             // Assert - Dispose to flush and close the log file
+            // Capture file existence and content for assertions
+            logFileExists = File.Exists(logFile);
+            if (logFileExists)
+            {
+                logContent = File.ReadAllText(logFile);
+            }
         }
         finally
         {
-            // Assert - Verify the log file was created and contains the message
-            Assert.IsTrue(File.Exists(logFile), "Log file should have been created");
-            var logContent = File.ReadAllText(logFile);
-            Assert.Contains("Test message", logContent);
-            File.Delete(logFile);
+            // Cleanup - delete the log file regardless of assertion outcomes
+            try
+            {
+                if (File.Exists(logFile))
+                {
+                    File.Delete(logFile);
+                }
+            }
+            catch
+            {
+                // Ignore cleanup failures
+            }
         }
+
+        // Assert - Verify the log file was created and contains the message
+        Assert.IsTrue(logFileExists, "Log file should have been created");
+        Assert.IsNotNull(logContent, "Log file content should have been read");
+        Assert.Contains("Test message", logContent);
     }
 
     /// <summary>
