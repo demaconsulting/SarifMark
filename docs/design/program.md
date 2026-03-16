@@ -21,8 +21,9 @@ unavailable it returns `"0.0.0"`. This satisfies requirement `SarifMark-Prg-Vers
 3. Returns `context.ExitCode` to the shell.
 
 `ArgumentException` and `InvalidOperationException` are caught, written to `Console.Error`, and
-translated to exit code 1. Any other exception is re-thrown so the runtime generates an event-log
-entry. This satisfies requirements `SarifMark-Prg-Main` and `SarifMark-Prg-Main-Exceptions`.
+translated to exit code 1. Any other exception prints its message to `Console.Error` and is
+then re-thrown so the runtime generates an event-log entry. This satisfies requirements
+`SarifMark-Prg-Main` and `SarifMark-Prg-Main-Exceptions`.
 
 ## Run Method
 
@@ -72,15 +73,17 @@ execution sequence is:
 
 1. Validates that `context.SarifFile` is non-null and non-whitespace; if not, calls
    `context.WriteError` and returns.
-2. Calls `SarifResults.Read(context.SarifFile)` to load the SARIF file. Catches
-   `FileNotFoundException` and `InvalidOperationException`, routing them through
-   `context.WriteError` and returning on failure.
+2. Writes the SARIF file path and a `"Reading SARIF file..."` status message, then calls
+   `SarifResults.Read(context.SarifFile)` to load the file. Catches `FileNotFoundException`
+   and `InvalidOperationException`, routing them through `context.WriteError` and returning
+   on failure.
 3. Reports the tool name, tool version, and result count via `context.WriteLine`.
 4. If `context.Enforce` is set and the result count is greater than zero, calls
    `context.WriteError("Error: Issues found in SARIF file")`.
-5. If `context.ReportFile` is set, calls `sarifResults.ToMarkdown` and writes the result to
-   the specified file with `File.WriteAllText`. I/O and permission exceptions are caught and
-   routed through `context.WriteError`.
+5. If `context.ReportFile` is set, writes a `"Writing report to..."` progress message, calls
+   `sarifResults.ToMarkdown` and writes the result to the specified file with
+   `File.WriteAllText`, then writes `"Report generated successfully."` on success. I/O and
+   permission exceptions are caught and routed through `context.WriteError`.
 
 This satisfies requirement `SarifMark-Prg-SarifAnalysis`.
 
