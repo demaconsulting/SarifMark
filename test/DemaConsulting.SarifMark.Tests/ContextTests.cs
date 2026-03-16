@@ -270,12 +270,13 @@ public class ContextTests
 
         try
         {
-            // Act
-            using var context = Context.Create(["--log", logFile]);
-            context.WriteLine("Test message");
+            // Act - dispose the context so the log file is flushed and closed before reading
+            using (var context = Context.Create(["--log", logFile]))
+            {
+                context.WriteLine("Test message");
+            }
 
-            // Assert - Dispose to flush and close the log file
-            // Capture file existence and content for assertions
+            // Assert - context is disposed; file handle is closed and safe to read
             logFileExists = File.Exists(logFile);
             if (logFileExists)
             {
