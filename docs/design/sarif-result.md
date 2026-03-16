@@ -36,7 +36,5 @@ every `SarifResult` in circulation has been produced through the validated parsi
 
 ## Cross-References
 
-See [sarif-results.md] for `SarifResults.Read`, which constructs `SarifResult` instances during
-SARIF file parsing.
-
-[sarif-results.md]: sarif-results.md
+See the SarifResults Record document for `SarifResults.Read`, which constructs `SarifResult`
+instances during SARIF file parsing.

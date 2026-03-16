@@ -50,6 +50,5 @@ This satisfies requirement `SarifMark-PH-SafeCombine`.
 
 ## Cross-References
 
-See [validation.md] for the `TemporaryDirectory` nested class that calls `SafePathCombine`.
-
-[validation.md]: validation.md
+See the Self-Validation document for the `TemporaryDirectory` nested class that calls
+`SafePathCombine`.

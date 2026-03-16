@@ -88,6 +88,5 @@ This satisfies requirement `SarifMark-Ctx-Dispose`.
 
 ## Cross-References
 
-See [program.md] for how `Context` is constructed and consumed by `Program.Main` and `Program.Run`.
-
-[program.md]: program.md
+See the Program Class document for how `Context` is constructed and consumed by `Program.Main`
+and `Program.Run`.

@@ -123,8 +123,6 @@ This satisfies requirement `SarifMark-SRs-FormatCount`.
 
 ## Cross-References
 
-See [sarif-result.md] for the `SarifResult` record that `ParseResults` produces. See
-[program.md] for how `Read` and `ToMarkdown` are called from `ProcessSarifAnalysis`.
-
-[sarif-result.md]: sarif-result.md
-[program.md]: program.md
+See the SarifResult Record document for the `SarifResult` record that `ParseResults` produces.
+See the Program Class document for how `Read` and `ToMarkdown` are called from
+`ProcessSarifAnalysis`.

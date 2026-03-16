@@ -4,8 +4,8 @@
 
 The SARIF and reporting layer is responsible for reading SARIF 2.1.0 files and generating
 markdown reports from the extracted results. It consists of two records:
-[`SarifResult`][sarif-result-md] (a single result entry) and
-[`SarifResults`][sarif-results-md] (the full results collection with reading and reporting
+`SarifResult` (a single result entry) and
+`SarifResults` (the full results collection with reading and reporting
 logic). This layer satisfies requirements `SarifMark-Sarif-Reading`,
 `SarifMark-Sarif-Validation`, `SarifMark-Sarif-ToolInfo`, `SarifMark-Sarif-Results`,
 `SarifMark-Sarif-Locations`, `SarifMark-Sarif-FilePaths`, `SarifMark-Sarif-Required`,
@@ -19,12 +19,12 @@ The SARIF and reporting layer uses a two-record design:
 
 - **`SarifResult`** is an immutable record representing a single static analysis finding.
   It stores the rule identifier, severity level, message, optional file URI, and optional
-  start line. It is constructed internally by the parsing pipeline. See [sarif-result.md]
-  for class-level details.
+  start line. It is constructed internally by the parsing pipeline. See the SarifResult
+  Record document for class-level details.
 
 - **`SarifResults`** holds tool metadata and the parsed list of results. It provides the
   static `Read` method for loading a SARIF file and the `ToMarkdown` method for generating
-  a markdown report. See [sarif-results.md] for class-level details.
+  a markdown report. See the SarifResults Record document for class-level details.
 
 ## Reading Pipeline
 
@@ -54,13 +54,9 @@ formats each result with location information and result counts. This satisfies
 The requirement `SarifMark-Sarif-Required` (the tool shall require the `--sarif` parameter
 for analysis) is enforced at the command-line layer rather than within this library. The
 `ProcessSarifAnalysis` method in `Program.cs` validates that `--sarif` is provided before
-invoking the SARIF reading layer. See [command-line.md] for full details.
+invoking the SARIF reading layer. See the Command Line document for full details.
 
 ## Class Details
 
-- [SarifResult record][sarif-result-md] — immutable value type for a single analysis finding
-- [SarifResults record][sarif-results-md] — SARIF file reading and markdown report generation
-
-[sarif-result-md]: sarif-result.md
-[sarif-results-md]: sarif-results.md
-[command-line.md]: command-line.md
+- **SarifResult record** — immutable value type for a single analysis finding
+- **SarifResults record** — SARIF file reading and markdown report generation

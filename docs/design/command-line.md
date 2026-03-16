@@ -4,8 +4,8 @@
 
 The command-line layer is responsible for parsing command-line arguments, routing program
 flow to the appropriate subsystem, and managing all output (console, error, and log file).
-It consists of two classes: [`Program`][program-md] (the entry point) and
-[`Context`][context-md] (the argument and output container). This layer satisfies
+It consists of two classes: `Program` (the entry point) and
+`Context` (the argument and output container). This layer satisfies
 requirements `SarifMark-Cli-Interface`, `SarifMark-Cli-Version`, `SarifMark-Cli-Help`,
 `SarifMark-Cli-Silent`, `SarifMark-Cli-Log`, `SarifMark-Cli-Enforce`, and
 `SarifMark-Cli-InvalidArgs`.
@@ -15,13 +15,13 @@ requirements `SarifMark-Cli-Interface`, `SarifMark-Cli-Version`, `SarifMark-Cli-
 The command-line layer uses a two-class design:
 
 - **`Program`** is the static entry point. It owns `Main`, constructs a `Context`, and
-  dispatches execution to the appropriate subsystem via priority-ordered logic. See
-  [program.md] for class-level details.
+  dispatches execution to the appropriate subsystem via priority-ordered logic. See the
+  Program Class document for class-level details.
 
 - **`Context`** is a sealed, disposable container for all parsed command-line state and
   output routing. It accumulates argument values during parsing and provides
-  `WriteLine`/`WriteError` methods used throughout the tool. See [context.md] for
-  class-level details.
+  `WriteLine`/`WriteError` methods used throughout the tool. See the Context Class document
+  for class-level details.
 
 ## Dispatch Model
 
@@ -48,8 +48,5 @@ optionally writes a markdown report. This satisfies requirements `SarifMark-Sari
 
 ## Class Details
 
-- [Program class][program-md] — entry point, dispatch, and SARIF analysis orchestration
-- [Context class][context-md] — argument parsing and output routing
-
-[program-md]: program.md
-[context-md]: context.md
+- **Program class** — entry point, dispatch, and SARIF analysis orchestration
+- **Context class** — argument parsing and output routing

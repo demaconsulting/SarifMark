@@ -86,8 +86,5 @@ This satisfies requirement `SarifMark-Prg-SarifAnalysis`.
 
 ## Cross-References
 
-See [context.md] for the `Context` class and [sarif-results.md] for the `SarifResults.Read` and
-`ToMarkdown` methods used in step 2 and step 5 above.
-
-[context.md]: context.md
-[sarif-results.md]: sarif-results.md
+See the Context Class document for the `Context` class and the SarifResults Record document
+for the `SarifResults.Read` and `ToMarkdown` methods used in step 2 and step 5 above.
