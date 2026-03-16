@@ -67,6 +67,8 @@ public class ContextTests
 
         // Assert
         Assert.IsTrue(context.Version);
+        Assert.IsFalse(context.Help);
+        Assert.AreEqual(0, context.ExitCode);
     }
 
     /// <summary>
