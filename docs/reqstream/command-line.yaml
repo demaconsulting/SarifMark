@@ -10,6 +10,9 @@ sections:
               A command-line interface enables automation, scripting, and integration into CI/CD pipelines,
               making the tool suitable for DevOps workflows and batch processing scenarios.
             tags: [public]
+            children:
+              - SarifMark-Prg-Main
+              - SarifMark-Ctx-Create
             tests:
               - IntegrationTest_VersionFlag_OutputsVersion
               - IntegrationTest_HelpFlag_OutputsUsageInformation
@@ -20,6 +23,9 @@ sections:
               Version information allows users to identify the tool version for troubleshooting, compatibility
               verification, and ensuring consistent behavior across different environments.
             tags: [public]
+            children:
+              - SarifMark-Prg-Version
+              - SarifMark-Ctx-VersionFlag
             tests:
               - IntegrationTest_VersionFlag_OutputsVersion
               - Context_Create_VersionFlag_SetsVersionTrue
@@ -30,6 +36,10 @@ sections:
               Help information improves discoverability and usability by providing users with guidance on
               available options, parameters, and usage patterns without consulting external documentation.
             tags: [public]
+            children:
+              - SarifMark-Ctx-HelpFlag
+              - SarifMark-Prg-Banner
+              - SarifMark-Prg-Help
             tests:
               - IntegrationTest_HelpFlag_OutputsUsageInformation
               - Context_Create_HelpFlag_SetsHelpTrue
@@ -40,6 +50,8 @@ sections:
               Silent mode enables cleaner integration into automated workflows and CI/CD pipelines where console
               noise needs to be minimized, while still allowing log files to capture detailed information.
             tags: [public]
+            children:
+              - SarifMark-Ctx-SilentFlag
             tests:
               - IntegrationTest_SilentFlag_SuppressesOutput
 
@@ -49,6 +61,8 @@ sections:
               Log file support enables persistent record-keeping, debugging, and audit trails, especially valuable
               in automated environments where console output may not be readily available.
             tags: [public]
+            children:
+              - SarifMark-Ctx-LogParam
             tests:
               - IntegrationTest_LogFile_WritesOutputToFile
 
@@ -58,6 +72,8 @@ sections:
               Quality gate enforcement enables the tool to act as a quality gate in CI/CD pipelines, failing
               builds when issues are detected and ensuring code quality standards are maintained.
             tags: [public]
+            children:
+              - SarifMark-Ctx-EnforceFlag
             tests:
               - SarifMark_Enforcement
               - IntegrationTest_EnforceFlagWithIssues_ReturnsError
@@ -68,5 +84,8 @@ sections:
               Rejecting unknown arguments prevents silent failures from typos or incorrect parameters, ensuring
               users receive immediate feedback about misconfigured commands.
             tags: [public]
+            children:
+              - SarifMark-Ctx-UnknownArgs
+              - SarifMark-Prg-Main-Exceptions
             tests:
               - IntegrationTest_UnknownArgument_ShowsError

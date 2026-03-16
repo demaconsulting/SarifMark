@@ -1,6 +1,6 @@
 ---
 sections:
-  - title: Internal Functionality
+  - title: Design Specifications
     sections:
       - title: PathHelpers Class
         requirements:

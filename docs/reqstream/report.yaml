@@ -10,6 +10,8 @@ sections:
               Markdown report generation transforms machine-readable SARIF into human-readable documentation,
               enabling better understanding and communication of analysis results across development teams.
             tags: [public]
+            children:
+              - SarifMark-SRs-ToMarkdown
             tests:
               - IntegrationTest_GenerateReport_CreatesReportFile
               - SarifMark_MarkdownReportGeneration
@@ -20,6 +22,9 @@ sections:
               Configurable heading depth allows reports to integrate seamlessly into existing documentation
               hierarchies, preventing heading level conflicts when reports are embedded in larger documents.
             tags: [public]
+            children:
+              - SarifMark-Ctx-ReportDepthParam
+              - SarifMark-SRs-ValidateDepth
             tests:
               - IntegrationTest_ReportDepth_IsConfigurable
 
@@ -29,6 +34,8 @@ sections:
               Result counts provide a quick summary of analysis findings, helping users understand the scope of
               issues at a glance and track improvements over time.
             tags: [public]
+            children:
+              - SarifMark-SRs-FormatCount
             tests:
               - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
               - SarifResults_ToMarkdown_OneResult_UsesSingularForm
@@ -39,6 +46,8 @@ sections:
               Displaying location information enables developers to quickly navigate to the source of issues,
               making the reports actionable and reducing time spent searching for problematic code.
             tags: [public]
+            children:
+              - SarifMark-SRs-FormatLocation
             tests:
               - SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
               - SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
@@ -49,6 +58,9 @@ sections:
               Custom headings allow users to tailor reports to their documentation standards and naming
               conventions, improving consistency across project documentation.
             tags: [public]
+            children:
+              - SarifMark-Ctx-HeadingParam
+              - SarifMark-SRs-ToMarkdown
             tests:
               - SarifResults_ToMarkdown_CustomHeading_UsesProvidedHeading
               - SarifResults_ToMarkdown_NullHeading_UsesDefaultHeading
@@ -61,5 +73,7 @@ sections:
               Proper line breaks between results ensure readability and visual separation in generated markdown,
               making it easier to distinguish between different findings in the report.
             tags: [public]
+            children:
+              - SarifMark-SRs-ToMarkdown
             tests:
               - SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks

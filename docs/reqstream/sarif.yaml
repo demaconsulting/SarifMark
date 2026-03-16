@@ -10,6 +10,8 @@ sections:
               Support for SARIF 2.1.0 is essential as it is the standard format for static analysis results,
               enabling interoperability with a wide range of analysis tools and platforms.
             tags: [public]
+            children:
+              - SarifMark-SRs-ParseResults
             tests:
               - SarifMark_SarifReading
               - IntegrationTest_ValidSarifFile_ProcessesSuccessfully
@@ -20,6 +22,9 @@ sections:
               Format validation ensures the tool processes only well-formed SARIF files, preventing runtime
               errors and providing clear feedback when inputs are malformed or corrupted.
             tags: [public]
+            children:
+              - SarifMark-SRs-ValidatePath
+              - SarifMark-SRs-ValidateStructure
             tests:
               - SarifResults_Read_InvalidJson_ThrowsInvalidOperationException
               - SarifResults_Read_MissingVersion_ThrowsInvalidOperationException
@@ -32,6 +37,9 @@ sections:
               Extracting tool information enables reports to identify which analysis tool generated the results,
               providing context and traceability for findings in the generated documentation.
             tags: [public]
+            children:
+              - SarifMark-SRs-ExtractTool
+              - SarifMark-SRs-VersionPriority
             tests:
               - SarifResults_Read_MissingTool_ThrowsInvalidOperationException
               - SarifResults_Read_MissingDriver_ThrowsInvalidOperationException
@@ -44,6 +52,9 @@ sections:
               Result extraction is the core functionality that enables conversion of analysis findings into
               readable markdown reports, making issues accessible to developers and stakeholders.
             tags: [public]
+            children:
+              - SarifMark-SRs-ParseResults
+              - SarifMark-SRs-FilterSuppressions
             tests:
               - SarifResults_Read_NoResults_ReturnsValidResults
               - SarifResults_Read_EmptyResults_ReturnsValidResults
@@ -55,6 +66,9 @@ sections:
               Location information allows users to quickly identify where issues exist in their codebase,
               improving the actionability of analysis results by pinpointing specific files and lines.
             tags: [public]
+            children:
+              - SarifMark-SR-Uri
+              - SarifMark-SR-StartLine
             tests:
               - SarifResults_Read_WithLocations_ReturnsResultsWithLocationData
 
@@ -64,6 +78,8 @@ sections:
               Path validation ensures clear error messages when files are missing or incorrectly specified,
               improving user experience and preventing confusing runtime failures.
             tags: [public]
+            children:
+              - SarifMark-SRs-ValidatePath
             tests:
               - SarifResults_Read_NullPath_ThrowsArgumentException
               - SarifResults_Read_EmptyPath_ThrowsArgumentException
@@ -76,6 +92,8 @@ sections:
               Requiring explicit SARIF file specification ensures intentional operation and prevents accidental
               execution without proper input, improving tool safety and predictability.
             tags: [public]
+            children:
+              - SarifMark-Prg-SarifAnalysis
             tests:
               - IntegrationTest_MissingSarifParameter_ShowsError
 
@@ -85,5 +103,7 @@ sections:
               Successful processing of valid SARIF files is the fundamental capability that enables the tool to
               fulfill its primary purpose of converting analysis results to markdown documentation.
             tags: [public]
+            children:
+              - SarifMark-Prg-SarifAnalysis
             tests:
               - IntegrationTest_ValidSarifFile_ProcessesSuccessfully

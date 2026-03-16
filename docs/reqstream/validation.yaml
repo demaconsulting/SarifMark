@@ -10,6 +10,9 @@ sections:
               Self-validation mode enables verification that the tool operates correctly in the user's
               environment, ensuring proper installation and configuration.
             tags: [public]
+            children:
+              - SarifMark-Ctx-ValidateFlag
+              - SarifMark-Vld-Run
             tests:
               - IntegrationTest_ValidateFlag_RunsSelfValidation
 
@@ -19,6 +22,8 @@ sections:
               Writing test results to files enables integration with CI/CD systems and provides persistent
               records of validation outcomes for tracking quality trends and compliance.
             tags: [public]
+            children:
+              - SarifMark-Vld-ResultsFile
             tests:
               - Validation_Run_WithTrxResultsFile_WritesResultsFile
               - Validation_Run_WithXmlResultsFile_WritesResultsFile
@@ -29,6 +34,8 @@ sections:
               TRX format support enables integration with Microsoft testing ecosystems and Azure DevOps,
               providing native compatibility with Visual Studio and .NET tooling.
             tags: [public]
+            children:
+              - SarifMark-Vld-ResultsFile
             tests:
               - Validation_Run_WithTrxResultsFile_WritesResultsFile
 
@@ -38,6 +45,8 @@ sections:
               JUnit format support enables broad compatibility with CI/CD platforms like Jenkins, GitHub Actions,
               and GitLab CI, which commonly use this standard format for test reporting.
             tags: [public]
+            children:
+              - SarifMark-Vld-ResultsFile
             tests:
               - Validation_Run_WithXmlResultsFile_WritesResultsFile
 
@@ -49,6 +58,9 @@ sections:
               Enforcement mode enables the tool to act as a quality gate in CI/CD pipelines, preventing code
               with analysis issues from being merged or deployed, thereby maintaining code quality standards.
             tags: [public]
+            children:
+              - SarifMark-Ctx-EnforceFlag
+              - SarifMark-Prg-SarifAnalysis
             tests:
               - IntegrationTest_EnforceFlagWithIssues_ReturnsError
               - SarifMark_Enforcement
@@ -59,6 +71,9 @@ sections:
               Non-zero exit codes signal failure to CI/CD systems and scripts, enabling automated build failures
               and preventing the progression of problematic code through deployment pipelines.
             tags: [public]
+            children:
+              - SarifMark-Ctx-ExitCode
+              - SarifMark-Ctx-WriteError
             tests:
               - IntegrationTest_EnforceFlagWithIssues_ReturnsError
               - SarifMark_Enforcement
