@@ -11,8 +11,8 @@ sections:
               making the tool suitable for DevOps workflows and batch processing scenarios.
             tags: [public]
             children:
-              - SarifMark-Prg-Main
-              - SarifMark-Ctx-Create
+              - SarifMark-Program-Main
+              - SarifMark-Context-Create
             tests:
               - IntegrationTest_VersionFlag_OutputsVersion
               - IntegrationTest_HelpFlag_OutputsUsageInformation
@@ -24,8 +24,8 @@ sections:
               verification, and ensuring consistent behavior across different environments.
             tags: [public]
             children:
-              - SarifMark-Prg-Version
-              - SarifMark-Ctx-VersionFlag
+              - SarifMark-Program-Version
+              - SarifMark-Context-VersionFlag
             tests:
               - IntegrationTest_VersionFlag_OutputsVersion
               - Context_Create_VersionFlag_SetsVersionTrue
@@ -37,9 +37,9 @@ sections:
               available options, parameters, and usage patterns without consulting external documentation.
             tags: [public]
             children:
-              - SarifMark-Ctx-HelpFlag
-              - SarifMark-Prg-Banner
-              - SarifMark-Prg-Help
+              - SarifMark-Context-HelpFlag
+              - SarifMark-Program-Banner
+              - SarifMark-Program-Help
             tests:
               - IntegrationTest_HelpFlag_OutputsUsageInformation
               - Context_Create_HelpFlag_SetsHelpTrue
@@ -51,7 +51,7 @@ sections:
               noise needs to be minimized, while still allowing log files to capture detailed information.
             tags: [public]
             children:
-              - SarifMark-Ctx-SilentFlag
+              - SarifMark-Context-SilentFlag
             tests:
               - IntegrationTest_SilentFlag_SuppressesOutput
 
@@ -62,7 +62,7 @@ sections:
               in automated environments where console output may not be readily available.
             tags: [public]
             children:
-              - SarifMark-Ctx-LogParam
+              - SarifMark-Context-LogParam
             tests:
               - IntegrationTest_LogFile_WritesOutputToFile
 
@@ -73,7 +73,7 @@ sections:
               builds when issues are detected and ensuring code quality standards are maintained.
             tags: [public]
             children:
-              - SarifMark-Ctx-EnforceFlag
+              - SarifMark-Context-EnforceFlag
             tests:
               - SarifMark_Enforcement
               - IntegrationTest_EnforceFlagWithIssues_ReturnsError
@@ -85,7 +85,7 @@ sections:
               users receive immediate feedback about misconfigured commands.
             tags: [public]
             children:
-              - SarifMark-Ctx-UnknownArgs
-              - SarifMark-Prg-Main-Exceptions
+              - SarifMark-Context-UnknownArgs
+              - SarifMark-Program-Main-Exceptions
             tests:
               - IntegrationTest_UnknownArgument_ShowsError

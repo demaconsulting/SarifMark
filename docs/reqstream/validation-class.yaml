@@ -4,7 +4,7 @@ sections:
     sections:
       - title: Validation Class
         requirements:
-          - id: SarifMark-Vld-Run
+          - id: SarifMark-Validation-Run
             title: The Run method shall orchestrate the header, all tests, summary, and results file in sequence.
             justification: >-
               Sequencing these four phases in a fixed order ensures that every validation run produces a
@@ -14,7 +14,7 @@ sections:
             tests:
               - Validation_Run_ValidContext_RunsAllTests
 
-          - id: SarifMark-Vld-NullCheck
+          - id: SarifMark-Validation-NullCheck
             title: The Run method shall reject a null context by throwing ArgumentNullException.
             justification: >-
               Explicitly rejecting null at the method boundary produces a clear and immediate diagnostic
@@ -24,7 +24,7 @@ sections:
             tests:
               - Validation_Run_NullContext_ThrowsArgumentNullException
 
-          - id: SarifMark-Vld-Header
+          - id: SarifMark-Validation-Header
             title: The PrintValidationHeader method shall emit a system information table before the tests run.
             justification: >-
               Printing platform and runtime details before any tests execute ensures that validation
@@ -34,7 +34,7 @@ sections:
             tests:
               - Validation_Run_ValidContext_PrintsValidationHeader
 
-          - id: SarifMark-Vld-SarifReadingTest
+          - id: SarifMark-Validation-SarifReadingTest
             title: The RunSarifReadingTest method shall verify end-to-end SARIF reading in the self-validation suite.
             justification: >-
               Including a SARIF reading test in self-validation confirms that the installed tool can parse
@@ -44,7 +44,7 @@ sections:
             tests:
               - Validation_Run_ValidContext_RunsAllTests
 
-          - id: SarifMark-Vld-ReportGenerationTest
+          - id: SarifMark-Validation-ReportGenerationTest
             title: The RunMarkdownReportGenerationTest method shall verify end-to-end markdown report generation.
             justification: >-
               Validating report generation as a self-contained test confirms that the full pipeline from
@@ -54,7 +54,7 @@ sections:
             tests:
               - Validation_Run_ValidContext_RunsAllTests
 
-          - id: SarifMark-Vld-EnforcementTest
+          - id: SarifMark-Validation-EnforcementTest
             title: The RunEnforcementTest method shall verify enforcement mode behavior in the self-validation suite.
             justification: >-
               Testing enforcement mode during self-validation ensures that the quality gate capability
@@ -64,7 +64,7 @@ sections:
             tests:
               - Validation_Run_ValidContext_RunsAllTests
 
-          - id: SarifMark-Vld-Summary
+          - id: SarifMark-Validation-Summary
             title: The Run method shall print a pass/fail summary after all tests have executed.
             justification: >-
               A printed summary provides an at-a-glance verdict of the overall validation result without
@@ -74,7 +74,7 @@ sections:
             tests:
               - Validation_Run_ValidContext_PrintsSummary
 
-          - id: SarifMark-Vld-ResultsFile
+          - id: SarifMark-Validation-ResultsFile
             title: The WriteResultsFile method shall write TRX for .trx, JUnit XML for .xml, or error otherwise.
             justification: >-
               Supporting both TRX and JUnit formats maximizes CI/CD platform compatibility, and reporting
@@ -86,7 +86,7 @@ sections:
               - Validation_Run_WithXmlResultsFile_WritesResultsFile
               - Validation_Run_WithUnsupportedResultsFileExtension_WritesError
 
-          - id: SarifMark-Vld-TempDir
+          - id: SarifMark-Validation-TempDir
             title: The TemporaryDirectory helper shall create a temporary directory and delete it on disposal.
             justification: >-
               Creating and cleaning up temporary directories through a disposable helper ensures that

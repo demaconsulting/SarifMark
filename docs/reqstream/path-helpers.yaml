@@ -4,7 +4,7 @@ sections:
     sections:
       - title: PathHelpers Class
         requirements:
-          - id: SarifMark-PH-SafeCombine
+          - id: SarifMark-PathHelpers-SafeCombine
             title: The SafePathCombine method shall combine a base path and a relative path into a validated path.
             justification: >-
               Providing a dedicated combining method keeps path-safety logic centralized and reusable,
@@ -17,7 +17,7 @@ sections:
               - PathHelpers_SafePathCombine_PathWithSubdirectories_CombinesSuccessfully
               - PathHelpers_SafePathCombine_GuidBasedFilename_CombinesSuccessfully
 
-          - id: SarifMark-PH-NullCheck
+          - id: SarifMark-PathHelpers-NullCheck
             title: The SafePathCombine method shall throw ArgumentNullException when either argument is null.
             justification: >-
               Explicit null checks produce clear exceptions at the earliest possible point, preventing
@@ -28,7 +28,7 @@ sections:
               - PathHelpers_SafePathCombine_NullBasePath_ThrowsArgumentNullException
               - PathHelpers_SafePathCombine_NullRelativePath_ThrowsArgumentNullException
 
-          - id: SarifMark-PH-PreCombineCheck
+          - id: SarifMark-PathHelpers-PreCombineCheck
             title: The SafePathCombine method shall reject relative paths containing ".." sequences or rooted paths.
             justification: >-
               Pre-combination checks catch the most common path traversal patterns before any file system
@@ -40,7 +40,7 @@ sections:
               - PathHelpers_SafePathCombine_PathWithDoubleDots_ThrowsArgumentException
               - PathHelpers_SafePathCombine_FilenameWithEmbeddedDots_ThrowsArgumentException
 
-          - id: SarifMark-PH-RootedCheck
+          - id: SarifMark-PathHelpers-RootedCheck
             title: The SafePathCombine method shall reject relative paths that are rooted or absolute.
             justification: >-
               Rejecting rooted relative paths prevents callers from accidentally bypassing the base path
@@ -50,7 +50,7 @@ sections:
             tests:
               - PathHelpers_SafePathCombine_AbsolutePath_ThrowsArgumentException
 
-          - id: SarifMark-PH-PostCombineCheck
+          - id: SarifMark-PathHelpers-PostCombineCheck
             title: The SafePathCombine method shall verify the combined path remains under the base path.
             justification: >-
               A post-combination check adds a second layer of defense by verifying the combined path

@@ -4,7 +4,7 @@ sections:
     sections:
       - title: Program Class
         requirements:
-          - id: SarifMark-Prg-Version
+          - id: SarifMark-Program-Version
             title: The Version property shall read the assembly informational version attribute.
             justification: >-
               Reading the assembly informational version attribute ensures the version string
@@ -14,7 +14,7 @@ sections:
             tests:
               - Program_Main_VersionFlag_DisplaysVersionOnly
 
-          - id: SarifMark-Prg-Main
+          - id: SarifMark-Program-Main
             title: The Main method shall create a Context, call Run, and return the ExitCode.
             justification: >-
               Delegating argument parsing to Context and execution to Run keeps Main focused on
@@ -26,7 +26,7 @@ sections:
               - Program_Main_VersionFlag_DisplaysVersionOnly
               - Program_Main_HelpFlag_DisplaysHelp
 
-          - id: SarifMark-Prg-Main-Exceptions
+          - id: SarifMark-Program-Main-Exceptions
             title: The Main method shall catch ArgumentException and InvalidOperationException and return exit code 1.
             justification: >-
               Catching these two exception types at the top level converts structured error signals from
@@ -37,7 +37,7 @@ sections:
               - Program_Main_NoArguments_ReturnsError
               - Program_Main_UnknownArgument_ReturnsError
 
-          - id: SarifMark-Prg-Run
+          - id: SarifMark-Program-Run
             title: The Run method shall dispatch commands in priority order.
             justification: >-
               Priority-ordered dispatch ensures that informational flags such as version and help are always
@@ -48,7 +48,7 @@ sections:
               - Program_Main_VersionFlag_DisplaysVersionOnly
               - Program_Main_HelpFlag_DisplaysHelp
 
-          - id: SarifMark-Prg-Banner
+          - id: SarifMark-Program-Banner
             title: The PrintBanner method shall emit the tool version and copyright notice.
             justification: >-
               Emitting version and copyright on every non-silent invocation gives users immediate context about
@@ -57,7 +57,7 @@ sections:
             tests:
               - Program_Main_HelpFlag_DisplaysHelp
 
-          - id: SarifMark-Prg-Help
+          - id: SarifMark-Program-Help
             title: The PrintHelp method shall output usage information describing all supported arguments.
             justification: >-
               Comprehensive inline help reduces dependence on external documentation and lets users discover
@@ -67,7 +67,7 @@ sections:
             tests:
               - Program_Main_HelpFlag_DisplaysHelp
 
-          - id: SarifMark-Prg-SarifAnalysis
+          - id: SarifMark-Program-SarifAnalysis
             title: The ProcessSarifAnalysis method shall validate --sarif and orchestrate SARIF processing.
             justification: >-
               Combining path validation, SARIF reading, enforcement checking, and report writing in one method

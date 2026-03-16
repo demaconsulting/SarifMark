@@ -4,7 +4,7 @@ sections:
     sections:
       - title: Context Class
         requirements:
-          - id: SarifMark-Ctx-Create
+          - id: SarifMark-Context-Create
             title: The Context class shall be created via a static factory method.
             justification: >-
               A static factory method centralizes argument parsing and object initialization, ensuring that
@@ -14,7 +14,7 @@ sections:
             tests:
               - Context_Create_NoArguments_ReturnsDefaultContext
 
-          - id: SarifMark-Ctx-VersionFlag
+          - id: SarifMark-Context-VersionFlag
             title: The Create method shall parse the -v and --version flags and set the Version property to true.
             justification: >-
               Recognizing both short and long form of the version flag provides a consistent command-line
@@ -24,7 +24,7 @@ sections:
             tests:
               - Context_Create_VersionFlag_SetsVersionTrue
 
-          - id: SarifMark-Ctx-HelpFlag
+          - id: SarifMark-Context-HelpFlag
             title: The Create method shall parse the -?, -h, and --help flags and set the Help property to true.
             justification: >-
               Supporting multiple help flag aliases accommodates different user conventions and shell
@@ -33,7 +33,7 @@ sections:
             tests:
               - Context_Create_HelpFlag_SetsHelpTrue
 
-          - id: SarifMark-Ctx-SilentFlag
+          - id: SarifMark-Context-SilentFlag
             title: The Create method shall parse the --silent flag and suppress console output when set.
             justification: >-
               Silent mode allows the tool to be embedded in pipelines and scripts without polluting stdout,
@@ -45,7 +45,7 @@ sections:
               - Context_WriteLine_SilentMode_DoesNotWriteToConsole
               - Context_WriteError_SilentMode_DoesNotWriteToConsoleButSetsExitCode
 
-          - id: SarifMark-Ctx-ValidateFlag
+          - id: SarifMark-Context-ValidateFlag
             title: The Create method shall parse the --validate flag and set the Validate property to true.
             justification: >-
               The validate flag activates self-validation mode, enabling the tool to exercise its own core
@@ -55,7 +55,7 @@ sections:
             tests:
               - Context_Create_ValidateFlag_SetsValidateTrue
 
-          - id: SarifMark-Ctx-EnforceFlag
+          - id: SarifMark-Context-EnforceFlag
             title: The Create method shall parse the --enforce flag and set the Enforce property to true.
             justification: >-
               The enforce flag enables quality gate behavior so the tool can signal build failure when SARIF
@@ -64,7 +64,7 @@ sections:
             tests:
               - Context_Create_EnforceFlag_SetsEnforceTrue
 
-          - id: SarifMark-Ctx-SarifParam
+          - id: SarifMark-Context-SarifParam
             title: The Create method shall parse the --sarif parameter and set the SarifFile property.
             justification: >-
               Capturing the SARIF file path in a dedicated property decouples argument parsing from file
@@ -74,7 +74,7 @@ sections:
             tests:
               - Context_Create_SarifParameter_SetsSarifFile
 
-          - id: SarifMark-Ctx-ReportParam
+          - id: SarifMark-Context-ReportParam
             title: The Create method shall parse the --report parameter and set the ReportFile property.
             justification: >-
               A dedicated report file property gives the application a clear output target and allows callers
@@ -83,7 +83,7 @@ sections:
             tests:
               - Context_Create_ReportParameter_SetsReportFile
 
-          - id: SarifMark-Ctx-ReportDepthParam
+          - id: SarifMark-Context-ReportDepthParam
             title: The Create method shall parse --report-depth, validate it is a positive integer, and set ReportDepth.
             justification: >-
               Validating the depth value at parse time prevents invalid heading levels from propagating into
@@ -96,7 +96,7 @@ sections:
               - Context_Create_ReportDepthInvalidValue_ThrowsArgumentException
               - Context_Create_ReportDepthZero_ThrowsArgumentException
 
-          - id: SarifMark-Ctx-HeadingParam
+          - id: SarifMark-Context-HeadingParam
             title: The Create method shall parse the --heading parameter and set the Heading property.
             justification: >-
               Capturing the custom heading in a named property keeps downstream report generation free of
@@ -107,7 +107,7 @@ sections:
               - Context_Create_HeadingArgument_SetsHeading
               - Context_Create_HeadingWithoutValue_ThrowsArgumentException
 
-          - id: SarifMark-Ctx-ResultsParam
+          - id: SarifMark-Context-ResultsParam
             title: The Create method shall parse the --results parameter and set the ResultsFile property.
             justification: >-
               Storing the results file path in a dedicated property cleanly separates argument parsing from
@@ -117,7 +117,7 @@ sections:
             tests:
               - Context_Create_ResultsParameter_SetsResultsFile
 
-          - id: SarifMark-Ctx-LogParam
+          - id: SarifMark-Context-LogParam
             title: The Create method shall parse the --log parameter and open the specified log file for writing.
             justification: >-
               Opening the log file during Context creation ensures that all subsequent output, including early
@@ -128,7 +128,7 @@ sections:
               - Context_Create_LogFile_OpensFileSuccessfully
               - Context_Create_InvalidLogFilePath_ThrowsInvalidOperationException
 
-          - id: SarifMark-Ctx-UnknownArgs
+          - id: SarifMark-Context-UnknownArgs
             title: The ArgumentParser inner class shall throw ArgumentException for any unrecognized argument.
             justification: >-
               Rejecting unknown arguments at parse time prevents silent misconfiguration caused by typos or
@@ -137,7 +137,7 @@ sections:
             tests:
               - Context_Create_UnknownArgument_ThrowsArgumentException
 
-          - id: SarifMark-Ctx-WriteLine
+          - id: SarifMark-Context-WriteLine
             title: The WriteLine method shall write to the console unless silent and to the log file when open.
             justification: >-
               Routing output through a single method enforces consistent silent-mode behavior and log file
@@ -148,7 +148,7 @@ sections:
               - Context_WriteLine_WritesToConsole
               - Context_WriteLine_SilentMode_DoesNotWriteToConsole
 
-          - id: SarifMark-Ctx-WriteError
+          - id: SarifMark-Context-WriteError
             title: The WriteError method shall write to stderr (unless silent), write to the log file when open, and set the ExitCode to 1.
             justification: >-
               Writing errors to stderr separates diagnostic output from the regular output stream, and
@@ -159,7 +159,7 @@ sections:
               - Context_WriteError_WritesToErrorAndSetsExitCode
               - Context_WriteError_SilentMode_DoesNotWriteToConsoleButSetsExitCode
 
-          - id: SarifMark-Ctx-ExitCode
+          - id: SarifMark-Context-ExitCode
             title: The ExitCode property shall start at zero and change to one after the first call to WriteError.
             justification: >-
               A default exit code of zero ensures success is the initial assumption, while transitioning to
@@ -169,7 +169,7 @@ sections:
             tests:
               - Context_ExitCode_StartsAtZero_ChangesToOneAfterError
 
-          - id: SarifMark-Ctx-Dispose
+          - id: SarifMark-Context-Dispose
             title: The Dispose method shall close the log StreamWriter when one is open.
             justification: >-
               Explicitly closing the StreamWriter on disposal ensures all buffered log content is flushed to

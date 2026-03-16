@@ -4,7 +4,7 @@ sections:
     sections:
       - title: SarifResult Record
         requirements:
-          - id: SarifMark-SR-Properties
+          - id: SarifMark-SarifResult-Properties
             title: The SarifResult record shall store RuleId, Level, Message, Uri, and StartLine properties.
             justification: >-
               Capturing all five properties on a single record provides a self-contained representation of
@@ -14,7 +14,7 @@ sections:
             tests:
               - SarifResults_InternalConstructor_CreatesValidInstance
 
-          - id: SarifMark-SR-Uri
+          - id: SarifMark-SarifResult-Uri
             title: The SarifResult record shall store an optional file URI for the result location.
             justification: >-
               Making the URI optional correctly reflects the SARIF specification, where not all results
@@ -24,7 +24,7 @@ sections:
             tests:
               - SarifResults_Read_WithLocations_ReturnsResultsWithLocationData
 
-          - id: SarifMark-SR-StartLine
+          - id: SarifMark-SarifResult-StartLine
             title: The SarifResult record shall store an optional start line number for the result location.
             justification: >-
               An optional start line mirrors the SARIF specification where line information may be absent,
@@ -34,7 +34,7 @@ sections:
             tests:
               - SarifResults_Read_WithLocations_ReturnsResultsWithLocationData
 
-          - id: SarifMark-SR-Internal
+          - id: SarifMark-SarifResult-Internal
             title: The SarifResult record shall only be constructible by internal code.
             justification: >-
               Restricting construction to internal code enforces that SarifResult instances are always

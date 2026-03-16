@@ -11,7 +11,7 @@ sections:
               enabling interoperability with a wide range of analysis tools and platforms.
             tags: [public]
             children:
-              - SarifMark-SRs-ParseResults
+              - SarifMark-SarifResults-ParseResults
             tests:
               - SarifMark_SarifReading
               - IntegrationTest_ValidSarifFile_ProcessesSuccessfully
@@ -23,8 +23,8 @@ sections:
               errors and providing clear feedback when inputs are malformed or corrupted.
             tags: [public]
             children:
-              - SarifMark-SRs-ValidatePath
-              - SarifMark-SRs-ValidateStructure
+              - SarifMark-SarifResults-ValidatePath
+              - SarifMark-SarifResults-ValidateStructure
             tests:
               - SarifResults_Read_InvalidJson_ThrowsInvalidOperationException
               - SarifResults_Read_MissingVersion_ThrowsInvalidOperationException
@@ -38,8 +38,8 @@ sections:
               providing context and traceability for findings in the generated documentation.
             tags: [public]
             children:
-              - SarifMark-SRs-ExtractTool
-              - SarifMark-SRs-VersionPriority
+              - SarifMark-SarifResults-ExtractTool
+              - SarifMark-SarifResults-VersionPriority
             tests:
               - SarifResults_Read_MissingTool_ThrowsInvalidOperationException
               - SarifResults_Read_MissingDriver_ThrowsInvalidOperationException
@@ -53,8 +53,8 @@ sections:
               readable markdown reports, making issues accessible to developers and stakeholders.
             tags: [public]
             children:
-              - SarifMark-SRs-ParseResults
-              - SarifMark-SRs-FilterSuppressions
+              - SarifMark-SarifResults-ParseResults
+              - SarifMark-SarifResults-FilterSuppressions
             tests:
               - SarifResults_Read_NoResults_ReturnsValidResults
               - SarifResults_Read_EmptyResults_ReturnsValidResults
@@ -67,8 +67,8 @@ sections:
               improving the actionability of analysis results by pinpointing specific files and lines.
             tags: [public]
             children:
-              - SarifMark-SR-Uri
-              - SarifMark-SR-StartLine
+              - SarifMark-SarifResult-Uri
+              - SarifMark-SarifResult-StartLine
             tests:
               - SarifResults_Read_WithLocations_ReturnsResultsWithLocationData
 
@@ -79,7 +79,7 @@ sections:
               improving user experience and preventing confusing runtime failures.
             tags: [public]
             children:
-              - SarifMark-SRs-ValidatePath
+              - SarifMark-SarifResults-ValidatePath
             tests:
               - SarifResults_Read_NullPath_ThrowsArgumentException
               - SarifResults_Read_EmptyPath_ThrowsArgumentException
@@ -93,7 +93,7 @@ sections:
               execution without proper input, improving tool safety and predictability.
             tags: [public]
             children:
-              - SarifMark-Prg-SarifAnalysis
+              - SarifMark-Program-SarifAnalysis
             tests:
               - IntegrationTest_MissingSarifParameter_ShowsError
 
@@ -104,6 +104,6 @@ sections:
               fulfill its primary purpose of converting analysis results to markdown documentation.
             tags: [public]
             children:
-              - SarifMark-Prg-SarifAnalysis
+              - SarifMark-Program-SarifAnalysis
             tests:
               - IntegrationTest_ValidSarifFile_ProcessesSuccessfully

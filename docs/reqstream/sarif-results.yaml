@@ -4,7 +4,7 @@ sections:
     sections:
       - title: SarifResults Record
         requirements:
-          - id: SarifMark-SRs-Properties
+          - id: SarifMark-SarifResults-Properties
             title: The SarifResults record shall expose ToolName, ToolVersion, Results, and ResultCount properties.
             justification: >-
               Exposing these four properties provides consumers with all the information needed to generate
@@ -14,7 +14,7 @@ sections:
             tests:
               - SarifResults_Read_NoResults_ReturnsValidResults
 
-          - id: SarifMark-SRs-ValidatePath
+          - id: SarifMark-SarifResults-ValidatePath
             title: The Read method shall validate the file path is non-null, non-empty, and the file exists.
             justification: >-
               Early path validation produces clear, actionable error messages before any I/O is attempted,
@@ -27,7 +27,7 @@ sections:
               - SarifResults_Read_WhitespacePath_ThrowsArgumentException
               - SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException
 
-          - id: SarifMark-SRs-ValidateStructure
+          - id: SarifMark-SarifResults-ValidateStructure
             title: The Read method shall validate that the SARIF document contains the required version and runs fields.
             justification: >-
               Structural validation at read time ensures that downstream processing always operates on
@@ -40,7 +40,7 @@ sections:
               - SarifResults_Read_MissingRuns_ThrowsInvalidOperationException
               - SarifResults_Read_EmptyRuns_ThrowsInvalidOperationException
 
-          - id: SarifMark-SRs-ExtractTool
+          - id: SarifMark-SarifResults-ExtractTool
             title: The Read method shall extract tool name and version from the driver node.
             justification: >-
               Requiring the tool and driver nodes and extracting a name and version from them ensures that
@@ -53,7 +53,7 @@ sections:
               - SarifResults_Read_MissingToolName_UsesUnknown
               - SarifResults_Read_MissingToolVersion_UsesUnknown
 
-          - id: SarifMark-SRs-VersionPriority
+          - id: SarifMark-SarifResults-VersionPriority
             title: The ExtractToolVersion helper shall use version priority order and fall back to Unknown.
             justification: >-
               The defined priority order matches the SARIF specification's preference ordering and ensures
@@ -68,7 +68,7 @@ sections:
               - SarifResults_Read_AllVersionFields_PrioritizesVersion
               - SarifResults_Read_EmptyVersionField_FallsBackToSemanticVersion
 
-          - id: SarifMark-SRs-ParseResults
+          - id: SarifMark-SarifResults-ParseResults
             title: The ParseResults helper shall collect all result entries into the Results collection.
             justification: >-
               Iterating every entry in the results array, including empty arrays and missing results nodes,
@@ -81,7 +81,7 @@ sections:
               - SarifResults_Read_WithResults_ReturnsValidResults
               - SarifResults_Read_WithLocations_ReturnsResultsWithLocationData
 
-          - id: SarifMark-SRs-FilterSuppressions
+          - id: SarifMark-SarifResults-FilterSuppressions
             title: The ParseResults helper shall skip results that carry a suppression entry.
             justification: >-
               Filtering suppressed results mirrors standard SARIF tooling behavior and ensures that
@@ -91,7 +91,7 @@ sections:
             tests:
               - SarifResults_Read_WithSuppressedResults_ExcludesSuppressedResults
 
-          - id: SarifMark-SRs-ToMarkdown
+          - id: SarifMark-SarifResults-ToMarkdown
             title: The ToMarkdown method shall generate a complete markdown report with heading, tool info, and results.
             justification: >-
               Generating the full report from a single method call provides a cohesive output document and
@@ -105,7 +105,7 @@ sections:
               - SarifResults_ToMarkdown_NoHeadingParameter_UsesDefaultHeading
               - SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks
 
-          - id: SarifMark-SRs-ValidateDepth
+          - id: SarifMark-SarifResults-ValidateDepth
             title: The ToMarkdown method shall validate that the depth argument is between 1 and 6 inclusive.
             justification: >-
               Restricting depth to the valid markdown heading range of 1–6 prevents generation of invalid
@@ -118,7 +118,7 @@ sections:
               - SarifResults_ToMarkdown_Depth3_UsesCorrectHeadingLevels
               - SarifResults_ToMarkdown_Depth6_ProducesCorrectOutput
 
-          - id: SarifMark-SRs-FormatLocation
+          - id: SarifMark-SarifResults-FormatLocation
             title: The FormatLocation helper shall return the most precise location string the data supports.
             justification: >-
               Producing the most precise location string the data supports ensures reports are as actionable
@@ -129,7 +129,7 @@ sections:
               - SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
               - SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
 
-          - id: SarifMark-SRs-FormatCount
+          - id: SarifMark-SarifResults-FormatCount
             title: The FormatFoundText helper shall use singular form for one result and plural form otherwise.
             justification: >-
               Correct singular and plural forms produce grammatically accurate summaries that improve

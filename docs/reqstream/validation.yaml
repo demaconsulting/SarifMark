@@ -4,76 +4,76 @@ sections:
     sections:
       - title: Validation and Testing
         requirements:
-          - id: SarifMark-Val-Mode
+          - id: SarifMark-Validate-Mode
             title: The tool shall support self-validation mode.
             justification: >-
               Self-validation mode enables verification that the tool operates correctly in the user's
               environment, ensuring proper installation and configuration.
             tags: [public]
             children:
-              - SarifMark-Ctx-ValidateFlag
-              - SarifMark-Vld-Run
+              - SarifMark-Context-ValidateFlag
+              - SarifMark-Validation-Run
             tests:
               - IntegrationTest_ValidateFlag_RunsSelfValidation
 
-          - id: SarifMark-Val-ResultFiles
+          - id: SarifMark-Validate-ResultFiles
             title: The tool shall write validation results to test result files.
             justification: >-
               Writing test results to files enables integration with CI/CD systems and provides persistent
               records of validation outcomes for tracking quality trends and compliance.
             tags: [public]
             children:
-              - SarifMark-Vld-ResultsFile
+              - SarifMark-Validation-ResultsFile
             tests:
               - Validation_Run_WithTrxResultsFile_WritesResultsFile
               - Validation_Run_WithXmlResultsFile_WritesResultsFile
 
-          - id: SarifMark-Val-TrxFormat
+          - id: SarifMark-Validate-TrxFormat
             title: The tool shall support TRX format for test results.
             justification: >-
               TRX format support enables integration with Microsoft testing ecosystems and Azure DevOps,
               providing native compatibility with Visual Studio and .NET tooling.
             tags: [public]
             children:
-              - SarifMark-Vld-ResultsFile
+              - SarifMark-Validation-ResultsFile
             tests:
               - Validation_Run_WithTrxResultsFile_WritesResultsFile
 
-          - id: SarifMark-Val-JUnitFormat
+          - id: SarifMark-Validate-JUnitFormat
             title: The tool shall support JUnit format for test results.
             justification: >-
               JUnit format support enables broad compatibility with CI/CD platforms like Jenkins, GitHub Actions,
               and GitLab CI, which commonly use this standard format for test reporting.
             tags: [public]
             children:
-              - SarifMark-Vld-ResultsFile
+              - SarifMark-Validation-ResultsFile
             tests:
               - Validation_Run_WithXmlResultsFile_WritesResultsFile
 
       - title: Quality Enforcement
         requirements:
-          - id: SarifMark-Enf-Mode
+          - id: SarifMark-Enforce-Mode
             title: The tool shall support enforcement mode to fail on issues found.
             justification: >-
               Enforcement mode enables the tool to act as a quality gate in CI/CD pipelines, preventing code
               with analysis issues from being merged or deployed, thereby maintaining code quality standards.
             tags: [public]
             children:
-              - SarifMark-Ctx-EnforceFlag
-              - SarifMark-Prg-SarifAnalysis
+              - SarifMark-Context-EnforceFlag
+              - SarifMark-Program-SarifAnalysis
             tests:
               - IntegrationTest_EnforceFlagWithIssues_ReturnsError
               - SarifMark_Enforcement
 
-          - id: SarifMark-Enf-ExitCode
+          - id: SarifMark-Enforce-ExitCode
             title: The tool shall return non-zero exit code when issues found in enforcement mode.
             justification: >-
               Non-zero exit codes signal failure to CI/CD systems and scripts, enabling automated build failures
               and preventing the progression of problematic code through deployment pipelines.
             tags: [public]
             children:
-              - SarifMark-Ctx-ExitCode
-              - SarifMark-Ctx-WriteError
+              - SarifMark-Context-ExitCode
+              - SarifMark-Context-WriteError
             tests:
               - IntegrationTest_EnforceFlagWithIssues_ReturnsError
               - SarifMark_Enforcement
