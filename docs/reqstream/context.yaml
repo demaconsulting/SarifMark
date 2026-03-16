@@ -23,6 +23,7 @@ sections:
             tags: [internal]
             tests:
               - Context_Create_VersionFlag_SetsVersionTrue
+              - Context_Create_ShortVersionFlag_SetsVersionTrue
 
           - id: SarifMark-Context-HelpFlag
             title: The Create method shall parse the -?, -h, and --help flags and set the Help property to true.
@@ -31,6 +32,8 @@ sections:
               environments, ensuring the help option is easily discoverable regardless of user background.
             tags: [internal]
             tests:
+              - Context_Create_QuestionMarkHelpFlag_SetsHelpTrue
+              - Context_Create_ShortHelpFlag_SetsHelpTrue
               - Context_Create_HelpFlag_SetsHelpTrue
 
           - id: SarifMark-Context-SilentFlag
