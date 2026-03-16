@@ -60,6 +60,7 @@ sections:
             tags: [public]
             tests:
               - SarifMark_Enforcement
+              - IntegrationTest_EnforceFlagWithIssues_ReturnsError
 
           - id: SarifMark-Cli-InvalidArgs
             title: The tool shall reject unknown command-line arguments.

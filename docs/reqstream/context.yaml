@@ -149,7 +149,7 @@ sections:
               - Context_WriteLine_SilentMode_DoesNotWriteToConsole
 
           - id: SarifMark-Ctx-WriteError
-            title: The WriteError method shall write to stderr and set the ExitCode to 1.
+            title: The WriteError method shall write to stderr (unless silent), write to the log file when open, and set the ExitCode to 1.
             justification: >-
               Writing errors to stderr separates diagnostic output from the regular output stream, and
               automatically setting the exit code ensures that callers receive a non-zero status without

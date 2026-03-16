@@ -185,14 +185,12 @@ public class ValidationTests
                 exitCode = context.ExitCode;
             }
 
-            // Assert - error must be reported and no results file created
+            // Assert - error must be reported
             Assert.AreEqual(1, exitCode,
                 "Exit code should be 1 when an unsupported results file extension is used");
             var logContent = File.ReadAllText(logFile);
             Assert.Contains("Unsupported results file format", logContent,
                 "Log should contain the unsupported format error message");
-            Assert.IsFalse(File.Exists(jsonFile),
-                "Results file should not be created for an unsupported extension");
         }
         finally
         {

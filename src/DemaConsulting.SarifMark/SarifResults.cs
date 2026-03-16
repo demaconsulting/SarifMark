@@ -426,7 +426,7 @@ public record SarifResults
     /// <returns>Formatted location string.</returns>
     private static string FormatLocation(string? uri, int? startLine)
     {
-        if (string.IsNullOrEmpty(uri))
+        if (string.IsNullOrWhiteSpace(uri))
         {
             return "(no location)";
         }

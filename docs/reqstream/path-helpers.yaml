@@ -29,7 +29,7 @@ sections:
               - PathHelpers_SafePathCombine_NullRelativePath_ThrowsArgumentNullException
 
           - id: SarifMark-PH-PreCombineCheck
-            title: The SafePathCombine method shall reject relative paths containing ".." segments or embedded dots.
+            title: The SafePathCombine method shall reject relative paths containing ".." sequences or rooted paths.
             justification: >-
               Pre-combination checks catch the most common path traversal patterns before any file system
               operations are performed, providing a fast and reliable first line of defense against

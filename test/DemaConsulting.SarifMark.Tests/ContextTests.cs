@@ -42,7 +42,7 @@ public class ContextTests
     }
 
     /// <summary>
-    ///     Test creating a context with the version flag.
+    ///     Test that creating a context with the version flag sets the Version property to true.
     /// </summary>
     [TestMethod]
     public void Context_Create_VersionFlag_SetsVersionTrue()
@@ -54,6 +54,19 @@ public class ContextTests
         Assert.IsTrue(context.Version);
         Assert.IsFalse(context.Help);
         Assert.AreEqual(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with -v sets the Version property to true.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_ShortVersionFlag_SetsVersionTrue()
+    {
+        // Act
+        using var context = Context.Create(["-v"]);
+
+        // Assert
+        Assert.IsTrue(context.Version);
     }
 
     /// <summary>
@@ -69,6 +82,32 @@ public class ContextTests
         Assert.IsFalse(context.Version);
         Assert.IsTrue(context.Help);
         Assert.AreEqual(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with -? sets the Help property to true.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_QuestionMarkHelpFlag_SetsHelpTrue()
+    {
+        // Act
+        using var context = Context.Create(["-?"]);
+
+        // Assert
+        Assert.IsTrue(context.Help);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with -h sets the Help property to true.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_ShortHelpFlag_SetsHelpTrue()
+    {
+        // Act
+        using var context = Context.Create(["-h"]);
+
+        // Assert
+        Assert.IsTrue(context.Help);
     }
 
     /// <summary>
@@ -236,12 +275,10 @@ public class ContextTests
         finally
         {
             // Assert - Verify the log file was created and contains the message
-            if (File.Exists(logFile))
-            {
-                var logContent = File.ReadAllText(logFile);
-                Assert.Contains("Test message", logContent);
-                File.Delete(logFile);
-            }
+            Assert.IsTrue(File.Exists(logFile), "Log file should have been created");
+            var logContent = File.ReadAllText(logFile);
+            Assert.Contains("Test message", logContent);
+            File.Delete(logFile);
         }
     }
 

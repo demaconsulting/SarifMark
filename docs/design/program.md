@@ -82,8 +82,9 @@ execution sequence is:
    `context.WriteError("Error: Issues found in SARIF file")`.
 5. If `context.ReportFile` is set, writes a `"Writing report to..."` progress message, calls
    `sarifResults.ToMarkdown` and writes the result to the specified file with
-   `File.WriteAllText`, then writes `"Report generated successfully."` on success. I/O and
-   permission exceptions are caught and routed through `context.WriteError`.
+   `File.WriteAllText`, then writes `"Report generated successfully."` on success. `IOException`,
+   `UnauthorizedAccessException`, `ArgumentException`, and `NotSupportedException` are caught and
+   routed through `context.WriteError`.
 
 This satisfies requirement `SarifMark-Prg-SarifAnalysis`.
 

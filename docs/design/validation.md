@@ -64,6 +64,25 @@ The test name is `SarifMark_MarkdownReportGeneration`, satisfying `SarifMark-Rpt
 The test name is `SarifMark_Enforcement`, satisfying `SarifMark-Enf-Mode` and
 `SarifMark-Enf-ExitCode`.
 
+### RunValidationTest
+
+`RunValidationTest` is a private shared helper used by `RunSarifReadingTest`,
+`RunMarkdownReportGenerationTest`, and `RunEnforcementTest`. It accepts a test name, an
+optional report file name, and a caller-supplied `validator` function, and:
+
+1. Creates a `TemporaryDirectory`.
+2. Creates a mock SARIF file and builds a command-line argument list with `--silent`,
+   `--log`, and `--sarif`. If a `reportFileName` is provided, adds `--report` to the
+   argument list.
+3. Constructs a `Context` and calls `Program.Run`, capturing the exit code.
+4. Reads the log and (if present) report file contents and passes them to the `validator`
+   function.
+5. Records the test as passed or failed in the `TestResults` collection and prints a `✓`
+   or `✗` status line to the context output.
+
+This design avoids duplication across the three test methods while keeping each test's
+validation logic distinct and independently readable.
+
 ### WriteResultsFile
 
 `WriteResultsFile` inspects the file extension of `context.ResultsFile`:
@@ -72,12 +91,18 @@ The test name is `SarifMark_Enforcement`, satisfying `SarifMark-Enf-Mode` and
 - `.xml` → `JUnitSerializer.Serialize`. This satisfies `SarifMark-Val-JUnitFormat`.
 - Other → writes an error via `context.WriteError`.
 
+On success, writes `"Results written to <path>"` via `context.WriteLine`. Catches
+`IOException`, `UnauthorizedAccessException`, `ArgumentException`, and
+`NotSupportedException` and routes them through `context.WriteError`.
+
 The serialized content is written with `File.WriteAllText`.
 
 ### TemporaryDirectory
 
 `TemporaryDirectory` is a private nested class implementing `IDisposable`. It creates a
 uniquely-named subdirectory under `Path.GetTempPath()` using `PathHelpers.SafePathCombine`
-and a `Guid`-based name. On `Dispose`, it deletes the directory recursively, ignoring
-`IOException` and `UnauthorizedAccessException` to allow graceful cleanup even in
-constrained environments.
+and a `sarifmark_validation_`-prefixed GUID name. Creation failures (`IOException`,
+`UnauthorizedAccessException`, `ArgumentException`) are wrapped in `InvalidOperationException`.
+On `Dispose`, it checks whether the directory still exists using `Directory.Exists` before
+deleting it recursively, ignoring `IOException` and `UnauthorizedAccessException` to allow
+graceful cleanup even in constrained environments.
