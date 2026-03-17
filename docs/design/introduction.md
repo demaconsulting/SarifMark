@@ -30,7 +30,7 @@ architecture, and the requirements it satisfies — followed by **class-level do
 that describe each implementing class in detail.
 
 This document does not cover installation, end-user usage patterns, or the CI/CD pipeline
-configuration. Those topics are addressed in the [SarifMark repository][sarifmark-repo].
+configuration. Those topics are addressed in other [SarifMark repository][sarifmark-repo] documentation.
 
 ## Audience
 
