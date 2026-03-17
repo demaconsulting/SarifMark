@@ -30,8 +30,7 @@ architecture, and the requirements it satisfies — followed by **class-level do
 that describe each implementing class in detail.
 
 This document does not cover installation, end-user usage patterns, or the CI/CD pipeline
-configuration. Those topics are addressed in the [User Guide][user-guide] and the
-[Requirements document][requirements-doc].
+configuration. Those topics are addressed in the [SarifMark repository][sarifmark-repo].
 
 ## Audience
 
@@ -55,5 +54,4 @@ This document describes the intent and structure of that code; any discrepancy b
 this document and the code should be resolved by updating this document to reflect the
 actual implementation, or by raising a defect against the code.
 
-[user-guide]: https://github.com/demaconsulting/SarifMark
-[requirements-doc]: https://github.com/demaconsulting/SarifMark
+[sarifmark-repo]: https://github.com/demaconsulting/SarifMark
