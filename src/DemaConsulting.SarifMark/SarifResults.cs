@@ -117,13 +117,13 @@ public record SarifResults
             throw new InvalidOperationException("Invalid SARIF file: missing or invalid 'runs' array.");
         }
 
-        var runs = runsElement.EnumerateArray().ToList();
-        if (runs.Count == 0)
+        var runsEnumerator = runsElement.EnumerateArray();
+        if (!runsEnumerator.MoveNext())
         {
             throw new InvalidOperationException("Invalid SARIF file: 'runs' array is empty.");
         }
 
-        return runs[0];
+        return runsEnumerator.Current;
     }
 
     /// <summary>
