@@ -106,8 +106,13 @@ internal static class Validation
             testResults,
             "SarifMark_SarifReading",
             null,
-            (logContent, _) =>
+            (exitCode, logContent, _) =>
             {
+                if (exitCode != 0)
+                {
+                    return $"Program exited with code {exitCode}";
+                }
+
                 if (logContent.Contains("Tool: MockTool 1.0.0") &&
                     logContent.Contains("Results: 2"))
                 {
@@ -130,8 +135,13 @@ internal static class Validation
             testResults,
             "SarifMark_MarkdownReportGeneration",
             "sarif-report.md",
-            (logContent, reportContent) =>
+            (exitCode, _, reportContent) =>
             {
+                if (exitCode != 0)
+                {
+                    return $"Program exited with code {exitCode}";
+                }
+
                 if (reportContent == null)
                 {
                     return "Report file not created";
@@ -154,68 +164,26 @@ internal static class Validation
     /// <param name="testResults">The test results collection.</param>
     private static void RunEnforcementTest(Context context, DemaConsulting.TestResults.TestResults testResults)
     {
-        var startTime = DateTime.UtcNow;
-        var test = CreateTestResult("SarifMark_Enforcement");
-
-        try
-        {
-            using var tempDir = new TemporaryDirectory();
-            var logFile = PathHelpers.SafePathCombine(tempDir.DirectoryPath, "enforcement.log");
-            var sarifFile = PathHelpers.SafePathCombine(tempDir.DirectoryPath, "test.sarif");
-
-            // Create mock SARIF file
-            CreateMockSarifFile(sarifFile);
-
-            // Build command line arguments
-            var args = new List<string>
+        RunValidationTest(
+            context,
+            testResults,
+            "SarifMark_Enforcement",
+            null,
+            (exitCode, logContent, _) =>
             {
-                "--silent",
-                "--log", logFile,
-                "--sarif", sarifFile,
-                "--enforce"
-            };
-
-            // Run the program
-            int exitCode;
-            using (var testContext = Context.Create([.. args]))
-            {
-                Program.Run(testContext);
-                exitCode = testContext.ExitCode;
-            }
-
-            // Check if execution failed as expected (should return non-zero when issues found)
-            if (exitCode != 0)
-            {
-                // Read log content
-                var logContent = File.ReadAllText(logFile);
+                if (exitCode == 0)
+                {
+                    return "Program should have exited with non-zero code";
+                }
 
                 if (logContent.Contains("Error: Issues found in SARIF file"))
                 {
-                    test.Outcome = DemaConsulting.TestResults.TestOutcome.Passed;
-                    context.WriteLine($"✓ SarifMark_Enforcement - Passed");
+                    return null;
                 }
-                else
-                {
-                    test.Outcome = DemaConsulting.TestResults.TestOutcome.Failed;
-                    test.ErrorMessage = "Expected error message not found";
-                    context.WriteError($"✗ SarifMark_Enforcement - Failed: Expected error message not found");
-                }
-            }
-            else
-            {
-                test.Outcome = DemaConsulting.TestResults.TestOutcome.Failed;
-                test.ErrorMessage = "Program should have exited with non-zero code";
-                context.WriteError($"✗ SarifMark_Enforcement - Failed: Program should have exited with non-zero code");
-            }
-        }
-        // Catch all exceptions as this is a test framework - any exception should be recorded as a test failure.
-        // This is intentional to ensure robust test execution and reporting regardless of exception type.
-        catch (Exception ex)
-        {
-            HandleTestException(test, context, "SarifMark_Enforcement", ex);
-        }
 
-        FinalizeTestResult(test, startTime, testResults);
+                return "Expected error message not found";
+            },
+            ["--enforce"]);
     }
 
     /// <summary>
@@ -225,13 +193,15 @@ internal static class Validation
     /// <param name="testResults">The test results collection.</param>
     /// <param name="testName">The name of the test.</param>
     /// <param name="reportFileName">Optional report file name to generate.</param>
-    /// <param name="validator">Function to validate test results. Returns null on success or error message on failure.</param>
+    /// <param name="validator">Function to validate test results. Receives exit code, log content, and report content. Returns null on success or error message on failure.</param>
+    /// <param name="extraArgs">Optional extra arguments to append to the command line.</param>
     private static void RunValidationTest(
         Context context,
         DemaConsulting.TestResults.TestResults testResults,
         string testName,
         string? reportFileName,
-        Func<string, string?, string?> validator)
+        Func<int, string, string?, string?> validator,
+        IEnumerable<string>? extraArgs = null)
     {
         var startTime = DateTime.UtcNow;
         var test = CreateTestResult(testName);
@@ -260,6 +230,11 @@ internal static class Validation
                 args.Add(reportFile);
             }
 
+            if (extraArgs != null)
+            {
+                args.AddRange(extraArgs);
+            }
+
             // Run the program
             int exitCode;
             using (var testContext = Context.Create([.. args]))
@@ -268,35 +243,25 @@ internal static class Validation
                 exitCode = testContext.ExitCode;
             }
 
-            // Check if execution succeeded
-            if (exitCode == 0)
+            // Read log and report contents
+            var logContent = File.ReadAllText(logFile);
+            var reportContent = reportFile != null && File.Exists(reportFile)
+                ? File.ReadAllText(reportFile)
+                : null;
+
+            // Validate the results
+            var errorMessage = validator(exitCode, logContent, reportContent);
+
+            if (errorMessage == null)
             {
-                // Read log and report contents
-                var logContent = File.ReadAllText(logFile);
-                var reportContent = reportFile != null && File.Exists(reportFile)
-                    ? File.ReadAllText(reportFile)
-                    : null;
-
-                // Validate the results
-                var errorMessage = validator(logContent, reportContent);
-
-                if (errorMessage == null)
-                {
-                    test.Outcome = DemaConsulting.TestResults.TestOutcome.Passed;
-                    context.WriteLine($"✓ {testName} - Passed");
-                }
-                else
-                {
-                    test.Outcome = DemaConsulting.TestResults.TestOutcome.Failed;
-                    test.ErrorMessage = errorMessage;
-                    context.WriteError($"✗ {testName} - Failed: {errorMessage}");
-                }
+                test.Outcome = DemaConsulting.TestResults.TestOutcome.Passed;
+                context.WriteLine($"✓ {testName} - Passed");
             }
             else
             {
                 test.Outcome = DemaConsulting.TestResults.TestOutcome.Failed;
-                test.ErrorMessage = $"Program exited with code {exitCode}";
-                context.WriteError($"✗ {testName} - Failed: Exit code {exitCode}");
+                test.ErrorMessage = errorMessage;
+                context.WriteError($"✗ {testName} - Failed: {errorMessage}");
             }
         }
         // Catch all exceptions as this is a test framework - any exception should be recorded as a test failure.

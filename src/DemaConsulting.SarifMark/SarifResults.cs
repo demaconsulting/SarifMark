@@ -49,7 +49,7 @@ public record SarifResults
     public int ResultCount => Results.Count;
 
     /// <summary>
-    ///     Internal constructor for testing purposes.
+    ///     Internal constructor to enforce that instances are only created through the validated parsing pipeline.
     /// </summary>
     /// <param name="toolName">The name of the analysis tool.</param>
     /// <param name="toolVersion">The version of the analysis tool.</param>

@@ -51,7 +51,7 @@ public record SarifResult
     public int? StartLine { get; }
 
     /// <summary>
-    ///     Internal constructor for testing purposes.
+    ///     Internal constructor to enforce that instances are only created through the validated parsing pipeline.
     /// </summary>
     /// <param name="ruleId">The rule identifier.</param>
     /// <param name="level">The level of the result.</param>

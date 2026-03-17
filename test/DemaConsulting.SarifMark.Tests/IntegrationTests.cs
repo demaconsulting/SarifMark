@@ -106,8 +106,8 @@ public class IntegrationTests
             _dllPath,
             "--validate");
 
-        // Assert - Validation runs (exit code may be 0 or 1 depending on test results)
-        Assert.IsTrue(exitCode is 0 or 1);
+        // Assert
+        Assert.AreEqual(0, exitCode);
         Assert.Contains("SarifMark version", output);
         Assert.Contains("Total Tests:", output);
     }
