@@ -18,6 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Text.RegularExpressions;
+
 namespace DemaConsulting.SarifMark.Tests;
 
 /// <summary>
@@ -75,10 +77,10 @@ public class ProgramTests
 
             // Assert
             Assert.AreEqual(0, result);
-            var output = outWriter.ToString();
-            Assert.IsFalse(string.IsNullOrWhiteSpace(output));
-            Assert.DoesNotContain("Copyright", output);
-            Assert.DoesNotContain("SarifMark version", output);
+            var output = outWriter.ToString().Trim();
+            Assert.IsTrue(
+                Regex.IsMatch(output, @"^\d+\.\d+\.\d+(?:-[\w.-]+)?(?:\+[\w.-]+)?$"),
+                $"Version output '{output}' does not match semantic version pattern");
         }
         finally
         {
