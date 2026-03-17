@@ -18,23 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Text.RegularExpressions;
-
 namespace DemaConsulting.SarifMark.Tests;
 
 /// <summary>
 ///     Unit tests for the Program class.
 /// </summary>
 [TestClass]
-public partial class ProgramTests
+public class ProgramTests
 {
-    /// <summary>
-    ///     Source-generated regex matching a semantic version string (e.g. 1.2.3, 1.2.3-alpha.1, 1.2.3+build.42).
-    ///     Uses the non-backtracking engine to eliminate ReDoS risk.
-    /// </summary>
-    [GeneratedRegex(@"^\d+\.\d+\.\d+(?:-[\w.-]+)?(?:\+[\w.-]+)?$", RegexOptions.NonBacktracking)]
-    private static partial Regex SemanticVersionRegex();
-
     /// <summary>
     ///     Test that Main with no arguments returns error due to missing sarif parameter.
     /// </summary>
@@ -85,9 +76,7 @@ public partial class ProgramTests
             // Assert
             Assert.AreEqual(0, result);
             var output = outWriter.ToString().Trim();
-            Assert.IsTrue(
-                SemanticVersionRegex().IsMatch(output),
-                $"Version output '{output}' does not match semantic version pattern");
+            Assert.MatchesRegex(@"^\d+\.\d+\.\d+(?:-[\w.-]+)?(?:\+[\w.-]+)?$", output);
         }
         finally
         {
@@ -125,7 +114,7 @@ public partial class ProgramTests
             Assert.Contains("--enforce", output);
             Assert.Contains("--log", output);
             Assert.Contains("--sarif", output);
-            Assert.Contains("--report", output);
+            Assert.MatchesRegex(@"--report(?!-)", output);
             Assert.Contains("--report-depth", output);
             Assert.Contains("--heading", output);
         }

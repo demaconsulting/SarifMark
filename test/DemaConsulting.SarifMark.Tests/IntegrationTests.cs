@@ -88,7 +88,7 @@ public class IntegrationTests
         Assert.Contains("--version", output);
         Assert.Contains("--help", output);
         Assert.Contains("--sarif", output);
-        Assert.Contains("--report", output);
+        Assert.MatchesRegex(@"--report(?!-)", output);
     }
 
     /// <summary>
