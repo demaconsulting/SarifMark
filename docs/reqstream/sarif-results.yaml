@@ -13,6 +13,7 @@ sections:
             tags: [internal]
             tests:
               - SarifResults_Read_NoResults_ReturnsValidResults
+              - SarifResults_InternalConstructor_CreatesValidInstance
 
           - id: SarifMark-SarifResults-ValidatePath
             title: The Read method shall validate the file path is non-null, non-empty, and the file exists.

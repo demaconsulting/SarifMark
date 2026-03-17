@@ -150,6 +150,8 @@ sections:
             tests:
               - Context_WriteLine_WritesToConsole
               - Context_WriteLine_SilentMode_DoesNotWriteToConsole
+              - Context_WriteLine_WithLogFile_WritesToLog
+              - Context_WriteLine_SilentModeWithLogFile_WritesToLog
 
           - id: SarifMark-Context-WriteError
             title: >-
@@ -163,6 +165,7 @@ sections:
             tests:
               - Context_WriteError_WritesToErrorAndSetsExitCode
               - Context_WriteError_SilentMode_DoesNotWriteToConsoleButSetsExitCode
+              - Context_WriteError_WithLogFile_WritesToLog
 
           - id: SarifMark-Context-ExitCode
             title: The ExitCode property shall start at zero and change to one after the first call to WriteError.

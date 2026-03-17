@@ -93,7 +93,8 @@ and `SarifMark-SarifResults-FilterSuppressions`.
    The sub-heading level is `min(depth + 1, 6)`.
 3. **Issues section** — calls `AppendIssuesSection` to emit the `Issues` sub-heading, the
    result count formatted by `FormatFoundText`, and one line per result formatted by
-   `FormatLocation`.
+   `FormatLocation`. Each result line is appended with a trailing two-space markdown hard
+   line break (`  `) before the newline, satisfying requirement `SarifMark-Report-LineBreaks`.
 
 This satisfies requirement `SarifMark-SarifResults-ToMarkdown`.
 
