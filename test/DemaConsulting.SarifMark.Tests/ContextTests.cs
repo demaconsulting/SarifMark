@@ -537,7 +537,7 @@ public class ContextTests
                 context.WriteLine("LogLine message");
             }
 
-            // Assert - message must appear in the log file even though --silent suppresses console
+            // Assert - message must appear in the log file
             var logContent = File.ReadAllText(logFile);
             Assert.Contains("LogLine message", logContent);
         }
