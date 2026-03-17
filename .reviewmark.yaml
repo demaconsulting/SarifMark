@@ -132,7 +132,6 @@ reviews:
     title: Review of SarifMark PathHelpers Software Unit
     paths:
       - "docs/reqstream/path-helpers.yaml"
-      - "docs/design/utilities.md"
       - "docs/design/path-helpers.md"
       - "src/**/PathHelpers.cs"
       - "test/**/PathHelpersTests.cs"
