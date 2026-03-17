@@ -26,8 +26,15 @@ namespace DemaConsulting.SarifMark.Tests;
 ///     Unit tests for the Program class.
 /// </summary>
 [TestClass]
-public class ProgramTests
+public partial class ProgramTests
 {
+    /// <summary>
+    ///     Source-generated regex matching a semantic version string (e.g. 1.2.3, 1.2.3-alpha.1, 1.2.3+build.42).
+    ///     Uses the non-backtracking engine to eliminate ReDoS risk.
+    /// </summary>
+    [GeneratedRegex(@"^\d+\.\d+\.\d+(?:-[\w.-]+)?(?:\+[\w.-]+)?$", RegexOptions.NonBacktracking)]
+    private static partial Regex SemanticVersionRegex();
+
     /// <summary>
     ///     Test that Main with no arguments returns error due to missing sarif parameter.
     /// </summary>
@@ -79,7 +86,7 @@ public class ProgramTests
             Assert.AreEqual(0, result);
             var output = outWriter.ToString().Trim();
             Assert.IsTrue(
-                Regex.IsMatch(output, @"^\d+\.\d+\.\d+(?:-[\w.-]+)?(?:\+[\w.-]+)?$"),
+                SemanticVersionRegex().IsMatch(output),
                 $"Version output '{output}' does not match semantic version pattern");
         }
         finally
