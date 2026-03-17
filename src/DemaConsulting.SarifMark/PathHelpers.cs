@@ -31,7 +31,8 @@ internal static class PathHelpers
     /// <param name="basePath">The base path.</param>
     /// <param name="relativePath">The relative path to combine.</param>
     /// <returns>The combined path.</returns>
-    /// <exception cref="ArgumentException">Thrown when relativePath contains invalid characters or path traversal sequences.</exception>
+    /// <exception cref="ArgumentException">Thrown when relativePath contains path traversal sequences or is a rooted path.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when basePath or relativePath is null.</exception>
     internal static string SafePathCombine(string basePath, string relativePath)
     {
         // Validate inputs

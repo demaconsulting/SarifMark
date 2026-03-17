@@ -1,0 +1,78 @@
+---
+sections:
+  - title: Design Specifications
+    sections:
+      - title: Program Class
+        requirements:
+          - id: SarifMark-Program-Version
+            title: The Version property shall read the assembly informational version attribute.
+            justification: >-
+              Reading the assembly informational version attribute ensures the version string
+              matches the NuGet package version, providing accurate version information for
+              troubleshooting and compatibility verification.
+            tags: [internal]
+            tests:
+              - Program_Main_VersionFlag_DisplaysVersionOnly
+
+          - id: SarifMark-Program-Main
+            title: The Main method shall create a Context, call Run, and return the ExitCode.
+            justification: >-
+              Delegating argument parsing to Context and execution to Run keeps Main focused on
+              orchestration, ensuring a clean separation of concerns and making each responsibility
+              independently testable.
+            tags: [internal]
+            tests:
+              - Program_Main_NoArguments_ReturnsError
+              - Program_Main_VersionFlag_DisplaysVersionOnly
+              - Program_Main_HelpFlag_DisplaysHelp
+
+          - id: SarifMark-Program-Main-Exceptions
+            title: The Main method shall catch ArgumentException and InvalidOperationException and return exit code 1.
+            justification: >-
+              Catching these two exception types at the top level converts structured error signals from
+              argument parsing and SARIF processing into a clean non-zero exit code, preventing unhandled
+              exceptions from surfacing to the shell while still communicating failure.
+            tags: [internal]
+            tests:
+              - Program_Main_NoArguments_ReturnsError
+              - Program_Main_UnknownArgument_ReturnsError
+
+          - id: SarifMark-Program-Run
+            title: The Run method shall dispatch commands in priority order.
+            justification: >-
+              Priority-ordered dispatch ensures that informational flags such as version and help are always
+              honoured before attempting expensive operations, giving users predictable and deterministic
+              command behavior regardless of argument ordering.
+            tags: [internal]
+            tests:
+              - Program_Main_VersionFlag_DisplaysVersionOnly
+              - Program_Main_HelpFlag_DisplaysHelp
+
+          - id: SarifMark-Program-Banner
+            title: The PrintBanner method shall emit the tool version and copyright notice.
+            justification: >-
+              Emitting version and copyright on every non-silent invocation gives users immediate context about
+              the tool build they are running and satisfies standard open-source attribution requirements.
+            tags: [internal]
+            tests:
+              - Program_Main_HelpFlag_DisplaysHelp
+
+          - id: SarifMark-Program-Help
+            title: The PrintHelp method shall output usage information describing all supported arguments.
+            justification: >-
+              Comprehensive inline help reduces dependence on external documentation and lets users discover
+              available options directly from the command line, improving discoverability in automated and
+              interactive environments.
+            tags: [internal]
+            tests:
+              - Program_Main_HelpFlag_DisplaysHelp
+
+          - id: SarifMark-Program-SarifAnalysis
+            title: The ProcessSarifAnalysis method shall validate --sarif and orchestrate SARIF processing.
+            justification: >-
+              Combining path validation, SARIF reading, enforcement checking, and report writing in one method
+              establishes a clear pipeline for the primary use case and ensures that each step is gated on the
+              success of the previous one, preventing partial or misleading output.
+            tags: [internal]
+            tests:
+              - Program_Main_NoArguments_ReturnsError

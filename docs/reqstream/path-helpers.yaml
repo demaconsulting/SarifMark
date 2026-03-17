@@ -1,0 +1,61 @@
+---
+sections:
+  - title: Design Specifications
+    sections:
+      - title: PathHelpers Class
+        requirements:
+          - id: SarifMark-PathHelpers-SafeCombine
+            title: The SafePathCombine method shall combine a base path and a relative path into a validated path.
+            justification: >-
+              Providing a dedicated combining method keeps path-safety logic centralized and reusable,
+              ensuring that every caller automatically benefits from the same validation rules rather than
+              reimplementing them independently.
+            tags: [internal]
+            tests:
+              - PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully
+              - PathHelpers_SafePathCombine_SimpleFilename_CombinesSuccessfully
+              - PathHelpers_SafePathCombine_PathWithSubdirectories_CombinesSuccessfully
+              - PathHelpers_SafePathCombine_GuidBasedFilename_CombinesSuccessfully
+
+          - id: SarifMark-PathHelpers-NullCheck
+            title: The SafePathCombine method shall throw ArgumentNullException when either argument is null.
+            justification: >-
+              Explicit null checks produce clear exceptions at the earliest possible point, preventing
+              null values from propagating into path manipulation code where the resulting errors would
+              be harder to diagnose.
+            tags: [internal]
+            tests:
+              - PathHelpers_SafePathCombine_NullBasePath_ThrowsArgumentNullException
+              - PathHelpers_SafePathCombine_NullRelativePath_ThrowsArgumentNullException
+
+          - id: SarifMark-PathHelpers-PreCombineCheck
+            title: The SafePathCombine method shall reject relative paths containing ".." sequences or rooted paths.
+            justification: >-
+              Pre-combination checks catch the most common path traversal patterns before any file system
+              operations are performed, providing a fast and reliable first line of defense against
+              directory traversal attacks.
+            tags: [internal]
+            tests:
+              - PathHelpers_SafePathCombine_PathWithParentDirectory_ThrowsArgumentException
+              - PathHelpers_SafePathCombine_PathWithDoubleDots_ThrowsArgumentException
+              - PathHelpers_SafePathCombine_FilenameWithEmbeddedDots_ThrowsArgumentException
+
+          - id: SarifMark-PathHelpers-RootedCheck
+            title: The SafePathCombine method shall reject relative paths that are rooted or absolute.
+            justification: >-
+              Rejecting rooted relative paths prevents callers from accidentally bypassing the base path
+              restriction by supplying an absolute path as the relative argument, closing a potential path
+              traversal vector.
+            tags: [internal]
+            tests:
+              - PathHelpers_SafePathCombine_AbsolutePath_ThrowsArgumentException
+
+          - id: SarifMark-PathHelpers-PostCombineCheck
+            title: The SafePathCombine method shall verify the combined path remains under the base path.
+            justification: >-
+              A post-combination check adds a second layer of defense by verifying the combined path
+              regardless of how the operating system resolves it, ensuring that no combination of legal
+              segments can escape the intended base directory.
+            tags: [internal]
+            tests:
+              - PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully

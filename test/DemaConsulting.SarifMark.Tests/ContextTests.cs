@@ -42,13 +42,28 @@ public class ContextTests
     }
 
     /// <summary>
-    ///     Test creating a context with the version flag.
+    ///     Test that creating a context with the version flag sets the Version property to true.
     /// </summary>
     [TestMethod]
     public void Context_Create_VersionFlag_SetsVersionTrue()
     {
         // Act
         using var context = Context.Create(["--version"]);
+
+        // Assert
+        Assert.IsTrue(context.Version);
+        Assert.IsFalse(context.Help);
+        Assert.AreEqual(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with -v sets the Version property to true.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_ShortVersionFlag_SetsVersionTrue()
+    {
+        // Act
+        using var context = Context.Create(["-v"]);
 
         // Assert
         Assert.IsTrue(context.Version);
@@ -69,6 +84,32 @@ public class ContextTests
         Assert.IsFalse(context.Version);
         Assert.IsTrue(context.Help);
         Assert.AreEqual(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with -? sets the Help property to true.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_QuestionMarkHelpFlag_SetsHelpTrue()
+    {
+        // Act
+        using var context = Context.Create(["-?"]);
+
+        // Assert
+        Assert.IsTrue(context.Help);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with -h sets the Help property to true.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_ShortHelpFlag_SetsHelpTrue()
+    {
+        // Act
+        using var context = Context.Create(["-h"]);
+
+        // Assert
+        Assert.IsTrue(context.Help);
     }
 
     /// <summary>
@@ -224,25 +265,44 @@ public class ContextTests
     {
         // Arrange
         var logFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
+        bool logFileExists = false;
+        string? logContent = null;
 
         try
         {
-            // Act
-            using var context = Context.Create(["--log", logFile]);
-            context.WriteLine("Test message");
+            // Act - dispose the context so the log file is flushed and closed before reading
+            using (var context = Context.Create(["--log", logFile]))
+            {
+                context.WriteLine("Test message");
+            }
 
-            // Assert - Dispose to flush and close the log file
+            // Assert - context is disposed; file handle is closed and safe to read
+            logFileExists = File.Exists(logFile);
+            if (logFileExists)
+            {
+                logContent = File.ReadAllText(logFile);
+            }
         }
         finally
         {
-            // Assert - Verify the log file was created and contains the message
-            if (File.Exists(logFile))
+            // Cleanup - delete the log file regardless of assertion outcomes
+            try
             {
-                var logContent = File.ReadAllText(logFile);
-                Assert.Contains("Test message", logContent);
-                File.Delete(logFile);
+                if (File.Exists(logFile))
+                {
+                    File.Delete(logFile);
+                }
+            }
+            catch
+            {
+                // Ignore cleanup failures
             }
         }
+
+        // Assert - Verify the log file was created and contains the message
+        Assert.IsTrue(logFileExists, "Log file should have been created");
+        Assert.IsNotNull(logContent, "Log file content should have been read");
+        Assert.Contains("Test message", logContent);
     }
 
     /// <summary>

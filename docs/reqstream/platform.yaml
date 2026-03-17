@@ -24,6 +24,7 @@ sections:
             justification: >-
               Windows support ensures the tool is accessible to developers using Microsoft platforms, which are
               prevalent in enterprise environments and .NET development ecosystems.
+            tags: [public]
             tests:
               - windows@IntegrationTest_VersionFlag_OutputsVersion
               - windows@IntegrationTest_HelpFlag_OutputsUsageInformation
@@ -34,6 +35,7 @@ sections:
             justification: >-
               Linux support is essential for cloud-native development and CI/CD pipelines, as most modern build
               systems and container environments run on Linux.
+            tags: [public]
             tests:
               - ubuntu@IntegrationTest_VersionFlag_OutputsVersion
               - ubuntu@IntegrationTest_HelpFlag_OutputsUsageInformation
@@ -44,6 +46,7 @@ sections:
             justification: >-
               macOS support ensures the tool is accessible to developers using Apple platforms, which are widely
               used in software development environments.
+            tags: [public]
             tests:
               - macos@IntegrationTest_VersionFlag_OutputsVersion
               - macos@IntegrationTest_HelpFlag_OutputsUsageInformation
@@ -54,6 +57,7 @@ sections:
             justification: >-
               .NET 8.0 support ensures compatibility with the current Long-Term Support release, providing
               stability and widespread adoption for enterprise users.
+            tags: [public]
             tests:
               - dotnet8.x@SarifMark_SarifReading
               - dotnet8.x@SarifMark_MarkdownReportGeneration
@@ -64,6 +68,7 @@ sections:
             justification: >-
               .NET 9.0 support enables users to leverage the latest .NET features and performance improvements,
               ensuring the tool remains current with the .NET ecosystem.
+            tags: [public]
             tests:
               - dotnet9.x@SarifMark_SarifReading
               - dotnet9.x@SarifMark_MarkdownReportGeneration
@@ -74,6 +79,7 @@ sections:
             justification: >-
               .NET 10.0 support provides forward compatibility and ensures the tool remains viable as users adopt
               future .NET versions, extending the tool's lifespan and relevance.
+            tags: [public]
             tests:
               - dotnet10.x@SarifMark_SarifReading
               - dotnet10.x@SarifMark_MarkdownReportGeneration
