@@ -531,7 +531,7 @@ public class ContextTests
         var logFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
         try
         {
-            using (var context = Context.Create(["--silent", "--log", logFile]))
+            using (var context = Context.Create(["--log", logFile]))
             {
                 // Act
                 context.WriteLine("LogLine message");
