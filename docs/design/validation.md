@@ -14,7 +14,11 @@ organizes all test execution internally.
 
 ### Run Method
 
-`Run` orchestrates the self-validation sequence:
+Before executing the sequence, `Run` validates its input by calling
+`ArgumentNullException.ThrowIfNull(context)`, throwing `ArgumentNullException` immediately if
+`context` is null. This satisfies requirement `SarifMark-Validation-NullCheck`.
+
+`Run` then orchestrates the self-validation sequence:
 
 1. Calls `PrintValidationHeader` to emit a markdown table with tool version, machine
    name, OS version, .NET runtime, and timestamp.

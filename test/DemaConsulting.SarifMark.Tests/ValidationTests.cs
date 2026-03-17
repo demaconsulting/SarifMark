@@ -61,6 +61,12 @@ public class ValidationTests
                 "Log should contain the 'SarifMark Version' header row");
             Assert.Contains("Machine Name", logContent,
                 "Log should contain the 'Machine Name' header row");
+            Assert.Contains("OS Version", logContent,
+                "Log should contain the 'OS Version' header row");
+            Assert.Contains("DotNet Runtime", logContent,
+                "Log should contain the 'DotNet Runtime' header row");
+            Assert.Contains("Time Stamp", logContent,
+                "Log should contain the 'Time Stamp' header row");
         }
         finally
         {

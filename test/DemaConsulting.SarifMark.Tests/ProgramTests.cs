@@ -117,6 +117,17 @@ public partial class ProgramTests
             Assert.Contains("SarifMark version", output);
             Assert.Contains("Copyright", output);
             Assert.Contains("Usage:", output);
+            Assert.Contains("--version", output);
+            Assert.Contains("--help", output);
+            Assert.Contains("--silent", output);
+            Assert.Contains("--validate", output);
+            Assert.Contains("--results", output);
+            Assert.Contains("--enforce", output);
+            Assert.Contains("--log", output);
+            Assert.Contains("--sarif", output);
+            Assert.Contains("--report", output);
+            Assert.Contains("--report-depth", output);
+            Assert.Contains("--heading", output);
         }
         finally
         {

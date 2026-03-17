@@ -357,11 +357,11 @@ public class ContextTests
     public void Context_ExitCode_StartsAtZero_ChangesToOneAfterError()
     {
         // Arrange
-        var originalOut = Console.Out;
+        var originalError = Console.Error;
         try
         {
-            using var outWriter = new StringWriter();
-            Console.SetOut(outWriter);
+            using var errWriter = new StringWriter();
+            Console.SetError(errWriter);
 
             using var context = Context.Create([]);
 
@@ -376,7 +376,7 @@ public class ContextTests
         }
         finally
         {
-            Console.SetOut(originalOut);
+            Console.SetError(originalError);
         }
     }
 
@@ -519,5 +519,92 @@ public class ContextTests
 
         // Assert
         Assert.AreEqual("results.trx", context.ResultsFile);
+    }
+
+    /// <summary>
+    ///     Test that WriteLine writes to the log file when it is open.
+    /// </summary>
+    [TestMethod]
+    public void Context_WriteLine_WithLogFile_WritesToLog()
+    {
+        // Arrange
+        var logFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
+        try
+        {
+            using (var context = Context.Create(["--silent", "--log", logFile]))
+            {
+                // Act
+                context.WriteLine("LogLine message");
+            }
+
+            // Assert - message must appear in the log file even though --silent suppresses console
+            var logContent = File.ReadAllText(logFile);
+            Assert.Contains("LogLine message", logContent);
+        }
+        finally
+        {
+            if (File.Exists(logFile))
+            {
+                File.Delete(logFile);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Test that WriteLine writes to the log file in silent mode.
+    /// </summary>
+    [TestMethod]
+    public void Context_WriteLine_SilentModeWithLogFile_WritesToLog()
+    {
+        // Arrange
+        var logFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
+        try
+        {
+            using (var context = Context.Create(["--silent", "--log", logFile]))
+            {
+                // Act
+                context.WriteLine("Silent log message");
+            }
+
+            // Assert - message must appear in the log even in silent mode
+            var logContent = File.ReadAllText(logFile);
+            Assert.Contains("Silent log message", logContent);
+        }
+        finally
+        {
+            if (File.Exists(logFile))
+            {
+                File.Delete(logFile);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Test that WriteError writes to the log file when it is open.
+    /// </summary>
+    [TestMethod]
+    public void Context_WriteError_WithLogFile_WritesToLog()
+    {
+        // Arrange
+        var logFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
+        try
+        {
+            using (var context = Context.Create(["--silent", "--log", logFile]))
+            {
+                // Act
+                context.WriteError("Error log message");
+            }
+
+            // Assert - error message must appear in the log file
+            var logContent = File.ReadAllText(logFile);
+            Assert.Contains("Error log message", logContent);
+        }
+        finally
+        {
+            if (File.Exists(logFile))
+            {
+                File.Delete(logFile);
+            }
+        }
     }
 }

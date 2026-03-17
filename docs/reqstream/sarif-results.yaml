@@ -139,3 +139,4 @@ sections:
             tests:
               - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
               - SarifResults_ToMarkdown_OneResult_UsesSingularForm
+              - SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput
