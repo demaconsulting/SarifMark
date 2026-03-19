@@ -9,7 +9,7 @@ appropriate subsystem, and handles top-level exception translation.
 ## Version Property
 
 The static `Version` property reads the assembly's `AssemblyInformationalVersionAttribute` at
-runtime. If that attribute is absent it falls back to the `AssemblyVersion`; if that is also
+runtime. If that attribute is absent, it falls back to the `AssemblyVersion`; if that is also
 unavailable it returns `"0.0.0"`. This satisfies requirement `SarifMark-Program-Version`.
 
 ## Main Method

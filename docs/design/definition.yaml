@@ -7,7 +7,6 @@ input-files:
   - docs/design/introduction.md
   - docs/design/command-line.md
   - docs/design/sarif.md
-  - docs/design/utilities.md
   - docs/design/validation.md
   - docs/design/program.md
   - docs/design/context.md

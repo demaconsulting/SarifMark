@@ -77,8 +77,8 @@ sections:
           - id: SarifMark-Plt-Net10
             title: The tool shall support .NET 10.0 runtime.
             justification: >-
-              .NET 10.0 support provides forward compatibility and ensures the tool remains viable as users adopt
-              future .NET versions, extending the tool's lifespan and relevance.
+              .NET 10.0 support provides forward compatibility and ensures the tool remains viable as
+              adoption grows, extending the tool's lifespan and relevance.
             tags: [public]
             tests:
               - dotnet10.x@SarifMark_SarifReading

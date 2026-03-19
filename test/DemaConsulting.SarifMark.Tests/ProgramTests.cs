@@ -75,9 +75,8 @@ public class ProgramTests
 
             // Assert
             Assert.AreEqual(0, result);
-            var output = outWriter.ToString();
-            Assert.DoesNotContain("Copyright", output);
-            Assert.DoesNotContain("SarifMark version", output);
+            var output = outWriter.ToString().Trim();
+            Assert.MatchesRegex(@"^\d+\.\d+\.\d+(?:-[\w.-]+)?(?:\+[\w.-]+)?$", output);
         }
         finally
         {
@@ -107,6 +106,17 @@ public class ProgramTests
             Assert.Contains("SarifMark version", output);
             Assert.Contains("Copyright", output);
             Assert.Contains("Usage:", output);
+            Assert.Contains("--version", output);
+            Assert.Contains("--help", output);
+            Assert.Contains("--silent", output);
+            Assert.Contains("--validate", output);
+            Assert.Contains("--results", output);
+            Assert.Contains("--enforce", output);
+            Assert.Contains("--log", output);
+            Assert.Contains("--sarif", output);
+            Assert.MatchesRegex(@"--report(?!-)", output);
+            Assert.Contains("--report-depth", output);
+            Assert.Contains("--heading", output);
         }
         finally
         {

@@ -18,4 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+// Disable parallel test execution to prevent Console.Out/Console.Error redirection conflicts
+// in ProgramTests, which captures console output for assertion purposes.
 [assembly: DoNotParallelize]

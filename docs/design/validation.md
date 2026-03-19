@@ -14,7 +14,11 @@ organizes all test execution internally.
 
 ### Run Method
 
-`Run` orchestrates the self-validation sequence:
+Before executing the sequence, `Run` validates its input by calling
+`ArgumentNullException.ThrowIfNull(context)`, throwing `ArgumentNullException` immediately if
+`context` is null. This satisfies requirement `SarifMark-Validation-NullCheck`.
+
+`Run` then orchestrates the self-validation sequence:
 
 1. Calls `PrintValidationHeader` to emit a markdown table with tool version, machine
    name, OS version, .NET runtime, and timestamp.
@@ -52,14 +56,11 @@ The test name is `SarifMark_MarkdownReportGeneration`, satisfying `SarifMark-Rep
 
 ### RunEnforcementTest
 
-`RunEnforcementTest` verifies enforcement mode:
+`RunEnforcementTest` verifies enforcement mode by delegating to `RunValidationTest` with
+`--enforce` as an extra argument and a validator that:
 
-1. Creates a `TemporaryDirectory`.
-2. Writes the mock SARIF file.
-3. Constructs a `Context` with `--silent`, `--log <file>`, `--sarif <file>`, and
-   `--enforce`.
-4. Calls `Program.Run` and verifies exit code is non-zero.
-5. Checks the log contains `"Error: Issues found in SARIF file"`.
+1. Verifies exit code is non-zero.
+2. Checks the log contains `"Error: Issues found in SARIF file"`.
 
 The test name is `SarifMark_Enforcement`, satisfying `SarifMark-Enforce-Mode` and
 `SarifMark-Enforce-ExitCode`.
@@ -68,15 +69,16 @@ The test name is `SarifMark_Enforcement`, satisfying `SarifMark-Enforce-Mode` an
 
 `RunValidationTest` is a private shared helper used by `RunSarifReadingTest`,
 `RunMarkdownReportGenerationTest`, and `RunEnforcementTest`. It accepts a test name, an
-optional report file name, and a caller-supplied `validator` function, and:
+optional report file name, a caller-supplied `validator` function, and an optional
+`extraArgs` collection, and:
 
 1. Creates a `TemporaryDirectory`.
 2. Creates a mock SARIF file and builds a command-line argument list with `--silent`,
    `--log`, and `--sarif`. If a `reportFileName` is provided, adds `--report` to the
-   argument list.
+   argument list. Any `extraArgs` are appended last.
 3. Constructs a `Context` and calls `Program.Run`, capturing the exit code.
-4. Reads the log and (if present) report file contents and passes them to the `validator`
-   function.
+4. Reads the log and (if present) report file contents and passes the exit code, log
+   content, and report content to the `validator` function.
 5. Records the test as passed or failed in the `TestResults` collection and prints a `✓`
    or `✗` status line to the context output.
 

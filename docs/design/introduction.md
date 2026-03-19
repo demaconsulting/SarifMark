@@ -15,13 +15,12 @@ The purpose of this document is to:
 
 ## Scope
 
-This document covers the design of four primary functional layers within SarifMark:
+This document covers the design of three primary functional layers within SarifMark:
 
 - The **command-line layer**: the `Program` entry point and `Context` class that handle
   argument parsing, output routing, and program flow control
 - The **SARIF and reporting layer**: the `SarifResult` and `SarifResults` classes that
   read SARIF files and generate markdown reports
-- The **utilities layer**: the `PathHelpers` class providing safe path operations
 - The **self-validation layer**: the `Validation` class that provides built-in
   verification of the tool's core functionality
 
@@ -30,8 +29,7 @@ architecture, and the requirements it satisfies — followed by **class-level do
 that describe each implementing class in detail.
 
 This document does not cover installation, end-user usage patterns, or the CI/CD pipeline
-configuration. Those topics are addressed in the [User Guide][user-guide] and the
-[Requirements document][requirements-doc].
+configuration. Those topics are addressed in other [SarifMark repository][sarifmark-repo] documentation.
 
 ## Audience
 
@@ -55,5 +53,4 @@ This document describes the intent and structure of that code; any discrepancy b
 this document and the code should be resolved by updating this document to reflect the
 actual implementation, or by raising a defect against the code.
 
-[user-guide]: https://github.com/demaconsulting/SarifMark
-[requirements-doc]: https://github.com/demaconsulting/SarifMark
+[sarifmark-repo]: https://github.com/demaconsulting/SarifMark

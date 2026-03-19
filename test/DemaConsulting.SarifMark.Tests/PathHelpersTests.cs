@@ -98,6 +98,7 @@ public class PathHelpersTests
         var exception = Assert.Throws<ArgumentException>(() =>
             PathHelpers.SafePathCombine(basePath, relativePath));
         Assert.Contains("Invalid path component", exception.Message);
+        Assert.AreEqual("relativePath", exception.ParamName);
     }
 
     /// <summary>
@@ -117,6 +118,7 @@ public class PathHelpersTests
         var exception = Assert.Throws<ArgumentException>(() =>
             PathHelpers.SafePathCombine(basePath, relativePath));
         Assert.Contains("Invalid path component", exception.Message);
+        Assert.AreEqual("relativePath", exception.ParamName);
     }
 
     /// <summary>
@@ -131,6 +133,7 @@ public class PathHelpersTests
         var unixException = Assert.Throws<ArgumentException>(() =>
             PathHelpers.SafePathCombine(unixBasePath, unixRelativePath));
         Assert.Contains("Invalid path component", unixException.Message);
+        Assert.AreEqual("relativePath", unixException.ParamName);
 
         // Test Windows absolute path (only on Windows since Windows paths may not be rooted on Unix)
         if (OperatingSystem.IsWindows())
@@ -140,6 +143,7 @@ public class PathHelpersTests
             var windowsException = Assert.Throws<ArgumentException>(() =>
                 PathHelpers.SafePathCombine(windowsBasePath, windowsRelativePath));
             Assert.Contains("Invalid path component", windowsException.Message);
+            Assert.AreEqual("relativePath", windowsException.ParamName);
         }
     }
 

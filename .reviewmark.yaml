@@ -32,6 +32,8 @@ reviews:
       - "docs/reqstream/context.yaml"
       - "docs/design/introduction.md"
       - "docs/design/command-line.md"
+      - "docs/design/program.md"
+      - "docs/design/context.md"
       - "src/**/Program.cs"
       - "src/**/Context.cs"
       - "test/**/ProgramTests.cs"
@@ -58,6 +60,7 @@ reviews:
       - "docs/reqstream/report.yaml"
       - "docs/reqstream/sarif-results.yaml"
       - "docs/design/sarif.md"
+      - "docs/design/sarif-results.md"
       - "src/**/SarifResults.cs"
       - "test/**/SarifResultsTests.cs"
       - "test/**/IntegrationTests.cs"
@@ -129,7 +132,6 @@ reviews:
     title: Review of SarifMark PathHelpers Software Unit
     paths:
       - "docs/reqstream/path-helpers.yaml"
-      - "docs/design/utilities.md"
       - "docs/design/path-helpers.md"
       - "src/**/PathHelpers.cs"
       - "test/**/PathHelpersTests.cs"

@@ -49,7 +49,7 @@ public record SarifResults
     public int ResultCount => Results.Count;
 
     /// <summary>
-    ///     Internal constructor for testing purposes.
+    ///     Internal constructor to enforce that instances are only created through the validated parsing pipeline.
     /// </summary>
     /// <param name="toolName">The name of the analysis tool.</param>
     /// <param name="toolVersion">The version of the analysis tool.</param>
@@ -117,13 +117,13 @@ public record SarifResults
             throw new InvalidOperationException("Invalid SARIF file: missing or invalid 'runs' array.");
         }
 
-        var runs = runsElement.EnumerateArray();
-        if (!runs.Any())
+        var runsEnumerator = runsElement.EnumerateArray();
+        if (!runsEnumerator.MoveNext())
         {
             throw new InvalidOperationException("Invalid SARIF file: 'runs' array is empty.");
         }
 
-        return runs.First();
+        return runsEnumerator.Current;
     }
 
     /// <summary>

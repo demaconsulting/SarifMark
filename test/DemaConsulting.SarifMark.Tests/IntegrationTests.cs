@@ -88,7 +88,7 @@ public class IntegrationTests
         Assert.Contains("--version", output);
         Assert.Contains("--help", output);
         Assert.Contains("--sarif", output);
-        Assert.Contains("--report", output);
+        Assert.MatchesRegex(@"--report(?!-)", output);
     }
 
     /// <summary>
@@ -106,8 +106,8 @@ public class IntegrationTests
             _dllPath,
             "--validate");
 
-        // Assert - Validation runs (exit code may be 0 or 1 depending on test results)
-        Assert.IsTrue(exitCode is 0 or 1);
+        // Assert
+        Assert.AreEqual(0, exitCode);
         Assert.Contains("SarifMark version", output);
         Assert.Contains("Total Tests:", output);
     }
