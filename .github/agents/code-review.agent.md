@@ -1,6 +1,7 @@
 ---
-name: Code Review Agent
+name: code-review
 description: Assists in performing formal file reviews - knows how to elaborate review-sets and perform structured review checks
+tools: [read, search]
 ---
 
 # Code Review Agent - SarifMark

@@ -1,6 +1,7 @@
 ---
-name: Repo Consistency Agent
+name: repo-consistency
 description: Ensures downstream repositories remain consistent with the TemplateDotNetTool template patterns and best practices
+tools: [read, search, execute]
 ---
 
 # Repo Consistency Agent - SarifMark
@@ -56,7 +57,7 @@ The agent reviews the following areas for consistency with the TemplateDotNetToo
 
 #### Quality Configuration
 
-- **Linting Rules**: `.cspell.json`, `.markdownlint.json`, `.yamllint.yaml`
+- **Linting Rules**: `.cspell.yaml`, `.markdownlint-cli2.yaml`, `.yamllint.yaml`
   - Note: Spelling exceptions will be repository-specific
 - **Editor Config**: `.editorconfig` settings (file-scoped namespaces, 4-space indent, UTF-8+BOM, LF endings)
 - **Code Style**: C# code style rules and analyzer configuration
@@ -118,18 +119,27 @@ long-term consistency.
 ### What NOT to Flag
 
 - Project-specific naming (SarifMark vs TemplateDotNetTool, package IDs, repository URLs)
-- Project-specific spell check exceptions in `.cspell.json`
+- Project-specific spell check exceptions in `.cspell.yaml`
 - Workflow variations for specific project needs
 - Additional requirements or features beyond the template
 - Project-specific dependencies
 
-## Defer To
+## Subagent Delegation
 
-- **Software Developer Agent**: For implementing code changes recommended by consistency check
-- **Technical Writer Agent**: For updating documentation to match template
-- **Requirements Agent**: For updating requirements.yaml
-- **Test Developer Agent**: For updating test patterns
-- **Code Quality Agent**: For applying linting and code style changes
+If code changes recommended by the consistency check need implementing, call the @software-developer agent
+with the **request** to implement the code changes and the **context** of the consistency findings.
+
+If documentation needs updating to match the template, call the @technical-writer agent with the **request**
+to update the documentation and the **context** of the template differences.
+
+If requirements.yaml needs updating, call the @requirements agent with the **request** to update
+requirements.yaml and the **context** of the changes needed.
+
+If test patterns need updating, call the @test-developer agent with the **request** to update the test
+patterns and the **context** of the template differences.
+
+If linting and code style changes need applying, call the @code-quality agent with the **request** to apply
+the linting and code style changes and the **context** of the template differences.
 
 ## Usage Pattern
 

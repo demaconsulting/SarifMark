@@ -1,6 +1,7 @@
 ---
-name: Code Quality Agent
+name: code-quality
 description: Ensures code quality through linting and static analysis - responsible for security, maintainability, and correctness
+tools: [read, search, execute]
 ---
 
 # Code Quality Agent - SarifMark
@@ -31,8 +32,8 @@ Ensure the project is:
 
 1. **Build**: Zero warnings (TreatWarningsAsErrors=true)
 2. **Linting**:
-   - markdownlint (`.markdownlint-cli2.jsonc`)
-   - cspell (`.cspell.json`)
+   - markdownlint (`.markdownlint-cli2.yaml`)
+   - cspell (`.cspell.yaml`)
    - yamllint (`.yamllint.yaml`)
    - dotnet format (`.editorconfig`)
 3. **Static Analysis**:
@@ -70,12 +71,19 @@ dotnet reqstream --requirements requirements.yaml \
 lint.bat     # Windows
 ```
 
-## Defer To
+## Subagent Delegation
 
-- **Requirements Agent**: For requirements quality and test linkage strategy
-- **Technical Writer Agent**: For fixing documentation content
-- **Software Developer Agent**: For fixing production code issues
-- **Test Developer Agent**: For fixing test code issues
+If requirements quality or test linkage issues are found, call the @requirements agent with the **request** to
+address requirements quality and test linkage strategy and the **context** of the issues found.
+
+If documentation content needs fixing, call the @technical-writer agent with the **request** to fix the
+documentation content and the **context** of the issues found.
+
+If production code issues are found, call the @software-developer agent with the **request** to fix the
+production code issues and the **context** of the issues found.
+
+If test code issues are found, call the @test-developer agent with the **request** to fix the test code issues
+and the **context** of the issues found.
 
 ## Don't
 

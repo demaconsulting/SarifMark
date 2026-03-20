@@ -46,8 +46,6 @@ Please run the following checks before submitting:
 - [ ] **Spell checker passes**: `cspell "**/*.{md,cs}"`
 - [ ] **Markdown linter passes**: `markdownlint "**/*.md"`
 - [ ] **YAML linter passes**: `yamllint .`
-- [ ] **Self-validation passes**:
-  `dotnet run --project src/DemaConsulting.SarifMark --configuration Release --framework net10.0 --no-build -- --validate`
 
 ### Testing
 

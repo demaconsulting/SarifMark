@@ -19,6 +19,7 @@ jobs:
       contents: read
     steps:
       # === INSTALL DEPENDENCIES ===
+      # This section installs all required dependencies for quality checks.
       # Downstream projects: Add any additional dependency installations here.
 
       - name: Checkout
@@ -33,6 +34,16 @@ jobs:
         run: >
           dotnet tool restore
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
       - name: Capture tool versions
         shell: bash
         run: |
@@ -44,29 +55,20 @@ jobs:
           echo "✓ Tool versions captured"
 
       # === CAPTURE OTS SELF-VALIDATION RESULTS ===
+      # This section captures self-validation results from OTS tools.
+      # Downstream projects: Add any additional self-validation steps here.
 
-      - name: VersionMark self-validation
+      - name: Run VersionMark self-validation
         run: >
           dotnet versionmark --validate --results artifacts/versionmark-self-validation-quality.trx
 
       # === RUN QUALITY CHECKS ===
+      # This section runs all quality checks for the project.
       # Downstream projects: Add any additional quality checks here.
 
-      - name: Run markdown linter
-        uses: DavidAnson/markdownlint-cli2-action@v22
-        with:
-          globs: '**/*.md'
-
-      - name: Run spell checker
-        uses: streetsidesoftware/cspell-action@v8
-        with:
-          files: '**/*.{md,cs}'
-          incremental_files_only: false
-
-      - name: Run YAML linter
-        uses: ibiqlik/action-yamllint@v3
-        with:
-          config_file: .yamllint.yaml
+      - name: Run linters
+        shell: bash
+        run: bash ./lint.sh
 
       # === UPLOAD ARTIFACTS ===
       # Downstream projects: Add any additional artifact uploads here.
