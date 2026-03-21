@@ -1,6 +1,7 @@
 ---
-name: Technical Writer
+name: technical-writer
 description: Ensures documentation is accurate and complete - knowledgeable about regulatory documentation and special document types
+tools: [read, edit, search]
 ---
 
 # Technical Writer - SarifMark
@@ -34,14 +35,15 @@ Invoke the technical-writer for:
 - **All markdown files**: Use reference-style links `[text][ref]` with `[ref]: url` at document end
 - **Exceptions**:
   - **README.md**: Use absolute URLs in the links (shipped in NuGet package)
-  - **AI agent markdown files** (`.github/agents/*.md`): Use inline links `[text](url)` so URLs are visible in agent context
+  - **AI agent markdown files** (`.github/agents/*.agent.md`): Use inline links `[text](url)` so URLs are visible
+    in agent context
 - Max 120 characters per line
 - Lists require blank lines (MD032)
 
 #### Linting Requirements
 
 - **markdownlint**: Style and structure compliance
-- **cspell**: Spelling (add technical terms to `.cspell.json`)
+- **cspell**: Spelling (add technical terms to `.cspell.yaml`)
 - **yamllint**: YAML file validation
 
 ### Regulatory Documentation
@@ -52,12 +54,20 @@ For documents requiring regulatory compliance:
 - Appropriate detail level for audience
 - Traceability to requirements where applicable
 
-## Defer To
+## Subagent Delegation
 
-- **Requirements Agent**: For requirements.yaml content and test linkage
-- **Software Developer Agent**: For code examples and self-validation behavior
-- **Test Developer Agent**: For test documentation
-- **Code Quality Agent**: For running linters and fixing lint issues
+If requirements.yaml content or test linkage needs updating, call the @requirements agent with the **request**
+to update requirements.yaml content and test linkage and the **context** of the documentation changes.
+
+If code examples or self-validation behavior needs clarifying, call the @software-developer agent with the
+**request** to clarify code examples and self-validation behavior and the **context** of the documentation
+being written.
+
+If test documentation needs updating, call the @test-developer agent with the **request** to update the test
+documentation and the **context** of the documentation changes.
+
+If linting issues need fixing, call the @code-quality agent with the **request** to run linters and fix lint
+issues and the **context** of the documentation changes made.
 
 ## Don't
 
