@@ -1,7 +1,8 @@
 ---
 name: test-developer
 description: Writes unit and integration tests following AAA pattern - clear documentation of what's tested and proved
-tools: [read, edit, search, execute]
+tools: [edit, read, search, execute]
+user-invocable: true
 ---
 
 # Test Developer - SarifMark

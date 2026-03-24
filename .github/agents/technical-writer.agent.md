@@ -1,7 +1,8 @@
 ---
 name: technical-writer
 description: Ensures documentation is accurate and complete - knowledgeable about regulatory documentation and special document types
-tools: [read, edit, search]
+tools: [edit, read, search, execute]
+user-invocable: true
 ---
 
 # Technical Writer - SarifMark
