@@ -43,7 +43,8 @@ Project-specific guidance for agents working on SarifMark - a .NET CLI tool for 
 
 ## Key Files
 
-- **`requirements.yaml`** - All requirements with test linkage (enforced via `dotnet reqstream --enforce`)
+- **`requirements.yaml`** - Root requirements file using `includes:` to reference `docs/reqstream/` files
+- **`docs/reqstream/`** - Per-software-unit, platform, and OTS requirements YAML files
 - **`.editorconfig`** - Code style (file-scoped namespaces, 4-space indent, UTF-8, LF endings)
 - **`.cspell.yaml`, `.markdownlint-cli2.yaml`, `.yamllint.yaml`** - Linting configs
 
@@ -111,6 +112,18 @@ dotnet build --configuration Release && dotnet test --configuration Release
 # 4. All linters (markdownlint, cspell, yamllint)
 # 5. Requirements: dotnet reqstream --requirements requirements.yaml --tests "test-results/**/*.trx" --enforce
 ```
+
+## Agent Report Files
+
+When agents need to write report files to communicate with each other or the user, follow these guidelines:
+
+- **Naming Convention**: Use the pattern `AGENT_REPORT_xxxx.md` (e.g., `AGENT_REPORT_analysis.md`,
+  `AGENT_REPORT_results.md`)
+- **Purpose**: These files are for temporary inter-agent communication and should not be committed
+- **Exclusions**: Files matching `AGENT_REPORT_*.md` are automatically:
+  - Excluded from git (via `.gitignore`)
+  - Excluded from markdown linting
+  - Excluded from spell checking
 
 ## Custom Agents
 

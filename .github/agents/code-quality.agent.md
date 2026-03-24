@@ -1,7 +1,8 @@
 ---
 name: code-quality
 description: Ensures code quality through linting and static analysis - responsible for security, maintainability, and correctness
-tools: [read, search, execute]
+tools: [read, search, edit, execute, github, agent]
+user-invocable: true
 ---
 
 # Code Quality Agent - SarifMark

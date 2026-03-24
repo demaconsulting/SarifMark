@@ -1,7 +1,8 @@
 ---
 name: software-developer
 description: Writes production code and self-validation tests - targets design-for-testability and literate programming style
-tools: [read, edit, search, execute]
+tools: [read, search, edit, execute, github, agent]
+user-invocable: true
 ---
 
 # Software Developer - SarifMark
