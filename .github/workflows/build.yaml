@@ -582,7 +582,7 @@ jobs:
           --filter node_modules/.bin/mermaid-filter.cmd
           --metadata version="${{ inputs.version }}"
           --metadata date="$(date +'%Y-%m-%d')"
-          --output docs/build_notes/buildnotes.html
+          --output docs/build_notes/build_notes.html
 
       - name: Generate Guide HTML with Pandoc
         shell: bash
@@ -661,7 +661,7 @@ jobs:
         run: >
           dotnet weasyprint
           --pdf-variant pdf/a-3u
-          docs/build_notes/buildnotes.html
+          docs/build_notes/build_notes.html
           "docs/SarifMark Build Notes.pdf"
 
       - name: Generate Guide PDF with Weasyprint
