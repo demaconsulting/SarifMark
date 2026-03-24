@@ -17,7 +17,7 @@ recommended changes.
 
 ## Consistency Steps
 
-1. Fetch the last 20 merged PRs (`is:pr is:merged`) from <https://github.com/demaconsulting/TemplateDotNetTool>
+1. Fetch the 20 most recently merged PRs (`is:pr is:merged sort:updated-desc`) from <https://github.com/demaconsulting/TemplateDotNetTool>
 2. Determine the intent of the template pull requests (what changes were performed to which files)
 3. Apply missing changes to this repository's files (if appropriate and with translation)
 
