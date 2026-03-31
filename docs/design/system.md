@@ -38,14 +38,16 @@ other unexpected `Exception` is logged with an "Unexpected error" message and
 then rethrown, allowing the default .NET unhandled-exception behavior (stack
 trace and process termination with a non-zero exit code) to occur.
 
-`Program.Run` evaluates conditions in priority order:
+`Program.Run` first prints the standard banner for all non-`--version`
+invocations, then evaluates conditions in priority order:
 
-| Mode       | Condition              | Subsystem Invoked                          |
-|------------|------------------------|--------------------------------------------|
-| Version    | `--version` flag       | None (prints version string)               |
-| Help       | `--help` flag          | None (prints usage)                        |
-| Validate   | `--validate` flag      | `SelfTest.Validation.Run`                  |
-| Analysis   | *(default)*            | `Sarif.SarifResults.Read` + `ToMarkdown`   |
+| Mode       | Condition                                  | Subsystem Invoked                          |
+|------------|--------------------------------------------|--------------------------------------------|
+| Banner     | Any non-`--version` invocation (first)     | `Program` (prints standard banner)         |
+| Version    | `--version` flag                           | None (prints version string)               |
+| Help       | `--help` flag                              | None (prints usage)                        |
+| Validate   | `--validate` flag                          | `SelfTest.Validation.Run`                  |
+| Analysis   | *(default)*                                | `Sarif.SarifResults.Read` + `ToMarkdown`   |
 
 ## Subsystem Interactions
 
