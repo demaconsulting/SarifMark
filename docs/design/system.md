@@ -46,27 +46,30 @@ non-zero exit code without an unhandled-exception stack trace.
 
 ## Subsystem Interactions
 
-```text
-┌─────────────────────────────────────────────────────────┐
-│  Program (system entry point)                           │
-│  ┌──────────┐  creates  ┌────────────────────────┐     │
-│  │          │──────────>│ Cli.Context             │     │
-│  │  Main /  │           │ (args, output, exit)    │     │
-│  │  Run     │           └────────────────────────┘     │
-│  │          │  calls    ┌──────────────────────────┐   │
-│  │          │──────────>│ SelfTest.Validation.Run  │   │
-│  │          │           └──────────────────────────┘   │
-│  │          │  calls    ┌──────────────────────────┐   │
-│  │          │──────────>│ Sarif.SarifResults.Read  │   │
-│  │          │           │ Sarif.SarifResults.ToMarkdown│
-│  └──────────┘           └──────────────────────────┘   │
-└─────────────────────────────────────────────────────────┘
-                              │  uses
-                              ▼
-                    ┌──────────────────┐
-                    │ Utilities.       │
-                    │ PathHelpers      │
-                    └──────────────────┘
+```mermaid
+flowchart TD
+    Main["Program\n(Main / Run)"]
+
+    subgraph Cli
+        Context["Context\n(args, output, exit)"]
+    end
+
+    subgraph SelfTest
+        Validation["Validation.Run"]
+    end
+
+    subgraph Sarif
+        SarifResults["SarifResults.Read\nSarifResults.ToMarkdown"]
+    end
+
+    subgraph Utilities
+        PathHelpers["PathHelpers"]
+    end
+
+    Main -->|creates| Context
+    Main -->|calls| Validation
+    Main -->|calls| SarifResults
+    SelfTest -->|uses| PathHelpers
 ```
 
 All subsystems receive a `Cli.Context` reference for output. The `Utilities`
