@@ -11,7 +11,6 @@ sections:
               making the tool suitable for DevOps workflows and batch processing scenarios.
             tags: [public]
             children:
-              - SarifMark-Program-Main
               - SarifMark-Context-Create
             tests:
               - IntegrationTest_VersionFlag_OutputsVersion
@@ -24,7 +23,6 @@ sections:
               verification, and ensuring consistent behavior across different environments.
             tags: [public]
             children:
-              - SarifMark-Program-Version
               - SarifMark-Context-VersionFlag
             tests:
               - IntegrationTest_VersionFlag_OutputsVersion
@@ -38,8 +36,6 @@ sections:
             tags: [public]
             children:
               - SarifMark-Context-HelpFlag
-              - SarifMark-Program-Banner
-              - SarifMark-Program-Help
             tests:
               - IntegrationTest_HelpFlag_OutputsUsageInformation
               - Context_Create_HelpFlag_SetsHelpTrue
@@ -86,6 +82,5 @@ sections:
             tags: [public]
             children:
               - SarifMark-Context-UnknownArgs
-              - SarifMark-Program-Main-Exceptions
             tests:
               - IntegrationTest_UnknownArgument_ShowsError

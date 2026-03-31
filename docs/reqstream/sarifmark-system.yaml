@@ -40,7 +40,7 @@ sections:
           Reading and analyzing SARIF files is the core purpose of the tool, enabling
           integration with static analysis workflows.
         tests:
-          - IntegrationTest_SarifFile_ProcessesSarifFile
+          - IntegrationTest_ValidSarifFile_ProcessesSuccessfully
 
       - id: SarifMark-System-Report
         title: The tool shall generate markdown reports from SARIF files.
@@ -48,7 +48,7 @@ sections:
           Markdown report generation makes SARIF analysis results accessible to
           stakeholders in a readable format.
         tests:
-          - IntegrationTest_ReportFile_GeneratesMarkdownReport
+          - IntegrationTest_GenerateReport_CreatesReportFile
 
       - id: SarifMark-System-Enforce
         title: The tool shall return non-zero exit code when enforcement mode detects issues.

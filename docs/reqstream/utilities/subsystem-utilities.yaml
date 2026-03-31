@@ -13,6 +13,8 @@ sections:
             tags: [internal]
             children:
               - SarifMark-PathHelpers-SafeCombine
-              - SarifMark-PathHelpers-TraversalCheck
+              - SarifMark-PathHelpers-PreCombineCheck
+              - SarifMark-PathHelpers-RootedCheck
+              - SarifMark-PathHelpers-PostCombineCheck
             tests:
               - PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully
