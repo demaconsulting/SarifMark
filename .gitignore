@@ -97,5 +97,6 @@ versionmark-*.json
 *.log
 .DS_Store
 
-# Agent reports (not to be committed)
+# Agent reports and logs (not to be committed)
 AGENT_REPORT_*.md
+.agent-logs/

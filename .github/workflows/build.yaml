@@ -523,7 +523,6 @@ jobs:
         # TODO: Add --enforce once reviews branch is populated with review evidence PDFs and index.json
         run: >
           dotnet reviewmark
-          --definition .reviewmark.yaml
           --plan docs/code_review_plan/plan.md
           --plan-depth 1
           --report docs/code_review_report/report.md
@@ -584,15 +583,25 @@ jobs:
           --metadata date="$(date +'%Y-%m-%d')"
           --output docs/build_notes/build_notes.html
 
-      - name: Generate Guide HTML with Pandoc
+      - name: Generate Design HTML with Pandoc
         shell: bash
         run: >
           dotnet pandoc
-          --defaults docs/guide/definition.yaml
+          --defaults docs/design/definition.yaml
           --filter node_modules/.bin/mermaid-filter.cmd
           --metadata version="${{ inputs.version }}"
           --metadata date="$(date +'%Y-%m-%d')"
-          --output docs/guide/guide.html
+          --output docs/design/design.html
+
+      - name: Generate User Guide HTML with Pandoc
+        shell: bash
+        run: >
+          dotnet pandoc
+          --defaults docs/user_guide/definition.yaml
+          --filter node_modules/.bin/mermaid-filter.cmd
+          --metadata version="${{ inputs.version }}"
+          --metadata date="$(date +'%Y-%m-%d')"
+          --output docs/user_guide/introduction.html
 
       - name: Generate Code Quality HTML with Pandoc
         shell: bash
@@ -664,12 +673,19 @@ jobs:
           docs/build_notes/build_notes.html
           "docs/SarifMark Build Notes.pdf"
 
-      - name: Generate Guide PDF with Weasyprint
+      - name: Generate User Guide PDF with Weasyprint
         run: >
           dotnet weasyprint
           --pdf-variant pdf/a-3u
-          docs/guide/guide.html
+          docs/user_guide/introduction.html
           "docs/SarifMark User Guide.pdf"
+
+      - name: Generate Design PDF with Weasyprint
+        run: >
+          dotnet weasyprint
+          --pdf-variant pdf/a-3u
+          docs/design/design.html
+          "docs/SarifMark Software Design.pdf"
 
       - name: Generate Code Quality PDF with Weasyprint
         run: >
