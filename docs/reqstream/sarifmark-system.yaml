@@ -12,6 +12,7 @@ sections:
     requirements:
       - id: SarifMark-System-Version
         title: The tool shall display version information when the version flag is provided.
+        tags: [public]
         justification: >-
           Users need to quickly identify the version of the tool they are using for
           troubleshooting and compatibility verification.
@@ -20,6 +21,7 @@ sections:
 
       - id: SarifMark-System-Help
         title: The tool shall display help information when the help flag is provided.
+        tags: [public]
         justification: >-
           Help information improves discoverability and usability by providing users with guidance
           on available options and parameters.
@@ -28,6 +30,7 @@ sections:
 
       - id: SarifMark-System-Validate
         title: The tool shall support self-validation mode.
+        tags: [public]
         justification: >-
           Self-validation mode enables verification that the tool operates correctly in
           the deployment environment.
@@ -36,6 +39,7 @@ sections:
 
       - id: SarifMark-System-SarifAnalysis
         title: The tool shall read and analyze SARIF files.
+        tags: [public]
         justification: >-
           Reading and analyzing SARIF files is the core purpose of the tool, enabling
           integration with static analysis workflows.
@@ -44,6 +48,7 @@ sections:
 
       - id: SarifMark-System-Report
         title: The tool shall generate markdown reports from SARIF files.
+        tags: [public]
         justification: >-
           Markdown report generation makes SARIF analysis results accessible to
           stakeholders in a readable format.
@@ -52,6 +57,7 @@ sections:
 
       - id: SarifMark-System-Enforce
         title: The tool shall return non-zero exit code when enforcement mode detects issues.
+        tags: [public]
         justification: >-
           Non-zero exit codes enable CI/CD pipeline integration for quality gates.
         tests:
@@ -59,6 +65,7 @@ sections:
 
       - id: SarifMark-System-Silent
         title: The tool shall support silent mode to suppress console output.
+        tags: [public]
         justification: >-
           Silent mode enables cleaner integration into automated workflows.
         tests:
@@ -66,6 +73,7 @@ sections:
 
       - id: SarifMark-System-LogFile
         title: The tool shall support writing output to a log file.
+        tags: [public]
         justification: >-
           Log file support enables persistent record-keeping and audit trails.
         tests:
@@ -73,6 +81,7 @@ sections:
 
       - id: SarifMark-System-InvalidArgs
         title: The tool shall reject unknown command-line arguments with an error.
+        tags: [public]
         justification: >-
           Rejecting unknown arguments prevents silent failures from typos.
         tests:

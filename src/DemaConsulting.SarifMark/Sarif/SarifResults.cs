@@ -326,9 +326,10 @@ public record SarifResults
     private static int? ParseStartLine(JsonElement physicalLocationElement)
     {
         if (physicalLocationElement.TryGetProperty("region", out var regionElement) &&
-            regionElement.TryGetProperty("startLine", out var startLineElement))
+            regionElement.TryGetProperty("startLine", out var startLineElement) &&
+            startLineElement.TryGetInt32(out var startLine))
         {
-            return startLineElement.GetInt32();
+            return startLine;
         }
 
         return null;
