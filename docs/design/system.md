@@ -32,8 +32,11 @@ The system entry point is `Program.Main`. On every invocation it:
 1. Returns `Context.ExitCode` to the shell (0 for success, 1 on error).
 
 `ArgumentException` and `InvalidOperationException` are caught at the
-`Main` level and translated to exit code 1, so all error paths produce a
-non-zero exit code without an unhandled-exception stack trace.
+`Main` level and translated to exit code 1, so these expected error paths
+produce a non-zero exit code without an unhandled-exception stack trace. Any
+other unexpected `Exception` is logged with an "Unexpected error" message and
+then rethrown, allowing the default .NET unhandled-exception behavior (stack
+trace and process termination with a non-zero exit code) to occur.
 
 `Program.Run` evaluates conditions in priority order:
 
