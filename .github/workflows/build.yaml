@@ -37,7 +37,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: lts/*
+          node-version: 24.x
 
       - name: Setup Python
         uses: actions/setup-python@v6
@@ -523,7 +523,6 @@ jobs:
         # TODO: Add --enforce once reviews branch is populated with review evidence PDFs and index.json
         run: >
           dotnet reviewmark
-          --definition .reviewmark.yaml
           --plan docs/code_review_plan/plan.md
           --plan-depth 1
           --report docs/code_review_report/report.md
@@ -583,6 +582,16 @@ jobs:
           --metadata version="${{ inputs.version }}"
           --metadata date="$(date +'%Y-%m-%d')"
           --output docs/build_notes/build_notes.html
+
+      - name: Generate Design HTML with Pandoc
+        shell: bash
+        run: >
+          dotnet pandoc
+          --defaults docs/design/definition.yaml
+          --filter node_modules/.bin/mermaid-filter.cmd
+          --metadata version="${{ inputs.version }}"
+          --metadata date="$(date +'%Y-%m-%d')"
+          --output docs/design/design.html
 
       - name: Generate Guide HTML with Pandoc
         shell: bash
@@ -670,6 +679,13 @@ jobs:
           --pdf-variant pdf/a-3u
           docs/guide/guide.html
           "docs/SarifMark User Guide.pdf"
+
+      - name: Generate Design PDF with Weasyprint
+        run: >
+          dotnet weasyprint
+          --pdf-variant pdf/a-3u
+          docs/design/design.html
+          "docs/SarifMark Software Design.pdf"
 
       - name: Generate Code Quality PDF with Weasyprint
         run: >

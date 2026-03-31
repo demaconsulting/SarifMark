@@ -2,6 +2,32 @@
 
 Project-specific guidance for agents working on SarifMark - a .NET CLI tool for creating markdown reports from SARIF files.
 
+## Standards Application (ALL Agents Must Follow)
+
+Before performing any work, agents must read and apply the relevant standards from `.github/standards/`:
+
+- **`csharp-language.md`** - For C# code development (literate programming, XML docs, dependency injection)
+- **`csharp-testing.md`** - For C# test development (AAA pattern, naming, MSTest anti-patterns)
+- **`reqstream-usage.md`** - For requirements management (traceability, semantic IDs, source filters)
+- **`reviewmark-usage.md`** - For file review management (review-sets, file patterns, enforcement)
+- **`software-items.md`** - For software categorization (system/subsystem/unit/OTS classification)
+- **`technical-documentation.md`** - For documentation creation and maintenance (structure, Pandoc, README best practices)
+
+Load only the standards relevant to your specific task scope and apply their
+quality checks and guidelines throughout your work.
+
+## Agent Delegation Guidelines
+
+The default agent should handle simple, straightforward tasks directly.
+Delegate to specialized agents only for specific scenarios:
+
+- **Light development work** (small fixes, simple features) → Call @developer agent
+- **Light quality checking** (linting, basic validation) → Call @quality agent
+- **Formal feature implementation** (complex, multi-step) → Call the `@implementation` agent
+- **Formal bug resolution** (complex debugging, systematic fixes) → Call the `@implementation` agent
+- **Formal reviews** (compliance verification, detailed analysis) → Call @code-review agent
+- **Template consistency** (downstream repository alignment) → Call @repo-consistency agent
+
 ## Available Specialized Agents
 
 - **requirements** agent - Develops requirements and ensures test coverage linkage
@@ -9,8 +35,15 @@ Project-specific guidance for agents working on SarifMark - a .NET CLI tool for 
 - **software-developer** agent - Writes production code and self-validation tests in literate style
 - **test-developer** agent - Creates unit and integration tests following AAA pattern
 - **code-quality** agent - Enforces linting, static analysis, and security standards
-- **code-review** agent - Assists in performing formal file reviews
-- **repo-consistency** agent - Ensures downstream repositories remain consistent with template patterns
+- **code-review** - Agent for performing formal reviews using standardized review processes
+- **developer** - General-purpose software development agent that applies appropriate standards
+  based on the work being performed
+- **implementation** - Orchestrator agent that manages quality implementations through a formal
+  state machine workflow
+- **quality** - Quality assurance agent that grades developer work against DEMA Consulting
+  standards and Continuous Compliance practices
+- **repo-consistency** - Ensures downstream repositories remain consistent with the
+  TemplateDotNetTool template patterns and best practices
 
 ## Agent Selection Guide
 
@@ -115,15 +148,15 @@ dotnet build --configuration Release && dotnet test --configuration Release
 
 ## Agent Report Files
 
-When agents need to write report files to communicate with each other or the user, follow these guidelines:
+Upon completion, create a report file at `.agent-logs/[agent-name]-[subject]-[unique-id].md` that includes:
 
-- **Naming Convention**: Use the pattern `AGENT_REPORT_xxxx.md` (e.g., `AGENT_REPORT_analysis.md`,
-  `AGENT_REPORT_results.md`)
-- **Purpose**: These files are for temporary inter-agent communication and should not be committed
-- **Exclusions**: Files matching `AGENT_REPORT_*.md` are automatically:
-  - Excluded from git (via `.gitignore`)
-  - Excluded from markdown linting
-  - Excluded from spell checking
+- A concise summary of the work performed
+- Any important decisions made and their rationale
+- Follow-up items, open questions, or TODOs
+
+Store agent logs in the `.agent-logs/` folder so they are ignored via `.gitignore` and excluded from linting and commits.
+
+Files matching `AGENT_REPORT_*.md` are also excluded from git, linting, and spell-checking (legacy naming pattern).
 
 ## Custom Agents
 
@@ -143,3 +176,9 @@ Delegate tasks to specialized agents for better results:
   code refactoring, literate programming style
 - **test-developer** - Invoke for: unit tests, integration tests, test coverage improvement, AAA
   pattern compliance
+- **developer** - Invoke for: light development work (small fixes, simple features) applying
+  appropriate standards based on task scope
+- **quality** - Invoke for: light quality checking, grading developer work against DEMA Consulting
+  standards and Continuous Compliance practices
+- **implementation** - Invoke for: formal feature implementation (complex, multi-step), formal bug
+  resolution (complex debugging, systematic fixes) using state machine orchestration
