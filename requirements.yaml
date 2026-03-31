@@ -13,15 +13,17 @@
 #
 ---
 includes:
-  - docs/reqstream/command-line.yaml
-  - docs/reqstream/sarif.yaml
-  - docs/reqstream/report.yaml
-  - docs/reqstream/validation.yaml
+  - docs/reqstream/sarifmark-system.yaml
+  - docs/reqstream/cli/subsystem-cli.yaml
+  - docs/reqstream/cli/context.yaml
+  - docs/reqstream/sarif/subsystem-sarif.yaml
+  - docs/reqstream/sarif/subsystem-report.yaml
+  - docs/reqstream/sarif/sarif-result.yaml
+  - docs/reqstream/sarif/sarif-results.yaml
+  - docs/reqstream/self-test/subsystem-self-test.yaml
+  - docs/reqstream/self-test/validation-class.yaml
+  - docs/reqstream/utilities/subsystem-utilities.yaml
+  - docs/reqstream/utilities/path-helpers.yaml
   - docs/reqstream/platform.yaml
   - docs/reqstream/ots-software.yaml
   - docs/reqstream/program.yaml
-  - docs/reqstream/context.yaml
-  - docs/reqstream/sarif-result.yaml
-  - docs/reqstream/sarif-results.yaml
-  - docs/reqstream/validation-class.yaml
-  - docs/reqstream/path-helpers.yaml

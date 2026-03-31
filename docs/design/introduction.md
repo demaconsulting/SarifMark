@@ -42,6 +42,48 @@ This document is intended for:
 Readers are assumed to be familiar with C# and .NET development and general concepts of
 command-line tool design.
 
+## Software Structure
+
+The following tree shows how the SarifMark software items are organized across the
+system, subsystem, and unit levels:
+
+```text
+SarifMark (System)
+├── Program (Unit)
+├── Cli (Subsystem)
+│   └── Context (Unit)
+├── Sarif (Subsystem)
+│   ├── SarifResult (Unit)
+│   └── SarifResults (Unit)
+├── SelfTest (Subsystem)
+│   └── Validation (Unit)
+└── Utilities (Subsystem)
+    └── PathHelpers (Unit)
+```
+
+Each unit is described in detail in its own chapter within this document.
+
+## Folder Layout
+
+The source code folder structure mirrors the top-level subsystem breakdown above, giving
+reviewers an explicit navigation aid from design to code:
+
+```text
+src/DemaConsulting.SarifMark/
+├── Program.cs                  — entry point and execution orchestrator
+├── Cli/
+│   └── Context.cs              — command-line argument parser and I/O owner
+├── Sarif/
+│   ├── SarifResult.cs          — immutable record for a single analysis finding
+│   └── SarifResults.cs         — SARIF file reading and markdown report generation
+├── SelfTest/
+│   └── Validation.cs           — self-validation test runner
+└── Utilities/
+    └── PathHelpers.cs          — safe path combination utilities
+```
+
+The test project mirrors the same layout under `test/DemaConsulting.SarifMark.Tests/`.
+
 ## Relationship to Requirements and Code
 
 Each component described here corresponds to one or more requirements defined in the

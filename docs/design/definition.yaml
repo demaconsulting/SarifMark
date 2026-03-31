@@ -1,18 +1,24 @@
 ---
 resource-path:
   - docs/design
+  - docs/design/cli
+  - docs/design/sarif
+  - docs/design/self-test
+  - docs/design/utilities
   - docs/template
 input-files:
   - docs/design/title.txt
   - docs/design/introduction.md
-  - docs/design/command-line.md
-  - docs/design/sarif.md
-  - docs/design/validation.md
   - docs/design/program.md
-  - docs/design/context.md
-  - docs/design/sarif-result.md
-  - docs/design/sarif-results.md
-  - docs/design/path-helpers.md
+  - docs/design/cli/cli.md
+  - docs/design/cli/context.md
+  - docs/design/sarif/sarif.md
+  - docs/design/sarif/sarif-result.md
+  - docs/design/sarif/sarif-results.md
+  - docs/design/self-test/self-test.md
+  - docs/design/self-test/validation.md
+  - docs/design/utilities/utilities.md
+  - docs/design/utilities/path-helpers.md
 template: template.html
 table-of-contents: true
 number-sections: true
