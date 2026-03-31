@@ -15,15 +15,15 @@
 includes:
   - docs/reqstream/sarifmark-system.yaml
   - docs/reqstream/cli/subsystem-cli.yaml
-  - docs/reqstream/cli/context.yaml
+  - docs/reqstream/cli/unit-context.yaml
   - docs/reqstream/sarif/subsystem-sarif.yaml
   - docs/reqstream/sarif/subsystem-report.yaml
-  - docs/reqstream/sarif/sarif-result.yaml
-  - docs/reqstream/sarif/sarif-results.yaml
+  - docs/reqstream/sarif/unit-sarif-result.yaml
+  - docs/reqstream/sarif/unit-sarif-results.yaml
   - docs/reqstream/self-test/subsystem-self-test.yaml
-  - docs/reqstream/self-test/validation-class.yaml
+  - docs/reqstream/self-test/unit-validation.yaml
   - docs/reqstream/utilities/subsystem-utilities.yaml
-  - docs/reqstream/utilities/path-helpers.yaml
-  - docs/reqstream/platform.yaml
+  - docs/reqstream/utilities/unit-path-helpers.yaml
+  - docs/reqstream/platform-requirements.yaml
   - docs/reqstream/ots-software.yaml
-  - docs/reqstream/program.yaml
+  - docs/reqstream/unit-program.yaml

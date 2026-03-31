@@ -24,13 +24,19 @@ evidence-source:
 # Software unit reviews cover the internal design and implementation of each individual class.
 reviews:
 
-  # System review
+  # ---------------------------------------------------------------------------
+  # System Review
+  # ---------------------------------------------------------------------------
+
   - id: SarifMark-System
     title: Review of SarifMark System
     paths:
       - "docs/reqstream/sarifmark-system.yaml"
+      - "docs/reqstream/platform-requirements.yaml"
+      - "docs/reqstream/ots-software.yaml"
       - "docs/design/introduction.md"
-      - "docs/reqstream/program.yaml"
+      - "docs/design/system.md"
+      - "docs/reqstream/unit-program.yaml"
       - "docs/design/program.md"
       - "src/**/Program.cs"
       - "test/**/ProgramTests.cs"
@@ -38,7 +44,10 @@ reviews:
       - "test/**/Runner.cs"
       - "test/**/AssemblyInfo.cs"
 
-  # All requirements review
+  # ---------------------------------------------------------------------------
+  # All Requirements Review
+  # ---------------------------------------------------------------------------
+
   - id: SarifMark-AllRequirements
     title: Review of All SarifMark Requirements
     paths:
@@ -49,7 +58,7 @@ reviews:
   # Subsystem Reviews
   # ---------------------------------------------------------------------------
 
-  - id: SarifMark-Cli-Subsystem-Review
+  - id: SarifMark-Cli
     title: Review of SarifMark Command-Line Interface Subsystem
     paths:
       - "docs/reqstream/cli/subsystem-cli.yaml"
@@ -58,7 +67,7 @@ reviews:
       - "src/**/Cli/Context.cs"
       - "test/**/Cli/ContextTests.cs"
 
-  - id: SarifMark-Sarif-Subsystem-Review
+  - id: SarifMark-Sarif
     title: Review of SarifMark SARIF Reading Subsystem
     paths:
       - "docs/reqstream/sarif/subsystem-sarif.yaml"
@@ -71,7 +80,7 @@ reviews:
       - "test/**/Sarif/SarifResultsTests.cs"
       - "test/**/IntegrationTests.cs"
 
-  - id: SarifMark-SelfTest-Subsystem-Review
+  - id: SarifMark-SelfTest
     title: Review of SarifMark Self-Validation Subsystem
     paths:
       - "docs/reqstream/self-test/subsystem-self-test.yaml"
@@ -81,7 +90,7 @@ reviews:
       - "test/**/SelfTest/ValidationTests.cs"
       - "test/**/IntegrationTests.cs"
 
-  - id: SarifMark-Utilities-Subsystem-Review
+  - id: SarifMark-Utilities
     title: Review of SarifMark Utilities Subsystem
     paths:
       - "docs/reqstream/utilities/subsystem-utilities.yaml"
@@ -90,60 +99,54 @@ reviews:
       - "src/**/Utilities/PathHelpers.cs"
       - "test/**/Utilities/PathHelpersTests.cs"
 
-  - id: SarifMark-Platform-Subsystem-Review
-    title: Review of SarifMark Platform and OTS Software
-    paths:
-      - "docs/reqstream/platform.yaml"
-      - "docs/reqstream/ots-software.yaml"
-
   # ---------------------------------------------------------------------------
   # Software Unit Reviews
   # ---------------------------------------------------------------------------
 
-  - id: SarifMark-Program-SoftwareUnit-Review
+  - id: SarifMark-Program
     title: Review of SarifMark Program Software Unit
     paths:
-      - "docs/reqstream/program.yaml"
+      - "docs/reqstream/unit-program.yaml"
       - "docs/design/program.md"
       - "src/**/Program.cs"
       - "test/**/ProgramTests.cs"
 
-  - id: SarifMark-Context-SoftwareUnit-Review
+  - id: SarifMark-Context
     title: Review of SarifMark Context Software Unit
     paths:
-      - "docs/reqstream/cli/context.yaml"
+      - "docs/reqstream/cli/unit-context.yaml"
       - "docs/design/cli/context.md"
       - "src/**/Cli/Context.cs"
       - "test/**/Cli/ContextTests.cs"
 
-  - id: SarifMark-SarifResult-SoftwareUnit-Review
+  - id: SarifMark-SarifResult
     title: Review of SarifMark SarifResult Software Unit
     paths:
-      - "docs/reqstream/sarif/sarif-result.yaml"
+      - "docs/reqstream/sarif/unit-sarif-result.yaml"
       - "docs/design/sarif/sarif-result.md"
       - "src/**/Sarif/SarifResult.cs"
       - "test/**/Sarif/SarifResultsTests.cs"
 
-  - id: SarifMark-SarifResults-SoftwareUnit-Review
+  - id: SarifMark-SarifResults
     title: Review of SarifMark SarifResults Software Unit
     paths:
-      - "docs/reqstream/sarif/sarif-results.yaml"
+      - "docs/reqstream/sarif/unit-sarif-results.yaml"
       - "docs/design/sarif/sarif-results.md"
       - "src/**/Sarif/SarifResults.cs"
       - "test/**/Sarif/SarifResultsTests.cs"
 
-  - id: SarifMark-Validation-SoftwareUnit-Review
+  - id: SarifMark-Validation
     title: Review of SarifMark Validation Software Unit
     paths:
-      - "docs/reqstream/self-test/validation-class.yaml"
+      - "docs/reqstream/self-test/unit-validation.yaml"
       - "docs/design/self-test/validation.md"
       - "src/**/SelfTest/Validation.cs"
       - "test/**/SelfTest/ValidationTests.cs"
 
-  - id: SarifMark-PathHelpers-SoftwareUnit-Review
+  - id: SarifMark-PathHelpers
     title: Review of SarifMark PathHelpers Software Unit
     paths:
-      - "docs/reqstream/utilities/path-helpers.yaml"
+      - "docs/reqstream/utilities/unit-path-helpers.yaml"
       - "docs/design/utilities/path-helpers.md"
       - "src/**/Utilities/PathHelpers.cs"
       - "test/**/Utilities/PathHelpersTests.cs"
