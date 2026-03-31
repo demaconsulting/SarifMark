@@ -1,0 +1,20 @@
+---
+sections:
+  - title: SarifMark Requirements
+    sections:
+      - title: Utilities Subsystem
+        requirements:
+          - id: SarifMark-Utilities-SafePathHandling
+            title: The Utilities subsystem shall provide safe path-handling functions for use by other subsystems.
+            justification: >-
+              Centralizing path-safety logic in a dedicated subsystem prevents path-traversal vulnerabilities
+              from being independently reimplemented across the codebase and ensures consistent, auditable
+              protection wherever external inputs are combined with base paths.
+            tags: [internal]
+            children:
+              - SarifMark-PathHelpers-SafeCombine
+              - SarifMark-PathHelpers-PreCombineCheck
+              - SarifMark-PathHelpers-RootedCheck
+              - SarifMark-PathHelpers-PostCombineCheck
+            tests:
+              - PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully

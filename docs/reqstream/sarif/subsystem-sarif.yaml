@@ -93,7 +93,7 @@ sections:
               execution without proper input, improving tool safety and predictability.
             tags: [public]
             children:
-              - SarifMark-Program-SarifAnalysis
+              - SarifMark-SarifResults-ValidatePath
             tests:
               - IntegrationTest_MissingSarifParameter_ShowsError
 
@@ -104,6 +104,6 @@ sections:
               fulfill its primary purpose of converting analysis results to markdown documentation.
             tags: [public]
             children:
-              - SarifMark-Program-SarifAnalysis
+              - SarifMark-SarifResults-ParseResults
             tests:
               - IntegrationTest_ValidSarifFile_ProcessesSuccessfully
