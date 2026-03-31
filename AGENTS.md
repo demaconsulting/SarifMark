@@ -30,11 +30,6 @@ Delegate to specialized agents only for specific scenarios:
 
 ## Available Specialized Agents
 
-- **requirements** agent - Develops requirements and ensures test coverage linkage
-- **technical-writer** agent - Creates accurate documentation following regulatory best practices
-- **software-developer** agent - Writes production code and self-validation tests in literate style
-- **test-developer** agent - Creates unit and integration tests following AAA pattern
-- **code-quality** agent - Enforces linting, static analysis, and security standards
 - **code-review** - Agent for performing formal reviews using standardized review processes
 - **developer** - General-purpose software development agent that applies appropriate standards
   based on the work being performed
@@ -47,23 +42,21 @@ Delegate to specialized agents only for specific scenarios:
 
 ## Agent Selection Guide
 
-- Fix a bug → call the @software-developer agent with the **request** to fix the bug and the **context** of the
-  bug details
-- Add a new feature → call the @requirements agent with the **request** to define the feature requirements and the
-  **context** of the feature details, then call the @software-developer agent with the **request** to implement the
-  feature and the **context** of the requirements, then call the @test-developer agent with the **request** to add
-  tests and the **context** of the feature implemented
-- Write a test → call the @test-developer agent with the **request** to write the test and the **context** of
+- Fix a bug → call the @developer agent with the **request** to fix the bug and the **context** of the
+  bug details; for complex bugs call the @implementation agent
+- Add a new feature → call the @implementation agent with the **request** to implement the feature
+  and the **context** of the feature details (it orchestrates requirements, development, and testing)
+- Write a test → call the @developer agent with the **request** to write the test and the **context** of
   what needs to be tested
-- Fix linting or static analysis issues → call the @code-quality agent with the **request** to fix the issues
+- Fix linting or static analysis issues → call the @quality agent with the **request** to fix the issues
   and the **context** of the errors encountered
-- Update documentation → call the @technical-writer agent with the **request** to update the documentation and
+- Update documentation → call the @developer agent with the **request** to update the documentation and
   the **context** of what needs to change
-- Add or update requirements → call the @requirements agent with the **request** to add or update requirements
+- Add or update requirements → call the @developer agent with the **request** to add or update requirements
   and the **context** of the feature details
-- Ensure test coverage linkage in `requirements.yaml` → call the @requirements agent with the **request** to
+- Ensure test coverage linkage in `requirements.yaml` → call the @developer agent with the **request** to
   ensure test coverage linkage and the **context** of the current coverage gaps
-- Run security scanning or address CodeQL alerts → call the @code-quality agent with the **request** to address
+- Run security scanning or address CodeQL alerts → call the @quality agent with the **request** to address
   security scanning or CodeQL alerts and the **context** of the alerts found
 - Perform a formal file review → call the @code-review agent with the **request** to perform a formal review and
   the **context** of the review-set name
@@ -162,20 +155,10 @@ Files matching `AGENT_REPORT_*.md` are also excluded from git, linting, and spel
 
 Delegate tasks to specialized agents for better results:
 
-- **requirements** - Invoke for: creating/reviewing requirements in requirements.yaml, ensuring
-  proper test coverage linkage, determining test strategy (unit/integration/self-validation)
-- **technical-writer** - Invoke for: documentation updates/reviews, markdown/spell/YAML linting,
-  regulatory documentation best practices
 - **repo-consistency** - Invoke for: ensuring SarifMark stays consistent with TemplateDotNetTool
   template patterns, identifying drift from template standards
-- **code-quality** - Invoke for: linting issues, static analysis, security scanning, quality
-  gates enforcement, requirements traceability verification
 - **code-review** - Invoke for: performing formal reviews of named review-sets, producing
   review evidence for the Continuous Compliance pipeline
-- **software-developer** - Invoke for: production code features, self-validation tests (SarifMark_*),
-  code refactoring, literate programming style
-- **test-developer** - Invoke for: unit tests, integration tests, test coverage improvement, AAA
-  pattern compliance
 - **developer** - Invoke for: light development work (small fixes, simple features) applying
   appropriate standards based on task scope
 - **quality** - Invoke for: light quality checking, grading developer work against DEMA Consulting
