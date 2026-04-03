@@ -22,8 +22,10 @@ evidence-source:
   location: https://raw.githubusercontent.com/demaconsulting/SarifMark/reviews/index.json
 
 # Review sets grouping files by logical unit of review.
-# Subsystem reviews cover the externally-visible behaviour of each feature subsystem.
-# Software unit reviews cover the internal design and implementation of each individual class.
+# Subsystem reviews cover the externally-visible behaviour of each feature subsystem:
+#   subsystem requirements + subsystem design + subsystem test suite.
+# Software unit reviews cover the internal design and implementation of each individual class:
+#   unit requirements + unit design + unit source code + unit tests.
 reviews:
 
   # ---------------------------------------------------------------------------
@@ -37,7 +39,6 @@ reviews:
       - "docs/reqstream/sarifmark/platform-requirements.yaml"
       - "docs/design/introduction.md"
       - "docs/design/sarifmark/sarifmark.md"
-      - "test/**/IntegrationTests.cs"
       - "test/**/Runner.cs"
       - "test/**/AssemblyInfo.cs"
 
@@ -58,6 +59,7 @@ reviews:
   - id: SarifMark-Design
     title: Review of SarifMark Design Documentation
     paths:
+      - "README.md"
       - "docs/reqstream/sarifmark/sarifmark.yaml"
       - "docs/reqstream/sarifmark/platform-requirements.yaml"
       - "docs/design/**/*.md"
@@ -71,9 +73,7 @@ reviews:
     paths:
       - "docs/reqstream/sarifmark/cli/cli.yaml"
       - "docs/design/sarifmark/cli/cli.md"
-      - "docs/design/sarifmark/cli/context.md"
-      - "src/**/Cli/Context.cs"
-      - "test/**/Cli/ContextTests.cs"
+      - "test/**/Cli/CliTests.cs"
 
   - id: SarifMark-Sarif
     title: Review of SarifMark SARIF Reading Subsystem
@@ -81,31 +81,21 @@ reviews:
       - "docs/reqstream/sarifmark/sarif/sarif.yaml"
       - "docs/reqstream/sarifmark/sarif/report.yaml"
       - "docs/design/sarifmark/sarif/sarif.md"
-      - "docs/design/sarifmark/sarif/sarif-result.md"
-      - "docs/design/sarifmark/sarif/sarif-results.md"
-      - "src/**/Sarif/SarifResult.cs"
-      - "src/**/Sarif/SarifResults.cs"
-      - "test/**/Sarif/SarifResultsTests.cs"
-      - "test/**/IntegrationTests.cs"
+      - "test/**/Sarif/SarifTests.cs"
 
   - id: SarifMark-SelfTest
     title: Review of SarifMark Self-Validation Subsystem
     paths:
       - "docs/reqstream/sarifmark/self-test/self-test.yaml"
       - "docs/design/sarifmark/self-test/self-test.md"
-      - "docs/design/sarifmark/self-test/validation.md"
-      - "src/**/SelfTest/Validation.cs"
-      - "test/**/SelfTest/ValidationTests.cs"
-      - "test/**/IntegrationTests.cs"
+      - "test/**/SelfTest/SelfTestTests.cs"
 
   - id: SarifMark-Utilities
     title: Review of SarifMark Utilities Subsystem
     paths:
       - "docs/reqstream/sarifmark/utilities/utilities.yaml"
       - "docs/design/sarifmark/utilities/utilities.md"
-      - "docs/design/sarifmark/utilities/path-helpers.md"
-      - "src/**/Utilities/PathHelpers.cs"
-      - "test/**/Utilities/PathHelpersTests.cs"
+      - "test/**/Utilities/UtilitiesTests.cs"
 
   # ---------------------------------------------------------------------------
   # Software Unit Reviews
