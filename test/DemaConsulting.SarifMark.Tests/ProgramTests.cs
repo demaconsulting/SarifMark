@@ -149,4 +149,93 @@ public class ProgramTests
             Console.SetError(originalError);
         }
     }
+
+    /// <summary>
+    ///     Test that Main processes a valid SARIF file successfully.
+    /// </summary>
+    [TestMethod]
+    public void Program_Main_ValidSarifFile_ProcessesSuccessfully()
+    {
+        // Arrange
+        var sarifFile = Path.Combine(AppContext.BaseDirectory, "TestData", "sample.sarif");
+        var originalOut = Console.Out;
+        try
+        {
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
+
+            // Act
+            var result = Program.Main(["--sarif", sarifFile]);
+
+            // Assert
+            Assert.AreEqual(0, result);
+            Assert.Contains("Tool: TestTool", outWriter.ToString());
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+        }
+    }
+
+    /// <summary>
+    ///     Test that enforce flag returns error exit code when issues are found.
+    /// </summary>
+    [TestMethod]
+    public void Program_Main_EnforceFlagWithIssues_ReturnsError()
+    {
+        // Arrange
+        var sarifFile = Path.Combine(AppContext.BaseDirectory, "TestData", "sample.sarif");
+        var originalOut = Console.Out;
+        var originalError = Console.Error;
+        try
+        {
+            using var outWriter = new StringWriter();
+            using var errWriter = new StringWriter();
+            Console.SetOut(outWriter);
+            Console.SetError(errWriter);
+
+            // Act
+            var result = Program.Main(["--sarif", sarifFile, "--enforce"]);
+
+            // Assert
+            Assert.AreEqual(1, result);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            Console.SetError(originalError);
+        }
+    }
+
+    /// <summary>
+    ///     Test that Main with report file creates the report.
+    /// </summary>
+    [TestMethod]
+    public void Program_Main_ReportFile_CreatesReport()
+    {
+        // Arrange
+        var sarifFile = Path.Combine(AppContext.BaseDirectory, "TestData", "sample.sarif");
+        var reportFile = Path.Combine(Path.GetTempPath(), $"test-report-{Guid.NewGuid()}.md");
+        var originalOut = Console.Out;
+        try
+        {
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
+
+            // Act
+            var result = Program.Main(["--sarif", sarifFile, "--report", reportFile]);
+
+            // Assert
+            Assert.AreEqual(0, result);
+            Assert.IsTrue(File.Exists(reportFile), "Report file was not created");
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            if (File.Exists(reportFile))
+            {
+                File.Delete(reportFile);
+            }
+        }
+    }
 }

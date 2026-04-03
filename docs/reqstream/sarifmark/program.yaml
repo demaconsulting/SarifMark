@@ -76,6 +76,6 @@ sections:
             tags: [internal]
             tests:
               - Program_Main_NoArguments_ReturnsError
-              - IntegrationTest_ValidSarifFile_ProcessesSuccessfully
-              - IntegrationTest_EnforceFlagWithIssues_ReturnsError
-              - IntegrationTest_GenerateReport_CreatesReportFile
+              - Program_Main_ValidSarifFile_ProcessesSuccessfully
+              - Program_Main_EnforceFlagWithIssues_ReturnsError
+              - Program_Main_ReportFile_CreatesReport
