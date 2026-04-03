@@ -82,7 +82,7 @@ subsystem is a stateless helper used by `SelfTest` for path construction.
 
 ## System Requirements
 
-System-level requirements are captured in `docs/reqstream/system.yaml`
+System-level requirements are captured in `docs/reqstream/sarifmark/sarifmark.yaml`
 and are validated through integration tests that exercise the published dotnet
 DLL end-to-end across the supported platforms.
 

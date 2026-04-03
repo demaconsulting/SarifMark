@@ -1,25 +1,26 @@
 ---
 resource-path:
   - docs/design
-  - docs/design/cli
-  - docs/design/sarif
-  - docs/design/self-test
-  - docs/design/utilities
+  - docs/design/sarifmark
+  - docs/design/sarifmark/cli
+  - docs/design/sarifmark/sarif
+  - docs/design/sarifmark/self-test
+  - docs/design/sarifmark/utilities
   - docs/template
 input-files:
   - docs/design/title.txt
   - docs/design/introduction.md
-  - docs/design/system.md
-  - docs/design/program.md
-  - docs/design/cli/cli.md
-  - docs/design/cli/context.md
-  - docs/design/sarif/sarif.md
-  - docs/design/sarif/sarif-result.md
-  - docs/design/sarif/sarif-results.md
-  - docs/design/self-test/self-test.md
-  - docs/design/self-test/validation.md
-  - docs/design/utilities/utilities.md
-  - docs/design/utilities/path-helpers.md
+  - docs/design/sarifmark/sarifmark.md
+  - docs/design/sarifmark/program.md
+  - docs/design/sarifmark/cli/cli.md
+  - docs/design/sarifmark/cli/context.md
+  - docs/design/sarifmark/sarif/sarif.md
+  - docs/design/sarifmark/sarif/sarif-result.md
+  - docs/design/sarifmark/sarif/sarif-results.md
+  - docs/design/sarifmark/self-test/self-test.md
+  - docs/design/sarifmark/self-test/validation.md
+  - docs/design/sarifmark/utilities/utilities.md
+  - docs/design/sarifmark/utilities/path-helpers.md
 template: template.html
 table-of-contents: true
 number-sections: true

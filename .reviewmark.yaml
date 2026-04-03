@@ -6,12 +6,14 @@
 # Patterns identifying all files that require review.
 # Processed in order; prefix a pattern with '!' to exclude.
 needs-review:
-  - "**/*.cs"                    # All C# source and test files
-  - "requirements.yaml"          # Root requirements file
-  - "docs/reqstream/**/*.yaml"   # Requirements files
-  - "docs/design/**/*.md"        # Design documents
-  - "!**/obj/**"                 # Exclude build output
-  - "!**/bin/**"                 # Exclude build output
+  - "**/*.cs"                          # All C# source and test files
+  - "requirements.yaml"                # Root requirements file
+  - "docs/reqstream/**/*.yaml"         # Requirements files
+  - "docs/design/**/*.md"              # Design documents
+  - "README.md"                        # Root level README
+  - "docs/user_guide/**/*.md"          # User guide
+  - "!**/obj/**"                       # Exclude build output
+  - "!**/bin/**"                       # Exclude build output
 
 # Evidence source: review data and index.json are located in the 'reviews' branch
 # of this repository, accessed through the GitHub public HTTPS raw content access.
@@ -25,16 +27,16 @@ evidence-source:
 reviews:
 
   # ---------------------------------------------------------------------------
-  # System Review
+  # Architecture Review
   # ---------------------------------------------------------------------------
 
-  - id: SarifMark-System
-    title: Review of SarifMark System
+  - id: SarifMark-Architecture
+    title: Review of SarifMark Architecture
     paths:
-      - "docs/reqstream/system.yaml"
-      - "docs/reqstream/platform-requirements.yaml"
+      - "docs/reqstream/sarifmark/sarifmark.yaml"
+      - "docs/reqstream/sarifmark/platform-requirements.yaml"
       - "docs/design/introduction.md"
-      - "docs/design/system.md"
+      - "docs/design/sarifmark/sarifmark.md"
       - "test/**/IntegrationTests.cs"
       - "test/**/Runner.cs"
       - "test/**/AssemblyInfo.cs"
@@ -56,8 +58,8 @@ reviews:
   - id: SarifMark-Design
     title: Review of SarifMark Design Documentation
     paths:
-      - "docs/reqstream/system.yaml"
-      - "docs/reqstream/platform-requirements.yaml"
+      - "docs/reqstream/sarifmark/sarifmark.yaml"
+      - "docs/reqstream/sarifmark/platform-requirements.yaml"
       - "docs/design/**/*.md"
 
   # ---------------------------------------------------------------------------
@@ -67,20 +69,20 @@ reviews:
   - id: SarifMark-Cli
     title: Review of SarifMark Command-Line Interface Subsystem
     paths:
-      - "docs/reqstream/cli/subsystem-cli.yaml"
-      - "docs/design/cli/cli.md"
-      - "docs/design/cli/context.md"
+      - "docs/reqstream/sarifmark/cli/cli.yaml"
+      - "docs/design/sarifmark/cli/cli.md"
+      - "docs/design/sarifmark/cli/context.md"
       - "src/**/Cli/Context.cs"
       - "test/**/Cli/ContextTests.cs"
 
   - id: SarifMark-Sarif
     title: Review of SarifMark SARIF Reading Subsystem
     paths:
-      - "docs/reqstream/sarif/subsystem-sarif.yaml"
-      - "docs/reqstream/sarif/subsystem-report.yaml"
-      - "docs/design/sarif/sarif.md"
-      - "docs/design/sarif/sarif-result.md"
-      - "docs/design/sarif/sarif-results.md"
+      - "docs/reqstream/sarifmark/sarif/sarif.yaml"
+      - "docs/reqstream/sarifmark/sarif/report.yaml"
+      - "docs/design/sarifmark/sarif/sarif.md"
+      - "docs/design/sarifmark/sarif/sarif-result.md"
+      - "docs/design/sarifmark/sarif/sarif-results.md"
       - "src/**/Sarif/SarifResult.cs"
       - "src/**/Sarif/SarifResults.cs"
       - "test/**/Sarif/SarifResultsTests.cs"
@@ -89,9 +91,9 @@ reviews:
   - id: SarifMark-SelfTest
     title: Review of SarifMark Self-Validation Subsystem
     paths:
-      - "docs/reqstream/self-test/subsystem-self-test.yaml"
-      - "docs/design/self-test/self-test.md"
-      - "docs/design/self-test/validation.md"
+      - "docs/reqstream/sarifmark/self-test/self-test.yaml"
+      - "docs/design/sarifmark/self-test/self-test.md"
+      - "docs/design/sarifmark/self-test/validation.md"
       - "src/**/SelfTest/Validation.cs"
       - "test/**/SelfTest/ValidationTests.cs"
       - "test/**/IntegrationTests.cs"
@@ -99,9 +101,9 @@ reviews:
   - id: SarifMark-Utilities
     title: Review of SarifMark Utilities Subsystem
     paths:
-      - "docs/reqstream/utilities/subsystem-utilities.yaml"
-      - "docs/design/utilities/utilities.md"
-      - "docs/design/utilities/path-helpers.md"
+      - "docs/reqstream/sarifmark/utilities/utilities.yaml"
+      - "docs/design/sarifmark/utilities/utilities.md"
+      - "docs/design/sarifmark/utilities/path-helpers.md"
       - "src/**/Utilities/PathHelpers.cs"
       - "test/**/Utilities/PathHelpersTests.cs"
 
@@ -112,47 +114,47 @@ reviews:
   - id: SarifMark-Program
     title: Review of SarifMark Program Software Unit
     paths:
-      - "docs/reqstream/unit-program.yaml"
-      - "docs/design/program.md"
+      - "docs/reqstream/sarifmark/program.yaml"
+      - "docs/design/sarifmark/program.md"
       - "src/**/Program.cs"
       - "test/**/ProgramTests.cs"
 
-  - id: SarifMark-Context
+  - id: SarifMark-Cli-Context
     title: Review of SarifMark Context Software Unit
     paths:
-      - "docs/reqstream/cli/unit-context.yaml"
-      - "docs/design/cli/context.md"
+      - "docs/reqstream/sarifmark/cli/context.yaml"
+      - "docs/design/sarifmark/cli/context.md"
       - "src/**/Cli/Context.cs"
       - "test/**/Cli/ContextTests.cs"
 
-  - id: SarifMark-SarifResult
+  - id: SarifMark-Sarif-SarifResult
     title: Review of SarifMark SarifResult Software Unit
     paths:
-      - "docs/reqstream/sarif/unit-sarif-result.yaml"
-      - "docs/design/sarif/sarif-result.md"
+      - "docs/reqstream/sarifmark/sarif/sarif-result.yaml"
+      - "docs/design/sarifmark/sarif/sarif-result.md"
       - "src/**/Sarif/SarifResult.cs"
       - "test/**/Sarif/SarifResultsTests.cs"
 
-  - id: SarifMark-SarifResults
+  - id: SarifMark-Sarif-SarifResults
     title: Review of SarifMark SarifResults Software Unit
     paths:
-      - "docs/reqstream/sarif/unit-sarif-results.yaml"
-      - "docs/design/sarif/sarif-results.md"
+      - "docs/reqstream/sarifmark/sarif/sarif-results.yaml"
+      - "docs/design/sarifmark/sarif/sarif-results.md"
       - "src/**/Sarif/SarifResults.cs"
       - "test/**/Sarif/SarifResultsTests.cs"
 
-  - id: SarifMark-Validation
+  - id: SarifMark-SelfTest-Validation
     title: Review of SarifMark Validation Software Unit
     paths:
-      - "docs/reqstream/self-test/unit-validation.yaml"
-      - "docs/design/self-test/validation.md"
+      - "docs/reqstream/sarifmark/self-test/validation.yaml"
+      - "docs/design/sarifmark/self-test/validation.md"
       - "src/**/SelfTest/Validation.cs"
       - "test/**/SelfTest/ValidationTests.cs"
 
-  - id: SarifMark-PathHelpers
+  - id: SarifMark-Utilities-PathHelpers
     title: Review of SarifMark PathHelpers Software Unit
     paths:
-      - "docs/reqstream/utilities/unit-path-helpers.yaml"
-      - "docs/design/utilities/path-helpers.md"
+      - "docs/reqstream/sarifmark/utilities/path-helpers.yaml"
+      - "docs/design/sarifmark/utilities/path-helpers.md"
       - "src/**/Utilities/PathHelpers.cs"
       - "test/**/Utilities/PathHelpersTests.cs"
