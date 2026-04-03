@@ -14,7 +14,7 @@ sections:
               - SarifMark-SarifResults-ParseResults
             tests:
               - SarifMark_SarifReading
-              - IntegrationTest_ValidSarifFile_ProcessesSuccessfully
+              - Sarif_ValidSarifFile_ProcessesSuccessfully
 
           - id: SarifMark-Sarif-Validation
             title: The tool shall validate SARIF file format.
@@ -95,7 +95,7 @@ sections:
             children:
               - SarifMark-SarifResults-ValidatePath
             tests:
-              - IntegrationTest_MissingSarifParameter_ShowsError
+              - Sarif_MissingSarifParameter_ShowsError
 
           - id: SarifMark-Sarif-Processing
             title: The tool shall process valid SARIF files successfully.
@@ -106,4 +106,4 @@ sections:
             children:
               - SarifMark-SarifResults-ParseResults
             tests:
-              - IntegrationTest_ValidSarifFile_ProcessesSuccessfully
+              - Sarif_ValidSarifFile_ProcessesSuccessfully

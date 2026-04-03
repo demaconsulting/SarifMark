@@ -13,7 +13,7 @@ sections:
             children:
               - SarifMark-Validation-Run
             tests:
-              - IntegrationTest_ValidateFlag_RunsSelfValidation
+              - SelfTest_ValidateFlag_RunsSelfValidation
 
           - id: SarifMark-Validate-ResultFiles
             title: The tool shall write validation results to test result files.
@@ -60,7 +60,7 @@ sections:
             children:
               - SarifMark-Validation-EnforcementTest
             tests:
-              - IntegrationTest_EnforceFlagWithIssues_ReturnsError
+              - Cli_EnforceFlagWithIssues_ReturnsError
               - SarifMark_Enforcement
 
           - id: SarifMark-Enforce-ExitCode
@@ -72,5 +72,5 @@ sections:
             children:
               - SarifMark-Validation-EnforcementTest
             tests:
-              - IntegrationTest_EnforceFlagWithIssues_ReturnsError
+              - Cli_EnforceFlagWithIssues_ReturnsError
               - SarifMark_Enforcement

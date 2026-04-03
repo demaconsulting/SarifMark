@@ -16,6 +16,7 @@ sections:
               - PathHelpers_SafePathCombine_SimpleFilename_CombinesSuccessfully
               - PathHelpers_SafePathCombine_PathWithSubdirectories_CombinesSuccessfully
               - PathHelpers_SafePathCombine_GuidBasedFilename_CombinesSuccessfully
+              - PathHelpers_SafePathCombine_FilenameWithEmbeddedDots_CombinesSuccessfully
 
           - id: SarifMark-PathHelpers-NullCheck
             title: The SafePathCombine method shall throw ArgumentNullException when either argument is null.
@@ -28,34 +29,17 @@ sections:
               - PathHelpers_SafePathCombine_NullBasePath_ThrowsArgumentNullException
               - PathHelpers_SafePathCombine_NullRelativePath_ThrowsArgumentNullException
 
-          - id: SarifMark-PathHelpers-PreCombineCheck
-            title: The SafePathCombine method shall reject relative paths containing ".." sequences or rooted paths.
+          - id: SarifMark-PathHelpers-PostCombineCheck
+            title: The SafePathCombine method shall verify the combined path remains under the base path.
             justification: >-
-              Pre-combination checks catch the most common path traversal patterns before any file system
-              operations are performed, providing a fast and reliable first line of defense against
-              directory traversal attacks.
+              A post-combination containment check using Path.GetRelativePath handles all traversal
+              patterns — directory traversal sequences, absolute-path overrides, and platform edge
+              cases — without fragile pre-combine string inspection. Treating ".." as an escape segment
+              only when it is the entire result or is followed by a directory separator avoids false
+              positives for valid names such as "..data" or "v1..0.sarif".
             tags: [internal]
             tests:
               - PathHelpers_SafePathCombine_PathWithParentDirectory_ThrowsArgumentException
               - PathHelpers_SafePathCombine_PathWithDoubleDots_ThrowsArgumentException
-              - PathHelpers_SafePathCombine_FilenameWithEmbeddedDots_ThrowsArgumentException
-
-          - id: SarifMark-PathHelpers-RootedCheck
-            title: The SafePathCombine method shall reject relative paths that are rooted or absolute.
-            justification: >-
-              Rejecting rooted relative paths prevents callers from accidentally bypassing the base path
-              restriction by supplying an absolute path as the relative argument, closing a potential path
-              traversal vector.
-            tags: [internal]
-            tests:
               - PathHelpers_SafePathCombine_AbsolutePath_ThrowsArgumentException
-
-          - id: SarifMark-PathHelpers-PostCombineCheck
-            title: The SafePathCombine method shall verify the combined path remains under the base path.
-            justification: >-
-              A post-combination check adds a second layer of defense by verifying the combined path
-              regardless of how the operating system resolves it, ensuring that no combination of legal
-              segments can escape the intended base directory.
-            tags: [internal]
-            tests:
               - PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully

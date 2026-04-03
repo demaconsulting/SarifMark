@@ -102,23 +102,23 @@ public class PathHelpersTests
     }
 
     /// <summary>
-    ///     Test that SafePathCombine throws ArgumentException for a filename that contains ".." as a substring.
-    ///     The check uses a strict Contains("..") comparison, so names like "v1..0.sarif" are rejected
-    ///     even though they do not represent path traversal.  This is intentional: the design favours
-    ///     rejecting a small set of unusual but valid names over risking traversal edge-cases.
+    ///     Test that SafePathCombine accepts a filename that contains ".." as an embedded substring.
+    ///     The post-combine check uses <see cref="Path.GetRelativePath"/> which treats ".." as an
+    ///     escape segment only when it is the full result or is followed by a directory separator,
+    ///     so names like "v1..0.sarif" are accepted as valid in-base filenames.
     /// </summary>
     [TestMethod]
-    public void PathHelpers_SafePathCombine_FilenameWithEmbeddedDots_ThrowsArgumentException()
+    public void PathHelpers_SafePathCombine_FilenameWithEmbeddedDots_CombinesSuccessfully()
     {
         // Arrange - "v1..0.sarif" contains ".." but is not a path traversal
         var basePath = "/home/user";
         var relativePath = "v1..0.sarif";
 
-        // Act & Assert - the strict substring check rejects this name
-        var exception = Assert.Throws<ArgumentException>(() =>
-            PathHelpers.SafePathCombine(basePath, relativePath));
-        Assert.Contains("Invalid path component", exception.Message);
-        Assert.AreEqual("relativePath", exception.ParamName);
+        // Act
+        var result = PathHelpers.SafePathCombine(basePath, relativePath);
+
+        // Assert
+        Assert.AreEqual(Path.Combine(basePath, relativePath), result);
     }
 
     /// <summary>
