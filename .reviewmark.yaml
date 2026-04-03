@@ -31,15 +31,10 @@ reviews:
   - id: SarifMark-System
     title: Review of SarifMark System
     paths:
-      - "docs/reqstream/sarifmark-system.yaml"
+      - "docs/reqstream/system.yaml"
       - "docs/reqstream/platform-requirements.yaml"
-      - "docs/reqstream/ots-software.yaml"
       - "docs/design/introduction.md"
       - "docs/design/system.md"
-      - "docs/reqstream/unit-program.yaml"
-      - "docs/design/program.md"
-      - "src/**/Program.cs"
-      - "test/**/ProgramTests.cs"
       - "test/**/IntegrationTests.cs"
       - "test/**/Runner.cs"
       - "test/**/AssemblyInfo.cs"
@@ -53,6 +48,17 @@ reviews:
     paths:
       - "requirements.yaml"
       - "docs/reqstream/**/*.yaml"
+
+  # ---------------------------------------------------------------------------
+  # Design Review
+  # ---------------------------------------------------------------------------
+
+  - id: SarifMark-Design
+    title: Review of SarifMark Design Documentation
+    paths:
+      - "docs/reqstream/system.yaml"
+      - "docs/reqstream/platform-requirements.yaml"
+      - "docs/design/**/*.md"
 
   # ---------------------------------------------------------------------------
   # Subsystem Reviews

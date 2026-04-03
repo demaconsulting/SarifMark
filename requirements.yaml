@@ -13,7 +13,7 @@
 #
 ---
 includes:
-  - docs/reqstream/sarifmark-system.yaml
+  - docs/reqstream/system.yaml
   - docs/reqstream/cli/subsystem-cli.yaml
   - docs/reqstream/cli/unit-context.yaml
   - docs/reqstream/sarif/subsystem-sarif.yaml
@@ -25,5 +25,5 @@ includes:
   - docs/reqstream/utilities/subsystem-utilities.yaml
   - docs/reqstream/utilities/unit-path-helpers.yaml
   - docs/reqstream/platform-requirements.yaml
-  - docs/reqstream/ots-software.yaml
+  - docs/reqstream/ots/ots-software.yaml
   - docs/reqstream/unit-program.yaml
