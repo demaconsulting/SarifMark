@@ -13,7 +13,7 @@ sections:
             children:
               - SarifMark-SarifResults-ToMarkdown
             tests:
-              - IntegrationTest_GenerateReport_CreatesReportFile
+              - Sarif_GenerateReport_CreatesReportFile
               - SarifMark_MarkdownReportGeneration
 
           - id: SarifMark-Report-Depth
@@ -25,7 +25,7 @@ sections:
             children:
               - SarifMark-SarifResults-ValidateDepth
             tests:
-              - IntegrationTest_ReportDepth_IsConfigurable
+              - Sarif_ReportDepth_IsConfigurable
 
           - id: SarifMark-Report-Counts
             title: The tool shall display result counts in reports.

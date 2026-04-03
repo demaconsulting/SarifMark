@@ -46,7 +46,7 @@ public class CliTests
     ///     Test that version flag outputs version information.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_VersionFlag_OutputsVersion()
+    public void Cli_VersionFlag_OutputsVersion()
     {
         // Arrange - No special setup needed
 
@@ -68,7 +68,7 @@ public class CliTests
     ///     Test that help flag outputs usage information.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_HelpFlag_OutputsUsageInformation()
+    public void Cli_HelpFlag_OutputsUsageInformation()
     {
         // Arrange - No special setup needed
 
@@ -93,7 +93,7 @@ public class CliTests
     ///     Test that silent flag suppresses console output.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_SilentFlag_SuppressesOutput()
+    public void Cli_SilentFlag_SuppressesOutput()
     {
         // Arrange
         var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
@@ -117,7 +117,7 @@ public class CliTests
     ///     Test that log file parameter writes output to file.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_LogFile_WritesOutputToFile()
+    public void Cli_LogFile_WritesOutputToFile()
     {
         // Arrange
         var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
@@ -157,7 +157,7 @@ public class CliTests
     ///     Test that enforce flag with issues returns error exit code.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_EnforceFlagWithIssues_ReturnsError()
+    public void Cli_EnforceFlagWithIssues_ReturnsError()
     {
         // Arrange
         var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
@@ -180,7 +180,7 @@ public class CliTests
     ///     Test that unknown arguments are rejected with error.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_UnknownArgument_ShowsError()
+    public void Cli_UnknownArgument_ShowsError()
     {
         // Arrange - No special setup needed
 

@@ -44,7 +44,7 @@ public class SelfTestTests
     ///     Test that validate flag runs self-validation.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_ValidateFlag_RunsSelfValidation()
+    public void SelfTest_ValidateFlag_RunsSelfValidation()
     {
         // Arrange - No special setup needed
 

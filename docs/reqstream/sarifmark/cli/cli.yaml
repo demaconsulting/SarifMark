@@ -13,8 +13,8 @@ sections:
             children:
               - SarifMark-Context-Create
             tests:
-              - IntegrationTest_VersionFlag_OutputsVersion
-              - IntegrationTest_HelpFlag_OutputsUsageInformation
+              - Cli_VersionFlag_OutputsVersion
+              - Cli_HelpFlag_OutputsUsageInformation
 
           - id: SarifMark-Cli-Version
             title: The tool shall display version information when requested.
@@ -25,7 +25,7 @@ sections:
             children:
               - SarifMark-Context-VersionFlag
             tests:
-              - IntegrationTest_VersionFlag_OutputsVersion
+              - Cli_VersionFlag_OutputsVersion
               - Context_Create_VersionFlag_SetsVersionTrue
 
           - id: SarifMark-Cli-Help
@@ -37,7 +37,7 @@ sections:
             children:
               - SarifMark-Context-HelpFlag
             tests:
-              - IntegrationTest_HelpFlag_OutputsUsageInformation
+              - Cli_HelpFlag_OutputsUsageInformation
               - Context_Create_HelpFlag_SetsHelpTrue
 
           - id: SarifMark-Cli-Silent
@@ -49,7 +49,7 @@ sections:
             children:
               - SarifMark-Context-SilentFlag
             tests:
-              - IntegrationTest_SilentFlag_SuppressesOutput
+              - Cli_SilentFlag_SuppressesOutput
 
           - id: SarifMark-Cli-Log
             title: The tool shall support writing output to a log file.
@@ -60,7 +60,7 @@ sections:
             children:
               - SarifMark-Context-LogParam
             tests:
-              - IntegrationTest_LogFile_WritesOutputToFile
+              - Cli_LogFile_WritesOutputToFile
 
           - id: SarifMark-Cli-Enforce
             title: The tool shall support enforcing quality gate checks.
@@ -72,7 +72,7 @@ sections:
               - SarifMark-Context-EnforceFlag
             tests:
               - SarifMark_Enforcement
-              - IntegrationTest_EnforceFlagWithIssues_ReturnsError
+              - Cli_EnforceFlagWithIssues_ReturnsError
 
           - id: SarifMark-Cli-InvalidArgs
             title: The tool shall reject unknown command-line arguments.
@@ -83,4 +83,4 @@ sections:
             children:
               - SarifMark-Context-UnknownArgs
             tests:
-              - IntegrationTest_UnknownArgument_ShowsError
+              - Cli_UnknownArgument_ShowsError

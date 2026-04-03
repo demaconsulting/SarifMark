@@ -39,6 +39,7 @@ reviews:
       - "docs/reqstream/sarifmark/platform-requirements.yaml"
       - "docs/design/introduction.md"
       - "docs/design/sarifmark/sarifmark.md"
+      - "test/**/IntegrationTests.cs"
       - "test/**/Runner.cs"
       - "test/**/AssemblyInfo.cs"
 
