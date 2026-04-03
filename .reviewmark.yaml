@@ -157,12 +157,3 @@ reviews:
       - "src/**/Utilities/PathHelpers.cs"
       - "test/**/Utilities/PathHelpersTests.cs"
 
-  # ---------------------------------------------------------------------------
-  # OTS Review
-  # ---------------------------------------------------------------------------
-
-  - id: SarifMark-OTS
-    title: Review of SarifMark OTS Software
-    paths:
-      - "docs/reqstream/ots/ots-software.yaml"
-      - "test/**/IntegrationTests.cs"
