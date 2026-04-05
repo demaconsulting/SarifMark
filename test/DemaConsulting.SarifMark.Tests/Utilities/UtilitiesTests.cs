@@ -42,4 +42,48 @@ public class UtilitiesTests
         // Assert
         Assert.AreEqual(Path.Combine(basePath, relativePath), result);
     }
+
+    /// <summary>
+    ///     Test that the Utilities subsystem rejects path-traversal attacks.
+    /// </summary>
+    [TestMethod]
+    public void Utilities_SafePathHandling_PathTraversal_ThrowsException()
+    {
+        // Arrange
+        var basePath = Path.GetTempPath();
+        var maliciousPath = "../../../etc/passwd";
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() =>
+            PathHelpers.SafePathCombine(basePath, maliciousPath));
+    }
+
+    /// <summary>
+    ///     Test that the Utilities subsystem rejects absolute paths.
+    /// </summary>
+    [TestMethod]
+    public void Utilities_SafePathHandling_AbsolutePath_ThrowsException()
+    {
+        // Arrange
+        var basePath = Path.GetTempPath();
+        var absolutePath = "/etc/passwd";
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() =>
+            PathHelpers.SafePathCombine(basePath, absolutePath));
+    }
+
+    /// <summary>
+    ///     Test that the Utilities subsystem rejects null inputs.
+    /// </summary>
+    [TestMethod]
+    public void Utilities_SafePathHandling_NullInput_ThrowsException()
+    {
+        // Arrange
+        var basePath = Path.GetTempPath();
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() =>
+            PathHelpers.SafePathCombine(basePath, null!));
+    }
 }
