@@ -26,6 +26,7 @@ sections:
               - SarifMark-SarifResults-ValidateStructure
             tests:
               - Sarif_NonExistentSarifFile_ShowsError
+              - Sarif_InvalidSarifFile_ShowsFormatError
 
           - id: SarifMark-Sarif-ToolInfo
             title: The tool shall extract tool information from SARIF files.
@@ -61,7 +62,7 @@ sections:
               - SarifMark-SarifResult-Uri
               - SarifMark-SarifResult-StartLine
             tests:
-              - Sarif_ValidSarifFile_ProcessesSuccessfully
+              - Sarif_Report_ContainsLocationInfo
 
           - id: SarifMark-Sarif-FilePaths
             title: The tool shall require valid file paths for SARIF input.

@@ -97,6 +97,32 @@ public class SelfTestTests
     }
 
     /// <summary>
+    ///     Test that enforce flag returns non-zero exit code when issues are found.
+    /// </summary>
+    [TestMethod]
+    public void SelfTest_EnforceFlag_ReturnsNonZeroOnIssues()
+    {
+        // Arrange
+        var baseDir = AppContext.BaseDirectory;
+        var sarifFile = PathHelpers.SafePathCombine(
+            PathHelpers.SafePathCombine(baseDir, "TestData"),
+            "sample.sarif");
+        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+
+        // Act
+        var exitCode = Runner.Run(
+            out var output,
+            "dotnet",
+            _dllPath,
+            "--sarif", sarifFile,
+            "--enforce");
+
+        // Assert
+        Assert.AreEqual(1, exitCode);
+        Assert.Contains("Issues found in SARIF file", output);
+    }
+
+    /// <summary>
     ///     Test that validate flag with JUnit XML results parameter writes a JUnit XML file.
     /// </summary>
     [TestMethod]

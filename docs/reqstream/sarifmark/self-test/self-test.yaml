@@ -60,7 +60,7 @@ sections:
             children:
               - SarifMark-Validation-EnforcementTest
             tests:
-              - SelfTest_ValidateFlag_RunsSelfValidation
+              - SelfTest_EnforceFlag_ReturnsNonZeroOnIssues
 
           - id: SarifMark-Enforce-ExitCode
             title: The tool shall return non-zero exit code when issues found in enforcement mode.
@@ -71,4 +71,4 @@ sections:
             children:
               - SarifMark-Validation-EnforcementTest
             tests:
-              - SelfTest_ValidateFlag_RunsSelfValidation
+              - SelfTest_EnforceFlag_ReturnsNonZeroOnIssues

@@ -187,6 +187,71 @@ public class SarifTests
     }
 
     /// <summary>
+    ///     Test that processing an invalid SARIF file shows a format error.
+    /// </summary>
+    [TestMethod]
+    public void Sarif_InvalidSarifFile_ShowsFormatError()
+    {
+        // Arrange
+        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "invalid.sarif");
+        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+
+        // Act
+        var exitCode = Runner.Run(
+            out var output,
+            "dotnet",
+            _dllPath,
+            "--sarif", sarifFile);
+
+        // Assert
+        Assert.AreEqual(1, exitCode);
+        Assert.Contains("Error:", output);
+    }
+
+    /// <summary>
+    ///     Test that a generated report formats multiple results with proper line breaks.
+    /// </summary>
+    [TestMethod]
+    public void Sarif_GenerateReport_FormatsMultipleResultsWithLineBreaks()
+    {
+        // Arrange
+        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "multi-result.sarif");
+        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+
+        var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-multi-report-{Guid.NewGuid()}.md");
+
+        try
+        {
+            // Act
+            var exitCode = Runner.Run(
+                out _,
+                "dotnet",
+                _dllPath,
+                "--sarif", sarifFile,
+                "--report", reportFile);
+
+            // Assert
+            Assert.AreEqual(0, exitCode);
+            Assert.IsTrue(File.Exists(reportFile), "Report file was not created");
+
+            var reportContent = File.ReadAllText(reportFile);
+            Assert.Contains("Found 2 issues", reportContent);
+            Assert.Contains("first.cs", reportContent);
+            Assert.Contains("second.cs", reportContent);
+
+            // Verify results appear on separate lines with proper markdown line breaks
+            Assert.MatchesRegex(@"first\.cs.*  \r?\nfile:///path/to/second\.cs", reportContent);
+        }
+        finally
+        {
+            if (File.Exists(reportFile))
+            {
+                File.Delete(reportFile);
+            }
+        }
+    }
+
+    /// <summary>
     ///     Test that a generated report contains result count information.
     /// </summary>
     [TestMethod]
