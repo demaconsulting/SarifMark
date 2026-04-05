@@ -185,4 +185,119 @@ public class SarifTests
             }
         }
     }
+
+    /// <summary>
+    ///     Test that a generated report contains result count information.
+    /// </summary>
+    [TestMethod]
+    public void Sarif_Report_ContainsResultCount()
+    {
+        // Arrange
+        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
+        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+
+        var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-count-report-{Guid.NewGuid()}.md");
+
+        try
+        {
+            // Act
+            var exitCode = Runner.Run(
+                out _,
+                "dotnet",
+                _dllPath,
+                "--sarif", sarifFile,
+                "--report", reportFile);
+
+            // Assert
+            Assert.AreEqual(0, exitCode);
+            Assert.IsTrue(File.Exists(reportFile), "Report file was not created");
+
+            var reportContent = File.ReadAllText(reportFile);
+            Assert.Contains("Found 1 issue", reportContent);
+        }
+        finally
+        {
+            if (File.Exists(reportFile))
+            {
+                File.Delete(reportFile);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Test that a generated report contains location information for results.
+    /// </summary>
+    [TestMethod]
+    public void Sarif_Report_ContainsLocationInfo()
+    {
+        // Arrange
+        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
+        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+
+        var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-location-report-{Guid.NewGuid()}.md");
+
+        try
+        {
+            // Act
+            var exitCode = Runner.Run(
+                out _,
+                "dotnet",
+                _dllPath,
+                "--sarif", sarifFile,
+                "--report", reportFile);
+
+            // Assert
+            Assert.AreEqual(0, exitCode);
+            Assert.IsTrue(File.Exists(reportFile), "Report file was not created");
+
+            var reportContent = File.ReadAllText(reportFile);
+            Assert.Contains("file:///path/to/file.cs", reportContent);
+        }
+        finally
+        {
+            if (File.Exists(reportFile))
+            {
+                File.Delete(reportFile);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Test that a generated report uses a custom heading when provided.
+    /// </summary>
+    [TestMethod]
+    public void Sarif_Report_UsesCustomHeading()
+    {
+        // Arrange
+        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
+        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+
+        var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-heading-report-{Guid.NewGuid()}.md");
+
+        try
+        {
+            // Act
+            var exitCode = Runner.Run(
+                out _,
+                "dotnet",
+                _dllPath,
+                "--sarif", sarifFile,
+                "--report", reportFile,
+                "--heading", "Custom Analysis Heading");
+
+            // Assert
+            Assert.AreEqual(0, exitCode);
+            Assert.IsTrue(File.Exists(reportFile), "Report file was not created");
+
+            var reportContent = File.ReadAllText(reportFile);
+            Assert.Contains("Custom Analysis Heading", reportContent);
+        }
+        finally
+        {
+            if (File.Exists(reportFile))
+            {
+                File.Delete(reportFile);
+            }
+        }
+    }
 }

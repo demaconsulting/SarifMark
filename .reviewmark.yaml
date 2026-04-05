@@ -6,8 +6,7 @@
 # Patterns identifying all files that require review.
 # Processed in order; prefix a pattern with '!' to exclude.
 needs-review:
-  - "**/*.cs"                          # All C# test files
-  - "!src/**/*.cs"                     # Source code reviewed through code review process
+  - "**/*.cs"                          # All C# source and test files
   - "requirements.yaml"                # Root requirements file
   - "docs/reqstream/**/*.yaml"         # Requirements files
   - "docs/design/**/*.md"              # Design documents
@@ -23,21 +22,35 @@ evidence-source:
   location: https://raw.githubusercontent.com/demaconsulting/SarifMark/reviews/index.json
 
 # Review sets grouping files by logical unit of review.
-# Subsystem reviews cover the externally-visible behaviour of each feature subsystem:
-#   subsystem requirements + subsystem design + subsystem test suite.
-# Software unit reviews cover the internal design of each individual class:
-#   unit requirements + unit design + unit test suite.
+# Purpose review: proves advertised features match the system design.
+# Architecture reviews: prove the system satisfies its requirements.
+# Design review: proves design is consistent and complete.
+# AllRequirements review: proves requirements are consistent and complete.
+# Subsystem reviews: prove each subsystem satisfies its requirements.
+# Unit reviews: prove each unit is designed, implemented, and tested correctly.
 reviews:
+
+  # ---------------------------------------------------------------------------
+  # Purpose Review
+  # ---------------------------------------------------------------------------
+
+  - id: SarifMark-Purpose
+    title: Review that Advertised Features Match System Design
+    paths:
+      - "README.md"
+      - "docs/user_guide/**/*.md"
+      - "docs/reqstream/sarifmark/sarifmark.yaml"
+      - "docs/design/introduction.md"
+      - "docs/design/sarifmark/sarifmark.md"
 
   # ---------------------------------------------------------------------------
   # Architecture Review
   # ---------------------------------------------------------------------------
 
   - id: SarifMark-Architecture
-    title: Review of SarifMark Architecture
+    title: Review that SarifMark Architecture Satisfies Requirements
     paths:
       - "docs/reqstream/sarifmark/sarifmark.yaml"
-      - "docs/reqstream/sarifmark/platform-requirements.yaml"
       - "docs/design/introduction.md"
       - "docs/design/sarifmark/sarifmark.md"
       - "test/**/IntegrationTests.cs"
@@ -45,40 +58,39 @@ reviews:
       - "test/**/AssemblyInfo.cs"
 
   # ---------------------------------------------------------------------------
-  # All Requirements Review
-  # ---------------------------------------------------------------------------
-
-  - id: SarifMark-AllRequirements
-    title: Review of All SarifMark Requirements
-    paths:
-      - "requirements.yaml"
-      - "docs/reqstream/**/*.yaml"
-
-  # ---------------------------------------------------------------------------
   # Design Review
   # ---------------------------------------------------------------------------
 
   - id: SarifMark-Design
-    title: Review of SarifMark Design Documentation
+    title: Review that SarifMark Design is Consistent and Complete
     paths:
-      - "README.md"
       - "docs/reqstream/sarifmark/sarifmark.yaml"
       - "docs/reqstream/sarifmark/platform-requirements.yaml"
       - "docs/design/**/*.md"
+
+  # ---------------------------------------------------------------------------
+  # All Requirements Review
+  # ---------------------------------------------------------------------------
+
+  - id: SarifMark-AllRequirements
+    title: Review that All SarifMark Requirements are Complete
+    paths:
+      - "requirements.yaml"
+      - "docs/reqstream/**/*.yaml"
 
   # ---------------------------------------------------------------------------
   # Subsystem Reviews
   # ---------------------------------------------------------------------------
 
   - id: SarifMark-Cli
-    title: Review of SarifMark Command-Line Interface Subsystem
+    title: Review that SarifMark Cli Satisfies Subsystem Requirements
     paths:
       - "docs/reqstream/sarifmark/cli/cli.yaml"
       - "docs/design/sarifmark/cli/cli.md"
       - "test/**/Cli/CliTests.cs"
 
   - id: SarifMark-Sarif
-    title: Review of SarifMark SARIF Reading Subsystem
+    title: Review that SarifMark Sarif Satisfies Subsystem Requirements
     paths:
       - "docs/reqstream/sarifmark/sarif/sarif.yaml"
       - "docs/reqstream/sarifmark/sarif/report.yaml"
@@ -86,14 +98,14 @@ reviews:
       - "test/**/Sarif/SarifTests.cs"
 
   - id: SarifMark-SelfTest
-    title: Review of SarifMark Self-Validation Subsystem
+    title: Review that SarifMark SelfTest Satisfies Subsystem Requirements
     paths:
       - "docs/reqstream/sarifmark/self-test/self-test.yaml"
       - "docs/design/sarifmark/self-test/self-test.md"
       - "test/**/SelfTest/SelfTestTests.cs"
 
   - id: SarifMark-Utilities
-    title: Review of SarifMark Utilities Subsystem
+    title: Review that SarifMark Utilities Satisfies Subsystem Requirements
     paths:
       - "docs/reqstream/sarifmark/utilities/utilities.yaml"
       - "docs/design/sarifmark/utilities/utilities.md"
@@ -104,43 +116,49 @@ reviews:
   # ---------------------------------------------------------------------------
 
   - id: SarifMark-Program
-    title: Review of SarifMark Program Software Unit
+    title: Review that SarifMark Program Implementation is Correct
     paths:
       - "docs/reqstream/sarifmark/program.yaml"
       - "docs/design/sarifmark/program.md"
+      - "src/**/Program.cs"
       - "test/**/ProgramTests.cs"
 
   - id: SarifMark-Cli-Context
-    title: Review of SarifMark Context Software Unit
+    title: Review that SarifMark Cli Context Implementation is Correct
     paths:
       - "docs/reqstream/sarifmark/cli/context.yaml"
       - "docs/design/sarifmark/cli/context.md"
+      - "src/**/Cli/Context.cs"
       - "test/**/Cli/ContextTests.cs"
 
   - id: SarifMark-Sarif-SarifResult
-    title: Review of SarifMark SarifResult Software Unit
+    title: Review that SarifMark Sarif SarifResult Implementation is Correct
     paths:
       - "docs/reqstream/sarifmark/sarif/sarif-result.yaml"
       - "docs/design/sarifmark/sarif/sarif-result.md"
+      - "src/**/Sarif/SarifResult.cs"
       - "test/**/Sarif/SarifResultsTests.cs"
 
   - id: SarifMark-Sarif-SarifResults
-    title: Review of SarifMark SarifResults Software Unit
+    title: Review that SarifMark Sarif SarifResults Implementation is Correct
     paths:
       - "docs/reqstream/sarifmark/sarif/sarif-results.yaml"
       - "docs/design/sarifmark/sarif/sarif-results.md"
+      - "src/**/Sarif/SarifResults.cs"
       - "test/**/Sarif/SarifResultsTests.cs"
 
   - id: SarifMark-SelfTest-Validation
-    title: Review of SarifMark Validation Software Unit
+    title: Review that SarifMark SelfTest Validation Implementation is Correct
     paths:
       - "docs/reqstream/sarifmark/self-test/validation.yaml"
       - "docs/design/sarifmark/self-test/validation.md"
+      - "src/**/SelfTest/Validation.cs"
       - "test/**/SelfTest/ValidationTests.cs"
 
   - id: SarifMark-Utilities-PathHelpers
-    title: Review of SarifMark PathHelpers Software Unit
+    title: Review that SarifMark Utilities PathHelpers Implementation is Correct
     paths:
       - "docs/reqstream/sarifmark/utilities/path-helpers.yaml"
       - "docs/design/sarifmark/utilities/path-helpers.md"
+      - "src/**/Utilities/PathHelpers.cs"
       - "test/**/Utilities/PathHelpersTests.cs"

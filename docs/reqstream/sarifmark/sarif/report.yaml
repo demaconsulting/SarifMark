@@ -14,7 +14,6 @@ sections:
               - SarifMark-SarifResults-ToMarkdown
             tests:
               - Sarif_GenerateReport_CreatesReportFile
-              - SarifMark_MarkdownReportGeneration
 
           - id: SarifMark-Report-Depth
             title: The tool shall support configurable markdown heading depth.
@@ -36,8 +35,7 @@ sections:
             children:
               - SarifMark-SarifResults-FormatCount
             tests:
-              - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
-              - SarifResults_ToMarkdown_OneResult_UsesSingularForm
+              - Sarif_Report_ContainsResultCount
 
           - id: SarifMark-Report-Locations
             title: The tool shall display location information for results.
@@ -48,8 +46,7 @@ sections:
             children:
               - SarifMark-SarifResults-FormatLocation
             tests:
-              - SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
-              - SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
+              - Sarif_Report_ContainsLocationInfo
 
           - id: SarifMark-Report-Headings
             title: The tool shall support custom headings in reports.
@@ -60,10 +57,7 @@ sections:
             children:
               - SarifMark-SarifResults-ToMarkdown
             tests:
-              - SarifResults_ToMarkdown_CustomHeading_UsesProvidedHeading
-              - SarifResults_ToMarkdown_NullHeading_UsesDefaultHeading
-              - SarifResults_ToMarkdown_NoHeadingParameter_UsesDefaultHeading
-              - Context_Create_HeadingArgument_SetsHeading
+              - Sarif_Report_UsesCustomHeading
 
           - id: SarifMark-Report-LineBreaks
             title: The tool shall format multiple results with proper line breaks.
@@ -74,4 +68,4 @@ sections:
             children:
               - SarifMark-SarifResults-ToMarkdown
             tests:
-              - SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks
+              - Sarif_GenerateReport_CreatesReportFile

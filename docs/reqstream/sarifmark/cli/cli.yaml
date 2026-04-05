@@ -26,7 +26,6 @@ sections:
               - SarifMark-Context-VersionFlag
             tests:
               - Cli_VersionFlag_OutputsVersion
-              - Context_Create_VersionFlag_SetsVersionTrue
 
           - id: SarifMark-Cli-Help
             title: The tool shall display help information when requested.
@@ -38,7 +37,6 @@ sections:
               - SarifMark-Context-HelpFlag
             tests:
               - Cli_HelpFlag_OutputsUsageInformation
-              - Context_Create_HelpFlag_SetsHelpTrue
 
           - id: SarifMark-Cli-Silent
             title: The tool shall support silent mode to suppress console output.
@@ -71,7 +69,6 @@ sections:
             children:
               - SarifMark-Context-EnforceFlag
             tests:
-              - SarifMark_Enforcement
               - Cli_EnforceFlagWithIssues_ReturnsError
 
           - id: SarifMark-Cli-InvalidArgs
