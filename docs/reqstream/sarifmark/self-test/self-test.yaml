@@ -24,8 +24,8 @@ sections:
             children:
               - SarifMark-Validation-ResultsFile
             tests:
-              - Validation_Run_WithTrxResultsFile_WritesResultsFile
-              - Validation_Run_WithXmlResultsFile_WritesResultsFile
+              - SelfTest_ResultsFile_WritesTrxFile
+              - SelfTest_ResultsFile_WritesJUnitFile
 
           - id: SarifMark-Validate-TrxFormat
             title: The tool shall support TRX format for test results.
@@ -36,7 +36,7 @@ sections:
             children:
               - SarifMark-Validation-ResultsFile
             tests:
-              - Validation_Run_WithTrxResultsFile_WritesResultsFile
+              - SelfTest_ResultsFile_WritesTrxFile
 
           - id: SarifMark-Validate-JUnitFormat
             title: The tool shall support JUnit format for test results.
@@ -47,7 +47,7 @@ sections:
             children:
               - SarifMark-Validation-ResultsFile
             tests:
-              - Validation_Run_WithXmlResultsFile_WritesResultsFile
+              - SelfTest_ResultsFile_WritesJUnitFile
 
       - title: Quality Enforcement
         requirements:
@@ -60,8 +60,7 @@ sections:
             children:
               - SarifMark-Validation-EnforcementTest
             tests:
-              - Cli_EnforceFlagWithIssues_ReturnsError
-              - SarifMark_Enforcement
+              - SelfTest_EnforceFlag_ReturnsNonZeroOnIssues
 
           - id: SarifMark-Enforce-ExitCode
             title: The tool shall return non-zero exit code when issues found in enforcement mode.
@@ -72,5 +71,4 @@ sections:
             children:
               - SarifMark-Validation-EnforcementTest
             tests:
-              - Cli_EnforceFlagWithIssues_ReturnsError
-              - SarifMark_Enforcement
+              - SelfTest_EnforceFlag_ReturnsNonZeroOnIssues

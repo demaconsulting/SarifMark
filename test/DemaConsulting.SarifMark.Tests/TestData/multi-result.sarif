@@ -1,0 +1,55 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "TestTool",
+          "version": "1.0.0",
+          "informationUri": "https://example.com/testtool"
+        }
+      },
+      "results": [
+        {
+          "ruleId": "TEST001",
+          "level": "warning",
+          "message": {
+            "text": "First test warning message"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///path/to/first.cs"
+                },
+                "region": {
+                  "startLine": 10
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "TEST002",
+          "level": "error",
+          "message": {
+            "text": "Second test error message"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///path/to/second.cs"
+                },
+                "region": {
+                  "startLine": 25
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

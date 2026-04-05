@@ -13,7 +13,6 @@ sections:
             children:
               - SarifMark-SarifResults-ParseResults
             tests:
-              - SarifMark_SarifReading
               - Sarif_ValidSarifFile_ProcessesSuccessfully
 
           - id: SarifMark-Sarif-Validation
@@ -26,10 +25,8 @@ sections:
               - SarifMark-SarifResults-ValidatePath
               - SarifMark-SarifResults-ValidateStructure
             tests:
-              - SarifResults_Read_InvalidJson_ThrowsInvalidOperationException
-              - SarifResults_Read_MissingVersion_ThrowsInvalidOperationException
-              - SarifResults_Read_MissingRuns_ThrowsInvalidOperationException
-              - SarifResults_Read_EmptyRuns_ThrowsInvalidOperationException
+              - Sarif_NonExistentSarifFile_ShowsError
+              - Sarif_InvalidSarifFile_ShowsFormatError
 
           - id: SarifMark-Sarif-ToolInfo
             title: The tool shall extract tool information from SARIF files.
@@ -41,10 +38,7 @@ sections:
               - SarifMark-SarifResults-ExtractTool
               - SarifMark-SarifResults-VersionPriority
             tests:
-              - SarifResults_Read_MissingTool_ThrowsInvalidOperationException
-              - SarifResults_Read_MissingDriver_ThrowsInvalidOperationException
-              - SarifResults_Read_MissingToolName_UsesUnknown
-              - SarifResults_Read_MissingToolVersion_UsesUnknown
+              - Sarif_ValidSarifFile_ProcessesSuccessfully
 
           - id: SarifMark-Sarif-Results
             title: The tool shall extract results from SARIF files.
@@ -56,9 +50,7 @@ sections:
               - SarifMark-SarifResults-ParseResults
               - SarifMark-SarifResults-FilterSuppressions
             tests:
-              - SarifResults_Read_NoResults_ReturnsValidResults
-              - SarifResults_Read_EmptyResults_ReturnsValidResults
-              - SarifResults_Read_WithResults_ReturnsValidResults
+              - Sarif_ValidSarifFile_ProcessesSuccessfully
 
           - id: SarifMark-Sarif-Locations
             title: The tool shall extract location information from SARIF results.
@@ -70,7 +62,7 @@ sections:
               - SarifMark-SarifResult-Uri
               - SarifMark-SarifResult-StartLine
             tests:
-              - SarifResults_Read_WithLocations_ReturnsResultsWithLocationData
+              - Sarif_Report_ContainsLocationInfo
 
           - id: SarifMark-Sarif-FilePaths
             title: The tool shall require valid file paths for SARIF input.
@@ -81,10 +73,8 @@ sections:
             children:
               - SarifMark-SarifResults-ValidatePath
             tests:
-              - SarifResults_Read_NullPath_ThrowsArgumentException
-              - SarifResults_Read_EmptyPath_ThrowsArgumentException
-              - SarifResults_Read_WhitespacePath_ThrowsArgumentException
-              - SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException
+              - Sarif_MissingSarifParameter_ShowsError
+              - Sarif_NonExistentSarifFile_ShowsError
 
           - id: SarifMark-Sarif-Required
             title: The tool shall require the --sarif parameter for analysis.
