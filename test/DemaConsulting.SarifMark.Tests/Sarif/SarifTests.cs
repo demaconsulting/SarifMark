@@ -38,37 +38,6 @@ public class SarifTests
     }
 
     /// <summary>
-    ///     Test that missing sarif parameter shows error.
-    /// </summary>
-    [TestMethod]
-    public void Sarif_MissingSarifParameter_ShowsError()
-    {
-        // Arrange
-        var originalOut = Console.Out;
-        var originalError = Console.Error;
-        try
-        {
-            using var outWriter = new StringWriter();
-            using var errWriter = new StringWriter();
-            Console.SetOut(outWriter);
-            Console.SetError(errWriter);
-
-            // Act
-            var exitCode = Program.Main([]);
-            var output = outWriter.ToString() + errWriter.ToString();
-
-            // Assert
-            Assert.AreEqual(1, exitCode);
-            Assert.Contains("--sarif parameter is required", output);
-        }
-        finally
-        {
-            Console.SetOut(originalOut);
-            Console.SetError(originalError);
-        }
-    }
-
-    /// <summary>
     ///     Test that processing a valid SARIF file succeeds.
     /// </summary>
     [TestMethod]
@@ -87,22 +56,23 @@ public class SarifTests
     }
 
     /// <summary>
-    ///     Test that processing a non-existent SARIF file throws FileNotFoundException.
+    ///     Test that reading a non-existent SARIF file throws FileNotFoundException.
     /// </summary>
     [TestMethod]
-    public void Sarif_NonExistentSarifFile_ShowsError()
+    public void Sarif_NonExistentSarifFile_ThrowsFileNotFoundException()
     {
-        // Arrange - No special setup needed
+        // Arrange
+        var nonExistentPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.sarif");
 
         // Act / Assert
-        Assert.ThrowsExactly<FileNotFoundException>(() => SarifResults.Read("nonexistent.sarif"));
+        Assert.ThrowsExactly<FileNotFoundException>(() => SarifResults.Read(nonExistentPath));
     }
 
     /// <summary>
-    ///     Test that generating a report file succeeds.
+    ///     Test that generating a report produces the expected markdown content.
     /// </summary>
     [TestMethod]
-    public void Sarif_GenerateReport_CreatesReportFile()
+    public void Sarif_GenerateReport_ProducesMarkdownContent()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
@@ -135,10 +105,10 @@ public class SarifTests
     }
 
     /// <summary>
-    ///     Test that processing an invalid SARIF file throws InvalidOperationException.
+    ///     Test that reading an invalid SARIF file throws InvalidOperationException.
     /// </summary>
     [TestMethod]
-    public void Sarif_InvalidSarifFile_ShowsFormatError()
+    public void Sarif_InvalidSarifFile_ThrowsInvalidOperationException()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "invalid.sarif");

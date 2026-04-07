@@ -23,12 +23,29 @@ The `Cli` subsystem contains the following software unit:
 
 The `Cli` subsystem exposes the following interface to the rest of the tool:
 
+**Methods:**
+
 | Interface            | Direction | Description                                                   |
 |----------------------|-----------|---------------------------------------------------------------|
 | `Context.Create`     | Outbound  | Factory method constructing a `Context` from `string[] args`. |
 | `Context.WriteLine`  | Outbound  | Writes a message to console and optional log file.            |
 | `Context.WriteError` | Outbound  | Writes an error to stderr and sets the error exit code.       |
-| `Context.ExitCode`   | Outbound  | Returns 0 for success or 1 when errors have been reported.    |
+
+**Parsed flags and parameters** (set by `Create`, read by the application layer):
+
+| Property      | Type      | CLI flag(s)              | Description                                   |
+|---------------|-----------|--------------------------|-----------------------------------------------|
+| `Version`     | `bool`    | `-v`, `--version`        | Version query flag                            |
+| `Help`        | `bool`    | `-?`, `-h`, `--help`     | Help flag                                     |
+| `Silent`      | `bool`    | `--silent`               | Suppress console output flag                  |
+| `Validate`    | `bool`    | `--validate`             | Self-validation mode flag                     |
+| `Enforce`     | `bool`    | `--enforce`              | Enforcement mode flag                         |
+| `SarifFile`   | `string?` | `--sarif <file>`         | Path to the SARIF input file                  |
+| `ReportFile`  | `string?` | `--report <file>`        | Path for the markdown report output file      |
+| `ReportDepth` | `int`     | `--report-depth <depth>` | Markdown heading depth for the report         |
+| `Heading`     | `string?` | `--heading <text>`       | Custom heading text for the report            |
+| `ResultsFile` | `string?` | `--results <file>`       | Path for the self-validation results file     |
+| `ExitCode`    | `int`     | *(derived)*              | 0 until `WriteError` is called, then 1        |
 
 ## Interactions
 

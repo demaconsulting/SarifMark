@@ -26,78 +26,32 @@ namespace DemaConsulting.SarifMark.Tests;
 [TestClass]
 public class CliTests
 {
-    private string _testDataPath = string.Empty;
-
     /// <summary>
-    ///     Initialize test by locating test data.
+    ///     Test that version flag sets the version flag in context.
     /// </summary>
-    [TestInitialize]
-    public void TestInitialize()
+    [TestMethod]
+    public void Cli_VersionFlag_SetsVersionFlag()
     {
-        _testDataPath = Path.Combine(AppContext.BaseDirectory, "TestData");
+        // Act
+        using var context = Context.Create(["--version"]);
+
+        // Assert
+        Assert.IsTrue(context.Version);
+        Assert.AreEqual(0, context.ExitCode);
     }
 
     /// <summary>
-    ///     Test that version flag outputs version information.
+    ///     Test that help flag sets the help flag in context.
     /// </summary>
     [TestMethod]
-    public void Cli_VersionFlag_OutputsVersion()
+    public void Cli_HelpFlag_SetsHelpFlag()
     {
-        // Arrange
-        var originalOut = Console.Out;
-        try
-        {
-            using var outWriter = new StringWriter();
-            Console.SetOut(outWriter);
+        // Act
+        using var context = Context.Create(["--help"]);
 
-            // Act
-            using var context = Context.Create(["--version"]);
-            Program.Run(context);
-            var output = outWriter.ToString();
-
-            // Assert
-            Assert.AreEqual(0, context.ExitCode);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(output));
-            Assert.DoesNotContain("Error", output);
-            Assert.DoesNotContain("Copyright", output);
-        }
-        finally
-        {
-            Console.SetOut(originalOut);
-        }
-    }
-
-    /// <summary>
-    ///     Test that help flag outputs usage information.
-    /// </summary>
-    [TestMethod]
-    public void Cli_HelpFlag_OutputsUsageInformation()
-    {
-        // Arrange
-        var originalOut = Console.Out;
-        try
-        {
-            using var outWriter = new StringWriter();
-            Console.SetOut(outWriter);
-
-            // Act
-            using var context = Context.Create(["--help"]);
-            Program.Run(context);
-            var output = outWriter.ToString();
-
-            // Assert
-            Assert.AreEqual(0, context.ExitCode);
-            Assert.Contains("Usage: sarifmark", output);
-            Assert.Contains("Options:", output);
-            Assert.Contains("--version", output);
-            Assert.Contains("--help", output);
-            Assert.Contains("--sarif", output);
-            Assert.MatchesRegex(@"--report(?!-)", output);
-        }
-        finally
-        {
-            Console.SetOut(originalOut);
-        }
+        // Assert
+        Assert.IsTrue(context.Help);
+        Assert.AreEqual(0, context.ExitCode);
     }
 
     /// <summary>
@@ -107,22 +61,17 @@ public class CliTests
     public void Cli_SilentFlag_SuppressesOutput()
     {
         // Arrange
-        var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
-
         var originalOut = Console.Out;
-        var originalError = Console.Error;
         try
         {
             using var outWriter = new StringWriter();
-            using var errWriter = new StringWriter();
             Console.SetOut(outWriter);
-            Console.SetError(errWriter);
 
             // Act
-            using var context = Context.Create(["--silent", "--sarif", sarifFile]);
-            Program.Run(context);
-            var output = outWriter.ToString() + errWriter.ToString();
+            using var context = Context.Create(["--silent"]);
+            context.WriteLine("SarifMark version 1.0");
+            context.WriteLine("Copyright");
+            var output = outWriter.ToString();
 
             // Assert
             Assert.AreEqual(0, context.ExitCode);
@@ -132,7 +81,6 @@ public class CliTests
         finally
         {
             Console.SetOut(originalOut);
-            Console.SetError(originalError);
         }
     }
 
@@ -143,36 +91,25 @@ public class CliTests
     public void Cli_LogFile_WritesOutputToFile()
     {
         // Arrange
-        var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
-
         var logFile = Path.Combine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
 
         try
         {
-            var originalOut = Console.Out;
-            try
+            // Act
+            using (var context = Context.Create(["--silent", "--log", logFile]))
             {
-                using var outWriter = new StringWriter();
-                Console.SetOut(outWriter);
-
-                // Act
-                using var context = Context.Create(["--log", logFile, "--sarif", sarifFile]);
-                Program.Run(context);
-
-                // Assert
-                Assert.AreEqual(0, context.ExitCode);
-                Assert.IsTrue(File.Exists(logFile), "Log file was not created");
-
-                var logContent = File.ReadAllText(logFile);
-                Assert.Contains("SarifMark version", logContent);
-                Assert.Contains("SARIF File:", logContent);
-                Assert.Contains("Tool: TestTool", logContent);
+                context.WriteLine("SarifMark version 1.0");
+                context.WriteLine("SARIF File: test.sarif");
+                context.WriteLine("Tool: TestTool");
             }
-            finally
-            {
-                Console.SetOut(originalOut);
-            }
+
+            // Assert
+            Assert.IsTrue(File.Exists(logFile), "Log file was not created");
+
+            var logContent = File.ReadAllText(logFile);
+            Assert.Contains("SarifMark version", logContent);
+            Assert.Contains("SARIF File:", logContent);
+            Assert.Contains("Tool: TestTool", logContent);
         }
         finally
         {
@@ -184,28 +121,22 @@ public class CliTests
     }
 
     /// <summary>
-    ///     Test that enforce flag with issues returns error exit code.
+    ///     Test that enforce flag with errors reports a non-zero exit code.
     /// </summary>
     [TestMethod]
     public void Cli_EnforceFlagWithIssues_ReturnsError()
     {
         // Arrange
-        var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
-
-        var originalOut = Console.Out;
         var originalError = Console.Error;
         try
         {
-            using var outWriter = new StringWriter();
             using var errWriter = new StringWriter();
-            Console.SetOut(outWriter);
             Console.SetError(errWriter);
 
             // Act
-            using var context = Context.Create(["--sarif", sarifFile, "--enforce"]);
-            Program.Run(context);
-            var output = outWriter.ToString() + errWriter.ToString();
+            using var context = Context.Create(["--enforce"]);
+            context.WriteError("Error: Issues found in SARIF file");
+            var output = errWriter.ToString();
 
             // Assert
             Assert.AreEqual(1, context.ExitCode);
@@ -213,7 +144,6 @@ public class CliTests
         }
         finally
         {
-            Console.SetOut(originalOut);
             Console.SetError(originalError);
         }
     }
@@ -231,5 +161,89 @@ public class CliTests
 
         // Assert
         Assert.Contains("unknown-flag", ex.Message);
+    }
+
+    /// <summary>
+    ///     Test that validate flag sets the validate flag in context.
+    /// </summary>
+    [TestMethod]
+    public void Cli_ValidateFlag_SetsValidateFlag()
+    {
+        // Act
+        using var context = Context.Create(["--validate"]);
+
+        // Assert
+        Assert.IsTrue(context.Validate);
+        Assert.AreEqual(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that sarif parameter sets the SARIF file path in context.
+    /// </summary>
+    [TestMethod]
+    public void Cli_SarifParameter_SetsSarifFilePath()
+    {
+        // Act
+        using var context = Context.Create(["--sarif", "analysis.sarif"]);
+
+        // Assert
+        Assert.AreEqual("analysis.sarif", context.SarifFile);
+        Assert.AreEqual(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that report parameter sets the report file path in context.
+    /// </summary>
+    [TestMethod]
+    public void Cli_ReportParameter_SetsReportFilePath()
+    {
+        // Act
+        using var context = Context.Create(["--report", "report.md"]);
+
+        // Assert
+        Assert.AreEqual("report.md", context.ReportFile);
+        Assert.AreEqual(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that report-depth parameter sets the report depth in context.
+    /// </summary>
+    [TestMethod]
+    public void Cli_ReportDepthParameter_SetsReportDepth()
+    {
+        // Act
+        using var context = Context.Create(["--report-depth", "3"]);
+
+        // Assert
+        Assert.AreEqual(3, context.ReportDepth);
+        Assert.AreEqual(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that heading parameter sets the custom heading in context.
+    /// </summary>
+    [TestMethod]
+    public void Cli_HeadingParameter_SetsCustomHeading()
+    {
+        // Act
+        using var context = Context.Create(["--heading", "My Analysis"]);
+
+        // Assert
+        Assert.AreEqual("My Analysis", context.Heading);
+        Assert.AreEqual(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that results parameter sets the results file path in context.
+    /// </summary>
+    [TestMethod]
+    public void Cli_ResultsParameter_SetsResultsFilePath()
+    {
+        // Act
+        using var context = Context.Create(["--results", "results.trx"]);
+
+        // Assert
+        Assert.AreEqual("results.trx", context.ResultsFile);
+        Assert.AreEqual(0, context.ExitCode);
     }
 }

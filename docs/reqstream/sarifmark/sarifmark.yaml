@@ -37,6 +37,17 @@ sections:
         tests:
           - IntegrationTest_ValidateFlag_RunsSelfValidation
 
+      - id: SarifMark-System-SarifRequired
+        title: The tool shall require the --sarif parameter for SARIF analysis.
+        tags: [public]
+        justification: >-
+          Requiring explicit SARIF file specification ensures intentional operation and prevents
+          accidental execution without proper input, improving tool safety and predictability.
+        children:
+          - SarifMark-Sarif-FilePaths
+        tests:
+          - IntegrationTest_MissingSarifParameter_ShowsError
+
       - id: SarifMark-System-SarifAnalysis
         title: The tool shall read and analyze SARIF files.
         tags: [public]

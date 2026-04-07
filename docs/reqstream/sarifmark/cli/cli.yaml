@@ -5,7 +5,7 @@ sections:
       - title: Command-Line Interface
         requirements:
           - id: SarifMark-Cli-Interface
-            title: The tool shall provide a command-line interface.
+            title: The CLI subsystem shall accept command-line arguments and route output.
             justification: >-
               A command-line interface enables automation, scripting, and integration into CI/CD pipelines,
               making the tool suitable for DevOps workflows and batch processing scenarios.
@@ -13,33 +13,33 @@ sections:
             children:
               - SarifMark-Context-Create
             tests:
-              - Cli_VersionFlag_OutputsVersion
-              - Cli_HelpFlag_OutputsUsageInformation
+              - Cli_VersionFlag_SetsVersionFlag
+              - Cli_HelpFlag_SetsHelpFlag
 
           - id: SarifMark-Cli-Version
-            title: The tool shall display version information when requested.
+            title: The CLI shall recognize the --version flag.
             justification: >-
-              Version information allows users to identify the tool version for troubleshooting, compatibility
-              verification, and ensuring consistent behavior across different environments.
+              Recognizing the version flag allows the application layer to identify the requested operation
+              and display the tool version, supporting troubleshooting and compatibility verification.
             tags: [public]
             children:
               - SarifMark-Context-VersionFlag
             tests:
-              - Cli_VersionFlag_OutputsVersion
+              - Cli_VersionFlag_SetsVersionFlag
 
           - id: SarifMark-Cli-Help
-            title: The tool shall display help information when requested.
+            title: The CLI shall recognize the --help flag.
             justification: >-
-              Help information improves discoverability and usability by providing users with guidance on
-              available options, parameters, and usage patterns without consulting external documentation.
+              Recognizing the help flag allows the application layer to display usage information,
+              improving discoverability without consulting external documentation.
             tags: [public]
             children:
               - SarifMark-Context-HelpFlag
             tests:
-              - Cli_HelpFlag_OutputsUsageInformation
+              - Cli_HelpFlag_SetsHelpFlag
 
           - id: SarifMark-Cli-Silent
-            title: The tool shall support silent mode to suppress console output.
+            title: The CLI shall suppress console output when the silent flag is set.
             justification: >-
               Silent mode enables cleaner integration into automated workflows and CI/CD pipelines where console
               noise needs to be minimized, while still allowing log files to capture detailed information.
@@ -50,7 +50,7 @@ sections:
               - Cli_SilentFlag_SuppressesOutput
 
           - id: SarifMark-Cli-Log
-            title: The tool shall support writing output to a log file.
+            title: The CLI shall write output to a log file when the log parameter is set.
             justification: >-
               Log file support enables persistent record-keeping, debugging, and audit trails, especially valuable
               in automated environments where console output may not be readily available.
@@ -61,10 +61,10 @@ sections:
               - Cli_LogFile_WritesOutputToFile
 
           - id: SarifMark-Cli-Enforce
-            title: The tool shall support enforcing quality gate checks.
+            title: The CLI shall set a non-zero exit code when errors are reported.
             justification: >-
-              Quality gate enforcement enables the tool to act as a quality gate in CI/CD pipelines, failing
-              builds when issues are detected and ensuring code quality standards are maintained.
+              A non-zero exit code on error enables the tool to act as a quality gate in CI/CD pipelines,
+              failing builds when issues are detected and ensuring code quality standards are maintained.
             tags: [public]
             children:
               - SarifMark-Context-EnforceFlag
@@ -72,7 +72,7 @@ sections:
               - Cli_EnforceFlagWithIssues_ReturnsError
 
           - id: SarifMark-Cli-InvalidArgs
-            title: The tool shall reject unknown command-line arguments.
+            title: The CLI shall reject unknown command-line arguments.
             justification: >-
               Rejecting unknown arguments prevents silent failures from typos or incorrect parameters, ensuring
               users receive immediate feedback about misconfigured commands.
@@ -81,3 +81,69 @@ sections:
               - SarifMark-Context-UnknownArgs
             tests:
               - Cli_UnknownArgument_ShowsError
+
+          - id: SarifMark-Cli-Validate
+            title: The CLI shall recognize the --validate flag.
+            justification: >-
+              Recognizing the validate flag allows the application layer to activate self-validation mode,
+              enabling verification that the tool operates correctly in the deployment environment.
+            tags: [public]
+            children:
+              - SarifMark-Context-ValidateFlag
+            tests:
+              - Cli_ValidateFlag_SetsValidateFlag
+
+          - id: SarifMark-Cli-Sarif
+            title: The CLI shall accept a SARIF file path via the --sarif parameter.
+            justification: >-
+              Exposing a dedicated SARIF file path parameter gives the application layer a clean, named value
+              that decouples argument parsing from file processing.
+            tags: [public]
+            children:
+              - SarifMark-Context-SarifParam
+            tests:
+              - Cli_SarifParameter_SetsSarifFilePath
+
+          - id: SarifMark-Cli-Report
+            title: The CLI shall accept a report file path via the --report parameter.
+            justification: >-
+              A dedicated report file path parameter gives the application layer a clear output target,
+              keeping argument parsing separate from report generation logic.
+            tags: [public]
+            children:
+              - SarifMark-Context-ReportParam
+            tests:
+              - Cli_ReportParameter_SetsReportFilePath
+
+          - id: SarifMark-Cli-ReportDepth
+            title: The CLI shall accept a heading depth via the --report-depth parameter.
+            justification: >-
+              Exposing a validated heading depth parameter allows the application layer to control markdown
+              report heading levels without reimplementing argument parsing or range checking.
+            tags: [public]
+            children:
+              - SarifMark-Context-ReportDepthParam
+            tests:
+              - Cli_ReportDepthParameter_SetsReportDepth
+
+          - id: SarifMark-Cli-Heading
+            title: The CLI shall accept a custom heading via the --heading parameter.
+            justification: >-
+              Exposing a custom heading parameter lets the application layer pass user-specified titles
+              directly to the report formatter, keeping argument handling separate from output logic.
+            tags: [public]
+            children:
+              - SarifMark-Context-HeadingParam
+            tests:
+              - Cli_HeadingParameter_SetsCustomHeading
+
+          - id: SarifMark-Cli-Results
+            title: The CLI shall accept a results file path via the --results parameter.
+            justification: >-
+              A dedicated results file path parameter gives the application layer a clear destination for
+              test result output during self-validation, keeping argument parsing separate from output logic.
+            tags: [public]
+            children:
+              - SarifMark-Context-ResultsParam
+            tests:
+              - Cli_ResultsParameter_SetsResultsFilePath

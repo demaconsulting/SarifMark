@@ -8,7 +8,7 @@ markdown reports from the extracted results. It consists of two records:
 `SarifResults` (the full results collection with reading and reporting
 logic). This layer satisfies requirements `SarifMark-Sarif-Reading`,
 `SarifMark-Sarif-Validation`, `SarifMark-Sarif-ToolInfo`, `SarifMark-Sarif-Results`,
-`SarifMark-Sarif-Locations`, `SarifMark-Sarif-FilePaths`, `SarifMark-Sarif-Required`,
+`SarifMark-Sarif-Locations`, `SarifMark-Sarif-FilePaths`,
 `SarifMark-Sarif-Processing`, `SarifMark-Report-Markdown`, `SarifMark-Report-Depth`,
 `SarifMark-Report-Counts`, `SarifMark-Report-Locations`, `SarifMark-Report-Headings`, and
 `SarifMark-Report-LineBreaks`.
@@ -51,10 +51,10 @@ formats each result with location information and result counts. This satisfies
 
 ## CLI Integration
 
-The requirement `SarifMark-Sarif-Required` (the tool shall require the `--sarif` parameter
-for analysis) is enforced at the command-line layer rather than within this library. The
+The requirement `SarifMark-System-SarifRequired` (the tool shall require the `--sarif` parameter
+for analysis) is enforced at the application layer rather than within this library. The
 `ProcessSarifAnalysis` method in `Program.cs` validates that `--sarif` is provided before
-invoking the SARIF reading layer. See the Command Line document for full details.
+invoking the SARIF reading layer. See the Program Class document for full details.
 
 ## Class Details
 

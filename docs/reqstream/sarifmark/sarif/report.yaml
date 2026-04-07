@@ -13,7 +13,7 @@ sections:
             children:
               - SarifMark-SarifResults-ToMarkdown
             tests:
-              - Sarif_GenerateReport_CreatesReportFile
+              - Sarif_GenerateReport_ProducesMarkdownContent
 
           - id: SarifMark-Report-Depth
             title: The tool shall support configurable markdown heading depth.
