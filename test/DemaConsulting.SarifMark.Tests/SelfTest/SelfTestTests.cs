@@ -142,7 +142,7 @@ public class SelfTestTests
     ///     Test that enforcement mode behavior is verified by the self-validation suite.
     /// </summary>
     [TestMethod]
-    public void SelfTest_EnforceFlag_ReturnsNonZeroOnIssues()
+    public void SelfTest_EnforcementTest_RunsWithinValidation()
     {
         // Arrange
         var originalOut = Console.Out;

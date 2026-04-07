@@ -226,8 +226,10 @@ public class CliTests
     {
         // Arrange - No special setup needed
 
-        // Act / Assert - Context rejects unknown command-line arguments
+        // Act
         var ex = Assert.ThrowsExactly<ArgumentException>(() => Context.Create(["--unknown-flag"]));
+
+        // Assert
         Assert.Contains("unknown-flag", ex.Message);
     }
 }
