@@ -156,9 +156,9 @@ public class SelfTestTests
             Validation.Run(context);
             var output = outWriter.ToString();
 
-            // Assert - enforcement test within validation passes
+            // Assert - enforcement test within validation runs and passes
             Assert.AreEqual(0, context.ExitCode);
-            Assert.Contains("SarifMark_Enforcement", output);
+            Assert.Contains("SarifMark_Enforcement - Passed", output);
         }
         finally
         {
