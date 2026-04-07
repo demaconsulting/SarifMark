@@ -2,7 +2,7 @@
 sections:
   - title: SarifMark Requirements
     sections:
-      - title: Command-Line Interface
+      - title: CLI Subsystem
         requirements:
           - id: SarifMark-Cli-Interface
             title: The CLI subsystem shall accept command-line arguments and route output.
