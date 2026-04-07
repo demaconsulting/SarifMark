@@ -75,8 +75,7 @@ public class CliTests
 
             // Assert
             Assert.AreEqual(0, context.ExitCode);
-            Assert.DoesNotContain("SarifMark version", output);
-            Assert.DoesNotContain("Copyright", output);
+            Assert.AreEqual(string.Empty, output);
         }
         finally
         {
