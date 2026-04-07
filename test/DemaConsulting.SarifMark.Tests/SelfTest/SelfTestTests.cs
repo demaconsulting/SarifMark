@@ -26,39 +26,32 @@ namespace DemaConsulting.SarifMark.Tests;
 [TestClass]
 public class SelfTestTests
 {
-    private string _dllPath = string.Empty;
-
-    /// <summary>
-    ///     Initialize test by locating the SarifMark DLL.
-    /// </summary>
-    [TestInitialize]
-    public void TestInitialize()
-    {
-        var baseDir = AppContext.BaseDirectory;
-        _dllPath = PathHelpers.SafePathCombine(baseDir, "DemaConsulting.SarifMark.dll");
-
-        Assert.IsTrue(File.Exists(_dllPath), $"Could not find SarifMark DLL at {_dllPath}");
-    }
-
     /// <summary>
     ///     Test that validate flag runs self-validation.
     /// </summary>
     [TestMethod]
     public void SelfTest_ValidateFlag_RunsSelfValidation()
     {
-        // Arrange - No special setup needed
+        // Arrange
+        var originalOut = Console.Out;
+        try
+        {
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
 
-        // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath,
-            "--validate");
+            // Act
+            using var context = Context.Create(["--validate"]);
+            Validation.Run(context);
+            var output = outWriter.ToString();
 
-        // Assert
-        Assert.AreEqual(0, exitCode);
-        Assert.Contains("SarifMark version", output);
-        Assert.Contains("Total Tests:", output);
+            // Assert
+            Assert.AreEqual(0, context.ExitCode);
+            Assert.Contains("Total Tests:", output);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+        }
     }
 
     /// <summary>
@@ -68,24 +61,73 @@ public class SelfTestTests
     public void SelfTest_ResultsFile_WritesTrxFile()
     {
         // Arrange
-        var resultsFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-results-{Guid.NewGuid()}.trx");
+        var resultsFile = Path.Combine(Path.GetTempPath(), $"test-results-{Guid.NewGuid()}.trx");
 
         try
         {
-            // Act
-            var exitCode = Runner.Run(
-                out _,
-                "dotnet",
-                _dllPath,
-                "--validate",
-                "--results", resultsFile);
+            var originalOut = Console.Out;
+            try
+            {
+                using var outWriter = new StringWriter();
+                Console.SetOut(outWriter);
 
-            // Assert
-            Assert.AreEqual(0, exitCode);
-            Assert.IsTrue(File.Exists(resultsFile), "TRX results file was not created");
+                // Act
+                using var context = Context.Create(["--validate", "--results", resultsFile]);
+                Validation.Run(context);
 
-            var content = File.ReadAllText(resultsFile);
-            Assert.Contains("<TestRun", content);
+                // Assert
+                Assert.AreEqual(0, context.ExitCode);
+                Assert.IsTrue(File.Exists(resultsFile), "TRX results file was not created");
+
+                var content = File.ReadAllText(resultsFile);
+                Assert.Contains("<TestRun", content);
+            }
+            finally
+            {
+                Console.SetOut(originalOut);
+            }
+        }
+        finally
+        {
+            if (File.Exists(resultsFile))
+            {
+                File.Delete(resultsFile);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Test that validate flag with JUnit XML results parameter writes a JUnit XML file.
+    /// </summary>
+    [TestMethod]
+    public void SelfTest_ResultsFile_WritesJUnitFile()
+    {
+        // Arrange
+        var resultsFile = Path.Combine(Path.GetTempPath(), $"test-results-{Guid.NewGuid()}.xml");
+
+        try
+        {
+            var originalOut = Console.Out;
+            try
+            {
+                using var outWriter = new StringWriter();
+                Console.SetOut(outWriter);
+
+                // Act
+                using var context = Context.Create(["--validate", "--results", resultsFile]);
+                Validation.Run(context);
+
+                // Assert
+                Assert.AreEqual(0, context.ExitCode);
+                Assert.IsTrue(File.Exists(resultsFile), "JUnit XML results file was not created");
+
+                var content = File.ReadAllText(resultsFile);
+                Assert.Contains("<testsuite", content);
+            }
+            finally
+            {
+                Console.SetOut(originalOut);
+            }
         }
         finally
         {
@@ -103,57 +145,30 @@ public class SelfTestTests
     public void SelfTest_EnforceFlag_ReturnsNonZeroOnIssues()
     {
         // Arrange
-        var baseDir = AppContext.BaseDirectory;
-        var sarifFile = PathHelpers.SafePathCombine(
-            PathHelpers.SafePathCombine(baseDir, "TestData"),
-            "sample.sarif");
+        var sarifFile = Path.Combine(AppContext.BaseDirectory, "TestData", "sample.sarif");
         Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
-        // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath,
-            "--sarif", sarifFile,
-            "--enforce");
-
-        // Assert
-        Assert.AreEqual(1, exitCode);
-        Assert.Contains("Issues found in SARIF file", output);
-    }
-
-    /// <summary>
-    ///     Test that validate flag with JUnit XML results parameter writes a JUnit XML file.
-    /// </summary>
-    [TestMethod]
-    public void SelfTest_ResultsFile_WritesJUnitFile()
-    {
-        // Arrange
-        var resultsFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-results-{Guid.NewGuid()}.xml");
-
+        var originalOut = Console.Out;
+        var originalError = Console.Error;
         try
         {
+            using var outWriter = new StringWriter();
+            using var errWriter = new StringWriter();
+            Console.SetOut(outWriter);
+            Console.SetError(errWriter);
+
             // Act
-            var exitCode = Runner.Run(
-                out _,
-                "dotnet",
-                _dllPath,
-                "--validate",
-                "--results", resultsFile);
+            var exitCode = Program.Main(["--sarif", sarifFile, "--enforce"]);
+            var output = outWriter.ToString() + errWriter.ToString();
 
             // Assert
-            Assert.AreEqual(0, exitCode);
-            Assert.IsTrue(File.Exists(resultsFile), "JUnit XML results file was not created");
-
-            var content = File.ReadAllText(resultsFile);
-            Assert.Contains("<testsuite", content);
+            Assert.AreEqual(1, exitCode);
+            Assert.Contains("Issues found in SARIF file", output);
         }
         finally
         {
-            if (File.Exists(resultsFile))
-            {
-                File.Delete(resultsFile);
-            }
+            Console.SetOut(originalOut);
+            Console.SetError(originalError);
         }
     }
 }

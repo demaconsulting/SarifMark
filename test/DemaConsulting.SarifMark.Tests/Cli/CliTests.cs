@@ -26,20 +26,15 @@ namespace DemaConsulting.SarifMark.Tests;
 [TestClass]
 public class CliTests
 {
-    private string _dllPath = string.Empty;
     private string _testDataPath = string.Empty;
 
     /// <summary>
-    ///     Initialize test by locating the SarifMark DLL and test data.
+    ///     Initialize test by locating test data.
     /// </summary>
     [TestInitialize]
     public void TestInitialize()
     {
-        var baseDir = AppContext.BaseDirectory;
-        _dllPath = PathHelpers.SafePathCombine(baseDir, "DemaConsulting.SarifMark.dll");
-        _testDataPath = PathHelpers.SafePathCombine(baseDir, "TestData");
-
-        Assert.IsTrue(File.Exists(_dllPath), $"Could not find SarifMark DLL at {_dllPath}");
+        _testDataPath = Path.Combine(AppContext.BaseDirectory, "TestData");
     }
 
     /// <summary>
@@ -48,20 +43,27 @@ public class CliTests
     [TestMethod]
     public void Cli_VersionFlag_OutputsVersion()
     {
-        // Arrange - No special setup needed
+        // Arrange
+        var originalOut = Console.Out;
+        try
+        {
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
 
-        // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath,
-            "--version");
+            // Act
+            var exitCode = Program.Main(["--version"]);
+            var output = outWriter.ToString();
 
-        // Assert
-        Assert.AreEqual(0, exitCode);
-        Assert.IsFalse(string.IsNullOrWhiteSpace(output));
-        Assert.DoesNotContain("Error", output);
-        Assert.DoesNotContain("Copyright", output);
+            // Assert
+            Assert.AreEqual(0, exitCode);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(output));
+            Assert.DoesNotContain("Error", output);
+            Assert.DoesNotContain("Copyright", output);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+        }
     }
 
     /// <summary>
@@ -70,23 +72,30 @@ public class CliTests
     [TestMethod]
     public void Cli_HelpFlag_OutputsUsageInformation()
     {
-        // Arrange - No special setup needed
+        // Arrange
+        var originalOut = Console.Out;
+        try
+        {
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
 
-        // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath,
-            "--help");
+            // Act
+            var exitCode = Program.Main(["--help"]);
+            var output = outWriter.ToString();
 
-        // Assert
-        Assert.AreEqual(0, exitCode);
-        Assert.Contains("Usage: sarifmark", output);
-        Assert.Contains("Options:", output);
-        Assert.Contains("--version", output);
-        Assert.Contains("--help", output);
-        Assert.Contains("--sarif", output);
-        Assert.MatchesRegex(@"--report(?!-)", output);
+            // Assert
+            Assert.AreEqual(0, exitCode);
+            Assert.Contains("Usage: sarifmark", output);
+            Assert.Contains("Options:", output);
+            Assert.Contains("--version", output);
+            Assert.Contains("--help", output);
+            Assert.Contains("--sarif", output);
+            Assert.MatchesRegex(@"--report(?!-)", output);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+        }
     }
 
     /// <summary>
@@ -96,21 +105,32 @@ public class CliTests
     public void Cli_SilentFlag_SuppressesOutput()
     {
         // Arrange
-        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
+        var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
         Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
-        // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath,
-            "--silent",
-            "--sarif", sarifFile);
+        var originalOut = Console.Out;
+        var originalError = Console.Error;
+        try
+        {
+            using var outWriter = new StringWriter();
+            using var errWriter = new StringWriter();
+            Console.SetOut(outWriter);
+            Console.SetError(errWriter);
 
-        // Assert
-        Assert.AreEqual(0, exitCode);
-        Assert.DoesNotContain("SarifMark version", output);
-        Assert.DoesNotContain("Copyright", output);
+            // Act
+            var exitCode = Program.Main(["--silent", "--sarif", sarifFile]);
+            var output = outWriter.ToString() + errWriter.ToString();
+
+            // Assert
+            Assert.AreEqual(0, exitCode);
+            Assert.DoesNotContain("SarifMark version", output);
+            Assert.DoesNotContain("Copyright", output);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            Console.SetError(originalError);
+        }
     }
 
     /// <summary>
@@ -120,29 +140,35 @@ public class CliTests
     public void Cli_LogFile_WritesOutputToFile()
     {
         // Arrange
-        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
+        var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
         Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
-        var logFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
+        var logFile = Path.Combine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
 
         try
         {
-            // Act
-            var exitCode = Runner.Run(
-                out _,
-                "dotnet",
-                _dllPath,
-                "--log", logFile,
-                "--sarif", sarifFile);
+            var originalOut = Console.Out;
+            try
+            {
+                using var outWriter = new StringWriter();
+                Console.SetOut(outWriter);
 
-            // Assert
-            Assert.AreEqual(0, exitCode);
-            Assert.IsTrue(File.Exists(logFile), "Log file was not created");
+                // Act
+                var exitCode = Program.Main(["--log", logFile, "--sarif", sarifFile]);
 
-            var logContent = File.ReadAllText(logFile);
-            Assert.Contains("SarifMark version", logContent);
-            Assert.Contains("SARIF File:", logContent);
-            Assert.Contains("Tool: TestTool", logContent);
+                // Assert
+                Assert.AreEqual(0, exitCode);
+                Assert.IsTrue(File.Exists(logFile), "Log file was not created");
+
+                var logContent = File.ReadAllText(logFile);
+                Assert.Contains("SarifMark version", logContent);
+                Assert.Contains("SARIF File:", logContent);
+                Assert.Contains("Tool: TestTool", logContent);
+            }
+            finally
+            {
+                Console.SetOut(originalOut);
+            }
         }
         finally
         {
@@ -160,20 +186,31 @@ public class CliTests
     public void Cli_EnforceFlagWithIssues_ReturnsError()
     {
         // Arrange
-        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
+        var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
         Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
-        // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath,
-            "--sarif", sarifFile,
-            "--enforce");
+        var originalOut = Console.Out;
+        var originalError = Console.Error;
+        try
+        {
+            using var outWriter = new StringWriter();
+            using var errWriter = new StringWriter();
+            Console.SetOut(outWriter);
+            Console.SetError(errWriter);
 
-        // Assert
-        Assert.AreEqual(1, exitCode);
-        Assert.Contains("Issues found in SARIF file", output);
+            // Act
+            var exitCode = Program.Main(["--sarif", sarifFile, "--enforce"]);
+            var output = outWriter.ToString() + errWriter.ToString();
+
+            // Assert
+            Assert.AreEqual(1, exitCode);
+            Assert.Contains("Issues found in SARIF file", output);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            Console.SetError(originalError);
+        }
     }
 
     /// <summary>
@@ -182,18 +219,25 @@ public class CliTests
     [TestMethod]
     public void Cli_UnknownArgument_ShowsError()
     {
-        // Arrange - No special setup needed
+        // Arrange
+        var originalError = Console.Error;
+        try
+        {
+            using var errWriter = new StringWriter();
+            Console.SetError(errWriter);
 
-        // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath,
-            "--unknown-flag");
+            // Act
+            var exitCode = Program.Main(["--unknown-flag"]);
+            var errorOutput = errWriter.ToString();
 
-        // Assert
-        Assert.AreEqual(1, exitCode);
-        Assert.Contains("Error:", output);
-        Assert.Contains("unknown-flag", output);
+            // Assert
+            Assert.AreEqual(1, exitCode);
+            Assert.Contains("Unsupported argument", errorOutput);
+            Assert.Contains("unknown-flag", errorOutput);
+        }
+        finally
+        {
+            Console.SetError(originalError);
+        }
     }
 }

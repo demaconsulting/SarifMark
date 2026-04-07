@@ -26,20 +26,15 @@ namespace DemaConsulting.SarifMark.Tests;
 [TestClass]
 public class SarifTests
 {
-    private string _dllPath = string.Empty;
     private string _testDataPath = string.Empty;
 
     /// <summary>
-    ///     Initialize test by locating the SarifMark DLL and test data.
+    ///     Initialize test by locating test data.
     /// </summary>
     [TestInitialize]
     public void TestInitialize()
     {
-        var baseDir = AppContext.BaseDirectory;
-        _dllPath = PathHelpers.SafePathCombine(baseDir, "DemaConsulting.SarifMark.dll");
-        _testDataPath = PathHelpers.SafePathCombine(baseDir, "TestData");
-
-        Assert.IsTrue(File.Exists(_dllPath), $"Could not find SarifMark DLL at {_dllPath}");
+        _testDataPath = Path.Combine(AppContext.BaseDirectory, "TestData");
     }
 
     /// <summary>
@@ -48,17 +43,29 @@ public class SarifTests
     [TestMethod]
     public void Sarif_MissingSarifParameter_ShowsError()
     {
-        // Arrange - No special setup needed
+        // Arrange
+        var originalOut = Console.Out;
+        var originalError = Console.Error;
+        try
+        {
+            using var outWriter = new StringWriter();
+            using var errWriter = new StringWriter();
+            Console.SetOut(outWriter);
+            Console.SetError(errWriter);
 
-        // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath);
+            // Act
+            var exitCode = Program.Main([]);
+            var output = outWriter.ToString() + errWriter.ToString();
 
-        // Assert
-        Assert.AreEqual(1, exitCode);
-        Assert.Contains("--sarif parameter is required", output);
+            // Assert
+            Assert.AreEqual(1, exitCode);
+            Assert.Contains("--sarif parameter is required", output);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            Console.SetError(originalError);
+        }
     }
 
     /// <summary>
@@ -68,43 +75,27 @@ public class SarifTests
     public void Sarif_ValidSarifFile_ProcessesSuccessfully()
     {
         // Arrange
-        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
+        var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
         Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath,
-            "--sarif", sarifFile);
+        var results = SarifResults.Read(sarifFile);
 
         // Assert
-        Assert.AreEqual(0, exitCode);
-        Assert.Contains("SarifMark version", output);
-        Assert.Contains("SARIF File:", output);
-        Assert.Contains("Reading SARIF file...", output);
-        Assert.Contains("Tool: TestTool", output);
-        Assert.Contains("Results: 1", output);
+        Assert.AreEqual("TestTool", results.ToolName);
+        Assert.AreEqual(1, results.ResultCount);
     }
 
     /// <summary>
-    ///     Test that processing a non-existent SARIF file shows error.
+    ///     Test that processing a non-existent SARIF file throws FileNotFoundException.
     /// </summary>
     [TestMethod]
     public void Sarif_NonExistentSarifFile_ShowsError()
     {
         // Arrange - No special setup needed
 
-        // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath,
-            "--sarif", "nonexistent.sarif");
-
-        // Assert
-        Assert.AreEqual(1, exitCode);
-        Assert.Contains("Error:", output);
+        // Act / Assert
+        Assert.ThrowsExactly<FileNotFoundException>(() => SarifResults.Read("nonexistent.sarif"));
     }
 
     /// <summary>
@@ -114,37 +105,15 @@ public class SarifTests
     public void Sarif_GenerateReport_CreatesReportFile()
     {
         // Arrange
-        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
+        var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
         Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
-        var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-report-{Guid.NewGuid()}.md");
+        // Act
+        var results = SarifResults.Read(sarifFile);
+        var reportContent = results.ToMarkdown(1);
 
-        try
-        {
-            // Act
-            var exitCode = Runner.Run(
-                out var output,
-                "dotnet",
-                _dllPath,
-                "--sarif", sarifFile,
-                "--report", reportFile);
-
-            // Assert
-            Assert.AreEqual(0, exitCode);
-            Assert.Contains("Writing report to", output);
-            Assert.Contains("Report generated successfully", output);
-            Assert.IsTrue(File.Exists(reportFile), "Report file was not created");
-
-            var reportContent = File.ReadAllText(reportFile);
-            Assert.Contains("# TestTool Analysis", reportContent);
-        }
-        finally
-        {
-            if (File.Exists(reportFile))
-            {
-                File.Delete(reportFile);
-            }
-        }
+        // Assert
+        Assert.Contains("# TestTool Analysis", reportContent);
     }
 
     /// <summary>
@@ -154,58 +123,29 @@ public class SarifTests
     public void Sarif_ReportDepth_IsConfigurable()
     {
         // Arrange
-        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
+        var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
         Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
-        var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-report-depth-{Guid.NewGuid()}.md");
+        // Act
+        var results = SarifResults.Read(sarifFile);
+        var reportContent = results.ToMarkdown(3);
 
-        try
-        {
-            // Act
-            var exitCode = Runner.Run(
-                out _,
-                "dotnet",
-                _dllPath,
-                "--sarif", sarifFile,
-                "--report", reportFile,
-                "--report-depth", "3");
-
-            // Assert
-            Assert.AreEqual(0, exitCode);
-            Assert.IsTrue(File.Exists(reportFile), "Report file was not created");
-
-            var reportContent = File.ReadAllText(reportFile);
-            Assert.Contains("### TestTool Analysis", reportContent);
-        }
-        finally
-        {
-            if (File.Exists(reportFile))
-            {
-                File.Delete(reportFile);
-            }
-        }
+        // Assert
+        Assert.Contains("### TestTool Analysis", reportContent);
     }
 
     /// <summary>
-    ///     Test that processing an invalid SARIF file shows a format error.
+    ///     Test that processing an invalid SARIF file throws InvalidOperationException.
     /// </summary>
     [TestMethod]
     public void Sarif_InvalidSarifFile_ShowsFormatError()
     {
         // Arrange
-        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "invalid.sarif");
+        var sarifFile = Path.Combine(_testDataPath, "invalid.sarif");
         Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
-        // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath,
-            "--sarif", sarifFile);
-
-        // Assert
-        Assert.AreEqual(1, exitCode);
-        Assert.Contains("Error:", output);
+        // Act / Assert
+        Assert.ThrowsExactly<InvalidOperationException>(() => SarifResults.Read(sarifFile));
     }
 
     /// <summary>
@@ -215,40 +155,20 @@ public class SarifTests
     public void Sarif_GenerateReport_FormatsMultipleResultsWithLineBreaks()
     {
         // Arrange
-        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "multi-result.sarif");
+        var sarifFile = Path.Combine(_testDataPath, "multi-result.sarif");
         Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
-        var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-multi-report-{Guid.NewGuid()}.md");
+        // Act
+        var results = SarifResults.Read(sarifFile);
+        var reportContent = results.ToMarkdown(1);
 
-        try
-        {
-            // Act
-            var exitCode = Runner.Run(
-                out _,
-                "dotnet",
-                _dllPath,
-                "--sarif", sarifFile,
-                "--report", reportFile);
+        // Assert
+        Assert.Contains("Found 2 issues", reportContent);
+        Assert.Contains("first.cs", reportContent);
+        Assert.Contains("second.cs", reportContent);
 
-            // Assert
-            Assert.AreEqual(0, exitCode);
-            Assert.IsTrue(File.Exists(reportFile), "Report file was not created");
-
-            var reportContent = File.ReadAllText(reportFile);
-            Assert.Contains("Found 2 issues", reportContent);
-            Assert.Contains("first.cs", reportContent);
-            Assert.Contains("second.cs", reportContent);
-
-            // Verify results appear on separate lines with proper markdown line breaks
-            Assert.MatchesRegex(@"first\.cs.*  \r?\nfile:///path/to/second\.cs", reportContent);
-        }
-        finally
-        {
-            if (File.Exists(reportFile))
-            {
-                File.Delete(reportFile);
-            }
-        }
+        // Verify results appear on separate lines with proper markdown line breaks
+        Assert.MatchesRegex(@"first\.cs.*  \r?\nfile:///path/to/second\.cs", reportContent);
     }
 
     /// <summary>
@@ -258,35 +178,15 @@ public class SarifTests
     public void Sarif_Report_ContainsResultCount()
     {
         // Arrange
-        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
+        var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
         Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
-        var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-count-report-{Guid.NewGuid()}.md");
+        // Act
+        var results = SarifResults.Read(sarifFile);
+        var reportContent = results.ToMarkdown(1);
 
-        try
-        {
-            // Act
-            var exitCode = Runner.Run(
-                out _,
-                "dotnet",
-                _dllPath,
-                "--sarif", sarifFile,
-                "--report", reportFile);
-
-            // Assert
-            Assert.AreEqual(0, exitCode);
-            Assert.IsTrue(File.Exists(reportFile), "Report file was not created");
-
-            var reportContent = File.ReadAllText(reportFile);
-            Assert.Contains("Found 1 issue", reportContent);
-        }
-        finally
-        {
-            if (File.Exists(reportFile))
-            {
-                File.Delete(reportFile);
-            }
-        }
+        // Assert
+        Assert.Contains("Found 1 issue", reportContent);
     }
 
     /// <summary>
@@ -296,35 +196,15 @@ public class SarifTests
     public void Sarif_Report_ContainsLocationInfo()
     {
         // Arrange
-        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
+        var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
         Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
-        var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-location-report-{Guid.NewGuid()}.md");
+        // Act
+        var results = SarifResults.Read(sarifFile);
+        var reportContent = results.ToMarkdown(1);
 
-        try
-        {
-            // Act
-            var exitCode = Runner.Run(
-                out _,
-                "dotnet",
-                _dllPath,
-                "--sarif", sarifFile,
-                "--report", reportFile);
-
-            // Assert
-            Assert.AreEqual(0, exitCode);
-            Assert.IsTrue(File.Exists(reportFile), "Report file was not created");
-
-            var reportContent = File.ReadAllText(reportFile);
-            Assert.Contains("file:///path/to/file.cs", reportContent);
-        }
-        finally
-        {
-            if (File.Exists(reportFile))
-            {
-                File.Delete(reportFile);
-            }
-        }
+        // Assert
+        Assert.Contains("file:///path/to/file.cs", reportContent);
     }
 
     /// <summary>
@@ -334,35 +214,14 @@ public class SarifTests
     public void Sarif_Report_UsesCustomHeading()
     {
         // Arrange
-        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
+        var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
         Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
-        var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-heading-report-{Guid.NewGuid()}.md");
+        // Act
+        var results = SarifResults.Read(sarifFile);
+        var reportContent = results.ToMarkdown(1, "Custom Analysis Heading");
 
-        try
-        {
-            // Act
-            var exitCode = Runner.Run(
-                out _,
-                "dotnet",
-                _dllPath,
-                "--sarif", sarifFile,
-                "--report", reportFile,
-                "--heading", "Custom Analysis Heading");
-
-            // Assert
-            Assert.AreEqual(0, exitCode);
-            Assert.IsTrue(File.Exists(reportFile), "Report file was not created");
-
-            var reportContent = File.ReadAllText(reportFile);
-            Assert.Contains("Custom Analysis Heading", reportContent);
-        }
-        finally
-        {
-            if (File.Exists(reportFile))
-            {
-                File.Delete(reportFile);
-            }
-        }
+        // Assert
+        Assert.Contains("Custom Analysis Heading", reportContent);
     }
 }
