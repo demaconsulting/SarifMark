@@ -61,15 +61,27 @@ sections:
               - Cli_LogFile_WritesOutputToFile
 
           - id: SarifMark-Cli-Enforce
-            title: The CLI shall set a non-zero exit code when errors are reported.
+            title: The CLI shall recognize the --enforce flag.
             justification: >-
-              A non-zero exit code on error enables the tool to act as a quality gate in CI/CD pipelines,
-              failing builds when issues are detected and ensuring code quality standards are maintained.
+              Recognizing the enforce flag allows the application layer to determine whether to apply
+              quality gate behavior, making it suitable for integration into CI/CD pipelines.
             tags: [public]
             children:
               - SarifMark-Context-EnforceFlag
             tests:
-              - Cli_EnforceFlagWithIssues_ReturnsError
+              - Cli_EnforceFlag_SetsEnforceFlag
+
+          - id: SarifMark-Cli-WriteError
+            title: The CLI shall write errors to stderr and set a non-zero exit code.
+            justification: >-
+              Writing errors to stderr separates diagnostic output from the regular output stream, and
+              automatically setting a non-zero exit code ensures that callers receive a failure signal
+              without requiring explicit exit code management throughout the codebase.
+            tags: [public]
+            children:
+              - SarifMark-Context-WriteError
+            tests:
+              - Cli_WriteError_SetsExitCodeToOne
 
           - id: SarifMark-Cli-InvalidArgs
             title: The CLI shall reject unknown command-line arguments.
@@ -80,7 +92,7 @@ sections:
             children:
               - SarifMark-Context-UnknownArgs
             tests:
-              - Cli_UnknownArgument_ShowsError
+              - Cli_UnknownArgument_ThrowsArgumentException
 
           - id: SarifMark-Cli-Validate
             title: The CLI shall recognize the --validate flag.

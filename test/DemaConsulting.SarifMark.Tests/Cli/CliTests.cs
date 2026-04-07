@@ -121,10 +121,24 @@ public class CliTests
     }
 
     /// <summary>
-    ///     Test that enforce flag with errors reports a non-zero exit code.
+    ///     Test that enforce flag sets the enforce flag in context.
     /// </summary>
     [TestMethod]
-    public void Cli_EnforceFlagWithIssues_ReturnsError()
+    public void Cli_EnforceFlag_SetsEnforceFlag()
+    {
+        // Act
+        using var context = Context.Create(["--enforce"]);
+
+        // Assert
+        Assert.IsTrue(context.Enforce);
+        Assert.AreEqual(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that WriteError writes to stderr and sets exit code to one.
+    /// </summary>
+    [TestMethod]
+    public void Cli_WriteError_SetsExitCodeToOne()
     {
         // Arrange
         var originalError = Console.Error;
@@ -134,13 +148,13 @@ public class CliTests
             Console.SetError(errWriter);
 
             // Act
-            using var context = Context.Create(["--enforce"]);
-            context.WriteError("Error: Issues found in SARIF file");
+            using var context = Context.Create([]);
+            context.WriteError("Test error message");
             var output = errWriter.ToString();
 
             // Assert
             Assert.AreEqual(1, context.ExitCode);
-            Assert.Contains("Issues found in SARIF file", output);
+            Assert.Contains("Test error message", output);
         }
         finally
         {
@@ -149,10 +163,10 @@ public class CliTests
     }
 
     /// <summary>
-    ///     Test that unknown arguments are rejected with error.
+    ///     Test that unknown arguments are rejected by throwing ArgumentException.
     /// </summary>
     [TestMethod]
-    public void Cli_UnknownArgument_ShowsError()
+    public void Cli_UnknownArgument_ThrowsArgumentException()
     {
         // Arrange - No special setup needed
 
