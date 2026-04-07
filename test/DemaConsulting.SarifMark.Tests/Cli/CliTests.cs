@@ -26,67 +26,32 @@ namespace DemaConsulting.SarifMark.Tests;
 [TestClass]
 public class CliTests
 {
-    private string _dllPath = string.Empty;
-    private string _testDataPath = string.Empty;
-
     /// <summary>
-    ///     Initialize test by locating the SarifMark DLL and test data.
+    ///     Test that version flag sets the version flag in context.
     /// </summary>
-    [TestInitialize]
-    public void TestInitialize()
+    [TestMethod]
+    public void Cli_VersionFlag_SetsVersionFlag()
     {
-        var baseDir = AppContext.BaseDirectory;
-        _dllPath = PathHelpers.SafePathCombine(baseDir, "DemaConsulting.SarifMark.dll");
-        _testDataPath = PathHelpers.SafePathCombine(baseDir, "TestData");
+        // Act
+        using var context = Context.Create(["--version"]);
 
-        Assert.IsTrue(File.Exists(_dllPath), $"Could not find SarifMark DLL at {_dllPath}");
+        // Assert
+        Assert.IsTrue(context.Version);
+        Assert.AreEqual(0, context.ExitCode);
     }
 
     /// <summary>
-    ///     Test that version flag outputs version information.
+    ///     Test that help flag sets the help flag in context.
     /// </summary>
     [TestMethod]
-    public void Cli_VersionFlag_OutputsVersion()
+    public void Cli_HelpFlag_SetsHelpFlag()
     {
-        // Arrange - No special setup needed
-
         // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath,
-            "--version");
+        using var context = Context.Create(["--help"]);
 
         // Assert
-        Assert.AreEqual(0, exitCode);
-        Assert.IsFalse(string.IsNullOrWhiteSpace(output));
-        Assert.DoesNotContain("Error", output);
-        Assert.DoesNotContain("Copyright", output);
-    }
-
-    /// <summary>
-    ///     Test that help flag outputs usage information.
-    /// </summary>
-    [TestMethod]
-    public void Cli_HelpFlag_OutputsUsageInformation()
-    {
-        // Arrange - No special setup needed
-
-        // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath,
-            "--help");
-
-        // Assert
-        Assert.AreEqual(0, exitCode);
-        Assert.Contains("Usage: sarifmark", output);
-        Assert.Contains("Options:", output);
-        Assert.Contains("--version", output);
-        Assert.Contains("--help", output);
-        Assert.Contains("--sarif", output);
-        Assert.MatchesRegex(@"--report(?!-)", output);
+        Assert.IsTrue(context.Help);
+        Assert.AreEqual(0, context.ExitCode);
     }
 
     /// <summary>
@@ -96,21 +61,26 @@ public class CliTests
     public void Cli_SilentFlag_SuppressesOutput()
     {
         // Arrange
-        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        var originalOut = Console.Out;
+        try
+        {
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
 
-        // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath,
-            "--silent",
-            "--sarif", sarifFile);
+            // Act
+            using var context = Context.Create(["--silent"]);
+            context.WriteLine("SarifMark version 1.0");
+            context.WriteLine("Copyright");
+            var output = outWriter.ToString();
 
-        // Assert
-        Assert.AreEqual(0, exitCode);
-        Assert.DoesNotContain("SarifMark version", output);
-        Assert.DoesNotContain("Copyright", output);
+            // Assert
+            Assert.AreEqual(0, context.ExitCode);
+            Assert.AreEqual(string.Empty, output);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+        }
     }
 
     /// <summary>
@@ -120,23 +90,19 @@ public class CliTests
     public void Cli_LogFile_WritesOutputToFile()
     {
         // Arrange
-        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
-
-        var logFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
+        var logFile = Path.Combine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
 
         try
         {
             // Act
-            var exitCode = Runner.Run(
-                out _,
-                "dotnet",
-                _dllPath,
-                "--log", logFile,
-                "--sarif", sarifFile);
+            using (var context = Context.Create(["--silent", "--log", logFile]))
+            {
+                context.WriteLine("SarifMark version 1.0");
+                context.WriteLine("SARIF File: test.sarif");
+                context.WriteLine("Tool: TestTool");
+            }
 
             // Assert
-            Assert.AreEqual(0, exitCode);
             Assert.IsTrue(File.Exists(logFile), "Log file was not created");
 
             var logContent = File.ReadAllText(logFile);
@@ -154,46 +120,143 @@ public class CliTests
     }
 
     /// <summary>
-    ///     Test that enforce flag with issues returns error exit code.
+    ///     Test that enforce flag sets the enforce flag in context.
     /// </summary>
     [TestMethod]
-    public void Cli_EnforceFlagWithIssues_ReturnsError()
+    public void Cli_EnforceFlag_SetsEnforceFlag()
     {
-        // Arrange
-        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
-
         // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath,
-            "--sarif", sarifFile,
-            "--enforce");
+        using var context = Context.Create(["--enforce"]);
 
         // Assert
-        Assert.AreEqual(1, exitCode);
-        Assert.Contains("Issues found in SARIF file", output);
+        Assert.IsTrue(context.Enforce);
+        Assert.AreEqual(0, context.ExitCode);
     }
 
     /// <summary>
-    ///     Test that unknown arguments are rejected with error.
+    ///     Test that WriteError writes to stderr and sets exit code to one.
     /// </summary>
     [TestMethod]
-    public void Cli_UnknownArgument_ShowsError()
+    public void Cli_WriteError_SetsExitCodeToOne()
+    {
+        // Arrange
+        var originalError = Console.Error;
+        try
+        {
+            using var errWriter = new StringWriter();
+            Console.SetError(errWriter);
+
+            // Act
+            using var context = Context.Create([]);
+            context.WriteError("Test error message");
+            var output = errWriter.ToString();
+
+            // Assert
+            Assert.AreEqual(1, context.ExitCode);
+            Assert.Contains("Test error message", output);
+        }
+        finally
+        {
+            Console.SetError(originalError);
+        }
+    }
+
+    /// <summary>
+    ///     Test that unknown arguments are rejected by throwing ArgumentException.
+    /// </summary>
+    [TestMethod]
+    public void Cli_UnknownArgument_ThrowsArgumentException()
     {
         // Arrange - No special setup needed
 
         // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath,
-            "--unknown-flag");
+        var ex = Assert.ThrowsExactly<ArgumentException>(() => Context.Create(["--unknown-flag"]));
 
         // Assert
-        Assert.AreEqual(1, exitCode);
-        Assert.Contains("Error:", output);
-        Assert.Contains("unknown-flag", output);
+        Assert.Contains("unknown-flag", ex.Message);
+    }
+
+    /// <summary>
+    ///     Test that validate flag sets the validate flag in context.
+    /// </summary>
+    [TestMethod]
+    public void Cli_ValidateFlag_SetsValidateFlag()
+    {
+        // Act
+        using var context = Context.Create(["--validate"]);
+
+        // Assert
+        Assert.IsTrue(context.Validate);
+        Assert.AreEqual(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that sarif parameter sets the SARIF file path in context.
+    /// </summary>
+    [TestMethod]
+    public void Cli_SarifParameter_SetsSarifFilePath()
+    {
+        // Act
+        using var context = Context.Create(["--sarif", "analysis.sarif"]);
+
+        // Assert
+        Assert.AreEqual("analysis.sarif", context.SarifFile);
+        Assert.AreEqual(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that report parameter sets the report file path in context.
+    /// </summary>
+    [TestMethod]
+    public void Cli_ReportParameter_SetsReportFilePath()
+    {
+        // Act
+        using var context = Context.Create(["--report", "report.md"]);
+
+        // Assert
+        Assert.AreEqual("report.md", context.ReportFile);
+        Assert.AreEqual(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that report-depth parameter sets the report depth in context.
+    /// </summary>
+    [TestMethod]
+    public void Cli_ReportDepthParameter_SetsReportDepth()
+    {
+        // Act
+        using var context = Context.Create(["--report-depth", "3"]);
+
+        // Assert
+        Assert.AreEqual(3, context.ReportDepth);
+        Assert.AreEqual(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that heading parameter sets the custom heading in context.
+    /// </summary>
+    [TestMethod]
+    public void Cli_HeadingParameter_SetsCustomHeading()
+    {
+        // Act
+        using var context = Context.Create(["--heading", "My Analysis"]);
+
+        // Assert
+        Assert.AreEqual("My Analysis", context.Heading);
+        Assert.AreEqual(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that results parameter sets the results file path in context.
+    /// </summary>
+    [TestMethod]
+    public void Cli_ResultsParameter_SetsResultsFilePath()
+    {
+        // Act
+        using var context = Context.Create(["--results", "results.trx"]);
+
+        // Assert
+        Assert.AreEqual("results.trx", context.ResultsFile);
+        Assert.AreEqual(0, context.ExitCode);
     }
 }

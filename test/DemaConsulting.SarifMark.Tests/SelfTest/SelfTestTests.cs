@@ -26,39 +26,32 @@ namespace DemaConsulting.SarifMark.Tests;
 [TestClass]
 public class SelfTestTests
 {
-    private string _dllPath = string.Empty;
-
-    /// <summary>
-    ///     Initialize test by locating the SarifMark DLL.
-    /// </summary>
-    [TestInitialize]
-    public void TestInitialize()
-    {
-        var baseDir = AppContext.BaseDirectory;
-        _dllPath = PathHelpers.SafePathCombine(baseDir, "DemaConsulting.SarifMark.dll");
-
-        Assert.IsTrue(File.Exists(_dllPath), $"Could not find SarifMark DLL at {_dllPath}");
-    }
-
     /// <summary>
     ///     Test that validate flag runs self-validation.
     /// </summary>
     [TestMethod]
     public void SelfTest_ValidateFlag_RunsSelfValidation()
     {
-        // Arrange - No special setup needed
+        // Arrange
+        var originalOut = Console.Out;
+        try
+        {
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
 
-        // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath,
-            "--validate");
+            // Act
+            using var context = Context.Create(["--validate"]);
+            Validation.Run(context);
+            var output = outWriter.ToString();
 
-        // Assert
-        Assert.AreEqual(0, exitCode);
-        Assert.Contains("SarifMark version", output);
-        Assert.Contains("Total Tests:", output);
+            // Assert
+            Assert.AreEqual(0, context.ExitCode);
+            Assert.Contains("Total Tests:", output);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+        }
     }
 
     /// <summary>
@@ -68,24 +61,31 @@ public class SelfTestTests
     public void SelfTest_ResultsFile_WritesTrxFile()
     {
         // Arrange
-        var resultsFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-results-{Guid.NewGuid()}.trx");
+        var resultsFile = Path.Combine(Path.GetTempPath(), $"test-results-{Guid.NewGuid()}.trx");
 
         try
         {
-            // Act
-            var exitCode = Runner.Run(
-                out _,
-                "dotnet",
-                _dllPath,
-                "--validate",
-                "--results", resultsFile);
+            var originalOut = Console.Out;
+            try
+            {
+                using var outWriter = new StringWriter();
+                Console.SetOut(outWriter);
 
-            // Assert
-            Assert.AreEqual(0, exitCode);
-            Assert.IsTrue(File.Exists(resultsFile), "TRX results file was not created");
+                // Act
+                using var context = Context.Create(["--validate", "--results", resultsFile]);
+                Validation.Run(context);
 
-            var content = File.ReadAllText(resultsFile);
-            Assert.Contains("<TestRun", content);
+                // Assert
+                Assert.AreEqual(0, context.ExitCode);
+                Assert.IsTrue(File.Exists(resultsFile), "TRX results file was not created");
+
+                var content = File.ReadAllText(resultsFile);
+                Assert.Contains("<TestRun", content);
+            }
+            finally
+            {
+                Console.SetOut(originalOut);
+            }
         }
         finally
         {
@@ -94,32 +94,6 @@ public class SelfTestTests
                 File.Delete(resultsFile);
             }
         }
-    }
-
-    /// <summary>
-    ///     Test that enforce flag returns non-zero exit code when issues are found.
-    /// </summary>
-    [TestMethod]
-    public void SelfTest_EnforceFlag_ReturnsNonZeroOnIssues()
-    {
-        // Arrange
-        var baseDir = AppContext.BaseDirectory;
-        var sarifFile = PathHelpers.SafePathCombine(
-            PathHelpers.SafePathCombine(baseDir, "TestData"),
-            "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
-
-        // Act
-        var exitCode = Runner.Run(
-            out var output,
-            "dotnet",
-            _dllPath,
-            "--sarif", sarifFile,
-            "--enforce");
-
-        // Assert
-        Assert.AreEqual(1, exitCode);
-        Assert.Contains("Issues found in SARIF file", output);
     }
 
     /// <summary>
@@ -129,24 +103,31 @@ public class SelfTestTests
     public void SelfTest_ResultsFile_WritesJUnitFile()
     {
         // Arrange
-        var resultsFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-results-{Guid.NewGuid()}.xml");
+        var resultsFile = Path.Combine(Path.GetTempPath(), $"test-results-{Guid.NewGuid()}.xml");
 
         try
         {
-            // Act
-            var exitCode = Runner.Run(
-                out _,
-                "dotnet",
-                _dllPath,
-                "--validate",
-                "--results", resultsFile);
+            var originalOut = Console.Out;
+            try
+            {
+                using var outWriter = new StringWriter();
+                Console.SetOut(outWriter);
 
-            // Assert
-            Assert.AreEqual(0, exitCode);
-            Assert.IsTrue(File.Exists(resultsFile), "JUnit XML results file was not created");
+                // Act
+                using var context = Context.Create(["--validate", "--results", resultsFile]);
+                Validation.Run(context);
 
-            var content = File.ReadAllText(resultsFile);
-            Assert.Contains("<testsuite", content);
+                // Assert
+                Assert.AreEqual(0, context.ExitCode);
+                Assert.IsTrue(File.Exists(resultsFile), "JUnit XML results file was not created");
+
+                var content = File.ReadAllText(resultsFile);
+                Assert.Contains("<testsuite", content);
+            }
+            finally
+            {
+                Console.SetOut(originalOut);
+            }
         }
         finally
         {
@@ -154,6 +135,34 @@ public class SelfTestTests
             {
                 File.Delete(resultsFile);
             }
+        }
+    }
+
+    /// <summary>
+    ///     Test that enforcement mode behavior is verified by the self-validation suite.
+    /// </summary>
+    [TestMethod]
+    public void SelfTest_EnforcementTest_RunsWithinValidation()
+    {
+        // Arrange
+        var originalOut = Console.Out;
+        try
+        {
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
+
+            // Act - Run validation which internally exercises enforcement mode
+            using var context = Context.Create(["--validate"]);
+            Validation.Run(context);
+            var output = outWriter.ToString();
+
+            // Assert - enforcement test within validation runs and passes
+            Assert.AreEqual(0, context.ExitCode);
+            Assert.Contains("SarifMark_Enforcement - Passed", output);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
         }
     }
 }

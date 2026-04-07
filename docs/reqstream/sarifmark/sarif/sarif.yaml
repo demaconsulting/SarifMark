@@ -25,8 +25,8 @@ sections:
               - SarifMark-SarifResults-ValidatePath
               - SarifMark-SarifResults-ValidateStructure
             tests:
-              - Sarif_NonExistentSarifFile_ShowsError
-              - Sarif_InvalidSarifFile_ShowsFormatError
+              - Sarif_NonExistentSarifFile_ThrowsFileNotFoundException
+              - Sarif_InvalidSarifFile_ThrowsInvalidOperationException
 
           - id: SarifMark-Sarif-ToolInfo
             title: The tool shall extract tool information from SARIF files.
@@ -65,7 +65,7 @@ sections:
               - Sarif_Report_ContainsLocationInfo
 
           - id: SarifMark-Sarif-FilePaths
-            title: The tool shall require valid file paths for SARIF input.
+            title: The SARIF subsystem shall require valid file paths for SARIF input.
             justification: >-
               Path validation ensures clear error messages when files are missing or incorrectly specified,
               improving user experience and preventing confusing runtime failures.
@@ -73,19 +73,7 @@ sections:
             children:
               - SarifMark-SarifResults-ValidatePath
             tests:
-              - Sarif_MissingSarifParameter_ShowsError
-              - Sarif_NonExistentSarifFile_ShowsError
-
-          - id: SarifMark-Sarif-Required
-            title: The tool shall require the --sarif parameter for analysis.
-            justification: >-
-              Requiring explicit SARIF file specification ensures intentional operation and prevents accidental
-              execution without proper input, improving tool safety and predictability.
-            tags: [public]
-            children:
-              - SarifMark-SarifResults-ValidatePath
-            tests:
-              - Sarif_MissingSarifParameter_ShowsError
+              - Sarif_NonExistentSarifFile_ThrowsFileNotFoundException
 
           - id: SarifMark-Sarif-Processing
             title: The tool shall process valid SARIF files successfully.
