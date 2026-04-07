@@ -51,11 +51,12 @@ public class CliTests
             Console.SetOut(outWriter);
 
             // Act
-            var exitCode = Program.Main(["--version"]);
+            using var context = Context.Create(["--version"]);
+            Program.Run(context);
             var output = outWriter.ToString();
 
             // Assert
-            Assert.AreEqual(0, exitCode);
+            Assert.AreEqual(0, context.ExitCode);
             Assert.IsFalse(string.IsNullOrWhiteSpace(output));
             Assert.DoesNotContain("Error", output);
             Assert.DoesNotContain("Copyright", output);
@@ -80,11 +81,12 @@ public class CliTests
             Console.SetOut(outWriter);
 
             // Act
-            var exitCode = Program.Main(["--help"]);
+            using var context = Context.Create(["--help"]);
+            Program.Run(context);
             var output = outWriter.ToString();
 
             // Assert
-            Assert.AreEqual(0, exitCode);
+            Assert.AreEqual(0, context.ExitCode);
             Assert.Contains("Usage: sarifmark", output);
             Assert.Contains("Options:", output);
             Assert.Contains("--version", output);
@@ -118,11 +120,12 @@ public class CliTests
             Console.SetError(errWriter);
 
             // Act
-            var exitCode = Program.Main(["--silent", "--sarif", sarifFile]);
+            using var context = Context.Create(["--silent", "--sarif", sarifFile]);
+            Program.Run(context);
             var output = outWriter.ToString() + errWriter.ToString();
 
             // Assert
-            Assert.AreEqual(0, exitCode);
+            Assert.AreEqual(0, context.ExitCode);
             Assert.DoesNotContain("SarifMark version", output);
             Assert.DoesNotContain("Copyright", output);
         }
@@ -154,10 +157,11 @@ public class CliTests
                 Console.SetOut(outWriter);
 
                 // Act
-                var exitCode = Program.Main(["--log", logFile, "--sarif", sarifFile]);
+                using var context = Context.Create(["--log", logFile, "--sarif", sarifFile]);
+                Program.Run(context);
 
                 // Assert
-                Assert.AreEqual(0, exitCode);
+                Assert.AreEqual(0, context.ExitCode);
                 Assert.IsTrue(File.Exists(logFile), "Log file was not created");
 
                 var logContent = File.ReadAllText(logFile);
@@ -199,11 +203,12 @@ public class CliTests
             Console.SetError(errWriter);
 
             // Act
-            var exitCode = Program.Main(["--sarif", sarifFile, "--enforce"]);
+            using var context = Context.Create(["--sarif", sarifFile, "--enforce"]);
+            Program.Run(context);
             var output = outWriter.ToString() + errWriter.ToString();
 
             // Assert
-            Assert.AreEqual(1, exitCode);
+            Assert.AreEqual(1, context.ExitCode);
             Assert.Contains("Issues found in SARIF file", output);
         }
         finally
@@ -219,25 +224,10 @@ public class CliTests
     [TestMethod]
     public void Cli_UnknownArgument_ShowsError()
     {
-        // Arrange
-        var originalError = Console.Error;
-        try
-        {
-            using var errWriter = new StringWriter();
-            Console.SetError(errWriter);
+        // Arrange - No special setup needed
 
-            // Act
-            var exitCode = Program.Main(["--unknown-flag"]);
-            var errorOutput = errWriter.ToString();
-
-            // Assert
-            Assert.AreEqual(1, exitCode);
-            Assert.Contains("Unsupported argument", errorOutput);
-            Assert.Contains("unknown-flag", errorOutput);
-        }
-        finally
-        {
-            Console.SetError(originalError);
-        }
+        // Act / Assert - Context rejects unknown command-line arguments
+        var ex = Assert.ThrowsExactly<ArgumentException>(() => Context.Create(["--unknown-flag"]));
+        Assert.Contains("unknown-flag", ex.Message);
     }
 }

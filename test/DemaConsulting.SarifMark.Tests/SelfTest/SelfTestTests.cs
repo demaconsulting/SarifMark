@@ -139,36 +139,30 @@ public class SelfTestTests
     }
 
     /// <summary>
-    ///     Test that enforce flag returns non-zero exit code when issues are found.
+    ///     Test that enforcement mode behavior is verified by the self-validation suite.
     /// </summary>
     [TestMethod]
     public void SelfTest_EnforceFlag_ReturnsNonZeroOnIssues()
     {
         // Arrange
-        var sarifFile = Path.Combine(AppContext.BaseDirectory, "TestData", "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
-
         var originalOut = Console.Out;
-        var originalError = Console.Error;
         try
         {
             using var outWriter = new StringWriter();
-            using var errWriter = new StringWriter();
             Console.SetOut(outWriter);
-            Console.SetError(errWriter);
 
-            // Act
-            var exitCode = Program.Main(["--sarif", sarifFile, "--enforce"]);
-            var output = outWriter.ToString() + errWriter.ToString();
+            // Act - Run validation which internally exercises enforcement mode
+            using var context = Context.Create(["--validate"]);
+            Validation.Run(context);
+            var output = outWriter.ToString();
 
-            // Assert
-            Assert.AreEqual(1, exitCode);
-            Assert.Contains("Issues found in SARIF file", output);
+            // Assert - enforcement test within validation passes
+            Assert.AreEqual(0, context.ExitCode);
+            Assert.Contains("SarifMark_Enforcement", output);
         }
         finally
         {
             Console.SetOut(originalOut);
-            Console.SetError(originalError);
         }
     }
 }
