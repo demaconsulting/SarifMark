@@ -159,3 +159,14 @@ sections:
               - SarifMark-Context-ResultsParam
             tests:
               - Cli_ResultsParameter_SetsResultsFilePath
+
+          - id: SarifMark-Cli-ResultLegacyAlias
+            title: The CLI shall accept --result as a legacy alias for --results.
+            justification: >-
+              Supporting the legacy --result alias preserves backwards compatibility for users and scripts
+              that relied on the earlier parameter name, avoiding breaking changes in automated workflows.
+            tags: [public]
+            children:
+              - SarifMark-Context-ResultLegacyAlias
+            tests:
+              - Cli_ResultLegacyAlias_SetsResultsFilePath
