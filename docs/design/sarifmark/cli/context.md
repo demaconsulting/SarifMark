@@ -37,13 +37,17 @@ This satisfies requirements `SarifMark-Context-Create` through `SarifMark-Contex
 | `ReportFile`  | `string?` | `null`  | `--report <file>`        | Path to the markdown report output file     |
 | `ReportDepth` | `int`     | `1`     | `--report-depth <depth>` | Markdown heading depth for the report       |
 | `Heading`     | `string?` | `null`  | `--heading <text>`       | Custom heading text for the report          |
-| `ResultsFile` | `string?` | `null`  | `--results <file>`, `--result <file>` | Path for the self-validation results file (`--result` is a legacy alias for `--results`) |
+| `ResultsFile` | `string?` | `null`  | `--results <file>`       | Path for the self-validation results file   |
 | `ExitCode`    | `int`     | `0`/`1` | *(derived)*              | 0 until `WriteError` is called, then 1      |
+
+The `--result` flag is accepted as a legacy alias for `--results`, preserving backwards compatibility
+(see requirement `SarifMark-Context-ResultLegacyAlias`).
 
 These properties satisfy requirements `SarifMark-Context-VersionFlag`, `SarifMark-Context-HelpFlag`,
 `SarifMark-Context-SilentFlag`, `SarifMark-Context-ValidateFlag`, `SarifMark-Context-EnforceFlag`,
 `SarifMark-Context-SarifParam`, `SarifMark-Context-ReportParam`, `SarifMark-Context-ReportDepthParam`,
-`SarifMark-Context-HeadingParam`, `SarifMark-Context-ResultsParam`, `SarifMark-Context-ResultLegacyAlias`, and `SarifMark-Context-ExitCode`.
+`SarifMark-Context-HeadingParam`, `SarifMark-Context-ResultsParam`, `SarifMark-Context-ResultLegacyAlias`,
+and `SarifMark-Context-ExitCode`.
 
 ## ArgumentParser Inner Class
 

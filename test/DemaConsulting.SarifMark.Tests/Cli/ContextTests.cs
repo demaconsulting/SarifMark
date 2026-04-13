@@ -522,6 +522,19 @@ public class ContextTests
     }
 
     /// <summary>
+    ///     Test that creating a context with the legacy --result parameter sets ResultsFile property.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_ResultLegacyAlias_SetsResultsFile()
+    {
+        // Act
+        using var context = Context.Create(["--result", "results.trx"]);
+
+        // Assert
+        Assert.AreEqual("results.trx", context.ResultsFile);
+    }
+
+    /// <summary>
     ///     Test that WriteLine writes to the log file when it is open.
     /// </summary>
     [TestMethod]
