@@ -259,4 +259,18 @@ public class CliTests
         Assert.AreEqual("results.trx", context.ResultsFile);
         Assert.AreEqual(0, context.ExitCode);
     }
+
+    /// <summary>
+    ///     Test that the legacy --result alias sets the results file path in context.
+    /// </summary>
+    [TestMethod]
+    public void Cli_ResultLegacyAlias_SetsResultsFilePath()
+    {
+        // Act
+        using var context = Context.Create(["--result", "results.trx"]);
+
+        // Assert
+        Assert.AreEqual("results.trx", context.ResultsFile);
+        Assert.AreEqual(0, context.ExitCode);
+    }
 }

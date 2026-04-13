@@ -120,6 +120,15 @@ sections:
             tests:
               - Context_Create_ResultsParameter_SetsResultsFile
 
+          - id: SarifMark-Context-ResultLegacyAlias
+            title: The Create method shall accept --result as a legacy alias for --results.
+            justification: >-
+              Accepting the legacy --result alias preserves backwards compatibility for existing scripts and
+              workflows that used the earlier parameter name, preventing breaking changes when users upgrade.
+            tags: [internal]
+            tests:
+              - Context_Create_ResultLegacyAlias_SetsResultsFile
+
           - id: SarifMark-Context-LogParam
             title: The Create method shall parse the --log parameter and open the specified log file for writing.
             justification: >-

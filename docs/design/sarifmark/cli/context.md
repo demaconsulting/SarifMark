@@ -40,10 +40,14 @@ This satisfies requirements `SarifMark-Context-Create` through `SarifMark-Contex
 | `ResultsFile` | `string?` | `null`  | `--results <file>`       | Path for the self-validation results file   |
 | `ExitCode`    | `int`     | `0`/`1` | *(derived)*              | 0 until `WriteError` is called, then 1      |
 
+The `--result` flag is accepted as a legacy alias for `--results`, preserving backwards compatibility
+(see requirement `SarifMark-Context-ResultLegacyAlias`).
+
 These properties satisfy requirements `SarifMark-Context-VersionFlag`, `SarifMark-Context-HelpFlag`,
 `SarifMark-Context-SilentFlag`, `SarifMark-Context-ValidateFlag`, `SarifMark-Context-EnforceFlag`,
 `SarifMark-Context-SarifParam`, `SarifMark-Context-ReportParam`, `SarifMark-Context-ReportDepthParam`,
-`SarifMark-Context-HeadingParam`, `SarifMark-Context-ResultsParam`, and `SarifMark-Context-ExitCode`.
+`SarifMark-Context-HeadingParam`, `SarifMark-Context-ResultsParam`, `SarifMark-Context-ResultLegacyAlias`,
+and `SarifMark-Context-ExitCode`.
 
 ## ArgumentParser Inner Class
 

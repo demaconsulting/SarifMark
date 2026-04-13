@@ -286,6 +286,7 @@ internal sealed class Context : IDisposable
                     Heading = GetRequiredStringArgument(arg, args, index, "a heading text argument");
                     return index + 1;
 
+                case "--result":     // Legacy alias for --results to preserve backwards compatibility
                 case "--results":
                     ResultsFile = GetRequiredStringArgument(arg, args, index, "a results filename argument");
                     return index + 1;
