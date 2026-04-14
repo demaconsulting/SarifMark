@@ -34,46 +34,9 @@ public record SarifResults
     public IReadOnlyList<SarifRun> Runs { get; }
 
     /// <summary>
-    ///     Gets the name of the analysis tool (from the first run).
-    /// </summary>
-    public string ToolName => Runs[0].ToolName;
-
-    /// <summary>
-    ///     Gets the version of the analysis tool (from the first run).
-    /// </summary>
-    public string ToolVersion => Runs[0].ToolVersion;
-
-    /// <summary>
-    ///     Gets the collection of results/issues found (from the first run).
-    /// </summary>
-    public IReadOnlyList<SarifResult> Results => Runs[0].Results;
-
-    /// <summary>
-    ///     Gets the total number of results/issues found (from the first run).
-    /// </summary>
-    public int ResultCount => Runs[0].ResultCount;
-
-    /// <summary>
-    ///     Gets the total number of files analyzed (from the first run).
-    /// </summary>
-    public int FileCount => Runs[0].FileCount;
-
-    /// <summary>
     ///     Gets a value indicating whether any run contains results.
     /// </summary>
     public bool HasIssues => Runs.Any(r => r.HasIssues);
-
-    /// <summary>
-    ///     Internal constructor to enforce that instances are only created through the validated parsing pipeline.
-    /// </summary>
-    /// <param name="toolName">The name of the analysis tool.</param>
-    /// <param name="toolVersion">The version of the analysis tool.</param>
-    /// <param name="results">The collection of results/issues.</param>
-    /// <param name="fileCount">The total number of files analyzed.</param>
-    internal SarifResults(string toolName, string toolVersion, IReadOnlyList<SarifResult> results, int fileCount = 0)
-    {
-        Runs = [new SarifRun(toolName, toolVersion, results, fileCount)];
-    }
 
     /// <summary>
     ///     Internal constructor for multi-run SARIF files.

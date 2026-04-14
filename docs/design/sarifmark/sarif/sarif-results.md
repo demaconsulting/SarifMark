@@ -8,7 +8,7 @@ for file loading and the `ToMarkdown` method for report generation.
 
 ## Record Design
 
-`SarifResults` is a `record` with `internal` constructors. External consumers obtain instances
+`SarifResults` is a `record` with an `internal` constructor. External consumers obtain instances
 only through `Read`; the record is immutable once constructed.
 
 ## Properties
@@ -16,15 +16,10 @@ only through `Read`; the record is immutable once constructed.
 | Property      | Type                         | Description                                          |
 |---------------|------------------------------|------------------------------------------------------|
 | `Runs`        | `IReadOnlyList<SarifRun>`    | Collection of all parsed runs                        |
-| `ToolName`    | `string`                     | Name of the analysis tool (from the first run)       |
-| `ToolVersion` | `string`                     | Version of the analysis tool (from the first run)    |
-| `FileCount`   | `int`                        | Total number of files analyzed (from the first run)  |
-| `Results`     | `IReadOnlyList<SarifResult>` | Collection of non-suppressed results (first run)     |
-| `ResultCount` | `int`                        | Total number of results (derived, first run)         |
 | `HasIssues`   | `bool`                       | True if any run contains results (aggregate)         |
 
-`ToolName`, `ToolVersion`, `FileCount`, `Results`, and `ResultCount` forward to `Runs[0]` for
-backward compatibility. `HasIssues` aggregates across all runs.
+`HasIssues` aggregates across all runs. Per-run data (tool name, version, results, file count) is
+accessed via the `Runs` collection.
 
 These satisfy requirements `SarifMark-SarifResults-Properties`, `SarifMark-SarifResults-Runs`,
 and `SarifMark-SarifResults-HasIssues`.
@@ -112,8 +107,8 @@ given run element:
 - If the `artifacts` property is absent or is not an array, `0` is returned.
 - Otherwise, the length of the `artifacts` array is returned.
 
-Using only the first run's file count is maintained through the `FileCount` property forwarding
-to `Runs[0].FileCount`. This satisfies requirement `SarifMark-SarifResults-FileCount`.
+Using only the first run's file count is maintained through `SarifRun.FileCount`, accessible via
+`Runs[0].FileCount`. This satisfies requirement `SarifMark-SarifResults-FileCount`.
 
 ## Cross-References
 

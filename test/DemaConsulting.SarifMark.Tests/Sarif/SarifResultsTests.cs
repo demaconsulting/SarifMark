@@ -243,10 +243,10 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - returns valid results with empty collection
-        Assert.AreEqual("TestTool", results.ToolName);
-        Assert.AreEqual("1.0.0", results.ToolVersion);
-        Assert.AreEqual(0, results.ResultCount);
-        Assert.IsEmpty(results.Results);
+        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
+        Assert.AreEqual("1.0.0", results.Runs[0].ToolVersion);
+        Assert.AreEqual(0, results.Runs[0].ResultCount);
+        Assert.IsEmpty(results.Runs[0].Results);
     }
 
     /// <summary>
@@ -278,10 +278,10 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - returns valid results with zero count
-        Assert.AreEqual("TestTool", results.ToolName);
-        Assert.AreEqual("1.0.0", results.ToolVersion);
-        Assert.AreEqual(0, results.ResultCount);
-        Assert.IsEmpty(results.Results);
+        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
+        Assert.AreEqual("1.0.0", results.Runs[0].ToolVersion);
+        Assert.AreEqual(0, results.Runs[0].ResultCount);
+        Assert.IsEmpty(results.Runs[0].Results);
     }
 
     /// <summary>
@@ -335,22 +335,22 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - returns all three results with correct properties
-        Assert.AreEqual("TestTool", results.ToolName);
-        Assert.AreEqual("1.0.0", results.ToolVersion);
-        Assert.AreEqual(3, results.ResultCount);
-        Assert.HasCount(3, results.Results);
+        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
+        Assert.AreEqual("1.0.0", results.Runs[0].ToolVersion);
+        Assert.AreEqual(3, results.Runs[0].ResultCount);
+        Assert.HasCount(3, results.Runs[0].Results);
 
-        Assert.AreEqual("TEST001", results.Results[0].RuleId);
-        Assert.AreEqual("error", results.Results[0].Level);
-        Assert.AreEqual("Error 1", results.Results[0].Message);
+        Assert.AreEqual("TEST001", results.Runs[0].Results[0].RuleId);
+        Assert.AreEqual("error", results.Runs[0].Results[0].Level);
+        Assert.AreEqual("Error 1", results.Runs[0].Results[0].Message);
 
-        Assert.AreEqual("TEST002", results.Results[1].RuleId);
-        Assert.AreEqual("warning", results.Results[1].Level);
-        Assert.AreEqual("Warning 1", results.Results[1].Message);
+        Assert.AreEqual("TEST002", results.Runs[0].Results[1].RuleId);
+        Assert.AreEqual("warning", results.Runs[0].Results[1].Level);
+        Assert.AreEqual("Warning 1", results.Runs[0].Results[1].Message);
 
-        Assert.AreEqual("TEST003", results.Results[2].RuleId);
-        Assert.AreEqual("note", results.Results[2].Level);
-        Assert.AreEqual("Note 1", results.Results[2].Message);
+        Assert.AreEqual("TEST003", results.Runs[0].Results[2].RuleId);
+        Assert.AreEqual("note", results.Runs[0].Results[2].Level);
+        Assert.AreEqual("Note 1", results.Runs[0].Results[2].Message);
     }
 
     /// <summary>
@@ -380,10 +380,10 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - tool name defaults to 'Unknown'
-        Assert.AreEqual("Unknown", results.ToolName);
-        Assert.AreEqual("1.0.0", results.ToolVersion);
-        Assert.AreEqual(0, results.ResultCount);
-        Assert.IsEmpty(results.Results);
+        Assert.AreEqual("Unknown", results.Runs[0].ToolName);
+        Assert.AreEqual("1.0.0", results.Runs[0].ToolVersion);
+        Assert.AreEqual(0, results.Runs[0].ResultCount);
+        Assert.IsEmpty(results.Runs[0].Results);
     }
 
     /// <summary>
@@ -413,10 +413,10 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - tool version defaults to 'Unknown'
-        Assert.AreEqual("TestTool", results.ToolName);
-        Assert.AreEqual("Unknown", results.ToolVersion);
-        Assert.AreEqual(0, results.ResultCount);
-        Assert.IsEmpty(results.Results);
+        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
+        Assert.AreEqual("Unknown", results.Runs[0].ToolVersion);
+        Assert.AreEqual(0, results.Runs[0].ResultCount);
+        Assert.IsEmpty(results.Runs[0].Results);
     }
 
     /// <summary>
@@ -446,10 +446,10 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - semanticVersion is used as the tool version
-        Assert.AreEqual("CodeQL", results.ToolName);
-        Assert.AreEqual("2.15.0", results.ToolVersion);
-        Assert.AreEqual(0, results.ResultCount);
-        Assert.IsEmpty(results.Results);
+        Assert.AreEqual("CodeQL", results.Runs[0].ToolName);
+        Assert.AreEqual("2.15.0", results.Runs[0].ToolVersion);
+        Assert.AreEqual(0, results.Runs[0].ResultCount);
+        Assert.IsEmpty(results.Runs[0].Results);
     }
 
     /// <summary>
@@ -479,10 +479,10 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - dottedQuadFileVersion is used as the tool version
-        Assert.AreEqual("TestTool", results.ToolName);
-        Assert.AreEqual("3.0.0.0", results.ToolVersion);
-        Assert.AreEqual(0, results.ResultCount);
-        Assert.IsEmpty(results.Results);
+        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
+        Assert.AreEqual("3.0.0.0", results.Runs[0].ToolVersion);
+        Assert.AreEqual(0, results.Runs[0].ResultCount);
+        Assert.IsEmpty(results.Runs[0].Results);
     }
 
     /// <summary>
@@ -513,10 +513,10 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - version field takes priority over semanticVersion
-        Assert.AreEqual("TestTool", results.ToolName);
-        Assert.AreEqual("1.0.0", results.ToolVersion);
-        Assert.AreEqual(0, results.ResultCount);
-        Assert.IsEmpty(results.Results);
+        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
+        Assert.AreEqual("1.0.0", results.Runs[0].ToolVersion);
+        Assert.AreEqual(0, results.Runs[0].ResultCount);
+        Assert.IsEmpty(results.Runs[0].Results);
     }
 
     /// <summary>
@@ -547,10 +547,10 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - semanticVersion takes priority over dottedQuadFileVersion
-        Assert.AreEqual("TestTool", results.ToolName);
-        Assert.AreEqual("2.0.0", results.ToolVersion);
-        Assert.AreEqual(0, results.ResultCount);
-        Assert.IsEmpty(results.Results);
+        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
+        Assert.AreEqual("2.0.0", results.Runs[0].ToolVersion);
+        Assert.AreEqual(0, results.Runs[0].ResultCount);
+        Assert.IsEmpty(results.Runs[0].Results);
     }
 
     /// <summary>
@@ -583,10 +583,10 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - version field takes highest priority
-        Assert.AreEqual("TestTool", results.ToolName);
-        Assert.AreEqual("1.0.0", results.ToolVersion);
-        Assert.AreEqual(0, results.ResultCount);
-        Assert.IsEmpty(results.Results);
+        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
+        Assert.AreEqual("1.0.0", results.Runs[0].ToolVersion);
+        Assert.AreEqual(0, results.Runs[0].ResultCount);
+        Assert.IsEmpty(results.Runs[0].Results);
     }
 
     /// <summary>
@@ -617,41 +617,10 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - semanticVersion is used when version field is empty
-        Assert.AreEqual("TestTool", results.ToolName);
-        Assert.AreEqual("2.0.0", results.ToolVersion);
-        Assert.AreEqual(0, results.ResultCount);
-        Assert.IsEmpty(results.Results);
-    }
-
-    /// <summary>
-    ///     Test internal constructor for testing purposes.
-    /// </summary>
-    [TestMethod]
-    public void SarifResults_InternalConstructor_CreatesValidInstance()
-    {
-        // Arrange - a list of SarifResult instances with mixed properties
-        var resultList = new List<SarifResult>
-        {
-            new("RULE001", "error", "Error message", "file.cs", 10),
-            new("RULE002", "warning", "Warning message", "file.cs", 20),
-            new("RULE003", "note", "Note message", null, null),
-            new("RULE004", "error", "Another error", "other.cs", 5),
-            new("RULE005", "warning", "Another warning", "other.cs", 15)
-        };
-
-        // Act - construct SarifResults via the internal constructor
-        var results = new SarifResults("TestTool", "1.0.0", resultList);
-
-        // Assert - all properties are stored correctly
-        Assert.AreEqual("TestTool", results.ToolName);
-        Assert.AreEqual("1.0.0", results.ToolVersion);
-        Assert.AreEqual(5, results.ResultCount);
-        Assert.HasCount(5, results.Results);
-        Assert.AreEqual("RULE001", results.Results[0].RuleId);
-        Assert.AreEqual("error", results.Results[0].Level);
-        Assert.AreEqual("Error message", results.Results[0].Message);
-        Assert.AreEqual("file.cs", results.Results[0].Uri);
-        Assert.AreEqual(10, results.Results[0].StartLine);
+        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
+        Assert.AreEqual("2.0.0", results.Runs[0].ToolVersion);
+        Assert.AreEqual(0, results.Runs[0].ResultCount);
+        Assert.IsEmpty(results.Runs[0].Results);
     }
 
     /// <summary>
@@ -702,12 +671,12 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - result contains the expected location information
-        Assert.AreEqual(1, results.ResultCount);
-        Assert.AreEqual("CA1001", results.Results[0].RuleId);
-        Assert.AreEqual("warning", results.Results[0].Level);
-        Assert.AreEqual("Types that own disposable fields should be disposable", results.Results[0].Message);
-        Assert.AreEqual("src/MyClass.cs", results.Results[0].Uri);
-        Assert.AreEqual(42, results.Results[0].StartLine);
+        Assert.AreEqual(1, results.Runs[0].ResultCount);
+        Assert.AreEqual("CA1001", results.Runs[0].Results[0].RuleId);
+        Assert.AreEqual("warning", results.Runs[0].Results[0].Level);
+        Assert.AreEqual("Types that own disposable fields should be disposable", results.Runs[0].Results[0].Message);
+        Assert.AreEqual("src/MyClass.cs", results.Runs[0].Results[0].Uri);
+        Assert.AreEqual(42, results.Runs[0].Results[0].StartLine);
     }
 
     /// <summary>
@@ -723,7 +692,7 @@ public class SarifResultsTests
             new("CA2000", "error", "Dispose objects before losing scope", "src/Program.cs", 15)
         };
 
-        var results = new SarifResults("TestTool", "1.0.0", resultList);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", resultList)]);
 
         // Act
         var markdown = results.ToMarkdown(1);
@@ -745,7 +714,7 @@ public class SarifResultsTests
     public void SarifResults_ToMarkdown_Depth3_UsesCorrectHeadingLevels()
     {
         // Arrange
-        var results = new SarifResults("TestTool", "1.0.0", []);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
         // Act
         var markdown = results.ToMarkdown(3);
@@ -763,7 +732,7 @@ public class SarifResultsTests
     public void SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults()
     {
         // Arrange
-        var results = new SarifResults("TestTool", "1.0.0", []);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
         // Act
         var markdown = results.ToMarkdown(1);
@@ -784,7 +753,7 @@ public class SarifResultsTests
             new("CA1001", "warning", "Test warning", "src/Test.cs", 10)
         };
 
-        var results = new SarifResults("TestTool", "1.0.0", resultList);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", resultList)]);
 
         // Act
         var markdown = results.ToMarkdown(1);
@@ -801,7 +770,7 @@ public class SarifResultsTests
     public void SarifResults_ToMarkdown_DepthLessThan1_ThrowsArgumentOutOfRangeException()
     {
         // Arrange
-        var results = new SarifResults("TestTool", "1.0.0", []);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
         // Act & Assert
         var exception = Assert.Throws<ArgumentOutOfRangeException>(() => results.ToMarkdown(0));
@@ -815,7 +784,7 @@ public class SarifResultsTests
     public void SarifResults_ToMarkdown_DepthGreaterThan6_ThrowsArgumentOutOfRangeException()
     {
         // Arrange
-        var results = new SarifResults("TestTool", "1.0.0", []);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
         // Act & Assert
         var exception = Assert.Throws<ArgumentOutOfRangeException>(() => results.ToMarkdown(7));
@@ -829,7 +798,7 @@ public class SarifResultsTests
     public void SarifResults_ToMarkdown_Depth6_ProducesCorrectOutput()
     {
         // Arrange
-        var results = new SarifResults("TestTool", "1.0.0", []);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
         // Act
         var markdown = results.ToMarkdown(6);
@@ -852,7 +821,7 @@ public class SarifResultsTests
             new("RULE001", "error", "Error without location", null, null)
         };
 
-        var results = new SarifResults("TestTool", "1.0.0", resultList);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", resultList)]);
 
         // Act
         var markdown = results.ToMarkdown(1);
@@ -873,7 +842,7 @@ public class SarifResultsTests
             new("RULE002", "warning", "Warning with URI only", "src/File.cs", null)
         };
 
-        var results = new SarifResults("TestTool", "1.0.0", resultList);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", resultList)]);
 
         // Act
         var markdown = results.ToMarkdown(1);
@@ -890,7 +859,7 @@ public class SarifResultsTests
     public void SarifResults_ToMarkdown_CustomHeading_UsesProvidedHeading()
     {
         // Arrange
-        var results = new SarifResults("TestTool", "1.0.0", []);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
         // Act
         var markdown = results.ToMarkdown(1, "My Custom Analysis Report");
@@ -908,7 +877,7 @@ public class SarifResultsTests
     public void SarifResults_ToMarkdown_NullHeading_UsesDefaultHeading()
     {
         // Arrange
-        var results = new SarifResults("TestTool", "1.0.0", []);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
         // Act
         var markdown = results.ToMarkdown(1, null);
@@ -925,7 +894,7 @@ public class SarifResultsTests
     public void SarifResults_ToMarkdown_NoHeadingParameter_UsesDefaultHeading()
     {
         // Arrange
-        var results = new SarifResults("TestTool", "1.0.0", []);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
         // Act
         var markdown = results.ToMarkdown(1);
@@ -949,7 +918,7 @@ public class SarifResultsTests
             new("CA3001", "note", "Third issue", "src/Helper.cs", 7)
         };
 
-        var results = new SarifResults("TestTool", "1.0.0", resultList);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", resultList)]);
 
         // Act
         var markdown = results.ToMarkdown(1);
@@ -1014,16 +983,16 @@ public class SarifResultsTests
 
         var results = SarifResults.Read(filePath);
 
-        Assert.AreEqual("TestTool", results.ToolName);
-        Assert.AreEqual("1.0.0", results.ToolVersion);
-        Assert.AreEqual(2, results.ResultCount);
-        Assert.HasCount(2, results.Results);
+        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
+        Assert.AreEqual("1.0.0", results.Runs[0].ToolVersion);
+        Assert.AreEqual(2, results.Runs[0].ResultCount);
+        Assert.HasCount(2, results.Runs[0].Results);
 
-        Assert.AreEqual("TEST001", results.Results[0].RuleId);
-        Assert.AreEqual("Unsuppressed warning", results.Results[0].Message);
+        Assert.AreEqual("TEST001", results.Runs[0].Results[0].RuleId);
+        Assert.AreEqual("Unsuppressed warning", results.Runs[0].Results[0].Message);
 
-        Assert.AreEqual("TEST003", results.Results[1].RuleId);
-        Assert.AreEqual("Another unsuppressed error", results.Results[1].Message);
+        Assert.AreEqual("TEST003", results.Runs[0].Results[1].RuleId);
+        Assert.AreEqual("Another unsuppressed error", results.Runs[0].Results[1].Message);
     }
 
     /// <summary>
@@ -1054,7 +1023,7 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - no artifacts array means zero file count
-        Assert.AreEqual(0, results.FileCount);
+        Assert.AreEqual(0, results.Runs[0].FileCount);
     }
 
     /// <summary>
@@ -1090,7 +1059,7 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - file count equals the number of artifacts
-        Assert.AreEqual(3, results.FileCount);
+        Assert.AreEqual(3, results.Runs[0].FileCount);
     }
 
     /// <summary>
@@ -1136,33 +1105,7 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - file count reflects only the first run's artifacts
-        Assert.AreEqual(2, results.FileCount);
-    }
-
-    /// <summary>
-    ///     Test that the internal constructor stores the file count.
-    /// </summary>
-    [TestMethod]
-    public void SarifResults_InternalConstructor_WithFileCount_StoresFileCount()
-    {
-        // Arrange & Act
-        var results = new SarifResults("TestTool", "1.0.0", [], fileCount: 42);
-
-        // Assert
-        Assert.AreEqual(42, results.FileCount);
-    }
-
-    /// <summary>
-    ///     Test that the internal constructor defaults file count to zero.
-    /// </summary>
-    [TestMethod]
-    public void SarifResults_InternalConstructor_WithoutFileCount_DefaultsToZero()
-    {
-        // Arrange & Act
-        var results = new SarifResults("TestTool", "1.0.0", []);
-
-        // Assert
-        Assert.AreEqual(0, results.FileCount);
+        Assert.AreEqual(2, results.Runs[0].FileCount);
     }
 
     /// <summary>
@@ -1172,7 +1115,7 @@ public class SarifResultsTests
     public void SarifResults_ToMarkdown_ShowsFileCount()
     {
         // Arrange
-        var results = new SarifResults("TestTool", "1.0.0", [], fileCount: 5);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [], 5)]);
 
         // Act
         var markdown = results.ToMarkdown(1);
@@ -1188,7 +1131,7 @@ public class SarifResultsTests
     public void SarifResults_ToMarkdown_ZeroFileCount_ShowsZero()
     {
         // Arrange
-        var results = new SarifResults("TestTool", "1.0.0", []);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
         // Act
         var markdown = results.ToMarkdown(1);
@@ -1204,7 +1147,7 @@ public class SarifResultsTests
     public void SarifResults_Runs_SingleRun_ReturnsSingleRun()
     {
         // Arrange & Act
-        var results = new SarifResults("TestTool", "1.0.0", []);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
         // Assert
         Assert.AreEqual(1, results.Runs.Count);
@@ -1218,7 +1161,7 @@ public class SarifResultsTests
     public void SarifResults_HasIssues_NoIssues_ReturnsFalse()
     {
         // Arrange & Act
-        var results = new SarifResults("TestTool", "1.0.0", []);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
         // Assert
         Assert.IsFalse(results.HasIssues);
@@ -1234,7 +1177,7 @@ public class SarifResultsTests
         var sarifResults2 = new List<SarifResult> { new SarifResult("R1", "warning", "msg", null, null) };
 
         // Act
-        var results = new SarifResults("TestTool", "1.0.0", sarifResults2);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", sarifResults2)]);
 
         // Assert
         Assert.IsTrue(results.HasIssues);

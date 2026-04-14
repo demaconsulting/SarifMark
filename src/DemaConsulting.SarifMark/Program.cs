@@ -167,8 +167,11 @@ internal static class Program
         try
         {
             sarifResults = SarifResults.Read(context.SarifFile);
-            context.WriteLine($"Tool: {sarifResults.ToolName} {sarifResults.ToolVersion}");
-            context.WriteLine($"Results: {sarifResults.ResultCount}");
+            foreach (var run in sarifResults.Runs)
+            {
+                context.WriteLine($"Tool: {run.ToolName} {run.ToolVersion}");
+                context.WriteLine($"Results: {run.ResultCount}");
+            }
         }
         catch (FileNotFoundException ex)
         {

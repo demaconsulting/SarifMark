@@ -6,18 +6,15 @@ sections:
         requirements:
           - id: SarifMark-SarifResults-Properties
             title: >-
-              The SarifResults record shall expose ToolName, ToolVersion, FileCount, Results,
-              and ResultCount properties.
+              The SarifResults record shall expose Runs and HasIssues properties.
             justification: >-
-              Exposing these five properties provides consumers with all the information needed to generate
-              a complete report without exposing raw JSON nodes, keeping the public surface area clean and
-              intentional.
+              Exposing the Runs collection and the HasIssues aggregate provides consumers with full access
+              to parsed SARIF content and a convenient check for enforcement logic, without exposing raw
+              JSON nodes and keeping the public surface area clean and intentional.
             tags: [internal]
             tests:
-              - SarifResults_Read_NoResults_ReturnsValidResults
-              - SarifResults_InternalConstructor_CreatesValidInstance
-              - SarifResults_InternalConstructor_WithFileCount_StoresFileCount
-              - SarifResults_InternalConstructor_WithoutFileCount_DefaultsToZero
+              - SarifResults_Runs_SingleRun_ReturnsSingleRun
+              - SarifResults_Read_MultipleRuns_ReturnsAllRuns
 
           - id: SarifMark-SarifResults-ValidatePath
             title: The Read method shall validate the file path is non-null, non-empty, and the file exists.

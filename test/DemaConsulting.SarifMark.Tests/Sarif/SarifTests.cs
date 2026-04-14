@@ -51,8 +51,8 @@ public class SarifTests
         var results = SarifResults.Read(sarifFile);
 
         // Assert
-        Assert.AreEqual("TestTool", results.ToolName);
-        Assert.AreEqual(1, results.ResultCount);
+        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
+        Assert.AreEqual(1, results.Runs[0].ResultCount);
     }
 
     /// <summary>
