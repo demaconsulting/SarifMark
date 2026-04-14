@@ -427,7 +427,7 @@ public class ContextTests
     ///     Test that creating a context with --depth parameter sets Depth property.
     /// </summary>
     [TestMethod]
-    public void Context_Create_DepthParameter_SetsReportDepth()
+    public void Context_Create_DepthParameter_SetsDepth()
     {
         // Act
         using var context = Context.Create(["--depth", "3"]);

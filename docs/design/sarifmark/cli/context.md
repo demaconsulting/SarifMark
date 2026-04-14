@@ -35,7 +35,7 @@ This satisfies requirements `SarifMark-Context-Create` through `SarifMark-Contex
 | `Enforce`     | `bool`    | `false` | `--enforce`              | Enforcement mode flag                       |
 | `SarifFile`   | `string?` | `null`  | `--sarif <file>`         | Path to the SARIF file                      |
 | `ReportFile`  | `string?` | `null`  | `--report <file>`        | Path to the markdown report output file     |
-| `ReportDepth` | `int`     | `1`     | `--depth <depth>`        | Markdown heading depth for the report       |
+| `Depth`       | `int`     | `1`     | `--depth <depth>`        | Markdown heading depth for the report       |
 | `Heading`     | `string?` | `null`  | `--heading <text>`       | Custom heading text for the report          |
 | `ResultsFile` | `string?` | `null`  | `--results <file>`       | Path for the self-validation results file   |
 | `ExitCode`    | `int`     | `0`/`1` | *(derived)*              | 0 until `WriteError` is called, then 1      |

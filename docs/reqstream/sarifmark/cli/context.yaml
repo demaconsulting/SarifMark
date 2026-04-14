@@ -96,7 +96,7 @@ sections:
               omitted.
             tags: [internal]
             tests:
-              - Context_Create_DepthParameter_SetsReportDepth
+              - Context_Create_DepthParameter_SetsDepth
               - Context_Create_DepthWithoutValue_ThrowsArgumentException
               - Context_Create_DepthInvalidValue_ThrowsArgumentException
               - Context_Create_DepthZero_ThrowsArgumentException

@@ -71,7 +71,7 @@ internal sealed class Context : IDisposable
     public string? ReportFile { get; private init; }
 
     /// <summary>
-    ///     Gets the report markdown depth.
+    ///     Gets the markdown depth.
     /// </summary>
     public int Depth { get; private init; } = 1;
 
@@ -196,7 +196,7 @@ internal sealed class Context : IDisposable
         public string? ReportFile { get; private set; }
 
         /// <summary>
-        ///     Gets the report markdown depth.
+        ///     Gets the markdown depth.
         /// </summary>
         public int Depth { get; private set; } = 1;
 

@@ -219,10 +219,10 @@ public class CliTests
     }
 
     /// <summary>
-    ///     Test that depth parameter sets the report depth in context.
+    ///     Test that depth parameter sets the depth in context.
     /// </summary>
     [TestMethod]
-    public void Cli_DepthParameter_SetsReportDepth()
+    public void Cli_DepthParameter_SetsDepth()
     {
         // Act
         using var context = Context.Create(["--depth", "3"]);

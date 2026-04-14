@@ -136,7 +136,7 @@ sections:
             children:
               - SarifMark-Context-ReportDepthParam
             tests:
-              - Cli_DepthParameter_SetsReportDepth
+              - Cli_DepthParameter_SetsDepth
               - SelfTest_DepthParameter_AffectsSelfValidationReport
 
           - id: SarifMark-Cli-Heading
