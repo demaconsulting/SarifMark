@@ -5,15 +5,19 @@ sections:
       - title: SarifResults Record
         requirements:
           - id: SarifMark-SarifResults-Properties
-            title: The SarifResults record shall expose ToolName, ToolVersion, Results, and ResultCount properties.
+            title: >-
+              The SarifResults record shall expose ToolName, ToolVersion, FileCount, Results,
+              and ResultCount properties.
             justification: >-
-              Exposing these four properties provides consumers with all the information needed to generate
+              Exposing these five properties provides consumers with all the information needed to generate
               a complete report without exposing raw JSON nodes, keeping the public surface area clean and
               intentional.
             tags: [internal]
             tests:
               - SarifResults_Read_NoResults_ReturnsValidResults
               - SarifResults_InternalConstructor_CreatesValidInstance
+              - SarifResults_InternalConstructor_WithFileCount_StoresFileCount
+              - SarifResults_InternalConstructor_WithoutFileCount_DefaultsToZero
 
           - id: SarifMark-SarifResults-ValidatePath
             title: The Read method shall validate the file path is non-null, non-empty, and the file exists.
@@ -141,3 +145,19 @@ sections:
               - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
               - SarifResults_ToMarkdown_OneResult_UsesSingularForm
               - SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput
+
+          - id: SarifMark-SarifResults-FileCount
+            title: >-
+              The Read method shall calculate and expose the total number of analyzed files
+              by summing the artifacts arrays across all runs.
+            justification: >-
+              Providing the total file count gives consumers verifiable evidence that analysis was performed,
+              and including it in the generated report header lets stakeholders quickly assess the scope of
+              the analysis without reading the raw SARIF file.
+            tags: [internal]
+            tests:
+              - SarifResults_Read_NoArtifacts_ReturnsZeroFileCount
+              - SarifResults_Read_WithArtifacts_ReturnsFileCount
+              - SarifResults_Read_WithArtifactsInMultipleRuns_SumsFileCount
+              - SarifResults_ToMarkdown_ShowsFileCount
+              - SarifResults_ToMarkdown_ZeroFileCount_ShowsZero

@@ -17,6 +17,7 @@ only through `Read`; the record is immutable once constructed.
 |---------------|------------------------------|-----------------------------------------|
 | `ToolName`    | `string`                     | Name of the analysis tool               |
 | `ToolVersion` | `string`                     | Version of the analysis tool            |
+| `FileCount`   | `int`                        | Total number of files analyzed          |
 | `Results`     | `IReadOnlyList<SarifResult>` | Collection of non-suppressed results    |
 | `ResultCount` | `int`                        | Total number of results (derived count) |
 
@@ -25,7 +26,7 @@ These satisfy requirement `SarifMark-SarifResults-Properties`.
 ## Read Method
 
 The static `Read(string filePath)` method loads and parses a SARIF 2.1.0 file through a
-six-step pipeline:
+seven-step pipeline:
 
 1. **Path validation** — throws `ArgumentException` if `filePath` is null, empty, or
    whitespace. This satisfies `SarifMark-SarifResults-ValidatePath`.
@@ -41,8 +42,10 @@ six-step pipeline:
    `ToolVersion` from `tool.driver`. This satisfies `SarifMark-SarifResults-ExtractTool`.
 6. **Result parsing** — delegates to `ParseResults` to iterate all non-suppressed results.
    This satisfies `SarifMark-SarifResults-ParseResults` and `SarifMark-SarifResults-FilterSuppressions`.
+7. **File count extraction** — delegates to `ExtractFileCount` to sum the lengths of the
+   `artifacts` arrays across all runs. This satisfies `SarifMark-SarifResults-FileCount`.
 
-Together, steps 1–6 form the complete SARIF reading pipeline.
+Together, steps 1–7 form the complete SARIF reading pipeline.
 
 ## ValidateSarifStructure Method
 
@@ -89,8 +92,9 @@ and `SarifMark-SarifResults-FilterSuppressions`.
 1. **Depth validation** — throws `ArgumentOutOfRangeException` if `depth` is less than 1 or
    greater than 6. This satisfies `SarifMark-SarifResults-ValidateDepth`.
 2. **Header** — calls `AppendHeader` to emit the main heading (using `heading` if provided, or
-   `"[ToolName] Analysis"` by default) followed by a `**Tool:**` line with name and version.
-   The sub-heading level is `min(depth + 1, 6)`.
+   `"[ToolName] Analysis"` by default) followed by a `**Tool:**` line with name and version,
+   then a `**Files:**` line with the file count. The sub-heading level is `min(depth + 1, 6)`.
+   This satisfies `SarifMark-SarifResults-FileCount`.
 3. **Issues section** — calls `AppendIssuesSection` to emit the `Issues` sub-heading, the
    result count formatted by `FormatFoundText`, and one line per result formatted by
    `FormatLocation`. Each result line is appended with a trailing two-space markdown hard
@@ -122,6 +126,19 @@ This satisfies requirement `SarifMark-SarifResults-FormatLocation`.
 | `> 1`   | Found {count} {singularNoun}s |
 
 This satisfies requirement `SarifMark-SarifResults-FormatCount`.
+
+## ExtractFileCount Method
+
+`ExtractFileCount(JsonElement root)` sums the lengths of the `artifacts` arrays across every element
+in the `runs` array of the SARIF document:
+
+- If the `runs` property is absent or is not an array, `0` is returned.
+- For each run element, if an `artifacts` property is present and is an array, its length is added
+  to the running total.
+- Run elements that lack an `artifacts` property contribute `0` to the total.
+
+The result is stored in the `FileCount` property and emitted as `**Files:** {FileCount}` in the
+`AppendHeader` output. This satisfies requirement `SarifMark-SarifResults-FileCount`.
 
 ## Cross-References
 

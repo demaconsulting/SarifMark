@@ -10,6 +10,18 @@
           "informationUri": "https://example.com/testtool"
         }
       },
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///path/to/file.cs"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///path/to/other.cs"
+          }
+        }
+      ],
       "results": [
         {
           "ruleId": "TEST001",

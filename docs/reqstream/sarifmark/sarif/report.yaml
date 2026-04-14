@@ -69,3 +69,15 @@ sections:
               - SarifMark-SarifResults-ToMarkdown
             tests:
               - Sarif_GenerateReport_FormatsMultipleResultsWithLineBreaks
+
+          - id: SarifMark-Report-FileCount
+            title: The tool shall include the file count in generated reports.
+            justification: >-
+              Including the file count in the report header provides evidence that analysis was actually
+              performed on the expected files, which is particularly valuable in regulated or audited
+              development environments.
+            tags: [public]
+            children:
+              - SarifMark-SarifResults-FileCount
+            tests:
+              - Sarif_Report_ContainsFileCount

@@ -85,3 +85,14 @@ sections:
               - SarifMark-SarifResults-ParseResults
             tests:
               - Sarif_ValidSarifFile_ProcessesSuccessfully
+
+          - id: SarifMark-Sarif-FileCount
+            title: The tool shall extract the total number of analyzed files from SARIF artifacts.
+            justification: >-
+              Extracting the file count from SARIF artifacts provides evidence of analysis scope, allowing
+              users and auditors to verify that the tool analyzed the expected set of files.
+            tags: [public]
+            children:
+              - SarifMark-SarifResults-FileCount
+            tests:
+              - Sarif_Report_ContainsFileCount

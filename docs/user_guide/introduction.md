@@ -280,6 +280,7 @@ sarifmark --sarif other-tool.sarif --report other-report.md --heading "Other Too
 The generated markdown reports include:
 
 - **Tool Information**: Name and version of the analysis tool
+- **File Count**: Total number of files analyzed (sum of artifacts across all runs)
 - **Summary**: Count of issues found
 - **Issues Details**: Detailed information about each finding, including:
   - File location and line number
