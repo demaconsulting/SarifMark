@@ -13,14 +13,14 @@ through `SarifResults.Read`; the record is immutable once constructed.
 
 ## Properties
 
-| Property      | Type                         | Description                                     |
-|---------------|------------------------------|-------------------------------------------------|
-| `ToolName`    | `string`                     | Name of the analysis tool                       |
-| `ToolVersion` | `string`                     | Version of the analysis tool                    |
-| `FileCount`   | `int`                        | Total number of files analyzed in this run      |
-| `Results`     | `IReadOnlyList<SarifResult>` | Collection of non-suppressed results            |
-| `ResultCount` | `int`                        | Total number of results (derived count)         |
-| `HasIssues`   | `bool`                       | True if any results are present (derived)       |
+| Property      | Type                          | Description                                     |
+|---------------|-------------------------------|-------------------------------------------------|
+| `ToolName`    | `string`                      | Name of the analysis tool                       |
+| `ToolVersion` | `string`                      | Version of the analysis tool                    |
+| `FileCount`   | `int`                         | Total number of files analyzed in this run      |
+| `Results`     | `IReadOnlyList<SarifFinding>` | Collection of non-suppressed results            |
+| `ResultCount` | `int`                         | Total number of results (derived count)         |
+| `HasIssues`   | `bool`                        | True if any results are present (derived)       |
 
 These satisfy requirements `SarifMark-SarifRun-Properties` and `SarifMark-SarifRun-HasIssues`.
 
@@ -69,4 +69,4 @@ This satisfies requirement `SarifMark-SarifRun-FormatCount`.
 
 See the SarifResults Record document for `SarifResults.Read`, which constructs `SarifRun`
 instances during SARIF file parsing.
-See the SarifResult Record document for the `SarifResult` record that each run's results contain.
+See the SarifFinding Record document for the `SarifFinding` record that each run's results contain.

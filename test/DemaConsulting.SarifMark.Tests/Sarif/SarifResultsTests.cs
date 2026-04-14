@@ -686,7 +686,7 @@ public class SarifResultsTests
     public void SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput()
     {
         // Arrange
-        var resultList = new List<SarifResult>
+        var resultList = new List<SarifFinding>
         {
             new("CA1001", "warning", "Types that own disposable fields should be disposable", "src/MyClass.cs", 42),
             new("CA2000", "error", "Dispose objects before losing scope", "src/Program.cs", 15)
@@ -748,7 +748,7 @@ public class SarifResultsTests
     public void SarifResults_ToMarkdown_OneResult_UsesSingularForm()
     {
         // Arrange
-        var resultList = new List<SarifResult>
+        var resultList = new List<SarifFinding>
         {
             new("CA1001", "warning", "Test warning", "src/Test.cs", 10)
         };
@@ -816,7 +816,7 @@ public class SarifResultsTests
     public void SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation()
     {
         // Arrange
-        var resultList = new List<SarifResult>
+        var resultList = new List<SarifFinding>
         {
             new("RULE001", "error", "Error without location", null, null)
         };
@@ -837,7 +837,7 @@ public class SarifResultsTests
     public void SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly()
     {
         // Arrange
-        var resultList = new List<SarifResult>
+        var resultList = new List<SarifFinding>
         {
             new("RULE002", "warning", "Warning with URI only", "src/File.cs", null)
         };
@@ -911,7 +911,7 @@ public class SarifResultsTests
     public void SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks()
     {
         // Arrange
-        var resultList = new List<SarifResult>
+        var resultList = new List<SarifFinding>
         {
             new("CA1001", "warning", "First issue", "src/MyClass.cs", 42),
             new("CA2000", "error", "Second issue", "src/Program.cs", 15),
@@ -1174,7 +1174,7 @@ public class SarifResultsTests
     public void SarifResults_HasIssues_WithIssues_ReturnsTrue()
     {
         // Arrange
-        var sarifResults2 = new List<SarifResult> { new SarifResult("R1", "warning", "msg", null, null) };
+        var sarifResults2 = new List<SarifFinding> { new SarifFinding("R1", "warning", "msg", null, null) };
 
         // Act
         var results = new SarifResults([new SarifRun("TestTool", "1.0.0", sarifResults2)]);
@@ -1191,7 +1191,7 @@ public class SarifResultsTests
     {
         // Arrange
         var run1 = new SarifRun("Tool1", "1.0", [], 0);
-        var run2Results = new List<SarifResult> { new SarifResult("R1", "warning", "msg", null, null) };
+        var run2Results = new List<SarifFinding> { new SarifFinding("R1", "warning", "msg", null, null) };
         var run2 = new SarifRun("Tool2", "2.0", run2Results, 0);
 
         // Act

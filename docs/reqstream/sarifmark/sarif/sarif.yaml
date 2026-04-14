@@ -59,8 +59,8 @@ sections:
               improving the actionability of analysis results by pinpointing specific files and lines.
             tags: [public]
             children:
-              - SarifMark-SarifResult-Uri
-              - SarifMark-SarifResult-StartLine
+              - SarifMark-SarifFinding-Uri
+              - SarifMark-SarifFinding-StartLine
             tests:
               - Sarif_Report_ContainsLocationInfo
 

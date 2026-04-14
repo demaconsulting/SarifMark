@@ -82,7 +82,7 @@ yields a value, `"Unknown"` is returned. This satisfies requirement `SarifMark-S
 `ParseResults` iterates the `results` JSON array within the run element. If the array is absent or
 not an array, an empty list is returned. For each element, `IsSuppressed` checks whether a
 non-empty `suppressions` array is present; suppressed entries are skipped. Each remaining element
-is parsed into a `SarifResult` record. This satisfies requirements `SarifMark-SarifResults-ParseResults`
+is parsed into a `SarifFinding` record. This satisfies requirements `SarifMark-SarifResults-ParseResults`
 and `SarifMark-SarifResults-FilterSuppressions`.
 
 ## ToMarkdown Method
@@ -112,6 +112,6 @@ This satisfies requirement `SarifMark-SarifResults-FileCount`.
 ## Cross-References
 
 See the SarifRun Record document for `SarifRun`, which is constructed per-run during SARIF parsing.
-See the SarifResult Record document for the `SarifResult` record that `ParseResults` produces.
+See the SarifFinding Record document for the `SarifFinding` record that `ParseResults` produces.
 See the Program Class document for how `Read` and `ToMarkdown` are called from
 `ProcessSarifAnalysis`.

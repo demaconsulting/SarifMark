@@ -4,7 +4,7 @@
 
 The SARIF and reporting layer is responsible for reading SARIF 2.1.0 files and generating
 markdown reports from the extracted results. It consists of three records:
-`SarifResult` (a single result entry),
+`SarifFinding` (a single result entry),
 `SarifRun` (results from a single tool run), and
 `SarifResults` (the full results collection with reading and reporting
 logic). This layer satisfies requirements `SarifMark-Sarif-Reading`,
@@ -18,9 +18,9 @@ logic). This layer satisfies requirements `SarifMark-Sarif-Reading`,
 
 The SARIF and reporting layer uses a three-record design:
 
-- **`SarifResult`** is an immutable record representing a single static analysis finding.
+- **`SarifFinding`** is an immutable record representing a single static analysis finding.
   It stores the rule identifier, severity level, message, optional file URI, and optional
-  start line. It is constructed internally by the parsing pipeline. See the SarifResult
+  start line. It is constructed internally by the parsing pipeline. See the SarifFinding
   Record document for class-level details.
 
 - **`SarifRun`** is an immutable record representing the results from a single run within a
@@ -69,6 +69,6 @@ invoking the SARIF reading layer. See the Program Class document for full detail
 
 ## Class Details
 
-- **SarifResult record** — immutable value type for a single analysis finding
+- **SarifFinding record** — immutable value type for a single analysis finding
 - **SarifRun record** — immutable value type for a single tool run with markdown generation
 - **SarifResults record** — SARIF file reading and markdown report generation

@@ -38,9 +38,9 @@ public record SarifRun
     public string ToolVersion { get; }
 
     /// <summary>
-    ///     Gets the collection of results/issues found.
+    ///     Gets the collection of findings found.
     /// </summary>
-    public IReadOnlyList<SarifResult> Results { get; }
+    public IReadOnlyList<SarifFinding> Results { get; }
 
     /// <summary>
     ///     Gets the total number of results/issues found.
@@ -64,7 +64,7 @@ public record SarifRun
     /// <param name="toolVersion">The version of the analysis tool.</param>
     /// <param name="results">The collection of results/issues.</param>
     /// <param name="fileCount">The total number of files analyzed.</param>
-    internal SarifRun(string toolName, string toolVersion, IReadOnlyList<SarifResult> results, int fileCount = 0)
+    internal SarifRun(string toolName, string toolVersion, IReadOnlyList<SarifFinding> results, int fileCount = 0)
     {
         ToolName = toolName;
         ToolVersion = toolVersion;

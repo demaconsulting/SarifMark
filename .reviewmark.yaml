@@ -131,13 +131,13 @@ reviews:
       - "src/**/Cli/Context.cs"
       - "test/**/Cli/ContextTests.cs"
 
-  - id: SarifMark-Sarif-SarifResult
-    title: Review that SarifMark Sarif SarifResult Implementation is Correct
+  - id: SarifMark-Sarif-SarifFinding
+    title: Review that SarifMark Sarif SarifFinding Implementation is Correct
     paths:
-      - "docs/reqstream/sarifmark/sarif/sarif-result.yaml"
-      - "docs/design/sarifmark/sarif/sarif-result.md"
-      - "src/**/Sarif/SarifResult.cs"
-      - "test/**/Sarif/SarifResultsTests.cs"
+      - "docs/reqstream/sarifmark/sarif/sarif-finding.yaml"
+      - "docs/design/sarifmark/sarif/sarif-finding.md"
+      - "src/**/Sarif/SarifFinding.cs"
+      - "test/**/Sarif/SarifFindingTests.cs"
 
   - id: SarifMark-Sarif-SarifResults
     title: Review that SarifMark Sarif SarifResults Implementation is Correct

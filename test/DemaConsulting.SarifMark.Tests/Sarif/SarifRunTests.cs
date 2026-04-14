@@ -33,7 +33,7 @@ public class SarifRunTests
     public void SarifRun_InternalConstructor_CreatesValidInstance()
     {
         // Arrange
-        var results = new List<SarifResult> { new SarifResult("R1", "warning", "msg", null, null) };
+        var results = new List<SarifFinding> { new SarifFinding("R1", "warning", "msg", null, null) };
 
         // Act
         var run = new SarifRun("MyTool", "1.0.0", results, 3);
@@ -65,7 +65,7 @@ public class SarifRunTests
     public void SarifRun_HasIssues_WithResults_ReturnsTrue()
     {
         // Arrange
-        var results = new List<SarifResult> { new SarifResult("R1", "warning", "msg", null, null) };
+        var results = new List<SarifFinding> { new SarifFinding("R1", "warning", "msg", null, null) };
 
         // Act
         var run = new SarifRun("Tool", "1.0", results, 0);
@@ -97,7 +97,7 @@ public class SarifRunTests
     public void SarifRun_ToMarkdown_WithResults_ShowsResults()
     {
         // Arrange
-        var results = new List<SarifResult> { new SarifResult("RULE1", "warning", "Test message", "file:///test.cs", 5) };
+        var results = new List<SarifFinding> { new SarifFinding("RULE1", "warning", "Test message", "file:///test.cs", 5) };
         var run = new SarifRun("Tool", "1.0", results, 1);
 
         // Act
@@ -209,7 +209,7 @@ public class SarifRunTests
     public void SarifRun_ToMarkdown_ResultWithoutLocation_ShowsNoLocation()
     {
         // Arrange
-        var results = new List<SarifResult> { new("RULE001", "error", "Error without location", null, null) };
+        var results = new List<SarifFinding> { new("RULE001", "error", "Error without location", null, null) };
         var run = new SarifRun("TestTool", "1.0.0", results, 0);
 
         // Act
@@ -226,7 +226,7 @@ public class SarifRunTests
     public void SarifRun_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly()
     {
         // Arrange
-        var results = new List<SarifResult> { new("RULE002", "warning", "Warning with URI only", "src/File.cs", null) };
+        var results = new List<SarifFinding> { new("RULE002", "warning", "Warning with URI only", "src/File.cs", null) };
         var run = new SarifRun("TestTool", "1.0.0", results, 0);
 
         // Act
@@ -244,7 +244,7 @@ public class SarifRunTests
     public void SarifRun_ToMarkdown_OneResult_UsesSingularForm()
     {
         // Arrange
-        var results = new List<SarifResult> { new("CA1001", "warning", "Test warning", "src/Test.cs", 10) };
+        var results = new List<SarifFinding> { new("CA1001", "warning", "Test warning", "src/Test.cs", 10) };
         var run = new SarifRun("TestTool", "1.0.0", results, 0);
 
         // Act

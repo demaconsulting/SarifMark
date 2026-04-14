@@ -21,19 +21,19 @@
 namespace DemaConsulting.SarifMark.Tests;
 
 /// <summary>
-///     Unit tests for the SarifResult record.
+///     Unit tests for the SarifFinding record.
 /// </summary>
 [TestClass]
-public class SarifResultTests
+public class SarifFindingTests
 {
     /// <summary>
     ///     Test that the internal constructor stores all properties correctly.
     /// </summary>
     [TestMethod]
-    public void SarifResult_InternalConstructor_StoresAllProperties()
+    public void SarifFinding_InternalConstructor_StoresAllProperties()
     {
         // Arrange & Act
-        var result = new SarifResult("RULE001", "error", "Error message", "src/File.cs", 42);
+        var result = new SarifFinding("RULE001", "error", "Error message", "src/File.cs", 42);
 
         // Assert
         Assert.AreEqual("RULE001", result.RuleId);
@@ -47,10 +47,10 @@ public class SarifResultTests
     ///     Test that Uri can be null.
     /// </summary>
     [TestMethod]
-    public void SarifResult_Uri_CanBeNull()
+    public void SarifFinding_Uri_CanBeNull()
     {
         // Arrange & Act
-        var result = new SarifResult("RULE001", "error", "Error message", null, null);
+        var result = new SarifFinding("RULE001", "error", "Error message", null, null);
 
         // Assert
         Assert.IsNull(result.Uri);
@@ -60,10 +60,10 @@ public class SarifResultTests
     ///     Test that StartLine can be null.
     /// </summary>
     [TestMethod]
-    public void SarifResult_StartLine_CanBeNull()
+    public void SarifFinding_StartLine_CanBeNull()
     {
         // Arrange & Act
-        var result = new SarifResult("RULE001", "error", "Error message", "src/File.cs", null);
+        var result = new SarifFinding("RULE001", "error", "Error message", "src/File.cs", null);
 
         // Assert
         Assert.IsNull(result.StartLine);

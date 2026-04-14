@@ -189,10 +189,10 @@ public record SarifResults
     ///     Parses all results from a run element, excluding suppressed results.
     /// </summary>
     /// <param name="runElement">The run JSON element.</param>
-    /// <returns>A list of parsed SARIF results.</returns>
-    private static List<SarifResult> ParseResults(JsonElement runElement)
+    /// <returns>A list of parsed SARIF findings.</returns>
+    private static List<SarifFinding> ParseResults(JsonElement runElement)
     {
-        var results = new List<SarifResult>();
+        var results = new List<SarifFinding>();
 
         if (!runElement.TryGetProperty("results", out var resultsElement) ||
             resultsElement.ValueKind != JsonValueKind.Array)
@@ -250,8 +250,8 @@ public record SarifResults
     ///     Parses a single result element.
     /// </summary>
     /// <param name="resultElement">The result JSON element.</param>
-    /// <returns>A parsed SARIF result.</returns>
-    private static SarifResult ParseResult(JsonElement resultElement)
+    /// <returns>A parsed SARIF finding.</returns>
+    private static SarifFinding ParseResult(JsonElement resultElement)
     {
         var ruleId = resultElement.TryGetProperty("ruleId", out var ruleIdElement)
             ? ruleIdElement.GetString() ?? string.Empty
@@ -264,7 +264,7 @@ public record SarifResults
         var message = ParseMessage(resultElement);
         var (uri, startLine) = ParseLocation(resultElement);
 
-        return new SarifResult(ruleId, level, message, uri, startLine);
+        return new SarifFinding(ruleId, level, message, uri, startLine);
     }
 
     /// <summary>
