@@ -61,7 +61,7 @@ to the context output, listing every supported option with its flag syntax and a
 - `--log <file>` — write output to a log file
 - `--sarif <file>` — SARIF file to process
 - `--report <file>` — export analysis results to a markdown file
-- `--report-depth <depth>` — markdown header depth for the report (default: 1)
+- `--depth <depth>` — markdown header depth for the report (default: 1)
 - `--heading <text>` — custom heading for the report (default: `[ToolName] Analysis`)
 
 This satisfies requirement `SarifMark-Program-Help`.

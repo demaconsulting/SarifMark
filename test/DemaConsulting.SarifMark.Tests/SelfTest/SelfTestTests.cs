@@ -139,6 +139,34 @@ public class SelfTestTests
     }
 
     /// <summary>
+    ///     Test that --depth affects the self-validation markdown report depth.
+    /// </summary>
+    [TestMethod]
+    public void SelfTest_DepthParameter_AffectsSelfValidationReport()
+    {
+        // Arrange
+        var originalOut = Console.Out;
+        try
+        {
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
+
+            // Act - run validation with non-default depth of 2
+            using var context = Context.Create(["--validate", "--depth", "2"]);
+            Validation.Run(context);
+            var output = outWriter.ToString();
+
+            // Assert - validation passes and the depth-sensitive report generation test passes
+            Assert.AreEqual(0, context.ExitCode);
+            Assert.Contains("SarifMark_MarkdownReportGeneration - Passed", output);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+        }
+    }
+
+    /// <summary>
     ///     Test that enforcement mode behavior is verified by the self-validation suite.
     /// </summary>
     [TestMethod]

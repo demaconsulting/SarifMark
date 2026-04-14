@@ -491,7 +491,7 @@ jobs:
           --sarif artifacts/csharp.sarif
           --report docs/code_quality/codeql-quality.md
           --heading "SarifMark CodeQL Analysis"
-          --report-depth 1
+          --depth 1
 
       - name: Display CodeQL Quality Report
         shell: bash

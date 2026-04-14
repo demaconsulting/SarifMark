@@ -35,13 +35,14 @@ This satisfies requirements `SarifMark-Context-Create` through `SarifMark-Contex
 | `Enforce`     | `bool`    | `false` | `--enforce`              | Enforcement mode flag                       |
 | `SarifFile`   | `string?` | `null`  | `--sarif <file>`         | Path to the SARIF file                      |
 | `ReportFile`  | `string?` | `null`  | `--report <file>`        | Path to the markdown report output file     |
-| `ReportDepth` | `int`     | `1`     | `--report-depth <depth>` | Markdown heading depth for the report       |
+| `Depth`       | `int`     | `1`     | `--depth <depth>`        | Markdown heading depth for the report       |
 | `Heading`     | `string?` | `null`  | `--heading <text>`       | Custom heading text for the report          |
 | `ResultsFile` | `string?` | `null`  | `--results <file>`       | Path for the self-validation results file   |
 | `ExitCode`    | `int`     | `0`/`1` | *(derived)*              | 0 until `WriteError` is called, then 1      |
 
-The `--result` flag is accepted as a legacy alias for `--results`, preserving backwards compatibility
-(see requirement `SarifMark-Context-ResultLegacyAlias`).
+The `--report-depth` flag is accepted as a legacy alias for `--depth`, preserving backwards compatibility
+(see requirement `SarifMark-Context-ReportDepthParam`). The `--result` flag is similarly accepted as a
+legacy alias for `--results` (see requirement `SarifMark-Context-ResultLegacyAlias`).
 
 These properties satisfy requirements `SarifMark-Context-VersionFlag`, `SarifMark-Context-HelpFlag`,
 `SarifMark-Context-SilentFlag`, `SarifMark-Context-ValidateFlag`, `SarifMark-Context-EnforceFlag`,
@@ -53,14 +54,15 @@ and `SarifMark-Context-ExitCode`.
 
 `ArgumentParser` is a private, sealed nested class responsible for token-by-token command-line
 parsing. Its `ParseArguments(string[] args)` method iterates through tokens in order and delegates
-each to `ParseArgument`. Value-bearing flags (e.g. `--sarif`, `--report-depth`) consume the
+each to `ParseArgument`. Value-bearing flags (e.g. `--sarif`, `--depth`) consume the
 following token as their argument value.
 
 Any unrecognized token causes `ParseArgument` to throw `ArgumentException` with a message
 identifying the unsupported argument. This satisfies requirement `SarifMark-Context-UnknownArgs`.
 
-`--report-depth` requires a positive integer value; non-integer or non-positive values also throw
-`ArgumentException`. This satisfies requirement `SarifMark-Context-ReportDepthParam`.
+`--depth` requires a positive integer value; non-integer or non-positive values also throw
+`ArgumentException`. The legacy alias `--report-depth` behaves identically.
+This satisfies requirement `SarifMark-Context-ReportDepthParam`.
 
 ## WriteLine Method
 

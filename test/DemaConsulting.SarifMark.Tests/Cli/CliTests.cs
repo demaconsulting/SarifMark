@@ -219,7 +219,21 @@ public class CliTests
     }
 
     /// <summary>
-    ///     Test that report-depth parameter sets the report depth in context.
+    ///     Test that depth parameter sets the depth in context.
+    /// </summary>
+    [TestMethod]
+    public void Cli_DepthParameter_SetsDepth()
+    {
+        // Act
+        using var context = Context.Create(["--depth", "3"]);
+
+        // Assert
+        Assert.AreEqual(3, context.Depth);
+        Assert.AreEqual(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that legacy report-depth parameter sets the report depth in context.
     /// </summary>
     [TestMethod]
     public void Cli_ReportDepthParameter_SetsReportDepth()
@@ -228,7 +242,7 @@ public class CliTests
         using var context = Context.Create(["--report-depth", "3"]);
 
         // Assert
-        Assert.AreEqual(3, context.ReportDepth);
+        Assert.AreEqual(3, context.Depth);
         Assert.AreEqual(0, context.ExitCode);
     }
 

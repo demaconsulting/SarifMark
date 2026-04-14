@@ -71,9 +71,9 @@ internal sealed class Context : IDisposable
     public string? ReportFile { get; private init; }
 
     /// <summary>
-    ///     Gets the report markdown depth.
+    ///     Gets the markdown depth.
     /// </summary>
-    public int ReportDepth { get; private init; } = 1;
+    public int Depth { get; private init; } = 1;
 
     /// <summary>
     ///     Gets the custom heading for the report.
@@ -120,7 +120,7 @@ internal sealed class Context : IDisposable
             Enforce = parser.Enforce,
             SarifFile = parser.SarifFile,
             ReportFile = parser.ReportFile,
-            ReportDepth = parser.ReportDepth,
+            Depth = parser.Depth,
             Heading = parser.Heading,
             ResultsFile = parser.ResultsFile
         };
@@ -196,9 +196,9 @@ internal sealed class Context : IDisposable
         public string? ReportFile { get; private set; }
 
         /// <summary>
-        ///     Gets the report markdown depth.
+        ///     Gets the markdown depth.
         /// </summary>
-        public int ReportDepth { get; private set; } = 1;
+        public int Depth { get; private set; } = 1;
 
         /// <summary>
         ///     Gets the custom heading for the report.
@@ -278,8 +278,9 @@ internal sealed class Context : IDisposable
                     ReportFile = GetRequiredStringArgument(arg, args, index, "a filename argument");
                     return index + 1;
 
-                case "--report-depth":
-                    ReportDepth = GetRequiredIntArgument(arg, args, index);
+                case "--depth":
+                case "--report-depth": // Legacy alias for --depth
+                    Depth = GetRequiredIntArgument(arg, args, index);
                     return index + 1;
 
                 case "--heading":
