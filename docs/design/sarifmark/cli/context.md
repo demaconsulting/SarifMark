@@ -41,7 +41,8 @@ This satisfies requirements `SarifMark-Context-Create` through `SarifMark-Contex
 | `ExitCode`    | `int`     | `0`/`1` | *(derived)*              | 0 until `WriteError` is called, then 1      |
 
 The `--report-depth` flag is accepted as a legacy alias for `--depth`, preserving backwards compatibility
-(see requirement `SarifMark-Context-ReportDepthParam`).
+(see requirement `SarifMark-Context-ReportDepthParam`). The `--result` flag is similarly accepted as a
+legacy alias for `--results` (see requirement `SarifMark-Context-ResultLegacyAlias`).
 
 These properties satisfy requirements `SarifMark-Context-VersionFlag`, `SarifMark-Context-HelpFlag`,
 `SarifMark-Context-SilentFlag`, `SarifMark-Context-ValidateFlag`, `SarifMark-Context-EnforceFlag`,
