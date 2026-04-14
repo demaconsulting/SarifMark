@@ -19,7 +19,7 @@ This document covers the design of three primary functional layers within SarifM
 
 - The **command-line layer**: the `Program` entry point and `Context` class that handle
   argument parsing, output routing, and program flow control
-- The **SARIF and reporting layer**: the `SarifResult` and `SarifResults` classes that
+- The **SARIF and reporting layer**: the `SarifResult`, `SarifRun`, and `SarifResults` classes that
   read SARIF files and generate markdown reports
 - The **self-validation layer**: the `Validation` class that provides built-in
   verification of the tool's core functionality
@@ -54,6 +54,7 @@ SarifMark (System)
 │   └── Context (Unit)
 ├── Sarif (Subsystem)
 │   ├── SarifResult (Unit)
+│   ├── SarifRun (Unit)
 │   └── SarifResults (Unit)
 ├── SelfTest (Subsystem)
 │   └── Validation (Unit)
@@ -75,6 +76,7 @@ src/DemaConsulting.SarifMark/
 │   └── Context.cs              — command-line argument parser and I/O owner
 ├── Sarif/
 │   ├── SarifResult.cs          — immutable record for a single analysis finding
+│   ├── SarifRun.cs             — immutable record for a single tool run
 │   └── SarifResults.cs         — SARIF file reading and markdown report generation
 ├── SelfTest/
 │   └── Validation.cs           — self-validation test runner
