@@ -51,6 +51,8 @@ treating a `uri` that is `null`, empty, or consists only of whitespace as missin
 | set                       | null         | `uri`            |
 | set                       | set          | `uri(startLine)` |
 
+This satisfies requirement `SarifMark-SarifRun-FormatLocation`.
+
 ## FormatFoundText Method
 
 `FormatFoundText(int count, string singularNoun)` produces a grammatically correct summary:
@@ -60,6 +62,8 @@ treating a `uri` that is `null`, empty, or consists only of whitespace as missin
 | `0`     | Found no {singularNoun}s      |
 | `1`     | Found 1 {singularNoun}        |
 | `> 1`   | Found {count} {singularNoun}s |
+
+This satisfies requirement `SarifMark-SarifRun-FormatCount`.
 
 ## Cross-References
 

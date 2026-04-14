@@ -107,8 +107,7 @@ given run element:
 - If the `artifacts` property is absent or is not an array, `0` is returned.
 - Otherwise, the length of the `artifacts` array is returned.
 
-Using only the first run's file count is maintained through `SarifRun.FileCount`, accessible via
-`Runs[0].FileCount`. This satisfies requirement `SarifMark-SarifResults-FileCount`.
+This satisfies requirement `SarifMark-SarifResults-FileCount`.
 
 ## Cross-References
 

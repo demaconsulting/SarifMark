@@ -185,4 +185,73 @@ public class SarifRunTests
         // Assert
         Assert.Contains("# MyTool Analysis", md);
     }
+
+    /// <summary>
+    ///     Test that ToMarkdown shows the file count.
+    /// </summary>
+    [TestMethod]
+    public void SarifRun_ToMarkdown_ShowsFileCount()
+    {
+        // Arrange
+        var run = new SarifRun("TestTool", "1.0.0", [], 5);
+
+        // Act
+        var md = run.ToMarkdown(1);
+
+        // Assert
+        Assert.Contains("**Files:** 5", md);
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown formats results without location correctly.
+    /// </summary>
+    [TestMethod]
+    public void SarifRun_ToMarkdown_ResultWithoutLocation_ShowsNoLocation()
+    {
+        // Arrange
+        var results = new List<SarifResult> { new("RULE001", "error", "Error without location", null, null) };
+        var run = new SarifRun("TestTool", "1.0.0", results, 0);
+
+        // Act
+        var md = run.ToMarkdown(1);
+
+        // Assert
+        Assert.Contains("(no location): error [RULE001] Error without location", md);
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown formats results with URI but no line number correctly.
+    /// </summary>
+    [TestMethod]
+    public void SarifRun_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly()
+    {
+        // Arrange
+        var results = new List<SarifResult> { new("RULE002", "warning", "Warning with URI only", "src/File.cs", null) };
+        var run = new SarifRun("TestTool", "1.0.0", results, 0);
+
+        // Act
+        var md = run.ToMarkdown(1);
+
+        // Assert
+        Assert.Contains("src/File.cs: warning [RULE002] Warning with URI only", md);
+        Assert.DoesNotContain("src/File.cs(", md);
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown uses singular form for one result.
+    /// </summary>
+    [TestMethod]
+    public void SarifRun_ToMarkdown_OneResult_UsesSingularForm()
+    {
+        // Arrange
+        var results = new List<SarifResult> { new("CA1001", "warning", "Test warning", "src/Test.cs", 10) };
+        var run = new SarifRun("TestTool", "1.0.0", results, 0);
+
+        // Act
+        var md = run.ToMarkdown(1);
+
+        // Assert
+        Assert.Contains("Found 1 issue", md);
+        Assert.DoesNotContain("Found 1 issues", md);
+    }
 }
