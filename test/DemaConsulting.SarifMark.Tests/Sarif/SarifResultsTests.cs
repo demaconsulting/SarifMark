@@ -1094,10 +1094,10 @@ public class SarifResultsTests
     }
 
     /// <summary>
-    ///     Test that Read sums artifacts across multiple runs.
+    ///     Test that Read uses only the first run's artifacts for the file count.
     /// </summary>
     [TestMethod]
-    public void SarifResults_Read_WithArtifactsInMultipleRuns_SumsFileCount()
+    public void SarifResults_Read_WithArtifactsInMultipleRuns_UsesFirstRunFileCount()
     {
         // Arrange
         var filePath = PathHelpers.SafePathCombine(_testDirectory!, "multi-run-artifacts.sarif");
@@ -1135,8 +1135,8 @@ public class SarifResultsTests
         // Act
         var results = SarifResults.Read(filePath);
 
-        // Assert - file count is the sum across all runs
-        Assert.AreEqual(3, results.FileCount);
+        // Assert - file count reflects only the first run's artifacts
+        Assert.AreEqual(2, results.FileCount);
     }
 
     /// <summary>

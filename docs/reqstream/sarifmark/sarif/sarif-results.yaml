@@ -148,16 +148,17 @@ sections:
 
           - id: SarifMark-SarifResults-FileCount
             title: >-
-              The Read method shall calculate and expose the total number of analyzed files
-              by summing the artifacts arrays across all runs.
+              The Read method shall calculate and expose the number of analyzed files
+              from the artifacts array of the first run.
             justification: >-
-              Providing the total file count gives consumers verifiable evidence that analysis was performed,
+              Providing the file count gives consumers verifiable evidence that analysis was performed,
               and including it in the generated report header lets stakeholders quickly assess the scope of
-              the analysis without reading the raw SARIF file.
+              the analysis without reading the raw SARIF file. Using only the first run keeps the file
+              count consistent with the tool information and results that are also drawn from the first run.
             tags: [internal]
             tests:
               - SarifResults_Read_NoArtifacts_ReturnsZeroFileCount
               - SarifResults_Read_WithArtifacts_ReturnsFileCount
-              - SarifResults_Read_WithArtifactsInMultipleRuns_SumsFileCount
+              - SarifResults_Read_WithArtifactsInMultipleRuns_UsesFirstRunFileCount
               - SarifResults_ToMarkdown_ShowsFileCount
               - SarifResults_ToMarkdown_ZeroFileCount_ShowsZero

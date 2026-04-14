@@ -97,7 +97,7 @@ public record SarifResults
             var firstRun = ValidateSarifStructure(root);
             var (toolName, toolVersion) = ExtractToolInformation(firstRun);
             var results = ParseResults(firstRun);
-            var fileCount = ExtractFileCount(root);
+            var fileCount = ExtractFileCount(firstRun);
 
             return new SarifResults(toolName, toolVersion, results, fileCount);
         }
@@ -232,29 +232,19 @@ public record SarifResults
     }
 
     /// <summary>
-    ///     Extracts the total file count by summing the lengths of the 'artifacts' arrays across all runs.
+    ///     Extracts the file count from the 'artifacts' array of the run element.
     /// </summary>
-    /// <param name="root">The root JSON element of the SARIF document.</param>
-    /// <returns>The total number of artifacts across all runs.</returns>
-    private static int ExtractFileCount(JsonElement root)
+    /// <param name="runElement">The run JSON element.</param>
+    /// <returns>The number of artifacts in the run, or zero if the artifacts array is absent.</returns>
+    private static int ExtractFileCount(JsonElement runElement)
     {
-        if (!root.TryGetProperty("runs", out var runsElement) ||
-            runsElement.ValueKind != JsonValueKind.Array)
+        if (runElement.TryGetProperty("artifacts", out var artifactsElement) &&
+            artifactsElement.ValueKind == JsonValueKind.Array)
         {
-            return 0;
+            return artifactsElement.GetArrayLength();
         }
 
-        var fileCount = 0;
-        foreach (var runElement in runsElement.EnumerateArray())
-        {
-            if (runElement.TryGetProperty("artifacts", out var artifactsElement) &&
-                artifactsElement.ValueKind == JsonValueKind.Array)
-            {
-                fileCount += artifactsElement.GetArrayLength();
-            }
-        }
-
-        return fileCount;
+        return 0;
     }
 
     /// <summary>

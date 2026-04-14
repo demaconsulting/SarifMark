@@ -129,16 +129,16 @@ This satisfies requirement `SarifMark-SarifResults-FormatCount`.
 
 ## ExtractFileCount Method
 
-`ExtractFileCount(JsonElement root)` sums the lengths of the `artifacts` arrays across every element
-in the `runs` array of the SARIF document:
+`ExtractFileCount(JsonElement runElement)` returns the length of the `artifacts` array of the
+given run element (which is always the first run, already validated by `ValidateSarifStructure`):
 
-- If the `runs` property is absent or is not an array, `0` is returned.
-- For each run element, if an `artifacts` property is present and is an array, its length is added
-  to the running total.
-- Run elements that lack an `artifacts` property contribute `0` to the total.
+- If the `artifacts` property is absent or is not an array, `0` is returned.
+- Otherwise, the length of the `artifacts` array is returned.
 
-The result is stored in the `FileCount` property and emitted as `**Files:** {FileCount}` in the
-`AppendHeader` output. This satisfies requirement `SarifMark-SarifResults-FileCount`.
+Using only the first run ensures the file count is consistent with the tool information and results,
+which are also drawn exclusively from the first run. The result is stored in the `FileCount` property
+and emitted as `**Files:** {FileCount}` in the `AppendHeader` output. This satisfies requirement
+`SarifMark-SarifResults-FileCount`.
 
 ## Cross-References
 
