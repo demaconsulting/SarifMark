@@ -117,7 +117,7 @@ Options:
   --log <file>               Write output to log file
   --sarif <file>             SARIF file to process
   --report <file>            Export analysis results to markdown file
-  --report-depth <depth>     Markdown header depth for report (default: 1)
+  --depth <depth>            Markdown header depth for report (default: 1)
   --heading <text>           Custom heading for report (default: [ToolName] Analysis)
 ```
 

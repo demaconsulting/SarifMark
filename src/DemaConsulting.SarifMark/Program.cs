@@ -142,7 +142,7 @@ internal static class Program
         context.WriteLine("  --log <file>               Write output to log file");
         context.WriteLine("  --sarif <file>             SARIF file to process");
         context.WriteLine("  --report <file>            Export analysis results to markdown file");
-        context.WriteLine("  --report-depth <depth>     Markdown header depth for report (default: 1)");
+        context.WriteLine("  --depth <depth>            Markdown header depth for report (default: 1)");
         context.WriteLine("  --heading <text>           Custom heading for report (default: [ToolName] Analysis)");
     }
 

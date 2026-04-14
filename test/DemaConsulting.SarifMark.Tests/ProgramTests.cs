@@ -115,7 +115,7 @@ public class ProgramTests
             Assert.Contains("--log", output);
             Assert.Contains("--sarif", output);
             Assert.MatchesRegex(@"--report(?!-)", output);
-            Assert.Contains("--report-depth", output);
+            Assert.Contains("--depth", output);
             Assert.Contains("--heading", output);
         }
         finally

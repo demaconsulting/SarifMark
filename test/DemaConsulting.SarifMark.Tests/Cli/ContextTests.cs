@@ -424,7 +424,53 @@ public class ContextTests
     }
 
     /// <summary>
-    ///     Test that creating a context with --report-depth parameter sets ReportDepth property.
+    ///     Test that creating a context with --depth parameter sets ReportDepth property.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_DepthParameter_SetsReportDepth()
+    {
+        // Act
+        using var context = Context.Create(["--depth", "3"]);
+
+        // Assert
+        Assert.AreEqual(3, context.ReportDepth);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --depth but no value throws exception.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_DepthWithoutValue_ThrowsArgumentException()
+    {
+        // Act & Assert
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--depth"]));
+        Assert.Contains("--depth requires", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --depth and invalid value throws exception.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_DepthInvalidValue_ThrowsArgumentException()
+    {
+        // Act & Assert
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--depth", "invalid"]));
+        Assert.Contains("--depth requires a positive integer", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --depth and zero value throws exception.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_DepthZero_ThrowsArgumentException()
+    {
+        // Act & Assert
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--depth", "0"]));
+        Assert.Contains("--depth requires a positive integer", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with legacy --report-depth parameter sets ReportDepth property.
     /// </summary>
     [TestMethod]
     public void Context_Create_ReportDepthParameter_SetsReportDepth()
@@ -437,7 +483,7 @@ public class ContextTests
     }
 
     /// <summary>
-    ///     Test that creating a context with --report-depth but no value throws exception.
+    ///     Test that creating a context with legacy --report-depth but no value throws exception.
     /// </summary>
     [TestMethod]
     public void Context_Create_ReportDepthWithoutValue_ThrowsArgumentException()
@@ -448,7 +494,7 @@ public class ContextTests
     }
 
     /// <summary>
-    ///     Test that creating a context with --report-depth and invalid value throws exception.
+    ///     Test that creating a context with legacy --report-depth and invalid value throws exception.
     /// </summary>
     [TestMethod]
     public void Context_Create_ReportDepthInvalidValue_ThrowsArgumentException()
@@ -459,7 +505,7 @@ public class ContextTests
     }
 
     /// <summary>
-    ///     Test that creating a context with --report-depth and zero value throws exception.
+    ///     Test that creating a context with legacy --report-depth and zero value throws exception.
     /// </summary>
     [TestMethod]
     public void Context_Create_ReportDepthZero_ThrowsArgumentException()

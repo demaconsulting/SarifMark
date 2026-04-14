@@ -139,7 +139,7 @@ SarifMark supports the following command-line options:
 - `--log <file>`: Write console output to log file
 - `--sarif <file>`: SARIF file to process (required for analysis)
 - `--report <file>`: Export analysis results to markdown file
-- `--report-depth <depth>`: Markdown header depth for report (default: 1)
+- `--depth <depth>`: Markdown header depth for report (default: 1)
 - `--heading <text>`: Custom heading for report (default: [ToolName] Analysis)
 
 # Common Usage Patterns
@@ -165,7 +165,7 @@ sarifmark --sarif analysis.sarif --report report.md --heading "Security Analysis
 Control the markdown header depth in the report:
 
 ```bash
-sarifmark --sarif analysis.sarif --report report.md --report-depth 2
+sarifmark --sarif analysis.sarif --report report.md --depth 2
 ```
 
 This is useful when including the report in a larger document where you want the sections to be at a deeper level.
@@ -349,7 +349,7 @@ This is useful in CI/CD pipelines to fail builds when quality issues are detecte
 Yes, you can customize:
 
 - **Heading**: Use `--heading "Custom Title"` to set a custom report heading
-- **Header Depth**: Use `--report-depth 2` to adjust the markdown header level (useful when including the report in
+- **Header Depth**: Use `--depth 2` to adjust the markdown header level (useful when including the report in
   a larger document)
 
 The report content format is standardized but these options allow you to integrate reports into different documentation

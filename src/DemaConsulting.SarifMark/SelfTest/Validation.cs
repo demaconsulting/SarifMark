@@ -130,6 +130,8 @@ internal static class Validation
     /// <param name="testResults">The test results collection.</param>
     private static void RunMarkdownReportGenerationTest(Context context, DemaConsulting.TestResults.TestResults testResults)
     {
+        var depthArgs = new[] { "--depth", context.ReportDepth.ToString() };
+        var headingPrefix = new string('#', context.ReportDepth);
         RunValidationTest(
             context,
             testResults,
@@ -147,14 +149,15 @@ internal static class Validation
                     return "Report file not created";
                 }
 
-                if (reportContent.Contains("MockTool Analysis") &&
+                if (reportContent.Contains($"{headingPrefix} MockTool Analysis") &&
                     reportContent.Contains("Found 2 issues"))
                 {
                     return null;
                 }
 
                 return "Report file missing expected content";
-            });
+            },
+            depthArgs);
     }
 
     /// <summary>

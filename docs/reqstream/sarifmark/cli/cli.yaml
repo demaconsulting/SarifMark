@@ -128,7 +128,7 @@ sections:
               - Cli_ReportParameter_SetsReportFilePath
 
           - id: SarifMark-Cli-ReportDepth
-            title: The CLI shall accept a heading depth via the --report-depth parameter.
+            title: The CLI shall accept a heading depth via the --depth parameter.
             justification: >-
               Exposing a validated heading depth parameter allows the application layer to control markdown
               report heading levels without reimplementing argument parsing or range checking.
@@ -136,7 +136,7 @@ sections:
             children:
               - SarifMark-Context-ReportDepthParam
             tests:
-              - Cli_ReportDepthParameter_SetsReportDepth
+              - Cli_DepthParameter_SetsReportDepth
 
           - id: SarifMark-Cli-Heading
             title: The CLI shall accept a custom heading via the --heading parameter.

@@ -328,7 +328,7 @@ public class IntegrationTests
     }
 
     /// <summary>
-    ///     Test that report depth parameter is configurable.
+    ///     Test that depth parameter is configurable.
     /// </summary>
     [TestMethod]
     public void IntegrationTest_ReportDepth_IsConfigurable()
@@ -338,6 +338,46 @@ public class IntegrationTests
         Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-report-depth-{Guid.NewGuid()}.md");
+
+        try
+        {
+            // Act
+            var exitCode = Runner.Run(
+                out _,
+                "dotnet",
+                _dllPath,
+                "--sarif", sarifFile,
+                "--report", reportFile,
+                "--depth", "3");
+
+            // Assert
+            Assert.AreEqual(0, exitCode);
+            Assert.IsTrue(File.Exists(reportFile), "Report file was not created");
+
+            var reportContent = File.ReadAllText(reportFile);
+            Assert.Contains("### TestTool Analysis", reportContent);
+        }
+        finally
+        {
+            // Clean up the temporary report file
+            if (File.Exists(reportFile))
+            {
+                File.Delete(reportFile);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Test that legacy report-depth parameter is still accepted.
+    /// </summary>
+    [TestMethod]
+    public void IntegrationTest_LegacyReportDepth_IsAccepted()
+    {
+        // Arrange
+        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
+        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+
+        var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-legacy-report-depth-{Guid.NewGuid()}.md");
 
         try
         {
