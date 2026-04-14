@@ -1025,4 +1025,176 @@ public class SarifResultsTests
         Assert.AreEqual("TEST003", results.Results[1].RuleId);
         Assert.AreEqual("Another unsuppressed error", results.Results[1].Message);
     }
+
+    /// <summary>
+    ///     Test that Read returns zero file count when no artifacts array is present.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_Read_NoArtifacts_ReturnsZeroFileCount()
+    {
+        // Arrange
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "no-artifacts.sarif");
+        File.WriteAllText(filePath, """
+            {
+                "version": "2.1.0",
+                "runs": [
+                    {
+                        "tool": {
+                            "driver": {
+                                "name": "TestTool",
+                                "version": "1.0.0"
+                            }
+                        }
+                    }
+                ]
+            }
+            """);
+
+        // Act
+        var results = SarifResults.Read(filePath);
+
+        // Assert - no artifacts array means zero file count
+        Assert.AreEqual(0, results.FileCount);
+    }
+
+    /// <summary>
+    ///     Test that Read sums artifacts across all runs.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_Read_WithArtifacts_ReturnsFileCount()
+    {
+        // Arrange
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "with-artifacts.sarif");
+        File.WriteAllText(filePath, """
+            {
+                "version": "2.1.0",
+                "runs": [
+                    {
+                        "tool": {
+                            "driver": {
+                                "name": "TestTool",
+                                "version": "1.0.0"
+                            }
+                        },
+                        "artifacts": [
+                            { "location": { "uri": "src/File1.cs" } },
+                            { "location": { "uri": "src/File2.cs" } },
+                            { "location": { "uri": "src/File3.cs" } }
+                        ]
+                    }
+                ]
+            }
+            """);
+
+        // Act
+        var results = SarifResults.Read(filePath);
+
+        // Assert - file count equals the number of artifacts
+        Assert.AreEqual(3, results.FileCount);
+    }
+
+    /// <summary>
+    ///     Test that Read uses only the first run's artifacts for the file count.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_Read_WithArtifactsInMultipleRuns_UsesFirstRunFileCount()
+    {
+        // Arrange
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "multi-run-artifacts.sarif");
+        File.WriteAllText(filePath, """
+            {
+                "version": "2.1.0",
+                "runs": [
+                    {
+                        "tool": {
+                            "driver": {
+                                "name": "TestTool",
+                                "version": "1.0.0"
+                            }
+                        },
+                        "artifacts": [
+                            { "location": { "uri": "src/File1.cs" } },
+                            { "location": { "uri": "src/File2.cs" } }
+                        ]
+                    },
+                    {
+                        "tool": {
+                            "driver": {
+                                "name": "TestTool",
+                                "version": "1.0.0"
+                            }
+                        },
+                        "artifacts": [
+                            { "location": { "uri": "src/File3.cs" } }
+                        ]
+                    }
+                ]
+            }
+            """);
+
+        // Act
+        var results = SarifResults.Read(filePath);
+
+        // Assert - file count reflects only the first run's artifacts
+        Assert.AreEqual(2, results.FileCount);
+    }
+
+    /// <summary>
+    ///     Test that the internal constructor stores the file count.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_InternalConstructor_WithFileCount_StoresFileCount()
+    {
+        // Arrange & Act
+        var results = new SarifResults("TestTool", "1.0.0", [], fileCount: 42);
+
+        // Assert
+        Assert.AreEqual(42, results.FileCount);
+    }
+
+    /// <summary>
+    ///     Test that the internal constructor defaults file count to zero.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_InternalConstructor_WithoutFileCount_DefaultsToZero()
+    {
+        // Arrange & Act
+        var results = new SarifResults("TestTool", "1.0.0", []);
+
+        // Assert
+        Assert.AreEqual(0, results.FileCount);
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown includes the file count in the header.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_ToMarkdown_ShowsFileCount()
+    {
+        // Arrange
+        var results = new SarifResults("TestTool", "1.0.0", [], fileCount: 5);
+
+        // Act
+        var markdown = results.ToMarkdown(1);
+
+        // Assert
+        Assert.Contains("**Files:** 5", markdown);
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown shows zero file count when no files were analyzed.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_ToMarkdown_ZeroFileCount_ShowsZero()
+    {
+        // Arrange
+        var results = new SarifResults("TestTool", "1.0.0", []);
+
+        // Act
+        var markdown = results.ToMarkdown(1);
+
+        // Assert
+        Assert.Contains("**Files:** 0", markdown);
+    }
 }
+

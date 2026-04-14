@@ -194,4 +194,22 @@ public class SarifTests
         // Assert
         Assert.Contains("Custom Analysis Heading", reportContent);
     }
+
+    /// <summary>
+    ///     Test that a generated report contains the file count.
+    /// </summary>
+    [TestMethod]
+    public void Sarif_Report_ContainsFileCount()
+    {
+        // Arrange
+        var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
+        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+
+        // Act
+        var results = SarifResults.Read(sarifFile);
+        var reportContent = results.ToMarkdown(1);
+
+        // Assert
+        Assert.Contains("**Files:** 2", reportContent);
+    }
 }

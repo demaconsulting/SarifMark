@@ -49,16 +49,23 @@ public record SarifResults
     public int ResultCount => Results.Count;
 
     /// <summary>
+    ///     Gets the total number of files analyzed (sum of artifact counts across all runs).
+    /// </summary>
+    public int FileCount { get; }
+
+    /// <summary>
     ///     Internal constructor to enforce that instances are only created through the validated parsing pipeline.
     /// </summary>
     /// <param name="toolName">The name of the analysis tool.</param>
     /// <param name="toolVersion">The version of the analysis tool.</param>
     /// <param name="results">The collection of results/issues.</param>
-    internal SarifResults(string toolName, string toolVersion, IReadOnlyList<SarifResult> results)
+    /// <param name="fileCount">The total number of files analyzed.</param>
+    internal SarifResults(string toolName, string toolVersion, IReadOnlyList<SarifResult> results, int fileCount = 0)
     {
         ToolName = toolName;
         ToolVersion = toolVersion;
         Results = results;
+        FileCount = fileCount;
     }
 
     /// <summary>
@@ -90,8 +97,9 @@ public record SarifResults
             var firstRun = ValidateSarifStructure(root);
             var (toolName, toolVersion) = ExtractToolInformation(firstRun);
             var results = ParseResults(firstRun);
+            var fileCount = ExtractFileCount(firstRun);
 
-            return new SarifResults(toolName, toolVersion, results);
+            return new SarifResults(toolName, toolVersion, results, fileCount);
         }
         catch (JsonException ex)
         {
@@ -221,6 +229,22 @@ public record SarifResults
         }
 
         return results;
+    }
+
+    /// <summary>
+    ///     Extracts the file count from the 'artifacts' array of the run element.
+    /// </summary>
+    /// <param name="runElement">The run JSON element.</param>
+    /// <returns>The number of artifacts in the run, or zero if the artifacts array is absent.</returns>
+    private static int ExtractFileCount(JsonElement runElement)
+    {
+        if (runElement.TryGetProperty("artifacts", out var artifactsElement) &&
+            artifactsElement.ValueKind == JsonValueKind.Array)
+        {
+            return artifactsElement.GetArrayLength();
+        }
+
+        return 0;
     }
 
     /// <summary>
@@ -375,6 +399,9 @@ public record SarifResults
 
         // Add tool info on separate line
         sb.AppendLine($"**Tool:** {ToolName} {ToolVersion}");
+
+        // Add file count on separate line
+        sb.AppendLine($"**Files:** {FileCount}");
         sb.AppendLine();
     }
 
