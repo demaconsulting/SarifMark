@@ -12,7 +12,7 @@ sections:
               stages without repeated JSON traversal.
             tags: [internal]
             tests:
-              - SarifResults_InternalConstructor_CreatesValidInstance
+              - SarifResult_InternalConstructor_StoresAllProperties
 
           - id: SarifMark-SarifResult-Uri
             title: The SarifResult record shall store an optional file URI for the result location.
@@ -22,7 +22,7 @@ sections:
               for results that have no associated file.
             tags: [internal]
             tests:
-              - SarifResults_Read_WithLocations_ReturnsResultsWithLocationData
+              - SarifResult_Uri_CanBeNull
 
           - id: SarifMark-SarifResult-StartLine
             title: The SarifResult record shall store an optional start line number for the result location.
@@ -32,7 +32,7 @@ sections:
               gracefully omitting it when not.
             tags: [internal]
             tests:
-              - SarifResults_Read_WithLocations_ReturnsResultsWithLocationData
+              - SarifResult_StartLine_CanBeNull
 
           - id: SarifMark-SarifResult-Internal
             title: The SarifResult record shall only be constructible by internal code.
@@ -42,4 +42,4 @@ sections:
               invalid or inconsistent result objects.
             tags: [internal]
             tests:
-              - SarifResults_InternalConstructor_CreatesValidInstance
+              - SarifResult_InternalConstructor_StoresAllProperties

@@ -4,18 +4,6 @@ sections:
     sections:
       - title: SarifResults Record
         requirements:
-          - id: SarifMark-SarifResults-Properties
-            title: >-
-              The SarifResults record shall expose Runs and HasIssues properties.
-            justification: >-
-              Exposing the Runs collection and the HasIssues aggregate provides consumers with full access
-              to parsed SARIF content and a convenient check for enforcement logic, without exposing raw
-              JSON nodes and keeping the public surface area clean and intentional.
-            tags: [internal]
-            tests:
-              - SarifResults_Runs_SingleRun_ReturnsSingleRun
-              - SarifResults_Read_MultipleRuns_ReturnsAllRuns
-
           - id: SarifMark-SarifResults-ValidatePath
             title: The Read method shall validate the file path is non-null, non-empty, and the file exists.
             justification: >-
