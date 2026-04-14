@@ -147,6 +147,14 @@ reviews:
       - "src/**/Sarif/SarifResults.cs"
       - "test/**/Sarif/SarifResultsTests.cs"
 
+  - id: SarifMark-Sarif-SarifRun
+    title: Review that SarifMark Sarif SarifRun Implementation is Correct
+    paths:
+      - "docs/reqstream/sarifmark/sarif/sarif-run.yaml"
+      - "docs/design/sarifmark/sarif/sarif-run.md"
+      - "src/**/Sarif/SarifRun.cs"
+      - "test/**/Sarif/SarifRunTests.cs"
+
   - id: SarifMark-SelfTest-Validation
     title: Review that SarifMark SelfTest Validation Implementation is Correct
     paths:

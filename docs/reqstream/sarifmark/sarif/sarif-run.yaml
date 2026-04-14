@@ -1,0 +1,47 @@
+---
+sections:
+  - title: Design Specifications
+    sections:
+      - title: SarifRun Record
+        requirements:
+          - id: SarifMark-SarifRun-Properties
+            title: >-
+              The SarifRun record shall expose ToolName, ToolVersion, FileCount, Results,
+              ResultCount, and HasIssues properties.
+            justification: >-
+              Exposing these properties provides consumers with all the information needed
+              to identify a tool run and check for issues.
+            tags: [internal]
+            tests:
+              - SarifRun_InternalConstructor_CreatesValidInstance
+
+          - id: SarifMark-SarifRun-HasIssues
+            title: The HasIssues property shall return true if any results are present.
+            justification: >-
+              HasIssues provides a convenient way to check if a run has any findings
+              without needing to check ResultCount directly.
+            tags: [internal]
+            tests:
+              - SarifRun_HasIssues_NoResults_ReturnsFalse
+              - SarifRun_HasIssues_WithResults_ReturnsTrue
+
+          - id: SarifMark-SarifRun-ToMarkdown
+            title: The ToMarkdown method shall generate a complete markdown report for a single run.
+            justification: >-
+              Generating the full report from a single method call provides a cohesive output
+              document for a single tool run.
+            tags: [internal]
+            tests:
+              - SarifRun_ToMarkdown_Depth1_ProducesCorrectOutput
+              - SarifRun_ToMarkdown_CustomHeading_UsesProvidedHeading
+              - SarifRun_ToMarkdown_NullHeading_UsesDefaultHeading
+
+          - id: SarifMark-SarifRun-ValidateDepth
+            title: The ToMarkdown method shall validate that the depth argument is between 1 and 6 inclusive.
+            justification: >-
+              Restricting depth to the valid markdown heading range of 1-6 prevents generation of
+              invalid markdown syntax.
+            tags: [internal]
+            tests:
+              - SarifRun_ToMarkdown_DepthLessThan1_ThrowsArgumentOutOfRangeException
+              - SarifRun_ToMarkdown_DepthGreaterThan6_ThrowsArgumentOutOfRangeException

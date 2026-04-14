@@ -29,29 +29,39 @@ namespace DemaConsulting.SarifMark;
 public record SarifResults
 {
     /// <summary>
-    ///     Gets the name of the analysis tool.
+    ///     Gets the collection of all parsed runs.
     /// </summary>
-    public string ToolName { get; }
+    public IReadOnlyList<SarifRun> Runs { get; }
 
     /// <summary>
-    ///     Gets the version of the analysis tool.
+    ///     Gets the name of the analysis tool (from the first run).
     /// </summary>
-    public string ToolVersion { get; }
+    public string ToolName => Runs[0].ToolName;
 
     /// <summary>
-    ///     Gets the collection of results/issues found.
+    ///     Gets the version of the analysis tool (from the first run).
     /// </summary>
-    public IReadOnlyList<SarifResult> Results { get; }
+    public string ToolVersion => Runs[0].ToolVersion;
 
     /// <summary>
-    ///     Gets the total number of results/issues found.
+    ///     Gets the collection of results/issues found (from the first run).
     /// </summary>
-    public int ResultCount => Results.Count;
+    public IReadOnlyList<SarifResult> Results => Runs[0].Results;
 
     /// <summary>
-    ///     Gets the total number of files analyzed (sum of artifact counts across all runs).
+    ///     Gets the total number of results/issues found (from the first run).
     /// </summary>
-    public int FileCount { get; }
+    public int ResultCount => Runs[0].ResultCount;
+
+    /// <summary>
+    ///     Gets the total number of files analyzed (from the first run).
+    /// </summary>
+    public int FileCount => Runs[0].FileCount;
+
+    /// <summary>
+    ///     Gets a value indicating whether any run contains results.
+    /// </summary>
+    public bool HasIssues => Runs.Any(r => r.HasIssues);
 
     /// <summary>
     ///     Internal constructor to enforce that instances are only created through the validated parsing pipeline.
@@ -62,10 +72,16 @@ public record SarifResults
     /// <param name="fileCount">The total number of files analyzed.</param>
     internal SarifResults(string toolName, string toolVersion, IReadOnlyList<SarifResult> results, int fileCount = 0)
     {
-        ToolName = toolName;
-        ToolVersion = toolVersion;
-        Results = results;
-        FileCount = fileCount;
+        Runs = [new SarifRun(toolName, toolVersion, results, fileCount)];
+    }
+
+    /// <summary>
+    ///     Internal constructor for multi-run SARIF files.
+    /// </summary>
+    /// <param name="runs">The collection of parsed runs.</param>
+    internal SarifResults(IReadOnlyList<SarifRun> runs)
+    {
+        Runs = runs;
     }
 
     /// <summary>
@@ -94,12 +110,17 @@ public record SarifResults
             using var document = JsonDocument.Parse(json);
             var root = document.RootElement;
 
-            var firstRun = ValidateSarifStructure(root);
-            var (toolName, toolVersion) = ExtractToolInformation(firstRun);
-            var results = ParseResults(firstRun);
-            var fileCount = ExtractFileCount(firstRun);
+            var runsElement = ValidateSarifStructure(root);
+            var runs = new List<SarifRun>();
+            foreach (var runElement in runsElement.EnumerateArray())
+            {
+                var (toolName, toolVersion) = ExtractToolInformation(runElement);
+                var results = ParseResults(runElement);
+                var fileCount = ExtractFileCount(runElement);
+                runs.Add(new SarifRun(toolName, toolVersion, results, fileCount));
+            }
 
-            return new SarifResults(toolName, toolVersion, results, fileCount);
+            return new SarifResults(runs);
         }
         catch (JsonException ex)
         {
@@ -108,10 +129,10 @@ public record SarifResults
     }
 
     /// <summary>
-    ///     Validates the SARIF file structure and returns the first run element.
+    ///     Validates the SARIF file structure and returns the runs array element.
     /// </summary>
     /// <param name="root">The root JSON element.</param>
-    /// <returns>The first run element.</returns>
+    /// <returns>The runs array element.</returns>
     /// <exception cref="InvalidOperationException">Thrown when the SARIF structure is invalid.</exception>
     private static JsonElement ValidateSarifStructure(JsonElement root)
     {
@@ -125,13 +146,12 @@ public record SarifResults
             throw new InvalidOperationException("Invalid SARIF file: missing or invalid 'runs' array.");
         }
 
-        var runsEnumerator = runsElement.EnumerateArray();
-        if (!runsEnumerator.MoveNext())
+        if (runsElement.GetArrayLength() == 0)
         {
             throw new InvalidOperationException("Invalid SARIF file: 'runs' array is empty.");
         }
 
-        return runsEnumerator.Current;
+        return runsElement;
     }
 
     /// <summary>
@@ -373,92 +393,22 @@ public record SarifResults
             throw new ArgumentOutOfRangeException(nameof(depth), depth, "Depth must be between 1 and 6");
         }
 
-        var mainHeading = new string('#', depth);
-        var subHeadingDepth = Math.Min(depth + 1, 6);
-        var subHeading = new string('#', subHeadingDepth);
-        var sb = new StringBuilder();
+        if (Runs.Count == 1)
+        {
+            return Runs[0].ToMarkdown(depth, heading);
+        }
 
-        AppendHeader(sb, mainHeading, heading);
-        AppendIssuesSection(sb, subHeading);
+        // Multi-run: concatenate all runs with indexed headings
+        var sb = new StringBuilder();
+        for (var i = 0; i < Runs.Count; i++)
+        {
+            var run = Runs[i];
+            var runHeading = heading != null
+                ? $"{heading} (#{i + 1})"
+                : $"{run.ToolName} Analysis (#{i + 1})";
+            sb.Append(run.ToMarkdown(depth, runHeading));
+        }
 
         return sb.ToString();
-    }
-
-    /// <summary>
-    ///     Appends the header section with custom or default heading and tool information.
-    /// </summary>
-    /// <param name="sb">The StringBuilder to append to.</param>
-    /// <param name="heading">The markdown heading prefix (e.g., "#", "##", "###").</param>
-    /// <param name="customHeading">Optional custom heading text. If null, defaults to "[ToolName] Analysis".</param>
-    private void AppendHeader(StringBuilder sb, string heading, string? customHeading)
-    {
-        // Use custom heading or default to "[ToolName] Analysis"
-        var headingText = customHeading ?? $"{ToolName} Analysis";
-        sb.AppendLine($"{heading} {headingText}");
-        sb.AppendLine();
-
-        // Add tool info on separate line
-        sb.AppendLine($"**Tool:** {ToolName} {ToolVersion}");
-
-        // Add file count on separate line
-        sb.AppendLine($"**Files:** {FileCount}");
-        sb.AppendLine();
-    }
-
-    /// <summary>
-    ///     Appends the issues section with count and details.
-    /// </summary>
-    /// <param name="sb">The StringBuilder to append to.</param>
-    /// <param name="subHeading">The markdown heading prefix for the Issues section.</param>
-    private void AppendIssuesSection(StringBuilder sb, string subHeading)
-    {
-        sb.AppendLine($"{subHeading} Issues");
-        sb.AppendLine();
-
-        sb.AppendLine(FormatFoundText(Results.Count, "issue"));
-        sb.AppendLine();
-
-        if (Results.Count > 0)
-        {
-            foreach (var result in Results)
-            {
-                var locationInfo = FormatLocation(result.Uri, result.StartLine);
-                sb.AppendLine($"{locationInfo}: {result.Level} [{result.RuleId}] {result.Message}  ");
-            }
-
-            sb.AppendLine();
-        }
-    }
-
-    /// <summary>
-    ///     Formats a count with proper pluralization and "Found" prefix.
-    /// </summary>
-    /// <param name="count">The count value.</param>
-    /// <param name="singularNoun">The singular form of the noun.</param>
-    /// <returns>Formatted text like "Found no issues", "Found 1 issue", or "Found 5 issues".</returns>
-    private static string FormatFoundText(int count, string singularNoun)
-    {
-        return count switch
-        {
-            0 => $"Found no {singularNoun}s",
-            1 => $"Found 1 {singularNoun}",
-            _ => $"Found {count} {singularNoun}s"
-        };
-    }
-
-    /// <summary>
-    ///     Formats the location information for a result.
-    /// </summary>
-    /// <param name="uri">The file URI.</param>
-    /// <param name="startLine">The starting line number.</param>
-    /// <returns>Formatted location string.</returns>
-    private static string FormatLocation(string? uri, int? startLine)
-    {
-        if (string.IsNullOrWhiteSpace(uri))
-        {
-            return "(no location)";
-        }
-
-        return startLine.HasValue ? $"{uri}({startLine})" : uri;
     }
 }

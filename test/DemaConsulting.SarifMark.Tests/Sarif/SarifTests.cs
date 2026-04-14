@@ -212,4 +212,21 @@ public class SarifTests
         // Assert
         Assert.Contains("**Files:** 2", reportContent);
     }
+
+    /// <summary>
+    ///     Test that a multi-run SARIF file is processed correctly and all runs are returned.
+    /// </summary>
+    [TestMethod]
+    public void Sarif_MultiRunSarifFile_ProcessesAllRuns()
+    {
+        // Arrange
+        var sarifFile = Path.Combine(_testDataPath, "multi-run.sarif");
+        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+
+        // Act
+        var results = SarifResults.Read(sarifFile);
+
+        // Assert
+        Assert.AreEqual(2, results.Runs.Count);
+    }
 }

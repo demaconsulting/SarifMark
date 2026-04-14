@@ -1196,5 +1196,103 @@ public class SarifResultsTests
         // Assert
         Assert.Contains("**Files:** 0", markdown);
     }
+
+    /// <summary>
+    ///     Test that Runs property returns a single run for a single-run SarifResults.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_Runs_SingleRun_ReturnsSingleRun()
+    {
+        // Arrange & Act
+        var results = new SarifResults("TestTool", "1.0.0", []);
+
+        // Assert
+        Assert.AreEqual(1, results.Runs.Count);
+        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
+    }
+
+    /// <summary>
+    ///     Test that HasIssues returns false when there are no issues.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_HasIssues_NoIssues_ReturnsFalse()
+    {
+        // Arrange & Act
+        var results = new SarifResults("TestTool", "1.0.0", []);
+
+        // Assert
+        Assert.IsFalse(results.HasIssues);
+    }
+
+    /// <summary>
+    ///     Test that HasIssues returns true when there are issues.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_HasIssues_WithIssues_ReturnsTrue()
+    {
+        // Arrange
+        var sarifResults2 = new List<SarifResult> { new SarifResult("R1", "warning", "msg", null, null) };
+
+        // Act
+        var results = new SarifResults("TestTool", "1.0.0", sarifResults2);
+
+        // Assert
+        Assert.IsTrue(results.HasIssues);
+    }
+
+    /// <summary>
+    ///     Test that HasIssues returns true when any run has issues.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_HasIssues_AnyRunHasIssues_ReturnsTrue()
+    {
+        // Arrange
+        var run1 = new SarifRun("Tool1", "1.0", [], 0);
+        var run2Results = new List<SarifResult> { new SarifResult("R1", "warning", "msg", null, null) };
+        var run2 = new SarifRun("Tool2", "2.0", run2Results, 0);
+
+        // Act
+        var results = new SarifResults(new List<SarifRun> { run1, run2 });
+
+        // Assert
+        Assert.IsTrue(results.HasIssues);
+    }
+
+    /// <summary>
+    ///     Test that Read parses all runs in a multi-run SARIF file.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_Read_MultipleRuns_ReturnsAllRuns()
+    {
+        // Arrange
+        var sarifFile = PathHelpers.SafePathCombine(Path.Combine(AppContext.BaseDirectory, "TestData"), "multi-run.sarif");
+
+        // Act
+        var results = SarifResults.Read(sarifFile);
+
+        // Assert
+        Assert.AreEqual(2, results.Runs.Count);
+        Assert.AreEqual("Tool1", results.Runs[0].ToolName);
+        Assert.AreEqual("Tool2", results.Runs[1].ToolName);
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown for multi-run files includes run indices.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_ToMarkdown_MultipleRuns_IncludesRunIndices()
+    {
+        // Arrange
+        var run1 = new SarifRun("Tool1", "1.0", [], 0);
+        var run2 = new SarifRun("Tool2", "2.0", [], 0);
+        var results = new SarifResults(new List<SarifRun> { run1, run2 });
+
+        // Act
+        var md = results.ToMarkdown(1);
+
+        // Assert
+        Assert.Contains("(#1)", md);
+        Assert.Contains("(#2)", md);
+    }
 }
 

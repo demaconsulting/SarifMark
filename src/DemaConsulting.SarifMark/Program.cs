@@ -182,7 +182,7 @@ internal static class Program
         }
 
         // Check enforcement if requested
-        if (context.Enforce && sarifResults.ResultCount > 0)
+        if (context.Enforce && sarifResults.HasIssues)
         {
             context.WriteError("Error: Issues found in SARIF file");
         }

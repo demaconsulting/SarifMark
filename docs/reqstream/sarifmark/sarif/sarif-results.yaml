@@ -162,3 +162,37 @@ sections:
               - SarifResults_Read_WithArtifactsInMultipleRuns_UsesFirstRunFileCount
               - SarifResults_ToMarkdown_ShowsFileCount
               - SarifResults_ToMarkdown_ZeroFileCount_ShowsZero
+
+          - id: SarifMark-SarifResults-Runs
+            title: The SarifResults record shall expose a Runs collection containing all parsed runs.
+            justification: >-
+              Exposing all runs provides consumers with full access to multi-run SARIF files,
+              enabling reporting across all runs from different tools.
+            tags: [internal]
+            tests:
+              - SarifResults_Runs_SingleRun_ReturnsSingleRun
+              - SarifResults_Read_MultipleRuns_ReturnsAllRuns
+
+          - id: SarifMark-SarifResults-HasIssues
+            title: The HasIssues property shall return true if any run contains results.
+            justification: >-
+              HasIssues provides a convenient aggregate check across all runs, simplifying
+              enforcement logic by not requiring callers to iterate all runs manually.
+            tags: [internal]
+            tests:
+              - SarifResults_HasIssues_NoIssues_ReturnsFalse
+              - SarifResults_HasIssues_WithIssues_ReturnsTrue
+              - SarifResults_HasIssues_AnyRunHasIssues_ReturnsTrue
+
+          - id: SarifMark-SarifResults-MultiRun
+            title: >-
+              The Read method shall parse all runs in a SARIF file and the ToMarkdown method
+              shall generate a combined report for multi-run files.
+            justification: >-
+              Full multi-run support ensures that SARIF files produced by tools that generate
+              multiple runs (e.g., running analysis on different targets) are handled correctly
+              and produce comprehensive reports.
+            tags: [internal]
+            tests:
+              - SarifResults_Read_MultipleRuns_ReturnsAllRuns
+              - SarifResults_ToMarkdown_MultipleRuns_IncludesRunIndices
