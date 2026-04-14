@@ -89,7 +89,7 @@ sections:
           - id: SarifMark-Context-ReportDepthParam
             title: >-
               The Create method shall parse --depth (and legacy --report-depth), validate it is a positive
-              integer, and set ReportDepth.
+              integer, and set Depth.
             justification: >-
               Validating the depth value at parse time prevents invalid heading levels from propagating into
               markdown generation, and defaulting to 1 ensures sensible behavior when the parameter is

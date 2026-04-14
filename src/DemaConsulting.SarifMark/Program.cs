@@ -193,7 +193,7 @@ internal static class Program
             context.WriteLine($"Writing report to {context.ReportFile}...");
             try
             {
-                var markdown = sarifResults.ToMarkdown(context.ReportDepth, context.Heading);
+                var markdown = sarifResults.ToMarkdown(context.Depth, context.Heading);
                 File.WriteAllText(context.ReportFile, markdown);
                 context.WriteLine("Report generated successfully.");
             }

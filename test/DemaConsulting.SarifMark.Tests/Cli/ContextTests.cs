@@ -424,7 +424,7 @@ public class ContextTests
     }
 
     /// <summary>
-    ///     Test that creating a context with --depth parameter sets ReportDepth property.
+    ///     Test that creating a context with --depth parameter sets Depth property.
     /// </summary>
     [TestMethod]
     public void Context_Create_DepthParameter_SetsReportDepth()
@@ -433,7 +433,7 @@ public class ContextTests
         using var context = Context.Create(["--depth", "3"]);
 
         // Assert
-        Assert.AreEqual(3, context.ReportDepth);
+        Assert.AreEqual(3, context.Depth);
     }
 
     /// <summary>
@@ -470,7 +470,7 @@ public class ContextTests
     }
 
     /// <summary>
-    ///     Test that creating a context with legacy --report-depth parameter sets ReportDepth property.
+    ///     Test that creating a context with legacy --report-depth parameter sets Depth property.
     /// </summary>
     [TestMethod]
     public void Context_Create_ReportDepthParameter_SetsReportDepth()
@@ -479,7 +479,7 @@ public class ContextTests
         using var context = Context.Create(["--report-depth", "3"]);
 
         // Assert
-        Assert.AreEqual(3, context.ReportDepth);
+        Assert.AreEqual(3, context.Depth);
     }
 
     /// <summary>

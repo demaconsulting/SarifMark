@@ -130,8 +130,8 @@ internal static class Validation
     /// <param name="testResults">The test results collection.</param>
     private static void RunMarkdownReportGenerationTest(Context context, DemaConsulting.TestResults.TestResults testResults)
     {
-        var depthArgs = new[] { "--depth", context.ReportDepth.ToString() };
-        var headingPrefix = new string('#', context.ReportDepth);
+        var depthArgs = new[] { "--depth", context.Depth.ToString() };
+        var headingPrefix = new string('#', context.Depth);
         RunValidationTest(
             context,
             testResults,

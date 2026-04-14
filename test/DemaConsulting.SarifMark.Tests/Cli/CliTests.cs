@@ -228,7 +228,7 @@ public class CliTests
         using var context = Context.Create(["--depth", "3"]);
 
         // Assert
-        Assert.AreEqual(3, context.ReportDepth);
+        Assert.AreEqual(3, context.Depth);
         Assert.AreEqual(0, context.ExitCode);
     }
 
@@ -242,7 +242,7 @@ public class CliTests
         using var context = Context.Create(["--report-depth", "3"]);
 
         // Assert
-        Assert.AreEqual(3, context.ReportDepth);
+        Assert.AreEqual(3, context.Depth);
         Assert.AreEqual(0, context.ExitCode);
     }
 
