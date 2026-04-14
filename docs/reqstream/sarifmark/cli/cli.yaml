@@ -137,6 +137,7 @@ sections:
               - SarifMark-Context-ReportDepthParam
             tests:
               - Cli_DepthParameter_SetsReportDepth
+              - SelfTest_DepthParameter_AffectsSelfValidationReport
 
           - id: SarifMark-Cli-Heading
             title: The CLI shall accept a custom heading via the --heading parameter.
