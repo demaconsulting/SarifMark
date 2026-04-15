@@ -278,7 +278,7 @@ sarifmark --sarif other-tool.sarif --report other-report.md --heading "Other Too
 
 SarifMark also supports SARIF files that contain multiple runs from different tools within a
 single file. When processing a multi-run SARIF file, SarifMark generates a combined report that
-includes a section for each run, with headings indexed as `"(#1)"`, `"(#2)"`, etc.
+includes a section for each run, with headings indexed as `(#1)`, `(#2)`, etc.
 
 # Report Format
 
