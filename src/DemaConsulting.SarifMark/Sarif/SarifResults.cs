@@ -366,7 +366,7 @@ public record SarifResults
         for (var i = 0; i < Runs.Count; i++)
         {
             var run = Runs[i];
-            var runHeading = heading != null
+            var runHeading = !string.IsNullOrWhiteSpace(heading)
                 ? $"{heading} (#{i + 1})"
                 : $"{run.ToolName} Analysis (#{i + 1})";
             sb.Append(run.ToMarkdown(depth, runHeading));
