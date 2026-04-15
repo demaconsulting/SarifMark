@@ -39,7 +39,7 @@ public record SarifResults
     public bool HasIssues => Runs.Any(r => r.HasIssues);
 
     /// <summary>
-    ///     Internal constructor for multi-run SARIF files.
+    ///     Internal constructor for SARIF results built from one or more parsed runs.
     /// </summary>
     /// <param name="runs">The collection of parsed runs.</param>
     internal SarifResults(IReadOnlyList<SarifRun> runs)
