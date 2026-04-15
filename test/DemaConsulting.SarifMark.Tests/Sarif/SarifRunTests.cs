@@ -187,6 +187,22 @@ public class SarifRunTests
     }
 
     /// <summary>
+    ///     Test that ToMarkdown with whitespace heading uses the default heading.
+    /// </summary>
+    [TestMethod]
+    public void SarifRun_ToMarkdown_WhitespaceHeading_UsesDefaultHeading()
+    {
+        // Arrange
+        var run = new SarifRun("MyTool", "1.0", [], 0);
+
+        // Act
+        var md = run.ToMarkdown(1, "   ");
+
+        // Assert
+        Assert.Contains("# MyTool Analysis", md);
+    }
+
+    /// <summary>
     ///     Test that ToMarkdown shows the file count.
     /// </summary>
     [TestMethod]

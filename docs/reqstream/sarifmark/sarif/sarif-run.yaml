@@ -37,6 +37,7 @@ sections:
               - SarifRun_ToMarkdown_ShowsFileCount
               - SarifRun_ToMarkdown_CustomHeading_UsesProvidedHeading
               - SarifRun_ToMarkdown_NullHeading_UsesDefaultHeading
+              - SarifRun_ToMarkdown_WhitespaceHeading_UsesDefaultHeading
 
           - id: SarifMark-SarifRun-ValidateDepth
             title: The ToMarkdown method shall validate that the depth argument is between 1 and 6 inclusive.
