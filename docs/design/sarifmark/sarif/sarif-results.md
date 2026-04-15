@@ -3,8 +3,8 @@
 ## Overview
 
 The `SarifResults` record (`SarifResults.cs`) is the primary public type for working with SARIF
-file content. It holds the tool metadata and the parsed list of results, and exposes both the
-`Read` static method for file loading and the `ToMarkdown` method for report generation.
+file content. It holds the collection of parsed runs and exposes both the `Read` static method
+for file loading and the `ToMarkdown` method for report generation.
 
 ## Record Design
 
@@ -13,20 +13,21 @@ only through `Read`; the record is immutable once constructed.
 
 ## Properties
 
-| Property      | Type                         | Description                             |
-|---------------|------------------------------|-----------------------------------------|
-| `ToolName`    | `string`                     | Name of the analysis tool               |
-| `ToolVersion` | `string`                     | Version of the analysis tool            |
-| `FileCount`   | `int`                        | Total number of files analyzed          |
-| `Results`     | `IReadOnlyList<SarifResult>` | Collection of non-suppressed results    |
-| `ResultCount` | `int`                        | Total number of results (derived count) |
+| Property      | Type                         | Description                                          |
+|---------------|------------------------------|------------------------------------------------------|
+| `Runs`        | `IReadOnlyList<SarifRun>`    | Collection of all parsed runs                        |
+| `HasIssues`   | `bool`                       | True if any run contains results (aggregate)         |
 
-These satisfy requirement `SarifMark-SarifResults-Properties`.
+`HasIssues` aggregates across all runs. Per-run data (tool name, version, results, file count) is
+accessed via the `Runs` collection.
+
+These satisfy requirements `SarifMark-SarifResults-Properties`, `SarifMark-SarifResults-Runs`,
+and `SarifMark-SarifResults-HasIssues`.
 
 ## Read Method
 
 The static `Read(string filePath)` method loads and parses a SARIF 2.1.0 file through a
-seven-step pipeline:
+pipeline:
 
 1. **Path validation** — throws `ArgumentException` if `filePath` is null, empty, or
    whitespace. This satisfies `SarifMark-SarifResults-ValidatePath`.
@@ -36,16 +37,15 @@ seven-step pipeline:
    `JsonDocument.Parse`. A `JsonException` is translated to `InvalidOperationException`.
    This satisfies `SarifMark-SarifResults-ValidateStructure`.
 4. **Structure validation** — delegates to `ValidateSarifStructure` to verify the `version`
-   and `runs` fields and return the first run element. This satisfies
+   and `runs` fields and return the runs array element. This satisfies
    `SarifMark-SarifResults-ValidateStructure`.
-5. **Tool extraction** — delegates to `ExtractToolInformation` to retrieve `ToolName` and
-   `ToolVersion` from `tool.driver`. This satisfies `SarifMark-SarifResults-ExtractTool`.
-6. **Result parsing** — delegates to `ParseResults` to iterate all non-suppressed results.
-   This satisfies `SarifMark-SarifResults-ParseResults` and `SarifMark-SarifResults-FilterSuppressions`.
-7. **File count extraction** — delegates to `ExtractFileCount` to sum the lengths of the
-   `artifacts` arrays across all runs. This satisfies `SarifMark-SarifResults-FileCount`.
-
-Together, steps 1–7 form the complete SARIF reading pipeline.
+5. **Per-run processing** — for each element in the runs array, delegates to
+   `ExtractToolInformation`, `ParseResults`, and `ExtractFileCount` to create a `SarifRun`.
+   This satisfies `SarifMark-SarifResults-ExtractTool`, `SarifMark-SarifResults-ParseResults`,
+   `SarifMark-SarifResults-FilterSuppressions`, `SarifMark-SarifResults-FileCount`, and
+   `SarifMark-SarifResults-MultiRun`.
+6. **Construction and return** — constructs and returns a `SarifResults` from the list of runs.
+   This satisfies `SarifMark-Sarif-Processing`.
 
 ## ValidateSarifStructure Method
 
@@ -54,8 +54,8 @@ Together, steps 1–7 form the complete SARIF reading pipeline.
 - A `version` property (any value is accepted; absence throws `InvalidOperationException`).
 - A `runs` array that is non-empty (absence or empty array throws `InvalidOperationException`).
 
-It returns the first element of the `runs` array for further processing. This satisfies
-requirement `SarifMark-SarifResults-ValidateStructure`.
+It returns the runs array element for iteration. This satisfies requirement
+`SarifMark-SarifResults-ValidateStructure`.
 
 ## ExtractToolInformation Method
 
@@ -82,7 +82,7 @@ yields a value, `"Unknown"` is returned. This satisfies requirement `SarifMark-S
 `ParseResults` iterates the `results` JSON array within the run element. If the array is absent or
 not an array, an empty list is returned. For each element, `IsSuppressed` checks whether a
 non-empty `suppressions` array is present; suppressed entries are skipped. Each remaining element
-is parsed into a `SarifResult` record. This satisfies requirements `SarifMark-SarifResults-ParseResults`
+is parsed into a `SarifFinding` record. This satisfies requirements `SarifMark-SarifResults-ParseResults`
 and `SarifMark-SarifResults-FilterSuppressions`.
 
 ## ToMarkdown Method
@@ -91,57 +91,29 @@ and `SarifMark-SarifResults-FilterSuppressions`.
 
 1. **Depth validation** — throws `ArgumentOutOfRangeException` if `depth` is less than 1 or
    greater than 6. This satisfies `SarifMark-SarifResults-ValidateDepth`.
-2. **Header** — calls `AppendHeader` to emit the main heading (using `heading` if provided, or
-   `"[ToolName] Analysis"` by default) followed by a `**Tool:**` line with name and version,
-   then a `**Files:**` line with the file count. The sub-heading level is `min(depth + 1, 6)`.
-   This satisfies `SarifMark-SarifResults-FileCount`.
-3. **Issues section** — calls `AppendIssuesSection` to emit the `Issues` sub-heading, the
-   result count formatted by `FormatFoundText`, and one line per result formatted by
-   `FormatLocation`. Each result line is appended with a trailing two-space markdown hard
-   line break (`  `) before the newline, satisfying requirement `SarifMark-Report-LineBreaks`.
-
-This satisfies requirement `SarifMark-SarifResults-ToMarkdown`.
-
-## FormatLocation Method
-
-`FormatLocation(string? uri, int? startLine)` produces the location prefix for each result line,
-treating a `uri` that is `null`, empty, or consists only of whitespace as missing:
-
-| `uri`                     | `startLine`  | Output           |
-|---------------------------|--------------|------------------|
-| null / empty / whitespace | any          | `(no location)`  |
-| set                       | null         | `uri`            |
-| set                       | set          | `uri(startLine)` |
-
-This satisfies requirement `SarifMark-SarifResults-FormatLocation`.
-
-## FormatFoundText Method
-
-`FormatFoundText(int count, string singularNoun)` produces a grammatically correct summary:
-
-| `count` | Output                        |
-|---------|-------------------------------|
-| `0`     | Found no {singularNoun}s      |
-| `1`     | Found 1 {singularNoun}        |
-| `> 1`   | Found {count} {singularNoun}s |
-
-This satisfies requirement `SarifMark-SarifResults-FormatCount`.
+2. **Single-run** — when there is exactly one run, delegates directly to
+   `Runs[0].ToMarkdown(depth, heading)`, producing output identical to the pre-multi-run
+   behavior. This satisfies `SarifMark-SarifResults-ToMarkdown`.
+3. **Multi-run** — when there are multiple runs, concatenates the markdown output of each run
+   with headings `"[ToolName] Analysis (#1)"`, `"[ToolName] Analysis (#2)"` etc. (or
+   `"[heading] (#1)"` if a custom heading is provided). This satisfies
+   `SarifMark-SarifResults-MultiRun`.
 
 ## ExtractFileCount Method
 
 `ExtractFileCount(JsonElement runElement)` returns the length of the `artifacts` array of the
-given run element (which is always the first run, already validated by `ValidateSarifStructure`):
+given run element:
 
 - If the `artifacts` property is absent or is not an array, `0` is returned.
 - Otherwise, the length of the `artifacts` array is returned.
 
-Using only the first run ensures the file count is consistent with the tool information and results,
-which are also drawn exclusively from the first run. The result is stored in the `FileCount` property
-and emitted as `**Files:** {FileCount}` in the `AppendHeader` output. This satisfies requirement
-`SarifMark-SarifResults-FileCount`.
+This method is called once per run element during `Read`, so each `SarifRun` in the resulting
+collection carries an independent file count from its own artifacts array. This satisfies
+requirement `SarifMark-SarifResults-FileCount`.
 
 ## Cross-References
 
-See the SarifResult Record document for the `SarifResult` record that `ParseResults` produces.
+See the SarifRun Record document for `SarifRun`, which is constructed per-run during SARIF parsing.
+See the SarifFinding Record document for the `SarifFinding` record that `ParseResults` produces.
 See the Program Class document for how `Read` and `ToMarkdown` are called from
 `ProcessSarifAnalysis`.

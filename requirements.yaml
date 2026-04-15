@@ -18,7 +18,8 @@ includes:
   - docs/reqstream/sarifmark/cli/context.yaml
   - docs/reqstream/sarifmark/sarif/sarif.yaml
   - docs/reqstream/sarifmark/sarif/report.yaml
-  - docs/reqstream/sarifmark/sarif/sarif-result.yaml
+  - docs/reqstream/sarifmark/sarif/sarif-run.yaml
+  - docs/reqstream/sarifmark/sarif/sarif-finding.yaml
   - docs/reqstream/sarifmark/sarif/sarif-results.yaml
   - docs/reqstream/sarifmark/self-test/self-test.yaml
   - docs/reqstream/sarifmark/self-test/validation.yaml

@@ -21,32 +21,32 @@
 namespace DemaConsulting.SarifMark;
 
 /// <summary>
-///     Represents a single result/issue from a SARIF file.
+///     Represents a single SARIF finding from a SARIF file.
 /// </summary>
-public record SarifResult
+public record SarifFinding
 {
     /// <summary>
-    ///     Gets the rule identifier for this result.
+    ///     Gets the rule identifier for this finding.
     /// </summary>
     public string RuleId { get; }
 
     /// <summary>
-    ///     Gets the level of the result (e.g., "error", "warning", "note").
+    ///     Gets the level of the finding (e.g., "error", "warning", "note").
     /// </summary>
     public string Level { get; }
 
     /// <summary>
-    ///     Gets the message text describing the result.
+    ///     Gets the message text describing the finding.
     /// </summary>
     public string Message { get; }
 
     /// <summary>
-    ///     Gets the file URI where the result was found.
+    ///     Gets the file URI where the finding was found.
     /// </summary>
     public string? Uri { get; }
 
     /// <summary>
-    ///     Gets the starting line number where the result was found.
+    ///     Gets the starting line number where the finding was found.
     /// </summary>
     public int? StartLine { get; }
 
@@ -54,11 +54,11 @@ public record SarifResult
     ///     Internal constructor to enforce that instances are only created through the validated parsing pipeline.
     /// </summary>
     /// <param name="ruleId">The rule identifier.</param>
-    /// <param name="level">The level of the result.</param>
+    /// <param name="level">The level of the finding.</param>
     /// <param name="message">The message text.</param>
     /// <param name="uri">The file URI.</param>
     /// <param name="startLine">The starting line number.</param>
-    internal SarifResult(string ruleId, string level, string message, string? uri, int? startLine)
+    internal SarifFinding(string ruleId, string level, string message, string? uri, int? startLine)
     {
         RuleId = ruleId;
         Level = level;

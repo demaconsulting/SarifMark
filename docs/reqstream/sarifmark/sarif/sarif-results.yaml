@@ -6,18 +6,14 @@ sections:
         requirements:
           - id: SarifMark-SarifResults-Properties
             title: >-
-              The SarifResults record shall expose ToolName, ToolVersion, FileCount, Results,
-              and ResultCount properties.
+              The SarifResults record shall expose Runs and HasIssues properties.
             justification: >-
-              Exposing these five properties provides consumers with all the information needed to generate
-              a complete report without exposing raw JSON nodes, keeping the public surface area clean and
-              intentional.
+              Exposing the Runs collection and the HasIssues aggregate provides consumers with full
+              access to parsed SARIF content and a convenient check for enforcement logic, without
+              exposing raw JSON nodes and keeping the public surface area clean and intentional.
             tags: [internal]
             tests:
-              - SarifResults_Read_NoResults_ReturnsValidResults
-              - SarifResults_InternalConstructor_CreatesValidInstance
-              - SarifResults_InternalConstructor_WithFileCount_StoresFileCount
-              - SarifResults_InternalConstructor_WithoutFileCount_DefaultsToZero
+              - SarifResults_InternalConstructor_ExposesRunsAndHasIssues
 
           - id: SarifMark-SarifResults-ValidatePath
             title: The Read method shall validate the file path is non-null, non-empty, and the file exists.
@@ -97,11 +93,11 @@ sections:
               - SarifResults_Read_WithSuppressedResults_ExcludesSuppressedResults
 
           - id: SarifMark-SarifResults-ToMarkdown
-            title: The ToMarkdown method shall generate a complete markdown report with heading, tool info, and results.
+            title: The ToMarkdown method shall dispatch report generation to the appropriate run(s).
             justification: >-
-              Generating the full report from a single method call provides a cohesive output document and
-              ensures that heading, tool attribution, count summary, and result details are always emitted
-              together in a consistent format.
+              For a single run, delegating directly to SarifRun.ToMarkdown preserves the output format.
+              For multiple runs, concatenating each run's output with indexed headings produces a
+              complete combined report. In both cases the caller needs only one method call.
             tags: [internal]
             tests:
               - SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput
@@ -109,6 +105,8 @@ sections:
               - SarifResults_ToMarkdown_NullHeading_UsesDefaultHeading
               - SarifResults_ToMarkdown_NoHeadingParameter_UsesDefaultHeading
               - SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks
+              - SarifResults_ToMarkdown_ShowsFileCount
+              - SarifResults_ToMarkdown_ZeroFileCount_ShowsZero
 
           - id: SarifMark-SarifResults-ValidateDepth
             title: The ToMarkdown method shall validate that the depth argument is between 1 and 6 inclusive.
@@ -123,42 +121,50 @@ sections:
               - SarifResults_ToMarkdown_Depth3_UsesCorrectHeadingLevels
               - SarifResults_ToMarkdown_Depth6_ProducesCorrectOutput
 
-          - id: SarifMark-SarifResults-FormatLocation
-            title: The FormatLocation helper shall return the most precise location string the data supports.
-            justification: >-
-              Producing the most precise location string the data supports ensures reports are as actionable
-              as possible, while gracefully degrading to partial or absent location information without
-              requiring special handling from callers.
-            tags: [internal]
-            tests:
-              - SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
-              - SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
-
-          - id: SarifMark-SarifResults-FormatCount
-            title: The FormatFoundText helper shall use singular form for one result and plural form otherwise.
-            justification: >-
-              Correct singular and plural forms produce grammatically accurate summaries that improve
-              readability and convey the right sense of magnitude, which is particularly important for
-              single-issue results where "1 issues" would be confusing.
-            tags: [internal]
-            tests:
-              - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
-              - SarifResults_ToMarkdown_OneResult_UsesSingularForm
-              - SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput
-
           - id: SarifMark-SarifResults-FileCount
             title: >-
-              The Read method shall calculate and expose the number of analyzed files
-              from the artifacts array of the first run.
+              The Read method shall extract the number of analyzed files from each run's artifacts array.
             justification: >-
-              Providing the file count gives consumers verifiable evidence that analysis was performed,
-              and including it in the generated report header lets stakeholders quickly assess the scope of
-              the analysis without reading the raw SARIF file. Using only the first run keeps the file
-              count consistent with the tool information and results that are also drawn from the first run.
+              Providing an independent file count per run gives consumers verifiable evidence that
+              analysis was performed on a known set of files. Including it in each run's generated
+              report header lets stakeholders quickly assess the scope of analysis for that run
+              without reading the raw SARIF file.
             tags: [internal]
             tests:
               - SarifResults_Read_NoArtifacts_ReturnsZeroFileCount
               - SarifResults_Read_WithArtifacts_ReturnsFileCount
-              - SarifResults_Read_WithArtifactsInMultipleRuns_UsesFirstRunFileCount
-              - SarifResults_ToMarkdown_ShowsFileCount
-              - SarifResults_ToMarkdown_ZeroFileCount_ShowsZero
+              - SarifResults_Read_MultipleRuns_EachRunHasOwnFileCount
+
+          - id: SarifMark-SarifResults-Runs
+            title: The SarifResults record shall expose a Runs collection containing all parsed runs.
+            justification: >-
+              Exposing all runs provides consumers with full access to multi-run SARIF files,
+              enabling reporting across all runs from different tools.
+            tags: [internal]
+            tests:
+              - SarifResults_Runs_SingleRun_ReturnsSingleRun
+              - SarifResults_Read_MultipleRuns_ReturnsAllRuns
+
+          - id: SarifMark-SarifResults-HasIssues
+            title: The HasIssues property shall return true if any run contains results.
+            justification: >-
+              HasIssues provides a convenient aggregate check across all runs, simplifying
+              enforcement logic by not requiring callers to iterate all runs manually.
+            tags: [internal]
+            tests:
+              - SarifResults_HasIssues_NoIssues_ReturnsFalse
+              - SarifResults_HasIssues_WithIssues_ReturnsTrue
+              - SarifResults_HasIssues_AnyRunHasIssues_ReturnsTrue
+
+          - id: SarifMark-SarifResults-MultiRun
+            title: >-
+              The Read method shall parse all runs in a SARIF file and the ToMarkdown method
+              shall generate a combined report for multi-run files.
+            justification: >-
+              Full multi-run support ensures that SARIF files produced by tools that generate
+              multiple runs (e.g., running analysis on different targets) are handled correctly
+              and produce comprehensive reports.
+            tags: [internal]
+            tests:
+              - SarifResults_Read_MultipleRuns_ReturnsAllRuns
+              - SarifResults_ToMarkdown_MultipleRuns_IncludesRunIndices

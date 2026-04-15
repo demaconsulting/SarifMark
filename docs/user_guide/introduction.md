@@ -21,7 +21,8 @@ This guide covers:
 
 ## Key Features
 
-- **SARIF Processing**: Read and parse SARIF files from any compatible static analysis tool
+- **SARIF Processing**: Read and parse SARIF files from any compatible static analysis tool,
+  including files with multiple runs from different tools
 - **Markdown Reports**: Generate human-readable markdown reports from SARIF data
 - **Self-Validation**: Built-in validation with test result output
 - **Configurable Output**: Customizable report depth and headings
@@ -274,6 +275,10 @@ sarifmark --sarif codeql.sarif --report codeql-report.md --heading "CodeQL Analy
 # Process other tool results
 sarifmark --sarif other-tool.sarif --report other-report.md --heading "Other Tool Analysis"
 ```
+
+SarifMark also supports SARIF files that contain multiple runs from different tools within a
+single file. When processing a multi-run SARIF file, SarifMark generates a combined report that
+includes a section for each run, with headings indexed as `(#1)`, `(#2)`, etc.
 
 # Report Format
 

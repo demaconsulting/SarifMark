@@ -15,7 +15,8 @@ input-files:
   - docs/design/sarifmark/cli/cli.md
   - docs/design/sarifmark/cli/context.md
   - docs/design/sarifmark/sarif/sarif.md
-  - docs/design/sarifmark/sarif/sarif-result.md
+  - docs/design/sarifmark/sarif/sarif-finding.md
+  - docs/design/sarifmark/sarif/sarif-run.md
   - docs/design/sarifmark/sarif/sarif-results.md
   - docs/design/sarifmark/self-test/self-test.md
   - docs/design/sarifmark/self-test/validation.md

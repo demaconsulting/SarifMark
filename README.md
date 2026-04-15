@@ -20,7 +20,7 @@ pipelines and documentation workflows.
 
 ## Features
 
-- 📄 **SARIF Processing** - Read and parse SARIF 2.1.0 format files
+- 📄 **SARIF Processing** - Read and parse SARIF 2.1.0 format files, including multi-run files
 - 📝 **Markdown Reports** - Generate human-readable reports from SARIF data
 - 🎯 **Customizable Output** - Configure report depth and custom headings
 - 🚀 **CI/CD Integration** - Enforce quality gates and fail builds on issues

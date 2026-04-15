@@ -1,0 +1,72 @@
+---
+sections:
+  - title: Design Specifications
+    sections:
+      - title: SarifRun Record
+        requirements:
+          - id: SarifMark-SarifRun-Properties
+            title: >-
+              The SarifRun record shall expose ToolName, ToolVersion, FileCount, Results,
+              ResultCount, and HasIssues properties.
+            justification: >-
+              Exposing these properties provides consumers with all the information needed
+              to identify a tool run and check for issues.
+            tags: [internal]
+            tests:
+              - SarifRun_InternalConstructor_CreatesValidInstance
+
+          - id: SarifMark-SarifRun-HasIssues
+            title: The HasIssues property shall return true if any results are present.
+            justification: >-
+              HasIssues provides a convenient way to check if a run has any findings
+              without needing to check ResultCount directly.
+            tags: [internal]
+            tests:
+              - SarifRun_HasIssues_NoResults_ReturnsFalse
+              - SarifRun_HasIssues_WithResults_ReturnsTrue
+
+          - id: SarifMark-SarifRun-ToMarkdown
+            title: The ToMarkdown method shall generate a complete markdown report for a single run.
+            justification: >-
+              Generating the full report from a single method call provides a cohesive output
+              document for a single tool run.
+            tags: [internal]
+            tests:
+              - SarifRun_ToMarkdown_Depth1_ProducesCorrectOutput
+              - SarifRun_ToMarkdown_WithResults_ShowsResults
+              - SarifRun_ToMarkdown_ShowsFileCount
+              - SarifRun_ToMarkdown_CustomHeading_UsesProvidedHeading
+              - SarifRun_ToMarkdown_NullHeading_UsesDefaultHeading
+              - SarifRun_ToMarkdown_WhitespaceHeading_UsesDefaultHeading
+
+          - id: SarifMark-SarifRun-ValidateDepth
+            title: The ToMarkdown method shall validate that the depth argument is between 1 and 6 inclusive.
+            justification: >-
+              Restricting depth to the valid markdown heading range of 1-6 prevents generation of
+              invalid markdown syntax.
+            tags: [internal]
+            tests:
+              - SarifRun_ToMarkdown_DepthLessThan1_ThrowsArgumentOutOfRangeException
+              - SarifRun_ToMarkdown_DepthGreaterThan6_ThrowsArgumentOutOfRangeException
+
+          - id: SarifMark-SarifRun-FormatLocation
+            title: The FormatLocation helper shall return the most precise location string the data supports.
+            justification: >-
+              Producing the most precise location string the data supports ensures reports are as actionable
+              as possible, while gracefully degrading to partial or absent location information without
+              requiring special handling from callers.
+            tags: [internal]
+            tests:
+              - SarifRun_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
+              - SarifRun_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
+
+          - id: SarifMark-SarifRun-FormatCount
+            title: The FormatFoundText helper shall use singular form for one result and plural form otherwise.
+            justification: >-
+              Correct singular and plural forms produce grammatically accurate summaries that improve
+              readability and convey the right sense of magnitude, which is particularly important for
+              single-issue results where "1 issues" would be confusing.
+            tags: [internal]
+            tests:
+              - SarifRun_ToMarkdown_NoResults_ShowsFoundNoResults
+              - SarifRun_ToMarkdown_OneResult_UsesSingularForm
