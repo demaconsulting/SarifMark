@@ -76,7 +76,7 @@ public record SarifRun
     ///     Converts the SARIF run results to markdown format.
     /// </summary>
     /// <param name="depth">The heading depth level (1-6) for the report title.</param>
-    /// <param name="heading">Optional custom heading. If null, defaults to "[ToolName] Analysis".</param>
+    /// <param name="heading">Optional custom heading. If null, empty, or whitespace, defaults to "[ToolName] Analysis".</param>
     /// <returns>Markdown representation of the SARIF run results.</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when depth is not between 1 and 6.</exception>
     public string ToMarkdown(int depth, string? heading = null)
@@ -102,11 +102,11 @@ public record SarifRun
     /// </summary>
     /// <param name="sb">The StringBuilder to append to.</param>
     /// <param name="heading">The markdown heading prefix (e.g., "#", "##", "###").</param>
-    /// <param name="customHeading">Optional custom heading text. If null, defaults to "[ToolName] Analysis".</param>
+    /// <param name="customHeading">Optional custom heading text. If null, empty, or whitespace, defaults to "[ToolName] Analysis".</param>
     private void AppendHeader(StringBuilder sb, string heading, string? customHeading)
     {
         // Use custom heading or default to "[ToolName] Analysis"
-        var headingText = customHeading ?? $"{ToolName} Analysis";
+        var headingText = string.IsNullOrWhiteSpace(customHeading) ? $"{ToolName} Analysis" : customHeading;
         sb.AppendLine($"{heading} {headingText}");
         sb.AppendLine();
 
