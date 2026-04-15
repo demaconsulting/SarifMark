@@ -1063,10 +1063,10 @@ public class SarifResultsTests
     }
 
     /// <summary>
-    ///     Test that Read uses only the first run's artifacts for the file count.
+    ///     Test that Read extracts independent file counts for each run.
     /// </summary>
     [TestMethod]
-    public void SarifResults_Read_WithArtifactsInMultipleRuns_UsesFirstRunFileCount()
+    public void SarifResults_Read_MultipleRuns_EachRunHasOwnFileCount()
     {
         // Arrange
         var filePath = PathHelpers.SafePathCombine(_testDirectory!, "multi-run-artifacts.sarif");
@@ -1104,8 +1104,9 @@ public class SarifResultsTests
         // Act
         var results = SarifResults.Read(filePath);
 
-        // Assert - file count reflects only the first run's artifacts
+        // Assert - each run has its own independent file count
         Assert.AreEqual(2, results.Runs[0].FileCount);
+        Assert.AreEqual(1, results.Runs[1].FileCount);
     }
 
     /// <summary>
@@ -1138,6 +1139,24 @@ public class SarifResultsTests
 
         // Assert
         Assert.Contains("**Files:** 0", markdown);
+    }
+
+    /// <summary>
+    ///     Test that the internal constructor stores the runs collection and exposes HasIssues.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_InternalConstructor_ExposesRunsAndHasIssues()
+    {
+        // Arrange
+        var run = new SarifRun("TestTool", "1.0.0", []);
+
+        // Act
+        var results = new SarifResults([run]);
+
+        // Assert
+        Assert.AreEqual(1, results.Runs.Count);
+        Assert.AreSame(run, results.Runs[0]);
+        Assert.IsFalse(results.HasIssues);
     }
 
     /// <summary>

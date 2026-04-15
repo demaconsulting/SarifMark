@@ -107,7 +107,9 @@ given run element:
 - If the `artifacts` property is absent or is not an array, `0` is returned.
 - Otherwise, the length of the `artifacts` array is returned.
 
-This satisfies requirement `SarifMark-SarifResults-FileCount`.
+This method is called once per run element during `Read`, so each `SarifRun` in the resulting
+collection carries an independent file count from its own artifacts array. This satisfies
+requirement `SarifMark-SarifResults-FileCount`.
 
 ## Cross-References
 

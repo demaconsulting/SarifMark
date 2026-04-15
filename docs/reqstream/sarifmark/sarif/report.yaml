@@ -33,7 +33,7 @@ sections:
               issues at a glance and track improvements over time.
             tags: [public]
             children:
-              - SarifMark-SarifResults-FormatCount
+              - SarifMark-SarifRun-FormatCount
             tests:
               - Sarif_Report_ContainsResultCount
 
@@ -44,7 +44,7 @@ sections:
               making the reports actionable and reducing time spent searching for problematic code.
             tags: [public]
             children:
-              - SarifMark-SarifResults-FormatLocation
+              - SarifMark-SarifRun-FormatLocation
             tests:
               - Sarif_Report_ContainsLocationInfo
 
