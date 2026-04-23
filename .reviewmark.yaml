@@ -54,8 +54,6 @@ reviews:
       - "docs/design/introduction.md"
       - "docs/design/sarifmark/sarifmark.md"
       - "test/**/IntegrationTests.cs"
-      - "test/**/Runner.cs"
-      - "test/**/AssemblyInfo.cs"
 
   # ---------------------------------------------------------------------------
   # Design Review
@@ -66,7 +64,8 @@ reviews:
     paths:
       - "docs/reqstream/sarifmark/sarifmark.yaml"
       - "docs/reqstream/sarifmark/platform-requirements.yaml"
-      - "docs/design/**/*.md"
+      - "docs/design/introduction.md"
+      - "docs/design/sarifmark/**/*.md"
 
   # ---------------------------------------------------------------------------
   # All Requirements Review
@@ -76,7 +75,8 @@ reviews:
     title: Review that All SarifMark Requirements are Complete
     paths:
       - "requirements.yaml"
-      - "docs/reqstream/**/*.yaml"
+      - "docs/reqstream/sarifmark/**/*.yaml"
+      - "docs/reqstream/ots/**/*.yaml"
 
   # ---------------------------------------------------------------------------
   # Subsystem Reviews
@@ -170,3 +170,9 @@ reviews:
       - "docs/design/sarifmark/utilities/path-helpers.md"
       - "src/**/Utilities/PathHelpers.cs"
       - "test/**/Utilities/PathHelpersTests.cs"
+
+  - id: SarifMark-Runner
+    title: Review that SarifMark Integration Test Runner Implementation is Correct
+    paths:
+      - "test/**/Runner.cs"
+      - "test/**/AssemblyInfo.cs"
