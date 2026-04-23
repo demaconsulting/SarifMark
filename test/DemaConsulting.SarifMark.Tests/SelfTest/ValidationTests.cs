@@ -108,7 +108,7 @@ public class ValidationTests
     }
 
     /// <summary>
-    ///     Tests that the SARIF reading self-test verifies tool information appears in the log.
+    ///     Tests that the SARIF reading self-test passes within the validation suite.
     /// </summary>
     [TestMethod]
     public void Validation_Run_ValidContext_VerifiesSarifReadingOutput()
@@ -135,7 +135,7 @@ public class ValidationTests
     }
 
     /// <summary>
-    ///     Tests that the report generation self-test verifies markdown output is produced.
+    ///     Tests that the report generation self-test passes within the validation suite.
     /// </summary>
     [TestMethod]
     public void Validation_Run_ValidContext_VerifiesReportGenerationOutput()
@@ -162,7 +162,7 @@ public class ValidationTests
     }
 
     /// <summary>
-    ///     Tests that the enforcement self-test verifies enforcement mode is exercised.
+    ///     Tests that the enforcement self-test passes within the validation suite.
     /// </summary>
     [TestMethod]
     public void Validation_Run_ValidContext_VerifiesEnforcementOutput()
