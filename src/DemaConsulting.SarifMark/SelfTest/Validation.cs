@@ -435,7 +435,7 @@ internal static class Validation
     /// <summary>
     ///     Represents a temporary directory that is automatically deleted when disposed.
     /// </summary>
-    private sealed class TemporaryDirectory : IDisposable
+    internal sealed class TemporaryDirectory : IDisposable
     {
         /// <summary>
         ///     Gets the path to the temporary directory.

@@ -70,3 +70,4 @@ sections:
             tests:
               - SarifRun_ToMarkdown_NoResults_ShowsFoundNoResults
               - SarifRun_ToMarkdown_OneResult_UsesSingularForm
+              - SarifRun_ToMarkdown_MultipleResults_UsesPluralForm

@@ -108,6 +108,87 @@ public class ValidationTests
     }
 
     /// <summary>
+    ///     Tests that the SARIF reading self-test verifies tool information appears in the log.
+    /// </summary>
+    [TestMethod]
+    public void Validation_Run_ValidContext_VerifiesSarifReadingOutput()
+    {
+        // Arrange - silent context that writes all output to a temp log file
+        var logFile = CreateTempFile(".log");
+        try
+        {
+            using (var context = Context.Create(["--silent", "--log", logFile]))
+            {
+                // Act
+                Validation.Run(context);
+            }
+
+            // Assert - SARIF reading test must have passed (no failure for SarifReading test)
+            var logContent = File.ReadAllText(logFile);
+            Assert.Contains("✓ SarifMark_SarifReading - Passed", logContent,
+                "Log should indicate SarifMark_SarifReading passed");
+        }
+        finally
+        {
+            SafeDeleteFile(logFile);
+        }
+    }
+
+    /// <summary>
+    ///     Tests that the report generation self-test verifies markdown output is produced.
+    /// </summary>
+    [TestMethod]
+    public void Validation_Run_ValidContext_VerifiesReportGenerationOutput()
+    {
+        // Arrange - silent context that writes all output to a temp log file
+        var logFile = CreateTempFile(".log");
+        try
+        {
+            using (var context = Context.Create(["--silent", "--log", logFile]))
+            {
+                // Act
+                Validation.Run(context);
+            }
+
+            // Assert - report generation test must have passed
+            var logContent = File.ReadAllText(logFile);
+            Assert.Contains("✓ SarifMark_MarkdownReportGeneration - Passed", logContent,
+                "Log should indicate SarifMark_MarkdownReportGeneration passed");
+        }
+        finally
+        {
+            SafeDeleteFile(logFile);
+        }
+    }
+
+    /// <summary>
+    ///     Tests that the enforcement self-test verifies enforcement mode is exercised.
+    /// </summary>
+    [TestMethod]
+    public void Validation_Run_ValidContext_VerifiesEnforcementOutput()
+    {
+        // Arrange - silent context that writes all output to a temp log file
+        var logFile = CreateTempFile(".log");
+        try
+        {
+            using (var context = Context.Create(["--silent", "--log", logFile]))
+            {
+                // Act
+                Validation.Run(context);
+            }
+
+            // Assert - enforcement test must have passed
+            var logContent = File.ReadAllText(logFile);
+            Assert.Contains("✓ SarifMark_Enforcement - Passed", logContent,
+                "Log should indicate SarifMark_Enforcement passed");
+        }
+        finally
+        {
+            SafeDeleteFile(logFile);
+        }
+    }
+
+    /// <summary>
     ///     Tests that running validation prints a summary with the correct totals.
     /// </summary>
     [TestMethod]
@@ -264,5 +345,41 @@ public class ValidationTests
         {
             // Ignore cleanup errors during test teardown
         }
+    }
+
+    /// <summary>
+    ///     Tests that TemporaryDirectory creates a directory that exists after construction.
+    /// </summary>
+    [TestMethod]
+    public void Validation_TemporaryDirectory_Create_DirectoryExists()
+    {
+        // Arrange & Act
+        using var tempDir = new Validation.TemporaryDirectory();
+
+        // Assert
+        Assert.IsTrue(Directory.Exists(tempDir.DirectoryPath),
+            "Temporary directory should exist after construction");
+    }
+
+    /// <summary>
+    ///     Tests that TemporaryDirectory deletes the directory on disposal.
+    /// </summary>
+    [TestMethod]
+    public void Validation_TemporaryDirectory_Dispose_DirectoryDeleted()
+    {
+        // Arrange
+        string? dirPath;
+        using (var tempDir = new Validation.TemporaryDirectory())
+        {
+            dirPath = tempDir.DirectoryPath;
+            Assert.IsTrue(Directory.Exists(dirPath),
+                "Temporary directory should exist before disposal");
+
+            // Act - dispose is called at end of using block
+        }
+
+        // Assert
+        Assert.IsFalse(Directory.Exists(dirPath),
+            "Temporary directory should be deleted after disposal");
     }
 }

@@ -9,10 +9,12 @@ sections:
             justification: >-
               Capturing all five properties on a single record provides a self-contained representation of
               one SARIF finding, making it straightforward to pass findings between parsing and formatting
-              stages without repeated JSON traversal.
+              stages without repeated JSON traversal. The five properties form an indivisible record
+              contract: a finding is only meaningful when all five slots (three required, two optional) are
+              present together, so they are specified as a single requirement rather than five separate ones.
             tags: [internal]
             tests:
-              - SarifFinding_InternalConstructor_StoresAllProperties
+              - SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties
 
           - id: SarifMark-SarifFinding-Uri
             title: The SarifFinding record shall store an optional file URI for the finding location.
@@ -22,7 +24,7 @@ sections:
               for findings that have no associated file.
             tags: [internal]
             tests:
-              - SarifFinding_Uri_CanBeNull
+              - SarifFinding_Constructor_NullUri_UriPropertyIsNull
 
           - id: SarifMark-SarifFinding-StartLine
             title: The SarifFinding record shall store an optional start line number for the finding location.
@@ -32,7 +34,7 @@ sections:
               gracefully omitting it when not.
             tags: [internal]
             tests:
-              - SarifFinding_StartLine_CanBeNull
+              - SarifFinding_Constructor_NullStartLine_StartLinePropertyIsNull
 
           - id: SarifMark-SarifFinding-Internal
             title: The SarifFinding record shall only be constructible by internal code.
@@ -42,4 +44,4 @@ sections:
               invalid or inconsistent finding objects.
             tags: [internal]
             tests:
-              - SarifFinding_InternalConstructor_StoresAllProperties
+              - SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties

@@ -59,8 +59,8 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_NullPath_ThrowsArgumentException()
     {
-        // Act & Assert - null path throws ArgumentException
-        Assert.Throws<ArgumentException>(() => SarifResults.Read(null!));
+        // Act & Assert
+        Assert.ThrowsExactly<ArgumentException>(() => SarifResults.Read(null!));
     }
 
     /// <summary>
@@ -69,8 +69,8 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_EmptyPath_ThrowsArgumentException()
     {
-        // Act & Assert - empty path throws ArgumentException
-        Assert.Throws<ArgumentException>(() => SarifResults.Read(string.Empty));
+        // Act & Assert
+        Assert.ThrowsExactly<ArgumentException>(() => SarifResults.Read(string.Empty));
     }
 
     /// <summary>
@@ -79,8 +79,8 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_WhitespacePath_ThrowsArgumentException()
     {
-        // Act & Assert - whitespace path throws ArgumentException
-        Assert.Throws<ArgumentException>(() => SarifResults.Read("   "));
+        // Act & Assert
+        Assert.ThrowsExactly<ArgumentException>(() => SarifResults.Read("   "));
     }
 
     /// <summary>
@@ -89,11 +89,11 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException()
     {
-        // Arrange - path to a file that does not exist
+        // Arrange
         var filePath = PathHelpers.SafePathCombine(_testDirectory!, "nonexistent.sarif");
 
-        // Act & Assert - reading non-existent file throws FileNotFoundException
-        Assert.Throws<FileNotFoundException>(() => SarifResults.Read(filePath));
+        // Act & Assert
+        Assert.ThrowsExactly<FileNotFoundException>(() => SarifResults.Read(filePath));
     }
 
     /// <summary>
@@ -106,8 +106,8 @@ public class SarifResultsTests
         var filePath = PathHelpers.SafePathCombine(_testDirectory!, "invalid.sarif");
         File.WriteAllText(filePath, "{ invalid json }");
 
-        // Act & Assert - reading invalid JSON throws InvalidOperationException
-        var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
+        // Act & Assert
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() => SarifResults.Read(filePath));
         Assert.Contains("Invalid JSON", exception.Message);
     }
 
@@ -125,8 +125,8 @@ public class SarifResultsTests
             }
             """);
 
-        // Act & Assert - reading SARIF without version throws InvalidOperationException
-        var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
+        // Act & Assert
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() => SarifResults.Read(filePath));
         Assert.Contains("missing 'version'", exception.Message);
     }
 
@@ -144,8 +144,8 @@ public class SarifResultsTests
             }
             """);
 
-        // Act & Assert - reading SARIF without runs throws InvalidOperationException
-        var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
+        // Act & Assert
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() => SarifResults.Read(filePath));
         Assert.Contains("missing or invalid 'runs'", exception.Message);
     }
 
@@ -164,8 +164,8 @@ public class SarifResultsTests
             }
             """);
 
-        // Act & Assert - reading SARIF with empty runs throws InvalidOperationException
-        var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
+        // Act & Assert
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() => SarifResults.Read(filePath));
         Assert.Contains("'runs' array is empty", exception.Message);
     }
 
@@ -186,8 +186,8 @@ public class SarifResultsTests
             }
             """);
 
-        // Act & Assert - reading SARIF without tool throws InvalidOperationException
-        var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
+        // Act & Assert
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() => SarifResults.Read(filePath));
         Assert.Contains("missing 'tool'", exception.Message);
     }
 
@@ -210,8 +210,8 @@ public class SarifResultsTests
             }
             """);
 
-        // Act & Assert - reading SARIF without driver throws InvalidOperationException
-        var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
+        // Act & Assert
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() => SarifResults.Read(filePath));
         Assert.Contains("missing 'driver'", exception.Message);
     }
 
@@ -443,6 +443,7 @@ public class SarifResultsTests
             }
             """);
 
+        // Act
         var results = SarifResults.Read(filePath);
 
         // Assert - semanticVersion is used as the tool version
@@ -476,6 +477,7 @@ public class SarifResultsTests
             }
             """);
 
+        // Act
         var results = SarifResults.Read(filePath);
 
         // Assert - dottedQuadFileVersion is used as the tool version
@@ -510,6 +512,7 @@ public class SarifResultsTests
             }
             """);
 
+        // Act
         var results = SarifResults.Read(filePath);
 
         // Assert - version field takes priority over semanticVersion
@@ -544,6 +547,7 @@ public class SarifResultsTests
             }
             """);
 
+        // Act
         var results = SarifResults.Read(filePath);
 
         // Assert - semanticVersion takes priority over dottedQuadFileVersion
@@ -614,6 +618,7 @@ public class SarifResultsTests
             }
             """);
 
+        // Act
         var results = SarifResults.Read(filePath);
 
         // Assert - semanticVersion is used when version field is empty
@@ -773,7 +778,7 @@ public class SarifResultsTests
         var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
         // Act & Assert
-        var exception = Assert.Throws<ArgumentOutOfRangeException>(() => results.ToMarkdown(0));
+        var exception = Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => results.ToMarkdown(0));
         Assert.Contains("Depth must be between 1 and 6", exception.Message);
     }
 
@@ -787,7 +792,7 @@ public class SarifResultsTests
         var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
         // Act & Assert
-        var exception = Assert.Throws<ArgumentOutOfRangeException>(() => results.ToMarkdown(7));
+        var exception = Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => results.ToMarkdown(7));
         Assert.Contains("Depth must be between 1 and 6", exception.Message);
     }
 
@@ -935,6 +940,7 @@ public class SarifResultsTests
     [TestMethod]
     public void SarifResults_Read_WithSuppressedResults_ExcludesSuppressedResults()
     {
+        // Arrange
         var filePath = PathHelpers.SafePathCombine(_testDirectory!, "with-suppressions.sarif");
         File.WriteAllText(filePath, """
             {
@@ -981,8 +987,10 @@ public class SarifResultsTests
             }
             """);
 
+        // Act
         var results = SarifResults.Read(filePath);
 
+        // Assert
         Assert.AreEqual("TestTool", results.Runs[0].ToolName);
         Assert.AreEqual("1.0.0", results.Runs[0].ToolVersion);
         Assert.AreEqual(2, results.Runs[0].ResultCount);

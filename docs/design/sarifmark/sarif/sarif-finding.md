@@ -34,6 +34,10 @@ Consumers outside the assembly obtain `SarifFinding` instances only through `Sar
 which validates and parses the source SARIF JSON before constructing each record. This ensures that
 every `SarifFinding` in circulation has been produced through the validated parsing pipeline.
 
+The `DemaConsulting.SarifMark` project file includes `<InternalsVisibleTo Include="DemaConsulting.SarifMark.Tests" />`,
+which grants the test assembly access to the internal constructor. This enables direct unit testing
+of the constructor without relaxing the access restriction for all external consumers.
+
 ## Cross-References
 
 See the SarifResults Record document for `SarifResults.Read`, which constructs `SarifFinding`

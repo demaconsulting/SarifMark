@@ -43,6 +43,7 @@ sections:
             tags: [internal]
             tests:
               - Validation_Run_ValidContext_RunsAllTests
+              - Validation_Run_ValidContext_VerifiesSarifReadingOutput
 
           - id: SarifMark-Validation-ReportGenerationTest
             title: The RunMarkdownReportGenerationTest method shall verify end-to-end markdown report generation.
@@ -53,6 +54,7 @@ sections:
             tags: [internal]
             tests:
               - Validation_Run_ValidContext_RunsAllTests
+              - Validation_Run_ValidContext_VerifiesReportGenerationOutput
 
           - id: SarifMark-Validation-EnforcementTest
             title: The RunEnforcementTest method shall verify enforcement mode behavior in the self-validation suite.
@@ -63,6 +65,7 @@ sections:
             tags: [internal]
             tests:
               - Validation_Run_ValidContext_RunsAllTests
+              - Validation_Run_ValidContext_VerifiesEnforcementOutput
 
           - id: SarifMark-Validation-Summary
             title: The Run method shall print a pass/fail summary after all tests have executed.
@@ -74,16 +77,31 @@ sections:
             tests:
               - Validation_Run_ValidContext_PrintsSummary
 
-          - id: SarifMark-Validation-ResultsFile
-            title: The WriteResultsFile method shall write TRX for .trx, JUnit XML for .xml, or error otherwise.
+          - id: SarifMark-Validation-TrxResultsFile
+            title: The WriteResultsFile method shall write TRX format when the results file has a .trx extension.
             justification: >-
-              Supporting both TRX and JUnit formats maximizes CI/CD platform compatibility, and reporting
-              an error for unrecognized extensions prevents silent data loss when callers specify an
-              unsupported output format.
+              Supporting TRX format enables compatibility with Visual Studio and Azure DevOps CI/CD
+              platforms, providing structured test result reporting.
             tags: [internal]
             tests:
               - Validation_Run_WithTrxResultsFile_WritesResultsFile
+
+          - id: SarifMark-Validation-XmlResultsFile
+            title: The WriteResultsFile method shall write JUnit XML format when the results file has a .xml extension.
+            justification: >-
+              Supporting JUnit XML format enables compatibility with Jenkins, GitHub Actions, and other
+              CI/CD platforms that consume standard JUnit test result files.
+            tags: [internal]
+            tests:
               - Validation_Run_WithXmlResultsFile_WritesResultsFile
+
+          - id: SarifMark-Validation-UnsupportedResultsFile
+            title: The WriteResultsFile method shall report an error for unsupported results file extensions.
+            justification: >-
+              Reporting an error for unrecognized extensions prevents silent data loss when callers specify
+              an unsupported output format, making configuration mistakes immediately visible.
+            tags: [internal]
+            tests:
               - Validation_Run_WithUnsupportedResultsFileExtension_WritesError
 
           - id: SarifMark-Validation-TempDir
@@ -94,4 +112,5 @@ sections:
               repeated validation runs.
             tags: [internal]
             tests:
-              - Validation_Run_ValidContext_RunsAllTests
+              - Validation_TemporaryDirectory_Create_DirectoryExists
+              - Validation_TemporaryDirectory_Dispose_DirectoryDeleted

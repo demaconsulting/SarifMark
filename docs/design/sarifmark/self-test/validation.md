@@ -47,10 +47,12 @@ The test name is `SarifMark_SarifReading`, satisfying `SarifMark-Sarif-Reading`.
 
 1. Creates a `TemporaryDirectory`.
 2. Writes the same mock SARIF file used in the reading test.
-3. Constructs a `Context` with `--silent`, `--log <file>`, `--sarif <file>`, and
-   `--report <file>`.
-4. Calls `Program.Run` and verifies exit code is 0.
-5. Checks the report file contains `"MockTool Analysis"` and `"Found 2 issues"`.
+3. Computes `depthArgs = new[] { "--depth", context.Depth.ToString() }` and
+   `headingPrefix = new string('#', context.Depth)`.
+4. Constructs a `Context` with `--silent`, `--log <file>`, `--sarif <file>`,
+   `--report <file>`, and `depthArgs` as extra arguments.
+5. Calls `Program.Run` and verifies exit code is 0.
+6. Checks the report file contains `"{headingPrefix} MockTool Analysis"` and `"Found 2 issues"`.
 
 The test name is `SarifMark_MarkdownReportGeneration`, satisfying `SarifMark-Report-Markdown`.
 
