@@ -22,7 +22,8 @@ sections:
               records of validation outcomes for tracking quality trends and compliance.
             tags: [public]
             children:
-              - SarifMark-Validation-ResultsFile
+              - SarifMark-Validation-TrxResultsFile
+              - SarifMark-Validation-XmlResultsFile
             tests:
               - SelfTest_ResultsFile_WritesTrxFile
               - SelfTest_ResultsFile_WritesJUnitFile
@@ -34,7 +35,7 @@ sections:
               providing native compatibility with Visual Studio and .NET tooling.
             tags: [public]
             children:
-              - SarifMark-Validation-ResultsFile
+              - SarifMark-Validation-TrxResultsFile
             tests:
               - SelfTest_ResultsFile_WritesTrxFile
 
@@ -45,7 +46,7 @@ sections:
               and GitLab CI, which commonly use this standard format for test reporting.
             tags: [public]
             children:
-              - SarifMark-Validation-ResultsFile
+              - SarifMark-Validation-XmlResultsFile
             tests:
               - SelfTest_ResultsFile_WritesJUnitFile
 
