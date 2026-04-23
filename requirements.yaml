@@ -1,16 +1,3 @@
-# Requirements Testing Strategy
-#
-# This project uses three categories of tests to verify requirements:
-#
-# 1. Unit Tests - Run locally via "dotnet test"
-# 2. Self-Validation Tests - Run locally via "--validate"
-# 3. Platform Tests - Run via CI/CD across OS/runtime matrix
-#
-# NOTE: Running "reqstream --enforce" with only local test results (unit tests
-# and local self-validation) is expected to show some unsatisfied requirements.
-# Platform-specific requirements require test results from CI/CD runs across
-# the full OS and runtime matrix.
-#
 ---
 includes:
   - docs/reqstream/sarifmark/sarifmark.yaml
@@ -26,5 +13,13 @@ includes:
   - docs/reqstream/sarifmark/utilities/utilities.yaml
   - docs/reqstream/sarifmark/utilities/path-helpers.yaml
   - docs/reqstream/sarifmark/platform-requirements.yaml
-  - docs/reqstream/ots/ots-software.yaml
   - docs/reqstream/sarifmark/program.yaml
+  - docs/reqstream/ots/mstest.yaml
+  - docs/reqstream/ots/reqstream.yaml
+  - docs/reqstream/ots/buildmark.yaml
+  - docs/reqstream/ots/versionmark.yaml
+  - docs/reqstream/ots/sonarmark.yaml
+  - docs/reqstream/ots/reviewmark.yaml
+  - docs/reqstream/ots/pandoc.yaml
+  - docs/reqstream/ots/weasyprint.yaml
+  - docs/reqstream/ots/fileassert.yaml

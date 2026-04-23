@@ -4,7 +4,6 @@
 
 tools:
   # .NET SDK
-  # Note: .NET SDK versions include up to 4 components (e.g., 10.0.102, 8.0.404)
   dotnet:
     command: dotnet --version
     regex: '(?<version>\d+\.\d+\.\d+(?:\.\d+)?)'
@@ -39,6 +38,11 @@ tools:
     command: dotnet tool list
     regex: '(?i)demaconsulting\.weasyprinttool\s+(?<version>\d+\.\d+\.\d+(?:-[a-zA-Z0-9.]+)?)'
 
+  # SarifMark (DemaConsulting.SarifMark from dotnet tool list)
+  sarifmark:
+    command: dotnet tool list
+    regex: '(?i)demaconsulting\.sarifmark\s+(?<version>\d+\.\d+\.\d+(?:-[a-zA-Z0-9.]+)?)'
+
   # SonarMark (DemaConsulting.SonarMark from dotnet tool list)
   sonarmark:
     command: dotnet tool list
@@ -54,12 +58,6 @@ tools:
     command: dotnet tool list
     regex: '(?i)demaconsulting\.buildmark\s+(?<version>\d+\.\d+\.\d+(?:-[a-zA-Z0-9.]+)?)'
 
-  # SarifMark (DemaConsulting.SarifMark from dotnet tool list --global)
-  # Note: SarifMark is installed globally in integration-test and build-docs jobs
-  sarifmark:
-    command: dotnet tool list --global
-    regex: '(?i)demaconsulting\.sarifmark\s+(?<version>\d+\.\d+\.\d+(?:-[a-zA-Z0-9.]+)?)'
-
   # VersionMark (DemaConsulting.VersionMark from dotnet tool list)
   versionmark:
     command: dotnet tool list
@@ -69,3 +67,8 @@ tools:
   reviewmark:
     command: dotnet tool list
     regex: '(?i)demaconsulting\.reviewmark\s+(?<version>\d+\.\d+\.\d+(?:-[a-zA-Z0-9.]+)?)'
+
+  # FileAssert (DemaConsulting.FileAssert from dotnet tool list)
+  fileassert:
+    command: dotnet tool list
+    regex: '(?i)demaconsulting\.fileassert\s+(?<version>\d+\.\d+\.\d+(?:-[a-zA-Z0-9.]+)?)'
