@@ -54,6 +54,8 @@ reviews:
       - "docs/design/introduction.md"
       - "docs/design/sarifmark/sarifmark.md"
       - "test/**/IntegrationTests.cs"
+      - "test/**/Runner.cs"
+      - "test/**/AssemblyInfo.cs"
 
   # ---------------------------------------------------------------------------
   # Design Review
@@ -170,9 +172,3 @@ reviews:
       - "docs/design/sarifmark/utilities/path-helpers.md"
       - "src/**/Utilities/PathHelpers.cs"
       - "test/**/Utilities/PathHelpersTests.cs"
-
-  - id: SarifMark-Runner
-    title: Review that SarifMark Integration Test Runner Implementation is Correct
-    paths:
-      - "test/**/Runner.cs"
-      - "test/**/AssemblyInfo.cs"
