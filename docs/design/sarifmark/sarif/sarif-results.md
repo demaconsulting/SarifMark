@@ -47,7 +47,7 @@ pipeline:
    `ExtractToolInformation`, `ParseResults`, and `ExtractFileCount` to create a `SarifRun`.
    This satisfies `SarifMark-SarifResults-ExtractTool`, `SarifMark-SarifResults-ParseResults`,
    `SarifMark-SarifResults-FilterSuppressions`, `SarifMark-SarifResults-FileCount`, and
-   `SarifMark-SarifResults-MultiRun`.
+   `SarifMark-SarifResults-Runs`.
 6. **Construction and return** — constructs and returns a `SarifResults` from the list of runs.
    This satisfies `SarifMark-Sarif-Processing`.
 

@@ -43,7 +43,6 @@ The `Cli` subsystem exposes the following interface to the rest of the tool:
 | `SarifFile`   | `string?` | `--sarif <file>`         | Path to the SARIF input file                  |
 | `ReportFile`  | `string?` | `--report <file>`        | Path for the markdown report output file      |
 | `Depth`       | `int`     | `--depth <depth>`        | Markdown heading depth for the report         |
-| `LogFile`     | `string?` | `--log <file>`           | Path to an optional log file for output       |
 | `Heading`     | `string?` | `--heading <text>`       | Custom heading text for the report            |
 | `ResultsFile` | `string?` | `--results <file>`       | Path for the self-validation results file     |
 | `ExitCode`    | `int`     | *(derived)*              | 0 until `WriteError` is called, then 1        |
