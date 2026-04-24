@@ -137,7 +137,6 @@ sections:
               - SarifMark-Context-ReportDepthParam
             tests:
               - Cli_DepthParameter_SetsDepth
-              - SelfTest_DepthParameter_AffectsSelfValidationReport
 
           - id: SarifMark-Cli-Heading
             title: The CLI shall accept a custom heading via the --heading parameter.
@@ -160,6 +159,17 @@ sections:
               - SarifMark-Context-ResultsParam
             tests:
               - Cli_ResultsParameter_SetsResultsFilePath
+
+          - id: SarifMark-Cli-ReportDepthLegacyAlias
+            title: The CLI shall accept --report-depth as a legacy alias for --depth.
+            justification: >-
+              Supporting the legacy --report-depth alias preserves backwards compatibility for users and scripts
+              that relied on the earlier parameter name, avoiding breaking changes in automated workflows.
+            tags: [public]
+            children:
+              - SarifMark-Context-ReportDepthParam
+            tests:
+              - Cli_ReportDepthParameter_SetsReportDepth
 
           - id: SarifMark-Cli-ResultLegacyAlias
             title: The CLI shall accept --result as a legacy alias for --results.

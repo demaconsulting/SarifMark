@@ -11,6 +11,10 @@ for file loading and the `ToMarkdown` method for report generation.
 `SarifResults` is a `record` with an `internal` constructor. External consumers obtain instances
 only through `Read`; the record is immutable once constructed.
 
+The `DemaConsulting.SarifMark` project file includes `<InternalsVisibleTo Include="DemaConsulting.SarifMark.Tests" />`,
+which grants the test assembly access to the internal constructor. This enables direct unit testing
+of the constructor without relaxing the access restriction for all external consumers.
+
 ## Properties
 
 | Property      | Type                         | Description                                          |
@@ -30,9 +34,9 @@ The static `Read(string filePath)` method loads and parses a SARIF 2.1.0 file th
 pipeline:
 
 1. **Path validation** — throws `ArgumentException` if `filePath` is null, empty, or
-   whitespace. This satisfies `SarifMark-SarifResults-ValidatePath`.
+   whitespace. This satisfies `SarifMark-SarifResults-ValidatePathArgument`.
 2. **File existence** — throws `FileNotFoundException` if the file does not exist on disk.
-   This satisfies `SarifMark-SarifResults-ValidatePath`.
+   This satisfies `SarifMark-SarifResults-ValidatePathExists`.
 3. **JSON parsing** — reads the file with `File.ReadAllText` and parses it with
    `JsonDocument.Parse`. A `JsonException` is translated to `InvalidOperationException`.
    This satisfies `SarifMark-SarifResults-ValidateStructure`.
@@ -43,7 +47,7 @@ pipeline:
    `ExtractToolInformation`, `ParseResults`, and `ExtractFileCount` to create a `SarifRun`.
    This satisfies `SarifMark-SarifResults-ExtractTool`, `SarifMark-SarifResults-ParseResults`,
    `SarifMark-SarifResults-FilterSuppressions`, `SarifMark-SarifResults-FileCount`, and
-   `SarifMark-SarifResults-MultiRun`.
+   `SarifMark-SarifResults-Runs`.
 6. **Construction and return** — constructs and returns a `SarifResults` from the list of runs.
    This satisfies `SarifMark-Sarif-Processing`.
 
@@ -97,7 +101,7 @@ and `SarifMark-SarifResults-FilterSuppressions`.
 3. **Multi-run** — when there are multiple runs, concatenates the markdown output of each run
    with headings `"[ToolName] Analysis (#1)"`, `"[ToolName] Analysis (#2)"` etc. (or
    `"[heading] (#1)"` if a custom heading is provided). This satisfies
-   `SarifMark-SarifResults-MultiRun`.
+   `SarifMark-SarifResults-MultiRunMarkdown`.
 
 ## ExtractFileCount Method
 

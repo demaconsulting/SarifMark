@@ -11,6 +11,15 @@ the `ToMarkdown` method for generating a markdown report for the run.
 `SarifRun` is a `record` with an `internal` constructor. External consumers obtain instances only
 through `SarifResults.Read`; the record is immutable once constructed.
 
+The `DemaConsulting.SarifMark` project file includes `<InternalsVisibleTo Include="DemaConsulting.SarifMark.Tests" />`,
+which grants the test assembly access to the internal constructor. This enables direct unit testing
+of the constructor without relaxing the access restriction for all external consumers.
+
+The `SarifRun` type and its sibling types (`SarifResults`, `SarifFinding`) are placed in the root
+`DemaConsulting.SarifMark` namespace rather than a `.Sarif` sub-namespace. This is an intentional
+design decision to keep the public and internal API surface flat and consistent, avoiding the need
+for additional `using` directives in consuming code.
+
 ## Properties
 
 | Property      | Type                          | Description                                     |
@@ -33,10 +42,10 @@ These satisfy requirements `SarifMark-SarifRun-Properties` and `SarifMark-SarifR
 2. **Header** — calls `AppendHeader` to emit the main heading (using `heading` if provided, or
    `"[ToolName] Analysis"` by default) followed by a `**Tool:**` line with name and version,
    then a `**Files:**` line with the file count.
-3. **Issues section** — calls `AppendIssuesSection` to emit the `Issues` sub-heading, the
-   result count formatted by `FormatFoundText`, and one line per result formatted by
-   `FormatLocation`. Each result line is appended with a trailing two-space markdown hard
-   line break.
+3. **Issues section** — calls `AppendIssuesSection` to emit the `Issues` sub-heading at
+   `depth + 1` (capped at `6` to remain within the valid markdown heading range), the result
+   count formatted by `FormatFoundText`, and one line per result formatted by `FormatLocation`.
+   Each result line is appended with a trailing two-space markdown hard line break.
 
 This satisfies requirement `SarifMark-SarifRun-ToMarkdown`.
 

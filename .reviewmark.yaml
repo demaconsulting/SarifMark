@@ -66,7 +66,8 @@ reviews:
     paths:
       - "docs/reqstream/sarifmark/sarifmark.yaml"
       - "docs/reqstream/sarifmark/platform-requirements.yaml"
-      - "docs/design/**/*.md"
+      - "docs/design/introduction.md"
+      - "docs/design/sarifmark/**/*.md"
 
   # ---------------------------------------------------------------------------
   # All Requirements Review
@@ -76,7 +77,8 @@ reviews:
     title: Review that All SarifMark Requirements are Complete
     paths:
       - "requirements.yaml"
-      - "docs/reqstream/**/*.yaml"
+      - "docs/reqstream/sarifmark/**/*.yaml"
+      - "docs/reqstream/ots/**/*.yaml"
 
   # ---------------------------------------------------------------------------
   # Subsystem Reviews

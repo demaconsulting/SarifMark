@@ -43,6 +43,8 @@ public class SarifRunTests
         Assert.AreEqual("1.0.0", run.ToolVersion);
         Assert.AreEqual(1, run.ResultCount);
         Assert.AreEqual(3, run.FileCount);
+        Assert.IsNotNull(run.Results);
+        Assert.IsTrue(run.HasIssues);
     }
 
     /// <summary>
@@ -51,7 +53,7 @@ public class SarifRunTests
     [TestMethod]
     public void SarifRun_HasIssues_NoResults_ReturnsFalse()
     {
-        // Arrange & Act
+        // Arrange
         var run = new SarifRun("Tool", "1.0", [], 0);
 
         // Assert
@@ -107,6 +109,7 @@ public class SarifRunTests
         Assert.Contains("Found 1 issue", md);
         Assert.Contains("RULE1", md);
         Assert.Contains("Test message", md);
+        Assert.Contains("file:///test.cs(5):", md);
     }
 
     /// <summary>
@@ -269,5 +272,28 @@ public class SarifRunTests
         // Assert
         Assert.Contains("Found 1 issue", md);
         Assert.DoesNotContain("Found 1 issues", md);
+    }
+
+    /// <summary>
+    ///     Test that ToMarkdown uses plural form for multiple results.
+    /// </summary>
+    [TestMethod]
+    public void SarifRun_ToMarkdown_MultipleResults_UsesPluralForm()
+    {
+        // Arrange
+        var results = new List<SarifFinding>
+        {
+            new("CA1001", "warning", "First issue", "src/A.cs", 1),
+            new("CA1002", "error", "Second issue", "src/B.cs", 2),
+            new("CA1003", "note", "Third issue", "src/C.cs", 3)
+        };
+        var run = new SarifRun("TestTool", "1.0.0", results, 0);
+
+        // Act
+        var md = run.ToMarkdown(1);
+
+        // Assert
+        Assert.Contains("Found 3 issues", md);
+        Assert.DoesNotContain("Found 3 issue ", md);
     }
 }

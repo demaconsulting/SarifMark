@@ -27,10 +27,10 @@ namespace DemaConsulting.SarifMark.Tests;
 public class SarifFindingTests
 {
     /// <summary>
-    ///     Test that the internal constructor stores all properties correctly.
+    ///     Test that the constructor stores all properties when all properties are provided.
     /// </summary>
     [TestMethod]
-    public void SarifFinding_InternalConstructor_StoresAllProperties()
+    public void SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties()
     {
         // Arrange & Act
         var result = new SarifFinding("RULE001", "error", "Error message", "src/File.cs", 42);
@@ -44,10 +44,10 @@ public class SarifFindingTests
     }
 
     /// <summary>
-    ///     Test that Uri can be null.
+    ///     Test that the Uri property is null when a null uri is provided to the constructor.
     /// </summary>
     [TestMethod]
-    public void SarifFinding_Uri_CanBeNull()
+    public void SarifFinding_Constructor_NullUri_UriPropertyIsNull()
     {
         // Arrange & Act
         var result = new SarifFinding("RULE001", "error", "Error message", null, null);
@@ -57,10 +57,10 @@ public class SarifFindingTests
     }
 
     /// <summary>
-    ///     Test that StartLine can be null.
+    ///     Test that the StartLine property is null when a null start line is provided to the constructor.
     /// </summary>
     [TestMethod]
-    public void SarifFinding_StartLine_CanBeNull()
+    public void SarifFinding_Constructor_NullStartLine_StartLinePropertyIsNull()
     {
         // Arrange & Act
         var result = new SarifFinding("RULE001", "error", "Error message", "src/File.cs", null);

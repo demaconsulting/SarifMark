@@ -15,17 +15,26 @@ sections:
             tests:
               - SarifResults_InternalConstructor_ExposesRunsAndHasIssues
 
-          - id: SarifMark-SarifResults-ValidatePath
-            title: The Read method shall validate the file path is non-null, non-empty, and the file exists.
+          - id: SarifMark-SarifResults-ValidatePathArgument
+            title: The Read method shall throw ArgumentException when the file path is null, empty, or whitespace.
             justification: >-
-              Early path validation produces clear, actionable error messages before any I/O is attempted,
-              improving diagnostic quality and preventing confusing low-level exceptions from propagating
-              to the caller.
+              Early argument validation produces a clear, actionable error message before any I/O is
+              attempted, improving diagnostic quality and preventing confusing low-level exceptions
+              from propagating to the caller.
             tags: [internal]
             tests:
               - SarifResults_Read_NullPath_ThrowsArgumentException
               - SarifResults_Read_EmptyPath_ThrowsArgumentException
               - SarifResults_Read_WhitespacePath_ThrowsArgumentException
+
+          - id: SarifMark-SarifResults-ValidatePathExists
+            title: The Read method shall throw FileNotFoundException when the specified file does not exist.
+            justification: >-
+              Checking file existence before attempting to read produces a clear FileNotFoundException
+              rather than a confusing low-level I/O error, making it easier for callers to diagnose
+              missing input files.
+            tags: [internal]
+            tests:
               - SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException
 
           - id: SarifMark-SarifResults-ValidateStructure
@@ -107,6 +116,10 @@ sections:
               - SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks
               - SarifResults_ToMarkdown_ShowsFileCount
               - SarifResults_ToMarkdown_ZeroFileCount_ShowsZero
+              - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
+              - SarifResults_ToMarkdown_OneResult_UsesSingularForm
+              - SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
+              - SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
 
           - id: SarifMark-SarifResults-ValidateDepth
             title: The ToMarkdown method shall validate that the depth argument is between 1 and 6 inclusive.
@@ -156,15 +169,14 @@ sections:
               - SarifResults_HasIssues_WithIssues_ReturnsTrue
               - SarifResults_HasIssues_AnyRunHasIssues_ReturnsTrue
 
-          - id: SarifMark-SarifResults-MultiRun
+          - id: SarifMark-SarifResults-MultiRunMarkdown
             title: >-
-              The Read method shall parse all runs in a SARIF file and the ToMarkdown method
-              shall generate a combined report for multi-run files.
+              The ToMarkdown method shall generate a combined report for multi-run files.
             justification: >-
               Full multi-run support ensures that SARIF files produced by tools that generate
               multiple runs (e.g., running analysis on different targets) are handled correctly
-              and produce comprehensive reports.
+              and produce comprehensive reports. The Read behavior for parsing multiple runs is
+              separately covered by SarifMark-SarifResults-Runs.
             tags: [internal]
             tests:
-              - SarifResults_Read_MultipleRuns_ReturnsAllRuns
               - SarifResults_ToMarkdown_MultipleRuns_IncludesRunIndices

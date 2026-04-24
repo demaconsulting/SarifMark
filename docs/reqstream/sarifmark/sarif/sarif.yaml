@@ -22,7 +22,8 @@ sections:
               errors and providing clear feedback when inputs are malformed or corrupted.
             tags: [public]
             children:
-              - SarifMark-SarifResults-ValidatePath
+              - SarifMark-SarifResults-ValidatePathArgument
+              - SarifMark-SarifResults-ValidatePathExists
               - SarifMark-SarifResults-ValidateStructure
             tests:
               - Sarif_NonExistentSarifFile_ThrowsFileNotFoundException
@@ -71,7 +72,8 @@ sections:
               improving user experience and preventing confusing runtime failures.
             tags: [public]
             children:
-              - SarifMark-SarifResults-ValidatePath
+              - SarifMark-SarifResults-ValidatePathArgument
+              - SarifMark-SarifResults-ValidatePathExists
             tests:
               - Sarif_NonExistentSarifFile_ThrowsFileNotFoundException
 
@@ -105,6 +107,6 @@ sections:
             tags: [public]
             children:
               - SarifMark-SarifResults-Runs
-              - SarifMark-SarifResults-MultiRun
+              - SarifMark-SarifResults-MultiRunMarkdown
             tests:
               - Sarif_MultiRunSarifFile_ProcessesAllRuns
