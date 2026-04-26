@@ -391,6 +391,5 @@ internal sealed class Context : IDisposable
         // Close and dispose the log file writer if it exists
         _logWriter?.Dispose();
         _logWriter = null;
-        GC.SuppressFinalize(this);
     }
 }

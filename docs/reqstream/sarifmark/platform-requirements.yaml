@@ -26,9 +26,9 @@ sections:
               prevalent in enterprise environments and .NET development ecosystems.
             tags: [public]
             tests:
-              - windows@IntegrationTest_VersionFlag_OutputsVersion
-              - windows@IntegrationTest_HelpFlag_OutputsUsageInformation
-              - windows@IntegrationTest_ValidateFlag_RunsSelfValidation
+              - windows@SarifMark_VersionFlag_OutputsVersion
+              - windows@SarifMark_HelpFlag_OutputsUsageInformation
+              - windows@SarifMark_ValidateFlag_RunsSelfValidation
 
           - id: SarifMark-Plt-Linux
             title: The tool shall run on Linux operating systems.
@@ -37,9 +37,9 @@ sections:
               systems and container environments run on Linux.
             tags: [public]
             tests:
-              - ubuntu@IntegrationTest_VersionFlag_OutputsVersion
-              - ubuntu@IntegrationTest_HelpFlag_OutputsUsageInformation
-              - ubuntu@IntegrationTest_ValidateFlag_RunsSelfValidation
+              - ubuntu@SarifMark_VersionFlag_OutputsVersion
+              - ubuntu@SarifMark_HelpFlag_OutputsUsageInformation
+              - ubuntu@SarifMark_ValidateFlag_RunsSelfValidation
 
           - id: SarifMark-Plt-MacOS
             title: The tool shall run on macOS operating systems.
@@ -48,9 +48,9 @@ sections:
               used in software development environments.
             tags: [public]
             tests:
-              - macos@IntegrationTest_VersionFlag_OutputsVersion
-              - macos@IntegrationTest_HelpFlag_OutputsUsageInformation
-              - macos@IntegrationTest_ValidateFlag_RunsSelfValidation
+              - macos@SarifMark_VersionFlag_OutputsVersion
+              - macos@SarifMark_HelpFlag_OutputsUsageInformation
+              - macos@SarifMark_ValidateFlag_RunsSelfValidation
 
           - id: SarifMark-Plt-Net8
             title: The tool shall support .NET 8.0 runtime.

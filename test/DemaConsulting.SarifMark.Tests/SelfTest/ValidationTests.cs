@@ -323,7 +323,7 @@ public class ValidationTests
     ///     Tests that when the results file path is in a non-existent directory, an I/O error is reported.
     /// </summary>
     [TestMethod]
-    public void Validation_Run_WithUnwritableResultsFile_WritesError()
+    public void Validation_Run_WithNonExistentResultsDirectory_WritesError()
     {
         // Arrange - use a .trx path inside a directory that does not exist so File.WriteAllText throws IOException
         var logFile = CreateTempFile(".log");
