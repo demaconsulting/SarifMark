@@ -114,7 +114,7 @@ sections:
           caller always receives a usable exit code and diagnostic message.
         tags: [internal]
         tests:
-          - Validation_Run_WithUnwritableResultsFile_WritesError
+          - Validation_Run_WithNonExistentResultsDirectory_WritesError
 
       - id: SarifMark-Validation-TempDir
         title: >-
