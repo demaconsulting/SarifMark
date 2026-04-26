@@ -27,6 +27,9 @@ pipelines and documentation workflows.
 - 🌐 **Multi-Platform** - Builds and runs on Windows, Linux, and macOS with .NET 8, 9, and 10
 - ✅ **Self-Validation** - Built-in tests without requiring external tools
 - 📊 **Detailed Reporting** - Extract tool information, results, and locations
+
+## Project Development Practices
+
 - 🔍 **Linting Enforcement** - markdownlint, cspell, and yamllint enforced on every CI run
 - 📋 **Continuous Compliance** - Compliance evidence generated automatically on every CI run,
   following the [Continuous Compliance](https://github.com/demaconsulting/ContinuousCompliance) methodology
@@ -174,7 +177,7 @@ These tests provide evidence of the tool's functionality and are particularly us
 - Generating test evidence for compliance and traceability requirements
 
 For detailed usage instructions, command-line options, and examples, including tool update instructions, see the
-[Usage Guide](https://github.com/demaconsulting/SarifMark/blob/main/docs/guide/guide.md).
+[Usage Guide](https://github.com/demaconsulting/SarifMark/blob/main/docs/user_guide/introduction.md).
 
 ## Report Format
 
@@ -232,7 +235,7 @@ Each test in the report proves:
 - **`SarifMark_MarkdownReportGeneration`** - Markdown report generation from SARIF data works correctly.
 - **`SarifMark_Enforcement`** - Enforcement mode returns a non-zero exit code when issues are found.
 
-See the [Usage Guide](https://github.com/demaconsulting/SarifMark/blob/main/docs/guide/guide.md) for more details
+See the [Usage Guide](https://github.com/demaconsulting/SarifMark/blob/main/docs/user_guide/introduction.md) for more details
 on the self-validation tests.
 
 On validation failure the tool will exit with a non-zero exit code.
@@ -259,7 +262,7 @@ By contributing to this project, you agree that your contributions will be licen
 - 🐛 **Report Bugs**: [GitHub Issues](https://github.com/demaconsulting/SarifMark/issues)
 - 💡 **Request Features**: [GitHub Issues](https://github.com/demaconsulting/SarifMark/issues)
 - ❓ **Ask Questions**: [GitHub Discussions](https://github.com/demaconsulting/SarifMark/discussions)
-- 📖 **Documentation**: [Usage Guide](https://github.com/demaconsulting/SarifMark/blob/main/docs/guide/guide.md)
+- 📖 **Documentation**: [Usage Guide](https://github.com/demaconsulting/SarifMark/blob/main/docs/user_guide/introduction.md)
 - 🤝 **Contributing**: [Contributing Guide](https://github.com/demaconsulting/SarifMark/blob/main/CONTRIBUTING.md)
 
 ## Security

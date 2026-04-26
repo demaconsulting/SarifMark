@@ -673,6 +673,7 @@ public class SarifResultsTests
             }
             """);
 
+        // Act - read the SARIF file
         var results = SarifResults.Read(filePath);
 
         // Assert - result contains the expected location information
@@ -1004,6 +1005,50 @@ public class SarifResultsTests
     }
 
     /// <summary>
+    ///     Test that Read does not suppress results with an empty suppressions array.
+    /// </summary>
+    [TestMethod]
+    public void SarifResults_Read_EmptySuppressions_DoesNotExcludeResult()
+    {
+        // Arrange - SARIF file with a result that has an empty suppressions array
+        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "empty-suppressions.sarif");
+        File.WriteAllText(filePath, """
+            {
+                "version": "2.1.0",
+                "runs": [
+                    {
+                        "tool": {
+                            "driver": {
+                                "name": "TestTool",
+                                "version": "1.0.0"
+                            }
+                        },
+                        "results": [
+                            {
+                                "ruleId": "TEST001",
+                                "level": "warning",
+                                "message": {
+                                    "text": "Unsuppressed result with empty suppressions"
+                                },
+                                "suppressions": []
+                            }
+                        ]
+                    }
+                ]
+            }
+            """);
+
+        // Act - read the SARIF file
+        var results = SarifResults.Read(filePath);
+
+        // Assert - result with empty suppressions array is not excluded
+        Assert.AreEqual(1, results.Runs[0].ResultCount,
+            "Result with an empty suppressions array should not be excluded");
+        Assert.AreEqual("TEST001", results.Runs[0].Results[0].RuleId);
+        Assert.AreEqual("Unsuppressed result with empty suppressions", results.Runs[0].Results[0].Message);
+    }
+
+    /// <summary>
     ///     Test that Read returns zero file count when no artifacts array is present.
     /// </summary>
     [TestMethod]
@@ -1201,10 +1246,10 @@ public class SarifResultsTests
     public void SarifResults_HasIssues_WithIssues_ReturnsTrue()
     {
         // Arrange
-        var sarifResults2 = new List<SarifFinding> { new SarifFinding("R1", "warning", "msg", null, null) };
+        var resultList = new List<SarifFinding> { new SarifFinding("R1", "warning", "msg", null, null) };
 
         // Act
-        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", sarifResults2)]);
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", resultList)]);
 
         // Assert
         Assert.IsTrue(results.HasIssues);

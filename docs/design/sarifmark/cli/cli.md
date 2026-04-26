@@ -42,9 +42,10 @@ The `Cli` subsystem exposes the following interface to the rest of the tool:
 | `Enforce`     | `bool`    | `--enforce`              | Enforcement mode flag                         |
 | `SarifFile`   | `string?` | `--sarif <file>`         | Path to the SARIF input file                  |
 | `ReportFile`  | `string?` | `--report <file>`        | Path for the markdown report output file      |
-| `Depth`       | `int`     | `--depth <depth>`        | Markdown heading depth for the report         |
+| `Depth`       | `int`     | `--depth <depth>`        | Heading depth (legacy: `--report-depth`)      |
 | `Heading`     | `string?` | `--heading <text>`       | Custom heading text for the report            |
-| `ResultsFile` | `string?` | `--results <file>`       | Path for the self-validation results file     |
+| `ResultsFile` | `string?` | `--results <file>`       | Results file (legacy: `--result`)             |
+| *(log writer)*| —         | `--log <file>`           | Internal log writer; not a property           |
 | `ExitCode`    | `int`     | *(derived)*              | 0 until `WriteError` is called, then 1        |
 
 ## Interactions

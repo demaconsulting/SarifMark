@@ -1,45 +1,45 @@
 ---
 sections:
-  - title: Design Specifications
-    sections:
-      - title: PathHelpers Class
-        requirements:
-          - id: SarifMark-PathHelpers-SafeCombine
-            title: The SafePathCombine method shall combine a base path and a relative path into a validated path.
-            justification: >-
-              Providing a dedicated combining method keeps path-safety logic centralized and reusable,
-              ensuring that every caller automatically benefits from the same validation rules rather than
-              reimplementing them independently.
-            tags: [internal]
-            tests:
-              - PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully
-              - PathHelpers_SafePathCombine_SimpleFilename_CombinesSuccessfully
-              - PathHelpers_SafePathCombine_PathWithSubdirectories_CombinesSuccessfully
-              - PathHelpers_SafePathCombine_GuidBasedFilename_CombinesSuccessfully
-              - PathHelpers_SafePathCombine_FilenameWithEmbeddedDots_CombinesSuccessfully
+  - title: PathHelpers Unit Requirements
+    requirements:
+      - id: SarifMark-PathHelpers-SafeCombine
+        title: >-
+          The PathHelpers unit shall safely combine a base path with a relative path,
+          producing a validated result path.
+        justification: >-
+          Providing a dedicated path-combining operation keeps path-safety logic centralized and reusable,
+          ensuring that every caller automatically benefits from the same validation rules rather than
+          reimplementing them independently.
+        tags: [internal]
+        tests:
+          - PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully
+          - PathHelpers_SafePathCombine_SimpleFilename_CombinesSuccessfully
+          - PathHelpers_SafePathCombine_PathWithSubdirectories_CombinesSuccessfully
+          - PathHelpers_SafePathCombine_GuidBasedFilename_CombinesSuccessfully
+          - PathHelpers_SafePathCombine_FilenameWithEmbeddedDots_CombinesSuccessfully
 
-          - id: SarifMark-PathHelpers-NullCheck
-            title: The SafePathCombine method shall throw ArgumentNullException when either argument is null.
-            justification: >-
-              Explicit null checks produce clear exceptions at the earliest possible point, preventing
-              null values from propagating into path manipulation code where the resulting errors would
-              be harder to diagnose.
-            tags: [internal]
-            tests:
-              - PathHelpers_SafePathCombine_NullBasePath_ThrowsArgumentNullException
-              - PathHelpers_SafePathCombine_NullRelativePath_ThrowsArgumentNullException
+      - id: SarifMark-PathHelpers-NullCheck
+        title: The PathHelpers unit shall reject null base or relative path arguments with a clear error.
+        justification: >-
+          Explicit null checks produce clear errors at the earliest possible point, preventing
+          null values from propagating into path manipulation code where the resulting errors would
+          be harder to diagnose.
+        tags: [internal]
+        tests:
+          - PathHelpers_SafePathCombine_NullBasePath_ThrowsArgumentNullException
+          - PathHelpers_SafePathCombine_NullRelativePath_ThrowsArgumentNullException
 
-          - id: SarifMark-PathHelpers-PostCombineCheck
-            title: The SafePathCombine method shall verify the combined path remains under the base path.
-            justification: >-
-              A post-combination containment check using Path.GetRelativePath handles all traversal
-              patterns — directory traversal sequences, absolute-path overrides, and platform edge
-              cases — without fragile pre-combine string inspection. Treating ".." as an escape segment
-              only when it is the entire result or is followed by a directory separator avoids false
-              positives for valid names such as "..data" or "v1..0.sarif".
-            tags: [internal]
-            tests:
-              - PathHelpers_SafePathCombine_PathWithParentDirectory_ThrowsArgumentException
-              - PathHelpers_SafePathCombine_PathWithDoubleDots_ThrowsArgumentException
-              - PathHelpers_SafePathCombine_AbsolutePath_ThrowsArgumentException
-              - PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully
+      - id: SarifMark-PathHelpers-PostCombineCheck
+        title: The PathHelpers unit shall reject combined paths that resolve outside the base directory.
+        justification: >-
+          A post-combination containment check handles all traversal patterns — directory traversal
+          sequences, absolute-path overrides, and platform edge cases — without fragile pre-combine
+          string inspection. Treating ".." as an escape segment only when it is the entire result or
+          is followed by a directory separator avoids false positives for valid names such as "..data"
+          or "v1..0.sarif".
+        tags: [internal]
+        tests:
+          - PathHelpers_SafePathCombine_PathWithParentDirectory_ThrowsArgumentException
+          - PathHelpers_SafePathCombine_PathWithDoubleDots_ThrowsArgumentException
+          - PathHelpers_SafePathCombine_AbsolutePath_ThrowsArgumentException
+          - PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully

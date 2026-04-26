@@ -10,9 +10,10 @@ markdown reports from the extracted results. It consists of three records:
 logic). This layer satisfies requirements `SarifMark-Sarif-Reading`,
 `SarifMark-Sarif-Validation`, `SarifMark-Sarif-ToolInfo`, `SarifMark-Sarif-Results`,
 `SarifMark-Sarif-Locations`, `SarifMark-Sarif-FilePaths`,
-`SarifMark-Sarif-Processing`, `SarifMark-Sarif-MultiRun`, `SarifMark-Report-Markdown`,
-`SarifMark-Report-Depth`, `SarifMark-Report-Counts`, `SarifMark-Report-Locations`,
-`SarifMark-Report-Headings`, and `SarifMark-Report-LineBreaks`.
+`SarifMark-Sarif-Processing`, `SarifMark-Sarif-MultiRun`, `SarifMark-Sarif-FileCount`,
+`SarifMark-Report-Markdown`, `SarifMark-Report-Depth`, `SarifMark-Report-Counts`,
+`SarifMark-Report-Locations`, `SarifMark-Report-Headings`, `SarifMark-Report-LineBreaks`,
+and `SarifMark-Report-FileCount`.
 
 ## Architecture
 
@@ -46,7 +47,9 @@ The SARIF and reporting layer uses a three-record design:
    (satisfies `SarifMark-Sarif-ToolInfo`)
 5. Per-run result parsing with suppression filtering
    (satisfies `SarifMark-Sarif-Results` and `SarifMark-Sarif-Reading`)
-6. Construction and return of the `SarifResults` record with all runs
+6. Per-run file count extraction from the `artifacts` array
+   (satisfies `SarifMark-Sarif-FileCount`)
+7. Construction and return of the `SarifResults` record with all runs
    (satisfies `SarifMark-Sarif-Processing` and `SarifMark-Sarif-MultiRun`)
 
 ## Report Generation
@@ -56,9 +59,10 @@ validates the heading depth (1–6), then for a single-run file delegates direct
 run's `ToMarkdown`. For multi-run files it concatenates the markdown output of all runs,
 emitting indexed headings (e.g., `"Tool1 Analysis (#1)"`, `"Tool2 Analysis (#2)"`). Each
 run's report includes a configurable heading with tool attribution, and formats each result
-with location information and result counts. This satisfies `SarifMark-Report-Markdown`,
-`SarifMark-Report-Depth`, `SarifMark-Report-Headings`, `SarifMark-Report-Counts`,
-`SarifMark-Report-Locations`, and `SarifMark-Report-LineBreaks`.
+with location information, result counts, and the analyzed file count. This satisfies
+`SarifMark-Report-Markdown`, `SarifMark-Report-Depth`, `SarifMark-Report-Headings`,
+`SarifMark-Report-Counts`, `SarifMark-Report-Locations`, `SarifMark-Report-LineBreaks`,
+and `SarifMark-Report-FileCount`.
 
 ## CLI Integration
 

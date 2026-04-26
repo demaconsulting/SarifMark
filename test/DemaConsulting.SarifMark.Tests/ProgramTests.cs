@@ -151,6 +151,19 @@ public class ProgramTests
     }
 
     /// <summary>
+    ///     Test that Main with --validate flag runs self-validation.
+    /// </summary>
+    [TestMethod]
+    public void Program_Main_ValidateFlag_RunsValidation()
+    {
+        // Act - run in silent mode to suppress all console output
+        var result = Program.Main(["--validate", "--silent"]);
+
+        // Assert
+        Assert.AreEqual(0, result);
+    }
+
+    /// <summary>
     ///     Test that Main processes a valid SARIF file successfully.
     /// </summary>
     [TestMethod]
@@ -199,6 +212,7 @@ public class ProgramTests
 
             // Assert
             Assert.AreEqual(1, result);
+            Assert.Contains("Issues found", errWriter.ToString());
         }
         finally
         {

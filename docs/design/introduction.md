@@ -15,7 +15,7 @@ The purpose of this document is to:
 
 ## Scope
 
-This document covers the design of three primary functional layers within SarifMark:
+This document covers the design of four primary functional layers within SarifMark:
 
 - The **command-line layer**: the `Program` entry point and `Context` class that handle
   argument parsing, output routing, and program flow control
@@ -23,6 +23,7 @@ This document covers the design of three primary functional layers within SarifM
   read SARIF files and generate markdown reports
 - The **self-validation layer**: the `Validation` class that provides built-in
   verification of the tool's core functionality
+- The **utilities layer**: the `PathHelpers` class that provides shared path-combination helpers
 
 Each functional layer is first described at a **concept level** — covering its purpose,
 architecture, and the requirements it satisfies — followed by **class-level documents**

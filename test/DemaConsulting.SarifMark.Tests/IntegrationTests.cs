@@ -48,7 +48,7 @@ public class IntegrationTests
     ///     Test that version flag outputs version information.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_VersionFlag_OutputsVersion()
+    public void SarifMark_VersionFlag_OutputsVersion()
     {
         // Arrange - No special setup needed
 
@@ -70,7 +70,7 @@ public class IntegrationTests
     ///     Test that help flag outputs usage information.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_HelpFlag_OutputsUsageInformation()
+    public void SarifMark_HelpFlag_OutputsUsageInformation()
     {
         // Arrange - No special setup needed
 
@@ -95,7 +95,7 @@ public class IntegrationTests
     ///     Test that validate flag runs self-validation.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_ValidateFlag_RunsSelfValidation()
+    public void SarifMark_ValidateFlag_RunsSelfValidation()
     {
         // Arrange - No special setup needed
 
@@ -116,7 +116,7 @@ public class IntegrationTests
     ///     Test that missing sarif parameter shows error.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_MissingSarifParameter_ShowsError()
+    public void SarifMark_MissingSarifParameter_ShowsError()
     {
         // Arrange - No special setup needed
 
@@ -135,7 +135,7 @@ public class IntegrationTests
     ///     Test that processing a valid SARIF file succeeds.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_ValidSarifFile_ProcessesSuccessfully()
+    public void SarifMark_ValidSarifFile_ProcessesSuccessfully()
     {
         // Arrange
         var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
@@ -161,7 +161,7 @@ public class IntegrationTests
     ///     Test that processing a non-existent SARIF file shows error.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_NonExistentSarifFile_ShowsError()
+    public void SarifMark_NonExistentSarifFile_ShowsError()
     {
         // Arrange - No special setup needed
 
@@ -181,7 +181,7 @@ public class IntegrationTests
     ///     Test that generating a report file succeeds.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_GenerateReport_CreatesReportFile()
+    public void SarifMark_GenerateReport_CreatesReportFile()
     {
         // Arrange
         var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
@@ -222,7 +222,7 @@ public class IntegrationTests
     ///     Test that enforce flag with issues returns error exit code.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_EnforceFlagWithIssues_ReturnsError()
+    public void SarifMark_EnforceFlagWithIssues_ReturnsError()
     {
         // Arrange
         var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
@@ -245,7 +245,7 @@ public class IntegrationTests
     ///     Test that silent flag suppresses console output.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_SilentFlag_SuppressesOutput()
+    public void SarifMark_SilentFlag_SuppressesOutput()
     {
         // Arrange
         var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
@@ -269,7 +269,7 @@ public class IntegrationTests
     ///     Test that log file parameter writes output to file.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_LogFile_WritesOutputToFile()
+    public void SarifMark_LogFile_WritesOutputToFile()
     {
         // Arrange
         var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
@@ -310,7 +310,7 @@ public class IntegrationTests
     ///     Test that unknown arguments are rejected with error.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_UnknownArgument_ShowsError()
+    public void SarifMark_UnknownArgument_ShowsError()
     {
         // Arrange - No special setup needed
 
@@ -331,7 +331,7 @@ public class IntegrationTests
     ///     Test that depth parameter is configurable.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_ReportDepth_IsConfigurable()
+    public void SarifMark_ReportDepth_IsConfigurable()
     {
         // Arrange
         var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
@@ -371,7 +371,7 @@ public class IntegrationTests
     ///     Test that legacy report-depth parameter is still accepted.
     /// </summary>
     [TestMethod]
-    public void IntegrationTest_LegacyReportDepth_IsAccepted()
+    public void SarifMark_LegacyReportDepth_IsAccepted()
     {
         // Arrange
         var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");

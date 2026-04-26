@@ -34,17 +34,18 @@ The system entry point is `Program.Main`. On every invocation it:
 `ArgumentException` and `InvalidOperationException` are caught at the
 `Main` level and translated to exit code 1, so these expected error paths
 produce a non-zero exit code without an unhandled-exception stack trace. Any
-other unexpected `Exception` is logged with an "Unexpected error" message and
-then rethrown, allowing the default .NET unhandled-exception behavior (stack
-trace and process termination with a non-zero exit code) to occur.
+other unexpected `Exception` has its message printed to `Console.Error` with an
+"Unexpected error:" prefix and is then rethrown, allowing the default .NET
+unhandled-exception behavior (stack trace and process termination with a non-zero
+exit code) to occur.
 
 `Program.Run` first prints the standard banner for all non-`--version`
 invocations, then evaluates conditions in priority order:
 
 | Mode       | Condition                                  | Subsystem Invoked                          |
 |------------|--------------------------------------------|--------------------------------------------|
-| Banner     | Any non-`--version` invocation (first)     | `Program` (prints standard banner)         |
 | Version    | `--version` flag                           | None (prints version string)               |
+| Banner     | Any non-`--version` invocation             | `Program` (prints standard banner)         |
 | Help       | `--help` flag                              | None (prints usage)                        |
 | Validate   | `--validate` flag                          | `SelfTest.Validation.Run`                  |
 | Analysis   | *(default)*                                | `Sarif.SarifResults.Read` + `ToMarkdown`   |

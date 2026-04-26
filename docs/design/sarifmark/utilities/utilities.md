@@ -22,9 +22,13 @@ The `Utilities` subsystem contains the following software unit:
 
 The `Utilities` subsystem exposes the following interface to the rest of the tool:
 
-| Interface                     | Direction | Description                                                |
-|-------------------------------|-----------|------------------------------------------------------------|
-| `PathHelpers.SafePathCombine` | Outbound  | Combines two path segments, rejecting traversal sequences. |
+| Interface                     | Direction | Description                                         |
+|-------------------------------|-----------|-----------------------------------------------------|
+| `PathHelpers.SafePathCombine` | Outbound  | Combines two path segments, rejecting traversal.    |
+
+**Error contract for `SafePathCombine`**: throws `ArgumentNullException` when either argument
+is `null`; throws `ArgumentException` when the resolved path escapes the base directory or
+contains an invalid path component.
 
 ## Interactions
 

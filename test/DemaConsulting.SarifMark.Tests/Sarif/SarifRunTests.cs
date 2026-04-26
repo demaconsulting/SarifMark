@@ -56,7 +56,7 @@ public class SarifRunTests
         // Arrange
         var run = new SarifRun("Tool", "1.0", [], 0);
 
-        // Assert
+        // Act & Assert
         Assert.IsFalse(run.HasIssues);
     }
 
@@ -296,4 +296,23 @@ public class SarifRunTests
         Assert.Contains("Found 3 issues", md);
         Assert.DoesNotContain("Found 3 issue ", md);
     }
+
+    /// <summary>
+    ///     Test that ToMarkdown at depth 6 caps the Issues sub-heading at 6 hashes.
+    /// </summary>
+    [TestMethod]
+    public void SarifRun_ToMarkdown_Depth6_IssuesHeadingCappedAtSix()
+    {
+        // Arrange
+        var run = new SarifRun("Tool", "1.0", [], 0);
+
+        // Act
+        var md = run.ToMarkdown(6);
+
+        // Assert - depth + 1 = 7 is capped at 6 by Math.Min(depth + 1, 6)
+        Assert.Contains("###### Tool Analysis", md);
+        Assert.Contains("###### Issues", md);
+        Assert.DoesNotContain("####### Issues", md);
+    }
 }
+

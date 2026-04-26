@@ -6,14 +6,14 @@
 # Patterns identifying all files that require review.
 # Processed in order; prefix a pattern with '!' to exclude.
 needs-review:
-  - "**/*.cs"                          # All C# source and test files
-  - "requirements.yaml"                # Root requirements file
-  - "docs/reqstream/**/*.yaml"         # Requirements files
-  - "docs/design/**/*.md"              # Design documents
-  - "README.md"                        # Root level README
-  - "docs/user_guide/**/*.md"          # User guide
-  - "!**/obj/**"                       # Exclude build output
-  - "!**/bin/**"                       # Exclude build output
+  - "README.md"                  # Project readme
+  - "**/*.cs"                    # All C# source and test files
+  - "requirements.yaml"          # Root requirements file
+  - "docs/reqstream/**/*.yaml"   # Requirements files
+  - "docs/user_guide/**/*.md"    # User guide documents
+  - "docs/design/**/*.md"        # Design documents
+  - "!**/obj/**"                 # Exclude build output
+  - "!**/bin/**"                 # Exclude build output
 
 # Evidence source: review data and index.json are located in the 'reviews' branch
 # of this repository, accessed through the GitHub public HTTPS raw content access.
@@ -21,21 +21,11 @@ evidence-source:
   type: url
   location: https://raw.githubusercontent.com/demaconsulting/SarifMark/reviews/index.json
 
-# Review sets grouping files by logical unit of review.
-# Purpose review: proves advertised features match the system design.
-# Architecture reviews: prove the system satisfies its requirements.
-# Design review: proves design is consistent and complete.
-# AllRequirements review: proves requirements are consistent and complete.
-# Subsystem reviews: prove each subsystem satisfies its requirements.
-# Unit reviews: prove each unit is designed, implemented, and tested correctly.
+# Review sets following standardized patterns for hierarchical compliance coverage
 reviews:
-
-  # ---------------------------------------------------------------------------
-  # Purpose Review
-  # ---------------------------------------------------------------------------
-
-  - id: SarifMark-Purpose
-    title: Review that Advertised Features Match System Design
+  # Purpose Review (only one per repository)
+  - id: Purpose
+    title: Review of user-facing capabilities and system promises
     paths:
       - "README.md"
       - "docs/user_guide/**/*.md"
@@ -43,12 +33,9 @@ reviews:
       - "docs/design/introduction.md"
       - "docs/design/sarifmark/sarifmark.md"
 
-  # ---------------------------------------------------------------------------
-  # Architecture Review
-  # ---------------------------------------------------------------------------
-
+  # SarifMark-Architecture Review (one per system)
   - id: SarifMark-Architecture
-    title: Review that SarifMark Architecture Satisfies Requirements
+    title: Review of SarifMark system architecture and operational validation
     paths:
       - "docs/reqstream/sarifmark/sarifmark.yaml"
       - "docs/design/introduction.md"
@@ -57,35 +44,26 @@ reviews:
       - "test/**/Runner.cs"
       - "test/**/AssemblyInfo.cs"
 
-  # ---------------------------------------------------------------------------
-  # Design Review
-  # ---------------------------------------------------------------------------
-
+  # SarifMark-Design Review (one per system)
   - id: SarifMark-Design
-    title: Review that SarifMark Design is Consistent and Complete
+    title: Review of SarifMark architectural and design consistency
     paths:
       - "docs/reqstream/sarifmark/sarifmark.yaml"
       - "docs/reqstream/sarifmark/platform-requirements.yaml"
       - "docs/design/introduction.md"
       - "docs/design/sarifmark/**/*.md"
 
-  # ---------------------------------------------------------------------------
-  # All Requirements Review
-  # ---------------------------------------------------------------------------
-
+  # SarifMark-AllRequirements Review (one per system)
   - id: SarifMark-AllRequirements
-    title: Review that All SarifMark Requirements are Complete
+    title: Review of SarifMark requirements quality and traceability
     paths:
       - "requirements.yaml"
       - "docs/reqstream/sarifmark/**/*.yaml"
       - "docs/reqstream/ots/**/*.yaml"
 
-  # ---------------------------------------------------------------------------
-  # Subsystem Reviews
-  # ---------------------------------------------------------------------------
-
+  # SarifMark-Cli Review (one per subsystem)
   - id: SarifMark-Cli
-    title: Review that SarifMark Cli Satisfies Subsystem Requirements
+    title: Review of SarifMark Cli subsystem architecture and interfaces
     paths:
       - "docs/reqstream/sarifmark/cli/cli.yaml"
       - "docs/design/sarifmark/cli/cli.md"

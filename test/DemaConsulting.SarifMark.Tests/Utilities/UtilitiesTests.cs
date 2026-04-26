@@ -54,12 +54,12 @@ public class UtilitiesTests
         var maliciousPath = "../../../etc/passwd";
 
         // Act & Assert
-        Assert.Throws<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             PathHelpers.SafePathCombine(basePath, maliciousPath));
     }
 
     /// <summary>
-    ///     Test that the Utilities subsystem rejects absolute paths.
+    ///     Test that the Utilities subsystem rejects absolute path input.
     /// </summary>
     [TestMethod]
     public void Utilities_SafePathHandling_AbsolutePath_ThrowsException()
@@ -69,21 +69,21 @@ public class UtilitiesTests
         var absolutePath = "/etc/passwd";
 
         // Act & Assert
-        Assert.Throws<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             PathHelpers.SafePathCombine(basePath, absolutePath));
     }
 
     /// <summary>
-    ///     Test that the Utilities subsystem rejects null inputs.
+    ///     Test that the Utilities subsystem rejects null relative path input.
     /// </summary>
     [TestMethod]
-    public void Utilities_SafePathHandling_NullInput_ThrowsException()
+    public void Utilities_SafePathHandling_NullRelativePath_ThrowsException()
     {
         // Arrange
         var basePath = Path.GetTempPath();
 
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() =>
+        Assert.ThrowsExactly<ArgumentNullException>(() =>
             PathHelpers.SafePathCombine(basePath, null!));
     }
 }

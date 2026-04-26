@@ -9,8 +9,9 @@ JUnit XML file when `--results` is also provided. This satisfies requirements
 
 ## Validation Class
 
-The `Validation` class (`Validation.cs`) exposes a single public method, `Run`, and
-organizes all test execution internally.
+The `Validation` class (`Validation.cs`) is declared `internal static`, limiting its use to the
+`DemaConsulting.SarifMark` assembly. It exposes a single public method, `Run`, and organizes
+all test execution internally.
 
 ### Run Method
 
@@ -100,6 +101,36 @@ On success, writes `"Results written to <path>"` via `context.WriteLine`. Catche
 `NotSupportedException` and routes them through `context.WriteError`.
 
 The serialized content is written with `File.WriteAllText`.
+
+### CreateMockSarifFile
+
+`CreateMockSarifFile(string filePath)` writes a hard-coded SARIF 2.1.0 JSON file to `filePath`.
+The file contains a single run from a tool named `MockTool` (version `1.0.0`) with exactly two
+results: `TEST001` (warning, `src/Program.cs` line 42) and `TEST002` (error, `src/Helper.cs`
+line 15). All three self-tests validate against this specific structure, so any change to
+the mock file must be reflected in the corresponding validator lambdas.
+
+### CreateTestResult
+
+`CreateTestResult(string testName)` allocates a new `TestResult` object with `Name` set to
+`testName`, `ClassName` set to `"Validation"`, and `CodeBase` set to `"SarifMark"`. Centralizing
+creation ensures every test result carries consistent metadata without repetition across the
+three test methods.
+
+### FinalizeTestResult
+
+`FinalizeTestResult(TestResult test, DateTime startTime, TestResults testResults)` sets
+`test.Duration` to the elapsed time since `startTime` and appends `test` to `testResults.Results`.
+It is always called at the end of `RunValidationTest` — whether the test passed, failed, or threw —
+to ensure every started test is recorded with a valid duration.
+
+### HandleTestException
+
+`HandleTestException(TestResult test, Context context, string testName, Exception ex)` sets
+`test.Outcome` to `Failed`, records the exception message as `test.ErrorMessage`, and calls
+`context.WriteError` with a `✗`-prefixed failure line. It is invoked from the `catch` block in
+`RunValidationTest` to handle any unhandled exception as a test failure rather than propagating
+it as an unhandled crash.
 
 ### TemporaryDirectory
 

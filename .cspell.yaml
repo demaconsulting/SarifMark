@@ -14,35 +14,23 @@ language: en
 
 # Project-specific technical terms and tool names
 words:
-  - Blockquotes
   - BuildMark
-  - buildtransitive
   - Checkmarx
-  - contentfiles
-  - dcterms
-  - DEMA
-  - doctitle
-  - docversion
+  - Dema
   - FileAssert
-  - LASTEXITCODE
   - mstest
-  - pagetitle
-  - pandoc
+  - Pandoc
   - Pylint
   - ReqStream
   - ReviewMark
   - SARIF
   - SarifMark
   - Semgrep
-  - slnx
-  - snupkg
+  - Unwritable
   - SonarMark
   - SonarQube
-  - thirdparty
-  - venv
   - VersionMark
   - WeasyPrint
-  - Werror
   - yamlfix
 
 # Exclude common build artifacts, dependencies, and vendored third-party code
