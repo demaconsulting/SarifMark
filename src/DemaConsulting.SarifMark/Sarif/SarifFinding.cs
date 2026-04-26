@@ -26,27 +26,34 @@ namespace DemaConsulting.SarifMark;
 public record SarifFinding
 {
     /// <summary>
-    ///     Gets the rule identifier for this finding.
+    ///     Gets the rule identifier that links this finding back to the tool rule definition,
+    ///     allowing report readers to look up the rule documentation for the flagged issue.
     /// </summary>
     public string RuleId { get; }
 
     /// <summary>
-    ///     Gets the level of the finding (e.g., "error", "warning", "note").
+    ///     Gets the severity level (error, warning, or note) that determines how the finding
+    ///     is classified and displayed in the generated markdown report.
     /// </summary>
     public string Level { get; }
 
     /// <summary>
-    ///     Gets the message text describing the finding.
+    ///     Gets the descriptive message text that explains what the finding means and how
+    ///     to address the flagged issue.
     /// </summary>
     public string Message { get; }
 
     /// <summary>
-    ///     Gets the file URI where the finding was found.
+    ///     Gets the file URI where the finding was detected, enabling report readers to
+    ///     navigate directly to the affected source file. Null when no physical location
+    ///     is associated with the finding.
     /// </summary>
     public string? Uri { get; }
 
     /// <summary>
-    ///     Gets the starting line number where the finding was found.
+    ///     Gets the starting line number within the file, providing precise location
+    ///     information for direct navigation to the affected code. Null when no line
+    ///     information is available in the SARIF data.
     /// </summary>
     public int? StartLine { get; }
 

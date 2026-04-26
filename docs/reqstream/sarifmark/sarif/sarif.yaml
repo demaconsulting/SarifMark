@@ -100,10 +100,11 @@ sections:
               - Sarif_Report_ContainsFileCount
 
           - id: SarifMark-Sarif-MultiRun
-            title: The tool shall support SARIF files containing multiple runs.
+            title: The tool shall process SARIF files containing multiple runs and return all runs.
             justification: >-
-              SARIF files can contain multiple runs from different tools. Supporting
-              multi-run files ensures comprehensive analysis reporting.
+              Multi-run SARIF files are produced when more than one analysis tool writes results into a single
+              file. Supporting multi-run files ensures the tool works correctly with all conformant SARIF
+              producers, including CI pipelines that aggregate results from several tools.
             tags: [public]
             children:
               - SarifMark-SarifResults-Runs

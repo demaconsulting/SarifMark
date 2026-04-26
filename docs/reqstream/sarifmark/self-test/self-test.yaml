@@ -25,8 +25,8 @@ sections:
               - SarifMark-Validation-TrxResultsFile
               - SarifMark-Validation-XmlResultsFile
             tests:
-              - SelfTest_ResultsFile_WritesTrxFile
-              - SelfTest_ResultsFile_WritesJUnitFile
+              - SelfTest_ResultsFile_TrxPath_WritesTrxFile
+              - SelfTest_ResultsFile_XmlPath_WritesJUnitFile
 
           - id: SarifMark-Validate-TrxFormat
             title: The tool shall support TRX format for test results.
@@ -37,7 +37,7 @@ sections:
             children:
               - SarifMark-Validation-TrxResultsFile
             tests:
-              - SelfTest_ResultsFile_WritesTrxFile
+              - SelfTest_ResultsFile_TrxPath_WritesTrxFile
 
           - id: SarifMark-Validate-JUnitFormat
             title: The tool shall support JUnit format for test results.
@@ -48,12 +48,12 @@ sections:
             children:
               - SarifMark-Validation-XmlResultsFile
             tests:
-              - SelfTest_ResultsFile_WritesJUnitFile
+              - SelfTest_ResultsFile_XmlPath_WritesJUnitFile
 
       - title: Quality Enforcement
         requirements:
           - id: SarifMark-Enforce-Mode
-            title: The tool shall support enforcement mode to fail on issues found.
+            title: The SelfTest subsystem shall support enforcement mode to fail on issues found.
             justification: >-
               Enforcement mode enables the tool to act as a quality gate in CI/CD pipelines, preventing code
               with analysis issues from being merged or deployed, thereby maintaining code quality standards.
@@ -64,7 +64,7 @@ sections:
               - SelfTest_EnforcementTest_RunsWithinValidation
 
           - id: SarifMark-Enforce-ExitCode
-            title: The tool shall return non-zero exit code when issues found in enforcement mode.
+            title: The SelfTest subsystem shall return non-zero exit code when issues found in enforcement mode.
             justification: >-
               Non-zero exit codes signal failure to CI/CD systems and scripts, enabling automated build failures
               and preventing the progression of problematic code through deployment pipelines.

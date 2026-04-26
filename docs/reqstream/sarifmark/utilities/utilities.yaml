@@ -19,4 +19,4 @@ sections:
               - Utilities_SafePathHandling_ValidPaths_CombinesSuccessfully
               - Utilities_SafePathHandling_PathTraversal_ThrowsException
               - Utilities_SafePathHandling_AbsolutePath_ThrowsException
-              - Utilities_SafePathHandling_NullInput_ThrowsException
+              - Utilities_SafePathHandling_NullRelativePath_ThrowsException

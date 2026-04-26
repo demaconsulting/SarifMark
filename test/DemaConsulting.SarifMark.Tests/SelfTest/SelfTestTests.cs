@@ -32,25 +32,28 @@ public class SelfTestTests
     [TestMethod]
     public void SelfTest_ValidateFlag_RunsSelfValidation()
     {
-        // Arrange
-        var originalOut = Console.Out;
+        // Arrange - silent context that captures all output to a temp log file
+        var logFile = Path.Combine(Path.GetTempPath(), $"self-test-{Guid.NewGuid()}.log");
         try
         {
-            using var outWriter = new StringWriter();
-            Console.SetOut(outWriter);
+            using (var context = Context.Create(["--validate", "--silent", "--log", logFile]))
+            {
+                // Act
+                Validation.Run(context);
 
-            // Act
-            using var context = Context.Create(["--validate"]);
-            Validation.Run(context);
-            var output = outWriter.ToString();
+                // Assert
+                Assert.AreEqual(0, context.ExitCode);
+            }
 
-            // Assert
-            Assert.AreEqual(0, context.ExitCode);
+            var output = File.ReadAllText(logFile);
             Assert.Contains("Total Tests:", output);
         }
         finally
         {
-            Console.SetOut(originalOut);
+            if (File.Exists(logFile))
+            {
+                File.Delete(logFile);
+            }
         }
     }
 
@@ -58,34 +61,23 @@ public class SelfTestTests
     ///     Test that validate flag with TRX results parameter writes a TRX file.
     /// </summary>
     [TestMethod]
-    public void SelfTest_ResultsFile_WritesTrxFile()
+    public void SelfTest_ResultsFile_TrxPath_WritesTrxFile()
     {
         // Arrange
         var resultsFile = Path.Combine(Path.GetTempPath(), $"test-results-{Guid.NewGuid()}.trx");
 
         try
         {
-            var originalOut = Console.Out;
-            try
-            {
-                using var outWriter = new StringWriter();
-                Console.SetOut(outWriter);
+            // Act
+            using var context = Context.Create(["--validate", "--silent", "--results", resultsFile]);
+            Validation.Run(context);
 
-                // Act
-                using var context = Context.Create(["--validate", "--results", resultsFile]);
-                Validation.Run(context);
+            // Assert
+            Assert.AreEqual(0, context.ExitCode);
+            Assert.IsTrue(File.Exists(resultsFile), "TRX results file was not created");
 
-                // Assert
-                Assert.AreEqual(0, context.ExitCode);
-                Assert.IsTrue(File.Exists(resultsFile), "TRX results file was not created");
-
-                var content = File.ReadAllText(resultsFile);
-                Assert.Contains("<TestRun", content);
-            }
-            finally
-            {
-                Console.SetOut(originalOut);
-            }
+            var content = File.ReadAllText(resultsFile);
+            Assert.Contains("<TestRun", content);
         }
         finally
         {
@@ -100,34 +92,23 @@ public class SelfTestTests
     ///     Test that validate flag with JUnit XML results parameter writes a JUnit XML file.
     /// </summary>
     [TestMethod]
-    public void SelfTest_ResultsFile_WritesJUnitFile()
+    public void SelfTest_ResultsFile_XmlPath_WritesJUnitFile()
     {
         // Arrange
         var resultsFile = Path.Combine(Path.GetTempPath(), $"test-results-{Guid.NewGuid()}.xml");
 
         try
         {
-            var originalOut = Console.Out;
-            try
-            {
-                using var outWriter = new StringWriter();
-                Console.SetOut(outWriter);
+            // Act
+            using var context = Context.Create(["--validate", "--silent", "--results", resultsFile]);
+            Validation.Run(context);
 
-                // Act
-                using var context = Context.Create(["--validate", "--results", resultsFile]);
-                Validation.Run(context);
+            // Assert
+            Assert.AreEqual(0, context.ExitCode);
+            Assert.IsTrue(File.Exists(resultsFile), "JUnit XML results file was not created");
 
-                // Assert
-                Assert.AreEqual(0, context.ExitCode);
-                Assert.IsTrue(File.Exists(resultsFile), "JUnit XML results file was not created");
-
-                var content = File.ReadAllText(resultsFile);
-                Assert.Contains("<testsuite", content);
-            }
-            finally
-            {
-                Console.SetOut(originalOut);
-            }
+            var content = File.ReadAllText(resultsFile);
+            Assert.Contains("<testsuite", content);
         }
         finally
         {
@@ -144,25 +125,29 @@ public class SelfTestTests
     [TestMethod]
     public void SelfTest_DepthParameter_AffectsSelfValidationReport()
     {
-        // Arrange
-        var originalOut = Console.Out;
+        // Arrange - silent context that captures all output to a temp log file
+        var logFile = Path.Combine(Path.GetTempPath(), $"self-test-{Guid.NewGuid()}.log");
         try
         {
-            using var outWriter = new StringWriter();
-            Console.SetOut(outWriter);
+            using (var context = Context.Create(["--validate", "--silent", "--depth", "2", "--log", logFile]))
+            {
+                // Act - run validation with non-default depth of 2
+                Validation.Run(context);
 
-            // Act - run validation with non-default depth of 2
-            using var context = Context.Create(["--validate", "--depth", "2"]);
-            Validation.Run(context);
-            var output = outWriter.ToString();
+                // Assert - validation passes
+                Assert.AreEqual(0, context.ExitCode);
+            }
 
-            // Assert - validation passes and the depth-sensitive report generation test passes
-            Assert.AreEqual(0, context.ExitCode);
+            // Assert - the depth-sensitive report generation test passes
+            var output = File.ReadAllText(logFile);
             Assert.Contains("SarifMark_MarkdownReportGeneration - Passed", output);
         }
         finally
         {
-            Console.SetOut(originalOut);
+            if (File.Exists(logFile))
+            {
+                File.Delete(logFile);
+            }
         }
     }
 
@@ -172,25 +157,28 @@ public class SelfTestTests
     [TestMethod]
     public void SelfTest_EnforcementTest_RunsWithinValidation()
     {
-        // Arrange
-        var originalOut = Console.Out;
+        // Arrange - silent context that captures all output to a temp log file
+        var logFile = Path.Combine(Path.GetTempPath(), $"self-test-{Guid.NewGuid()}.log");
         try
         {
-            using var outWriter = new StringWriter();
-            Console.SetOut(outWriter);
+            using (var context = Context.Create(["--validate", "--silent", "--log", logFile]))
+            {
+                // Act - Run validation which internally exercises enforcement mode
+                Validation.Run(context);
 
-            // Act - Run validation which internally exercises enforcement mode
-            using var context = Context.Create(["--validate"]);
-            Validation.Run(context);
-            var output = outWriter.ToString();
+                // Assert - enforcement test within validation runs and passes
+                Assert.AreEqual(0, context.ExitCode);
+            }
 
-            // Assert - enforcement test within validation runs and passes
-            Assert.AreEqual(0, context.ExitCode);
+            var output = File.ReadAllText(logFile);
             Assert.Contains("SarifMark_Enforcement - Passed", output);
         }
         finally
         {
-            Console.SetOut(originalOut);
+            if (File.Exists(logFile))
+            {
+                File.Delete(logFile);
+            }
         }
     }
 }

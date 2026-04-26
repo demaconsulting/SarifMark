@@ -52,6 +52,7 @@ public class SarifTests
 
         // Assert
         Assert.AreEqual("TestTool", results.Runs[0].ToolName);
+        Assert.AreEqual("1.0.0", results.Runs[0].ToolVersion);
         Assert.AreEqual(1, results.Runs[0].ResultCount);
     }
 

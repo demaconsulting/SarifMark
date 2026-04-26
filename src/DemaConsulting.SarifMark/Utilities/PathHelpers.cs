@@ -21,7 +21,9 @@
 namespace DemaConsulting.SarifMark;
 
 /// <summary>
-///     Helper utilities for safe path operations.
+///     Prevents directory traversal attacks by providing a safe path-combination method that
+///     rejects relative paths escaping the base directory, ensuring callers cannot be tricked
+///     into reading or writing files outside an intended location.
 /// </summary>
 internal static class PathHelpers
 {

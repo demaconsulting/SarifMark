@@ -8,6 +8,12 @@ within the base directory. Note that `Path.GetFullPath` normalizes `.`/`..` segm
 not resolve symlinks or reparse points, so this check guards against string-level traversal
 only.
 
+## Class Visibility
+
+`PathHelpers` is declared `internal`, limiting its use to the `DemaConsulting.SarifMark` assembly.
+The project file includes `<InternalsVisibleTo Include="DemaConsulting.SarifMark.Tests" />`,
+which grants the test assembly access to the class and its methods for direct unit testing.
+
 ## SafePathCombine Method
 
 ```csharp

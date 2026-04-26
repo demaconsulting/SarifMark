@@ -35,10 +35,11 @@ This satisfies requirements `SarifMark-Context-Create` through `SarifMark-Contex
 | `Enforce`     | `bool`    | `false` | `--enforce`              | Enforcement mode flag                       |
 | `SarifFile`   | `string?` | `null`  | `--sarif <file>`         | Path to the SARIF file                      |
 | `ReportFile`  | `string?` | `null`  | `--report <file>`        | Path to the markdown report output file     |
-| `Depth`       | `int`     | `1`     | `--depth <depth>`        | Markdown heading depth for the report       |
+| `Depth`       | `int`     | `1`     | `--depth <depth>`        | Heading depth; `--report-depth` is legacy   |
 | `Heading`     | `string?` | `null`  | `--heading <text>`       | Custom heading text for the report          |
-| `ResultsFile` | `string?` | `null`  | `--results <file>`       | Path for the self-validation results file   |
-| `ExitCode`    | `int`     | `0`/`1` | *(derived)*              | 0 until `WriteError` is called, then 1      |
+| `ResultsFile` | `string?` | `null`  | `--results <file>`       | Results file; `--result` is a legacy alias  |
+| *(log writer)*| —         | —       | `--log <file>`           | Internal log writer; not a property         |
+| `ExitCode`    | `int`     | `0`     | *(derived)*              | 0 until `WriteError` is called, then 1      |
 
 The `--report-depth` flag is accepted as a legacy alias for `--depth`, preserving backwards compatibility
 (see requirement `SarifMark-Context-ReportDepthParam`). The `--result` flag is similarly accepted as a
@@ -64,18 +65,25 @@ identifying the unsupported argument. This satisfies requirement `SarifMark-Cont
 `ArgumentException`. The legacy alias `--report-depth` behaves identically.
 This satisfies requirement `SarifMark-Context-ReportDepthParam`.
 
+The value-bearing string flags (`--sarif`, `--report`, `--results`, `--log`, and `--heading`)
+also throw `ArgumentException` when they are the last token in the argument list without a
+following value. This satisfies requirements `SarifMark-Context-SarifParam-MissingValue`,
+`SarifMark-Context-ReportParam-MissingValue`, `SarifMark-Context-ResultsParam-MissingValue`,
+`SarifMark-Context-LogParam-MissingValue`, and `SarifMark-Context-HeadingParam`.
+
 ## WriteLine Method
 
 `WriteLine(string message)` writes to `Console.Out` unless `Silent` is `true`. If a log file is
 open, the message is also written to the log `StreamWriter` regardless of the `Silent` flag. This
-satisfies requirement `SarifMark-Context-WriteLine`.
+satisfies requirements `SarifMark-Context-WriteLine-Console` and `SarifMark-Context-WriteLine-Log`.
 
 ## WriteError Method
 
 `WriteError(string message)` unconditionally sets the private `_hasErrors` flag to `true`, which
 causes `ExitCode` to return `1`. Unless `Silent` is `true`, it writes the message to
 `Console.Error` with the console foreground color temporarily set to red. If a log file is open,
-the message is also written there. This satisfies requirements `SarifMark-Context-WriteError` and
+the message is also written there. This satisfies requirements `SarifMark-Context-WriteError-Stderr`,
+`SarifMark-Context-WriteError-Log`, `SarifMark-Context-WriteError-ExitCode`, and
 `SarifMark-Context-ExitCode`.
 
 ## OpenLogFile Method

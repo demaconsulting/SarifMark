@@ -38,6 +38,7 @@ public class ContextTests
         // Assert
         Assert.IsFalse(context.Version);
         Assert.IsFalse(context.Help);
+        Assert.AreEqual(1, context.Depth);
         Assert.AreEqual(0, context.ExitCode);
     }
 
@@ -119,7 +120,7 @@ public class ContextTests
     public void Context_Create_UnknownArgument_ThrowsArgumentException()
     {
         // Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--unknown"]));
+        var exception = Assert.ThrowsExactly<ArgumentException>(() => Context.Create(["--unknown"]));
         Assert.Contains("Unsupported argument", exception.Message);
     }
 
@@ -198,7 +199,7 @@ public class ContextTests
     public void Context_Create_HeadingWithoutValue_ThrowsArgumentException()
     {
         // Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--heading"]));
+        var exception = Assert.ThrowsExactly<ArgumentException>(() => Context.Create(["--heading"]));
         Assert.Contains("--heading requires", exception.Message);
     }
 
@@ -315,7 +316,7 @@ public class ContextTests
         var invalidPath = PathHelpers.SafePathCombine("/nonexistent/directory", "test.log");
 
         // Act & Assert
-        var exception = Assert.Throws<InvalidOperationException>(() => Context.Create(["--log", invalidPath]));
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() => Context.Create(["--log", invalidPath]));
         Assert.Contains("Failed to open log file", exception.Message);
     }
 
@@ -443,7 +444,7 @@ public class ContextTests
     public void Context_Create_DepthWithoutValue_ThrowsArgumentException()
     {
         // Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--depth"]));
+        var exception = Assert.ThrowsExactly<ArgumentException>(() => Context.Create(["--depth"]));
         Assert.Contains("--depth requires", exception.Message);
     }
 
@@ -454,7 +455,7 @@ public class ContextTests
     public void Context_Create_DepthInvalidValue_ThrowsArgumentException()
     {
         // Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--depth", "invalid"]));
+        var exception = Assert.ThrowsExactly<ArgumentException>(() => Context.Create(["--depth", "invalid"]));
         Assert.Contains("--depth requires a positive integer", exception.Message);
     }
 
@@ -465,7 +466,7 @@ public class ContextTests
     public void Context_Create_DepthZero_ThrowsArgumentException()
     {
         // Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--depth", "0"]));
+        var exception = Assert.ThrowsExactly<ArgumentException>(() => Context.Create(["--depth", "0"]));
         Assert.Contains("--depth requires a positive integer", exception.Message);
     }
 
@@ -489,7 +490,7 @@ public class ContextTests
     public void Context_Create_ReportDepthWithoutValue_ThrowsArgumentException()
     {
         // Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--report-depth"]));
+        var exception = Assert.ThrowsExactly<ArgumentException>(() => Context.Create(["--report-depth"]));
         Assert.Contains("--report-depth requires", exception.Message);
     }
 
@@ -500,7 +501,7 @@ public class ContextTests
     public void Context_Create_ReportDepthInvalidValue_ThrowsArgumentException()
     {
         // Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--report-depth", "invalid"]));
+        var exception = Assert.ThrowsExactly<ArgumentException>(() => Context.Create(["--report-depth", "invalid"]));
         Assert.Contains("--report-depth requires a positive integer", exception.Message);
     }
 
@@ -511,7 +512,7 @@ public class ContextTests
     public void Context_Create_ReportDepthZero_ThrowsArgumentException()
     {
         // Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--report-depth", "0"]));
+        var exception = Assert.ThrowsExactly<ArgumentException>(() => Context.Create(["--report-depth", "0"]));
         Assert.Contains("--report-depth requires a positive integer", exception.Message);
     }
 
@@ -665,5 +666,49 @@ public class ContextTests
                 File.Delete(logFile);
             }
         }
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --sarif but no value throws exception.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_SarifWithoutValue_ThrowsArgumentException()
+    {
+        // Act & Assert
+        var exception = Assert.ThrowsExactly<ArgumentException>(() => Context.Create(["--sarif"]));
+        Assert.Contains("--sarif requires", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --report but no value throws exception.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_ReportWithoutValue_ThrowsArgumentException()
+    {
+        // Act & Assert
+        var exception = Assert.ThrowsExactly<ArgumentException>(() => Context.Create(["--report"]));
+        Assert.Contains("--report requires", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --results but no value throws exception.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_ResultsWithoutValue_ThrowsArgumentException()
+    {
+        // Act & Assert
+        var exception = Assert.ThrowsExactly<ArgumentException>(() => Context.Create(["--results"]));
+        Assert.Contains("--results requires", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --log but no value throws exception.
+    /// </summary>
+    [TestMethod]
+    public void Context_Create_LogWithoutValue_ThrowsArgumentException()
+    {
+        // Act & Assert
+        var exception = Assert.ThrowsExactly<ArgumentException>(() => Context.Create(["--log"]));
+        Assert.Contains("--log requires", exception.Message);
     }
 }

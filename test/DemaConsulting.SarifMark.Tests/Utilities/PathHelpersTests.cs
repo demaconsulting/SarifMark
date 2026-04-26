@@ -33,7 +33,7 @@ public class PathHelpersTests
     public void PathHelpers_SafePathCombine_NullBasePath_ThrowsArgumentNullException()
     {
         // Act & Assert
-        var exception = Assert.Throws<ArgumentNullException>(() =>
+        var exception = Assert.ThrowsExactly<ArgumentNullException>(() =>
             PathHelpers.SafePathCombine(null!, "file.txt"));
         Assert.AreEqual("basePath", exception.ParamName);
     }
@@ -45,7 +45,7 @@ public class PathHelpersTests
     public void PathHelpers_SafePathCombine_NullRelativePath_ThrowsArgumentNullException()
     {
         // Act & Assert
-        var exception = Assert.Throws<ArgumentNullException>(() =>
+        var exception = Assert.ThrowsExactly<ArgumentNullException>(() =>
             PathHelpers.SafePathCombine("/home/user", null!));
         Assert.AreEqual("relativePath", exception.ParamName);
     }
@@ -78,7 +78,7 @@ public class PathHelpersTests
         var relativePath = "../etc/passwd";
 
         // Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() =>
+        var exception = Assert.ThrowsExactly<ArgumentException>(() =>
             PathHelpers.SafePathCombine(basePath, relativePath));
         Assert.Contains("Invalid path component", exception.Message);
         Assert.AreEqual("relativePath", exception.ParamName);
@@ -95,7 +95,7 @@ public class PathHelpersTests
         var relativePath = "documents/../../../etc/passwd";
 
         // Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() =>
+        var exception = Assert.ThrowsExactly<ArgumentException>(() =>
             PathHelpers.SafePathCombine(basePath, relativePath));
         Assert.Contains("Invalid path component", exception.Message);
         Assert.AreEqual("relativePath", exception.ParamName);
@@ -132,7 +132,7 @@ public class PathHelpersTests
         var unixRelativePath = "/etc/passwd";
 
         // Act & Assert
-        var unixException = Assert.Throws<ArgumentException>(() =>
+        var unixException = Assert.ThrowsExactly<ArgumentException>(() =>
             PathHelpers.SafePathCombine(unixBasePath, unixRelativePath));
         Assert.Contains("Invalid path component", unixException.Message);
         Assert.AreEqual("relativePath", unixException.ParamName);
@@ -145,7 +145,7 @@ public class PathHelpersTests
             var windowsRelativePath = "C:\\Windows\\System32";
 
             // Act & Assert
-            var windowsException = Assert.Throws<ArgumentException>(() =>
+            var windowsException = Assert.ThrowsExactly<ArgumentException>(() =>
                 PathHelpers.SafePathCombine(windowsBasePath, windowsRelativePath));
             Assert.Contains("Invalid path component", windowsException.Message);
             Assert.AreEqual("relativePath", windowsException.ParamName);

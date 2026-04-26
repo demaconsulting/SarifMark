@@ -320,6 +320,41 @@ public class ValidationTests
     }
 
     /// <summary>
+    ///     Tests that when the results file path is in a non-existent directory, an I/O error is reported.
+    /// </summary>
+    [TestMethod]
+    public void Validation_Run_WithUnwritableResultsFile_WritesError()
+    {
+        // Arrange - use a .trx path inside a directory that does not exist so File.WriteAllText throws IOException
+        var logFile = CreateTempFile(".log");
+        var nonExistentDir = Path.Combine(Path.GetTempPath(), $"nonexistent_{Guid.NewGuid()}");
+        var unwritableTrx = Path.Combine(nonExistentDir, "results.trx");
+
+        try
+        {
+            int exitCode;
+            using (var context = Context.Create(
+                ["--silent", "--log", logFile, "--results", unwritableTrx]))
+            {
+                // Act
+                Validation.Run(context);
+                exitCode = context.ExitCode;
+            }
+
+            // Assert - error must be reported and exit code must be 1
+            Assert.AreEqual(1, exitCode,
+                "Exit code should be 1 when the results file cannot be written");
+            var logContent = File.ReadAllText(logFile);
+            Assert.Contains("Error: Failed to write results file", logContent,
+                "Log should contain the write failure error message");
+        }
+        finally
+        {
+            SafeDeleteFile(logFile);
+        }
+    }
+
+    /// <summary>
     ///     Creates a unique temporary file path with the specified extension.
     ///     The file itself is not created; only the path is returned.
     /// </summary>

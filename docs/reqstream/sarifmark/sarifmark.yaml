@@ -17,7 +17,7 @@ sections:
           Users need to quickly identify the version of the tool they are using for
           troubleshooting and compatibility verification.
         tests:
-          - IntegrationTest_VersionFlag_OutputsVersion
+          - SarifMark_VersionFlag_OutputsVersion
 
       - id: SarifMark-System-Help
         title: The tool shall display help information when the help flag is provided.
@@ -26,7 +26,7 @@ sections:
           Help information improves discoverability and usability by providing users with guidance
           on available options and parameters.
         tests:
-          - IntegrationTest_HelpFlag_OutputsUsageInformation
+          - SarifMark_HelpFlag_OutputsUsageInformation
 
       - id: SarifMark-System-Validate
         title: The tool shall support self-validation mode.
@@ -35,7 +35,7 @@ sections:
           Self-validation mode enables verification that the tool operates correctly in
           the deployment environment.
         tests:
-          - IntegrationTest_ValidateFlag_RunsSelfValidation
+          - SarifMark_ValidateFlag_RunsSelfValidation
 
       - id: SarifMark-System-SarifRequired
         title: The tool shall require the --sarif parameter for SARIF analysis.
@@ -46,7 +46,7 @@ sections:
         children:
           - SarifMark-Sarif-FilePaths
         tests:
-          - IntegrationTest_MissingSarifParameter_ShowsError
+          - SarifMark_MissingSarifParameter_ShowsError
 
       - id: SarifMark-System-SarifAnalysis
         title: The tool shall read and analyze SARIF files.
@@ -55,7 +55,8 @@ sections:
           Reading and analyzing SARIF files is the core purpose of the tool, enabling
           integration with static analysis workflows.
         tests:
-          - IntegrationTest_ValidSarifFile_ProcessesSuccessfully
+          - SarifMark_ValidSarifFile_ProcessesSuccessfully
+          - SarifMark_NonExistentSarifFile_ShowsError
 
       - id: SarifMark-System-Report
         title: The tool shall generate markdown reports from SARIF files.
@@ -64,7 +65,7 @@ sections:
           Markdown report generation makes SARIF analysis results accessible to
           stakeholders in a readable format.
         tests:
-          - IntegrationTest_GenerateReport_CreatesReportFile
+          - SarifMark_GenerateReport_CreatesReportFile
 
       - id: SarifMark-System-Enforce
         title: The tool shall return non-zero exit code when enforcement mode detects issues.
@@ -72,7 +73,7 @@ sections:
         justification: >-
           Non-zero exit codes enable CI/CD pipeline integration for quality gates.
         tests:
-          - IntegrationTest_EnforceFlagWithIssues_ReturnsError
+          - SarifMark_EnforceFlagWithIssues_ReturnsError
 
       - id: SarifMark-System-Silent
         title: The tool shall support silent mode to suppress console output.
@@ -80,7 +81,7 @@ sections:
         justification: >-
           Silent mode enables cleaner integration into automated workflows.
         tests:
-          - IntegrationTest_SilentFlag_SuppressesOutput
+          - SarifMark_SilentFlag_SuppressesOutput
 
       - id: SarifMark-System-LogFile
         title: The tool shall support writing output to a log file.
@@ -88,7 +89,7 @@ sections:
         justification: >-
           Log file support enables persistent record-keeping and audit trails.
         tests:
-          - IntegrationTest_LogFile_WritesOutputToFile
+          - SarifMark_LogFile_WritesOutputToFile
 
       - id: SarifMark-System-InvalidArgs
         title: The tool shall reject unknown command-line arguments with an error.
@@ -96,4 +97,14 @@ sections:
         justification: >-
           Rejecting unknown arguments prevents silent failures from typos.
         tests:
-          - IntegrationTest_UnknownArgument_ShowsError
+          - SarifMark_UnknownArgument_ShowsError
+
+      - id: SarifMark-System-ReportDepth
+        title: The tool shall accept a configurable heading depth for generated markdown reports.
+        tags: [public]
+        justification: >-
+          Configurable report depth allows the generated report to be embedded at any heading
+          level within a larger document, improving flexibility for documentation workflows.
+        tests:
+          - SarifMark_ReportDepth_IsConfigurable
+          - SarifMark_LegacyReportDepth_IsAccepted

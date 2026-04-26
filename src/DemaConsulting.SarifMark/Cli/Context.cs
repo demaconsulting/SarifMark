@@ -102,6 +102,7 @@ internal sealed class Context : IDisposable
     /// </summary>
     /// <param name="args">Command-line arguments.</param>
     /// <returns>A new Context instance.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="args"/> is null.</exception>
     /// <exception cref="ArgumentException">Thrown when arguments are invalid.</exception>
     public static Context Create(string[] args)
     {
@@ -390,5 +391,6 @@ internal sealed class Context : IDisposable
         // Close and dispose the log file writer if it exists
         _logWriter?.Dispose();
         _logWriter = null;
+        GC.SuppressFinalize(this);
     }
 }

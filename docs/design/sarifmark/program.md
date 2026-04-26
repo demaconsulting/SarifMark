@@ -21,8 +21,8 @@ unavailable it returns `"0.0.0"`. This satisfies requirement `SarifMark-Program-
 3. Returns `context.ExitCode` to the shell.
 
 `ArgumentException` and `InvalidOperationException` are caught, written to `Console.Error`, and
-translated to exit code 1. Any other exception prints its message to `Console.Error` and is
-then re-thrown so the runtime generates an event-log entry. This satisfies requirements
+translated to exit code 1. Any other exception has its message printed to `Console.Error` with
+an "Unexpected error:" prefix and is then re-thrown so the runtime generates an event-log entry. This satisfies requirements
 `SarifMark-Program-Main` and `SarifMark-Program-Main-Exceptions`.
 
 ## Run Method
@@ -78,7 +78,7 @@ execution sequence is:
    and `InvalidOperationException`, routing them through `context.WriteError` and returning
    on failure.
 3. Reports the tool name, tool version, and result count via `context.WriteLine`.
-4. If `context.Enforce` is set and the result count is greater than zero, calls
+4. If `context.Enforce` is set and `sarifResults.HasIssues` is true, calls
    `context.WriteError("Error: Issues found in SARIF file")`.
 5. If `context.ReportFile` is set, writes a `"Writing report to..."` progress message, calls
    `sarifResults.ToMarkdown` and writes the result to the specified file with

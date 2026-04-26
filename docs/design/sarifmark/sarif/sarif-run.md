@@ -26,12 +26,13 @@ for additional `using` directives in consuming code.
 |---------------|-------------------------------|-------------------------------------------------|
 | `ToolName`    | `string`                      | Name of the analysis tool                       |
 | `ToolVersion` | `string`                      | Version of the analysis tool                    |
-| `FileCount`   | `int`                         | Total number of files analyzed in this run      |
 | `Results`     | `IReadOnlyList<SarifFinding>` | Collection of non-suppressed results            |
 | `ResultCount` | `int`                         | Total number of results (derived count)         |
+| `FileCount`   | `int`                         | Total number of files analyzed in this run      |
 | `HasIssues`   | `bool`                        | True if any results are present (derived)       |
 
-These satisfy requirements `SarifMark-SarifRun-Properties` and `SarifMark-SarifRun-HasIssues`.
+These satisfy requirements `SarifMark-SarifRun-ToolName`, `SarifMark-SarifRun-ToolVersion`,
+`SarifMark-SarifRun-Results`, `SarifMark-SarifRun-FileCount`, and `SarifMark-SarifRun-HasIssues`.
 
 ## ToMarkdown Method
 

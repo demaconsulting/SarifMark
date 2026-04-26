@@ -4,14 +4,15 @@
 
 The `SarifFinding` record (`SarifFinding.cs`) is an immutable value type that represents a single
 static analysis finding extracted from a SARIF file. It carries the minimum set of fields needed
-to identify, describe, and locate a finding in a generated markdown report.
+to identify, describe, and locate a finding in a generated markdown report. The fully qualified
+type name is `DemaConsulting.SarifMark.SarifFinding`.
 
 ## Record Design
 
 `SarifFinding` is declared as a `record`, making all instances immutable by default. The constructor
-is `internal`, so the type cannot be directly instantiated by external consumers; instances are
-only produced by the `SarifResults.Read` parsing pipeline. This satisfies requirement
-`SarifMark-SarifFinding-Internal`.
+is `internal`, so the type cannot be directly instantiated by consumers outside the
+`DemaConsulting.SarifMark` assembly; instances are only produced by the `SarifResults.Read`
+parsing pipeline. This satisfies requirement `SarifMark-SarifFinding-Internal`.
 
 ## Properties
 
