@@ -22,7 +22,8 @@ all argument validation paths.
 - **`SarifMark-SarifRun-ToMarkdown`**: Depth-1 full markdown output —
   `SarifRun_ToMarkdown_Depth1_ProducesCorrectOutput`
 - **`SarifMark-SarifRun-ValidateDepth`**: Depth < 1 or > 6 throws —
-  `SarifRun_ToMarkdown_Depth6_IssuesHeadingCappedAtSix`
+  `SarifRun_ToMarkdown_DepthLessThan1_ThrowsArgumentOutOfRangeException`,
+  `SarifRun_ToMarkdown_DepthGreaterThan6_ThrowsArgumentOutOfRangeException`
 - **`SarifMark-SarifRun-FormatLocation`**: Location format —
   `SarifRun_ToMarkdown_ResultWithoutLocation_ShowsNoLocation`
 - **`SarifMark-SarifRun-FormatCount`**: 0/1/many results count format —

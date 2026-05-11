@@ -12,7 +12,7 @@ The `SarifResults` class is verified by the `SarifResultsTests` test class in
 - **`SarifMark-SarifResults-ValidatePathArgument`**: Path arg null —
   `SarifResults_Read_NullPath_ThrowsArgumentException`
 - **`SarifMark-SarifResults-ValidatePathExists`**: File not found —
-  `Read_NonExistentFile_ThrowsFileNotFoundException`
+  `SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException`
 - **`SarifMark-SarifResults-ValidateStructure`**: Structure —
   `SarifResults_Read_EmptyRuns_ThrowsInvalidOperationException`
 - **`SarifMark-SarifResults-ExtractTool`**: Extract tool info —
