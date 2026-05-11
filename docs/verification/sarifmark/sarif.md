@@ -12,12 +12,13 @@ JSON).
 
 | Requirement ID | Description | Test Scenario(s) |
 | --- | --- | --- |
-| `SarifMark-Sarif-Reading` | Valid SARIF processed correctly | `Sarif_ValidSarifFile_ProcessesSuccessfully` |
-| `SarifMark-Sarif-Validation` | File not found or bad JSON | `Sarif_NonExistentSarifFile_ThrowsFileNotFoundException` |
-| `SarifMark-Sarif-ToolInfo` | Tool name and version extracted | `Sarif_ValidSarifFile_ProcessesSuccessfully` |
-| `SarifMark-Sarif-Results` | Results extracted from SARIF file | `Sarif_ValidSarifFile_ProcessesSuccessfully` |
-| `SarifMark-Sarif-Locations` | Location information present | `Sarif_Report_ContainsLocationInfo` |
-| `SarifMark-Sarif-FilePaths` | Non-existent file throws | `Sarif_NonExistentSarifFile_ThrowsFileNotFoundException` |
-| `SarifMark-Sarif-Processing` | Valid SARIF processed successfully | `Sarif_ValidSarifFile_ProcessesSuccessfully` |
-| `SarifMark-Sarif-FileCount` | File count in generated report | `Sarif_Report_ContainsFileCount` |
-| `SarifMark-Sarif-MultiRun` | Multi-run SARIF returns all runs | `Sarif_MultiRunSarifFile_ProcessesAllRuns` |
+| `SarifMark-Sarif-Reading` | Valid SARIF processed correctly | `Sarif_Read_ValidSarifFile_ProcessesSuccessfully` |
+| `SarifMark-Sarif-Validation` | File not found | `Sarif_Read_NonExistentFile_ThrowsFileNotFoundException` |
+| `SarifMark-Sarif-Validation` | Bad JSON input | `Sarif_Read_InvalidSarifFile_ThrowsInvalidOperationException` |
+| `SarifMark-Sarif-ToolInfo` | Tool name and version extracted | `Sarif_Read_ValidSarifFile_ProcessesSuccessfully` |
+| `SarifMark-Sarif-Results` | Results extracted from SARIF file | `Sarif_Read_ValidSarifFile_ProcessesSuccessfully` |
+| `SarifMark-Sarif-Locations` | Location info present | `Sarif_GenerateReport_LocationInfo_ContainsLocationInfo` |
+| `SarifMark-Sarif-FilePaths` | Non-existent file throws | `Sarif_Read_NonExistentFile_ThrowsFileNotFoundException` |
+| `SarifMark-Sarif-Processing` | Valid SARIF processed | `Sarif_Read_ValidSarifFile_ProcessesSuccessfully` |
+| `SarifMark-Sarif-FileCount` | File count in generated report | `Sarif_GenerateReport_FileCount_ContainsFileCount` |
+| `SarifMark-Sarif-MultiRun` | Multi-run SARIF returns all runs | `Sarif_Read_MultiRunSarifFile_ProcessesAllRuns` |

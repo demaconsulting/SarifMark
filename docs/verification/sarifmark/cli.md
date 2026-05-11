@@ -11,34 +11,34 @@ dependencies on other tool subsystems.
 ### Requirement Coverage
 
 - **`SarifMark-Cli-Interface`**: Version and help flags accepted and routed —
-  `Cli_VersionFlag_SetsVersionFlag`, `Cli_HelpFlag_SetsHelpFlag`
+  `Cli_Create_VersionFlag_SetsVersionFlag`, `Cli_Create_HelpFlag_SetsHelpFlag`
 - **`SarifMark-Cli-Version`**: `--version` sets `Version` property —
-  `Cli_VersionFlag_SetsVersionFlag`
+  `Cli_Create_VersionFlag_SetsVersionFlag`
 - **`SarifMark-Cli-Help`**: `--help` sets `Help` property —
-  `Cli_HelpFlag_SetsHelpFlag`
+  `Cli_Create_HelpFlag_SetsHelpFlag`
 - **`SarifMark-Cli-Silent`**: `--silent` suppresses console output —
-  `Cli_SilentFlag_SuppressesOutput`
+  `Cli_Create_SilentFlag_SuppressesOutput`
 - **`SarifMark-Cli-Log`**: `--log` writes output to file —
-  `Cli_LogFile_WritesOutputToFile`
+  `Cli_Create_LogFile_WritesOutputToFile`
 - **`SarifMark-Cli-Enforce`**: `--enforce` sets `Enforce` property —
-  `Cli_EnforceFlag_SetsEnforceFlag`
+  `Cli_Create_EnforceFlag_SetsEnforceFlag`
 - **`SarifMark-Cli-WriteError`**: `WriteError` writes to stderr and sets exit code —
-  `Cli_WriteError_SetsExitCodeToOne`
+  `Cli_WriteError_WithMessage_SetsExitCodeToOne`
 - **`SarifMark-Cli-InvalidArgs`**: Unknown argument throws `ArgumentException` —
-  `Cli_UnknownArgument_ThrowsArgumentException`
+  `Cli_Create_UnknownArgument_ThrowsArgumentException`
 - **`SarifMark-Cli-Validate`**: `--validate` sets `Validate` property —
-  `Cli_ValidateFlag_SetsValidateFlag`
+  `Cli_Create_ValidateFlag_SetsValidateFlag`
 - **`SarifMark-Cli-Sarif`**: `--sarif` sets `SarifFile` property —
-  `Cli_SarifParameter_SetsSarifFilePath`
+  `Cli_Create_SarifParameter_SetsSarifFilePath`
 - **`SarifMark-Cli-Report`**: `--report` sets `ReportFile` property —
-  `Cli_ReportParameter_SetsReportFilePath`
+  `Cli_Create_ReportParameter_SetsReportFilePath`
 - **`SarifMark-Cli-ReportDepth`**: `--depth` sets `Depth` property —
-  `Cli_DepthParameter_SetsDepth`
+  `Cli_Create_DepthParameter_SetsDepth`
 - **`SarifMark-Cli-Heading`**: `--heading` sets `Heading` property —
-  `Cli_HeadingParameter_SetsCustomHeading`
+  `Cli_Create_HeadingParameter_SetsCustomHeading`
 - **`SarifMark-Cli-Results`**: `--results` sets `ResultsFile` property —
-  `Cli_ResultsParameter_SetsResultsFilePath`
+  `Cli_Create_ResultsParameter_SetsResultsFilePath`
 - **`SarifMark-Cli-ReportDepthLegacyAlias`**: `--report-depth` sets `Depth` property —
-  `Cli_ReportDepthParameter_SetsReportDepth`
+  `Cli_Create_ReportDepthParameter_SetsReportDepth`
 - **`SarifMark-Cli-ResultLegacyAlias`**: `--result` sets `ResultsFile` property —
-  `Cli_ResultLegacyAlias_SetsResultsFilePath`
+  `Cli_Create_ResultLegacyAlias_SetsResultsFilePath`
