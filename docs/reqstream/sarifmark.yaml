@@ -125,13 +125,15 @@ sections:
         title: The tool shall accept a configurable custom heading for generated markdown reports.
         tags: [public]
         justification: >-
-          Configurable report heading allows users to customise the section title in generated
+          Configurable report heading allows users to customize the section title in generated
           reports, improving integration into existing documentation workflows.
         tests:
           - SarifMark_HelpFlag_OutputsUsageInformation
 
       - id: SarifMark-System-ValidateResults
-        title: The tool shall support writing self-validation results to a file when the --results parameter is provided.
+        title: >-
+          The tool shall support writing self-validation results to a file
+          when the --results parameter is provided.
         tags: [public]
         justification: >-
           Writing validation results to a file enables integration with CI/CD test result

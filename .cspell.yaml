@@ -18,6 +18,7 @@ words:
   - Checkmarx
   - Dema
   - FileAssert
+  - hotspots
   - xunit
   - Pandoc
   - Pylint

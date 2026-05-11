@@ -14,5 +14,5 @@ and rendered the report correctly.
 ### Requirement Coverage
 
 | Requirement ID | Description | Verification Evidence |
-|---|---|---|
+| --- | --- | --- |
 | `SarifMark-OTS-SonarMark` | Retrieves quality data and generates markdown report | `SonarMark_QualityGateRetrieval` |

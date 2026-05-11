@@ -9,5 +9,5 @@ subsystems; `PathHelpers` is a stateless static class using only BCL types. No m
 ### Requirement Coverage
 
 | Requirement ID | Description | Test Scenario(s) |
-|---|---|---|
+| --- | --- | --- |
 | `SarifMark-Utilities-SafePathHandling` | Safe combine | `Utilities_SafePathHandling_ValidPaths_CombinesSuccessfully` |

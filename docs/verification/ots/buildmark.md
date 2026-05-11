@@ -14,5 +14,5 @@ subsequently converted to HTML and PDF by Pandoc and WeasyPrint.
 ### Requirement Coverage
 
 | Requirement ID | Description | Verification Evidence |
-|---|---|---|
+| --- | --- | --- |
 | `SarifMark-OTS-BuildMark` | Build notes generated in CI | `BuildMark_MarkdownReportGeneration` (CI pipeline step) |

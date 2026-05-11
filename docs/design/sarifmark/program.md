@@ -86,7 +86,8 @@ execution sequence is:
    `UnauthorizedAccessException`, `ArgumentException`, and `NotSupportedException` are caught and
    routed through `context.WriteError`.
 
-This satisfies requirements `SarifMark-Program-SarifArgument`, `SarifMark-Program-SarifReading`, `SarifMark-Program-EnforcementCheck`, and `SarifMark-Program-ReportGeneration`.
+This satisfies requirements `SarifMark-Program-SarifArgument`, `SarifMark-Program-SarifReading`,
+`SarifMark-Program-EnforcementCheck`, and `SarifMark-Program-ReportGeneration`.
 
 ### Cross-References
 

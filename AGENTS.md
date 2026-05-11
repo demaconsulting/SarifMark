@@ -1,7 +1,8 @@
 # Project Overview
 
 - **name**: SarifMark
-- **description**: A .NET command-line tool that generates comprehensive markdown reports from SARIF (Static Analysis Results Interchange Format) files
+- **description**: A .NET command-line tool that generates comprehensive markdown reports from
+  SARIF (Static Analysis Results Interchange Format) files
 - **languages**: C#
 - **technologies**: .NET, SARIF
 

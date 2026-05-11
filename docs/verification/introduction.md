@@ -14,7 +14,7 @@ procedures, end-user guides, or CI/CD pipeline configuration.
 
 ## Companion Artifact Structure
 
-For each in-house software item, the companion artifacts are organised as follows:
+For each in-house software item, the companion artifacts are organized as follows:
 
 - Requirements: `docs/reqstream/sarifmark.yaml` and `docs/reqstream/sarifmark/{item}.yaml`
 - Design: `docs/design/sarifmark.md` and `docs/design/sarifmark/{item}.md`
@@ -22,7 +22,7 @@ For each in-house software item, the companion artifacts are organised as follow
 - Source: `src/DemaConsulting.SarifMark/`
 - Tests: `test/DemaConsulting.SarifMark.Tests/`
 
-For each OTS software item, the companion artifacts are organised as follows:
+For each OTS software item, the companion artifacts are organized as follows:
 
 - Requirements: `docs/reqstream/ots/{ots-name}.yaml`
 - Verification: `docs/verification/ots/{ots-name}.md`

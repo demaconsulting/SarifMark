@@ -14,5 +14,5 @@ execution of file assertion steps in the CI pipeline.
 ### Requirement Coverage
 
 | Requirement ID | Description | Verification Evidence |
-|---|---|---|
+| --- | --- | --- |
 | `SarifMark-OTS-FileAssert` | CI file assertions pass | `FileAssert_VersionDisplay`, `FileAssert_HelpDisplay` |

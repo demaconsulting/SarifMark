@@ -15,5 +15,5 @@ found no untested requirements.
 ### Requirement Coverage
 
 | Requirement ID | Description | Verification Evidence |
-|---|---|---|
+| --- | --- | --- |
 | `SarifMark-OTS-ReqStream` | Enforcement mode passes in CI | `ReqStream_EnforcementMode` (CI pipeline step) |

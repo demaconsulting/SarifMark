@@ -12,6 +12,5 @@ size, contains at least one page, and includes expected rendered text.
 
 ### Requirement Coverage
 
-| Requirement ID | Description | Verification Evidence |
-|---|---|---|
-| `SarifMark-OTS-WeasyPrint` | Converts each doc type to valid PDF | `WeasyPrint_BuildNotesPdf`, `WeasyPrint_DesignPdf` |
+- **`SarifMark-OTS-WeasyPrint`**: Converts each doc type to valid PDF —
+  `WeasyPrint_BuildNotesPdf`, `WeasyPrint_DesignPdf`

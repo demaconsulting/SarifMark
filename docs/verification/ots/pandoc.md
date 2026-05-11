@@ -14,5 +14,5 @@ non-trivial size, contains a valid `<title>` element, and includes expected docu
 ### Requirement Coverage
 
 | Requirement ID | Description | Verification Evidence |
-|---|---|---|
+| --- | --- | --- |
 | `SarifMark-OTS-Pandoc` | Pandoc converts each doc to valid HTML | `Pandoc_BuildNotesHtml`, `Pandoc_DesignHtml` |

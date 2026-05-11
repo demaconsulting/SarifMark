@@ -25,24 +25,41 @@ tool itself; they are not xUnit test methods but named scenarios reported in the
 
 ## Requirement Coverage
 
-The following table maps each system-level requirement to the named test scenario(s) that provide verification evidence.
+The following list maps each system-level requirement to the named test scenario(s) that provide
+verification evidence.
 
-| Requirement ID | Description | Test Scenario(s) |
-|---|---|---|
-| `SarifMark-System-Version` | Tool displays version on `--version` | `SarifMark_VersionFlag_OutputsVersion` |
-| `SarifMark-System-Help` | Tool displays help on `--help` | `SarifMark_HelpFlag_OutputsUsageInformation` |
-| `SarifMark-System-Validate` | Tool supports `--validate` mode | `SarifMark_ValidateFlag_RunsSelfValidation` |
-| `SarifMark-System-SarifRequired` | Tool requires `--sarif` for analysis | `SarifMark_MissingSarifParameter_ShowsError` |
-| `SarifMark-System-SarifAnalysis` | Tool reads and analyses SARIF files | `SarifMark_ValidSarifFile_ProcessesSuccessfully`, `SarifMark_NonExistentSarifFile_ShowsError` |
-| `SarifMark-System-Report` | Tool generates markdown reports | `SarifMark_GenerateReport_CreatesReportFile` |
-| `SarifMark-System-Enforce` | Non-zero exit code in enforcement mode | `SarifMark_EnforceFlagWithIssues_ReturnsError` |
-| `SarifMark-System-Silent` | `--silent` suppresses console output | `SarifMark_SilentFlag_SuppressesOutput` |
-| `SarifMark-System-LogFile` | `--log` writes output to file | `SarifMark_LogFile_WritesOutputToFile` |
-| `SarifMark-System-InvalidArgs` | Unknown arguments rejected with error | `SarifMark_UnknownArgument_ShowsError` |
-| `SarifMark-System-ReportDepth` | Configurable heading depth | `SarifMark_ReportDepth_IsConfigurable`, `SarifMark_LegacyReportDepth_IsAccepted` |
-| `SarifMark-Plt-Windows` | Runs on Windows | `SarifMark_VersionFlag_OutputsVersion` (Windows runner) |
-| `SarifMark-Plt-Linux` | Runs on Linux (Ubuntu) | `SarifMark_VersionFlag_OutputsVersion` (Ubuntu runner) |
-| `SarifMark-Plt-MacOS` | Runs on macOS | `SarifMark_VersionFlag_OutputsVersion` (macOS runner) |
-| `SarifMark-Plt-Net8` | Supports .NET 8 runtime | `SarifMark_SarifReading`, `SarifMark_MarkdownReportGeneration` (.NET 8) |
-| `SarifMark-Plt-Net9` | Supports .NET 9 runtime | `SarifMark_SarifReading`, `SarifMark_MarkdownReportGeneration` (.NET 9) |
-| `SarifMark-Plt-Net10` | Supports .NET 10 runtime | `SarifMark_SarifReading`, `SarifMark_MarkdownReportGeneration` (.NET 10) |
+- **`SarifMark-System-Version`**: Tool displays version on `--version` —
+  `SarifMark_VersionFlag_OutputsVersion`
+- **`SarifMark-System-Help`**: Tool displays help on `--help` —
+  `SarifMark_HelpFlag_OutputsUsageInformation`
+- **`SarifMark-System-Validate`**: Tool supports `--validate` mode —
+  `SarifMark_ValidateFlag_RunsSelfValidation`
+- **`SarifMark-System-SarifRequired`**: Tool requires `--sarif` for analysis —
+  `SarifMark_MissingSarifParameter_ShowsError`
+- **`SarifMark-System-SarifAnalysis`**: Tool reads and analyses SARIF files —
+  `SarifMark_ValidSarifFile_ProcessesSuccessfully`,
+  `SarifMark_NonExistentSarifFile_ShowsError`
+- **`SarifMark-System-Report`**: Tool generates markdown reports —
+  `SarifMark_GenerateReport_CreatesReportFile`
+- **`SarifMark-System-Enforce`**: Non-zero exit code in enforcement mode —
+  `SarifMark_EnforceFlagWithIssues_ReturnsError`
+- **`SarifMark-System-Silent`**: `--silent` suppresses console output —
+  `SarifMark_SilentFlag_SuppressesOutput`
+- **`SarifMark-System-LogFile`**: `--log` writes output to file —
+  `SarifMark_LogFile_WritesOutputToFile`
+- **`SarifMark-System-InvalidArgs`**: Unknown arguments rejected with error —
+  `SarifMark_UnknownArgument_ShowsError`
+- **`SarifMark-System-ReportDepth`**: Configurable heading depth —
+  `SarifMark_ReportDepth_IsConfigurable`, `SarifMark_LegacyReportDepth_IsAccepted`
+- **`SarifMark-Plt-Windows`**: Runs on Windows —
+  `SarifMark_VersionFlag_OutputsVersion` (Windows runner)
+- **`SarifMark-Plt-Linux`**: Runs on Linux (Ubuntu) —
+  `SarifMark_VersionFlag_OutputsVersion` (Ubuntu runner)
+- **`SarifMark-Plt-MacOS`**: Runs on macOS —
+  `SarifMark_VersionFlag_OutputsVersion` (macOS runner)
+- **`SarifMark-Plt-Net8`**: Supports .NET 8 runtime —
+  `SarifMark_SarifReading`, `SarifMark_MarkdownReportGeneration` (.NET 8)
+- **`SarifMark-Plt-Net9`**: Supports .NET 9 runtime —
+  `SarifMark_SarifReading`, `SarifMark_MarkdownReportGeneration` (.NET 9)
+- **`SarifMark-Plt-Net10`**: Supports .NET 10 runtime —
+  `SarifMark_SarifReading`, `SarifMark_MarkdownReportGeneration` (.NET 10)

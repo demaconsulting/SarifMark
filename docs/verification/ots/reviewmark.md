@@ -14,5 +14,5 @@ converted to HTML and PDF.
 ### Requirement Coverage
 
 | Requirement ID | Description | Verification Evidence |
-|---|---|---|
+| --- | --- | --- |
 | `SarifMark-OTS-ReviewMark` | Generates review plan and report in CI | `ReviewMark_ReviewPlanGeneration` |

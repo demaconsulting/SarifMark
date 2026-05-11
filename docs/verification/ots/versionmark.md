@@ -13,6 +13,5 @@ configured tool versions.
 
 ### Requirement Coverage
 
-| Requirement ID | Description | Verification Evidence |
-|---|---|---|
-| `SarifMark-OTS-VersionMark` | Tool versions captured and markdown report generated | `VersionMark_CapturesVersions`, `VersionMark_GeneratesMarkdownReport` |
+- **`SarifMark-OTS-VersionMark`**: Tool versions captured and markdown report generated —
+  `VersionMark_CapturesVersions`, `VersionMark_GeneratesMarkdownReport`

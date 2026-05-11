@@ -13,8 +13,9 @@ test code, ensuring it is skipped on non-Windows platforms.
 
 #### Requirement Coverage
 
-| Requirement ID | Description | Test Scenario(s) |
-|---|---|---|
-| `SarifMark-PathHelpers-SafeCombine` | Relative combine | `PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully` |
-| `SarifMark-PathHelpers-NullCheck` | Null arg | `PathHelpers_SafePathCombine_NullBasePath_ThrowsArgumentNullException` |
-| `SarifMark-PathHelpers-PostCombineCheck` | Path check | `PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully` |
+- **`SarifMark-PathHelpers-SafeCombine`**: Relative combine —
+  `PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully`
+- **`SarifMark-PathHelpers-NullCheck`**: Null arg —
+  `PathHelpers_SafePathCombine_NullBasePath_ThrowsArgumentNullException`
+- **`SarifMark-PathHelpers-PostCombineCheck`**: Path check —
+  `PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully`

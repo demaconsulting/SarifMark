@@ -11,7 +11,7 @@ JSON).
 ### Requirement Coverage
 
 | Requirement ID | Description | Test Scenario(s) |
-|---|---|---|
+| --- | --- | --- |
 | `SarifMark-Sarif-Reading` | Valid SARIF processed correctly | `Sarif_ValidSarifFile_ProcessesSuccessfully` |
 | `SarifMark-Sarif-Validation` | File not found or bad JSON | `Sarif_NonExistentSarifFile_ThrowsFileNotFoundException` |
 | `SarifMark-Sarif-ToolInfo` | Tool name and version extracted | `Sarif_ValidSarifFile_ProcessesSuccessfully` |
