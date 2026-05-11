@@ -1,0 +1,37 @@
+---
+# xUnit v3 OTS Software Requirements
+#
+# Requirements for the xUnit v3 testing framework functionality.
+
+sections:
+  - title: OTS Software Requirements
+    sections:
+      - title: xUnit v3 Requirements
+        requirements:
+          - id: SarifMark-OTS-XUnitV3-Discovery
+            title: xUnit v3 shall discover and execute unit tests.
+            justification: |
+              xunit.v3 is the unit-testing framework used by the project. It discovers and runs
+              all test methods marked with [Fact] or [Theory] attributes, confirming the framework
+              is functioning correctly and all tests pass.
+            tags: [ots]
+            tests:
+              - SarifResults_Read_NoResults_ReturnsValidResults
+              - SarifResults_Read_WithResults_ReturnsValidResults
+              - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
+              - Context_Create_VersionFlag_SetsVersionTrue
+              - Context_Create_HelpFlag_SetsHelpTrue
+
+          - id: SarifMark-OTS-XUnitV3-TrxOutput
+            title: xUnit v3 shall write TRX result files for traceability.
+            justification: |
+              xunit.runner.visualstudio provides the VSTest adapter that writes TRX result files
+              when tests are executed via `dotnet test`. These TRX files are consumed by ReqStream
+              for requirements traceability enforcement, linking passing tests to requirement IDs.
+            tags: [ots]
+            tests:
+              - SarifResults_Read_NoResults_ReturnsValidResults
+              - SarifResults_Read_WithResults_ReturnsValidResults
+              - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
+              - Context_Create_VersionFlag_SetsVersionTrue
+              - Context_Create_HelpFlag_SetsHelpTrue

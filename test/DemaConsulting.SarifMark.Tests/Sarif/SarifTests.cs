@@ -39,7 +39,7 @@ public class SarifTests
     ///     Test that processing a valid SARIF file succeeds.
     /// </summary>
     [Fact]
-    public void Sarif_ValidSarifFile_ProcessesSuccessfully()
+    public void Sarif_Read_ValidSarifFile_ProcessesSuccessfully()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
@@ -58,7 +58,7 @@ public class SarifTests
     ///     Test that reading a non-existent SARIF file throws FileNotFoundException.
     /// </summary>
     [Fact]
-    public void Sarif_NonExistentSarifFile_ThrowsFileNotFoundException()
+    public void Sarif_Read_NonExistentFile_ThrowsFileNotFoundException()
     {
         // Arrange
         var nonExistentPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.sarif");
@@ -68,10 +68,10 @@ public class SarifTests
     }
 
     /// <summary>
-    ///     Test that generating a report produces the expected markdown content.
+    ///     Test that generating a report at default depth produces the expected markdown content.
     /// </summary>
     [Fact]
-    public void Sarif_GenerateReport_ProducesMarkdownContent()
+    public void Sarif_GenerateReport_DefaultDepth_ProducesMarkdownContent()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
@@ -86,10 +86,10 @@ public class SarifTests
     }
 
     /// <summary>
-    ///     Test that report depth parameter is configurable.
+    ///     Test that the report depth parameter is configurable.
     /// </summary>
     [Fact]
-    public void Sarif_ReportDepth_IsConfigurable()
+    public void Sarif_GenerateReport_ReportDepth_IsConfigurable()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
@@ -107,7 +107,7 @@ public class SarifTests
     ///     Test that reading an invalid SARIF file throws InvalidOperationException.
     /// </summary>
     [Fact]
-    public void Sarif_InvalidSarifFile_ThrowsInvalidOperationException()
+    public void Sarif_Read_InvalidSarifFile_ThrowsInvalidOperationException()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "invalid.sarif");
@@ -118,10 +118,10 @@ public class SarifTests
     }
 
     /// <summary>
-    ///     Test that a generated report formats multiple results with proper line breaks.
+    ///     Test that a generated report with multiple results formats them with proper line breaks.
     /// </summary>
     [Fact]
-    public void Sarif_GenerateReport_FormatsMultipleResultsWithLineBreaks()
+    public void Sarif_GenerateReport_MultipleResults_FormatsWithLineBreaks()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "multi-result.sarif");
@@ -144,7 +144,7 @@ public class SarifTests
     ///     Test that a generated report contains result count information.
     /// </summary>
     [Fact]
-    public void Sarif_Report_ContainsResultCount()
+    public void Sarif_GenerateReport_ResultCount_ContainsResultCount()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
@@ -162,7 +162,7 @@ public class SarifTests
     ///     Test that a generated report contains location information for results.
     /// </summary>
     [Fact]
-    public void Sarif_Report_ContainsLocationInfo()
+    public void Sarif_GenerateReport_LocationInfo_ContainsLocationInfo()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
@@ -180,7 +180,7 @@ public class SarifTests
     ///     Test that a generated report uses a custom heading when provided.
     /// </summary>
     [Fact]
-    public void Sarif_Report_UsesCustomHeading()
+    public void Sarif_GenerateReport_CustomHeading_UsesCustomHeading()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
@@ -198,7 +198,7 @@ public class SarifTests
     ///     Test that a generated report contains the file count.
     /// </summary>
     [Fact]
-    public void Sarif_Report_ContainsFileCount()
+    public void Sarif_GenerateReport_FileCount_ContainsFileCount()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
@@ -216,7 +216,7 @@ public class SarifTests
     ///     Test that a multi-run SARIF file is processed correctly and all runs are returned.
     /// </summary>
     [Fact]
-    public void Sarif_MultiRunSarifFile_ProcessesAllRuns()
+    public void Sarif_Read_MultiRunSarifFile_ProcessesAllRuns()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "multi-run.sarif");

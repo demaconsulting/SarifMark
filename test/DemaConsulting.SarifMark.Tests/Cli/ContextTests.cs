@@ -365,7 +365,7 @@ public class ContextTests
 
             using var context = Context.Create([]);
 
-            // Act - Check initial exit code
+            // Assert - initial exit code is zero
             Assert.Equal(0, context.ExitCode);
 
             // Act - Write an error

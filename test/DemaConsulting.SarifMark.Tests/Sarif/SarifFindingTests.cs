@@ -48,8 +48,10 @@ public class SarifFindingTests
     [Fact]
     public void SarifFinding_Constructor_NullUri_UriPropertyIsNull()
     {
+        // Arrange - No special setup needed
+
         // Arrange & Act
-        var result = new SarifFinding("RULE001", "error", "Error message", null, null);
+        var result = new SarifFinding("RULE001", "error", "Error message", null, 42);
 
         // Assert
         Assert.Null(result.Uri);

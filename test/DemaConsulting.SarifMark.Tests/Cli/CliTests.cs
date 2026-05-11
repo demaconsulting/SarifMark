@@ -29,8 +29,10 @@ public class CliTests
     ///     Test that version flag sets the version flag in context.
     /// </summary>
     [Fact]
-    public void Cli_VersionFlag_SetsVersionFlag()
+    public void Cli_Create_VersionFlag_SetsVersionFlag()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--version"]);
 
@@ -43,8 +45,10 @@ public class CliTests
     ///     Test that help flag sets the help flag in context.
     /// </summary>
     [Fact]
-    public void Cli_HelpFlag_SetsHelpFlag()
+    public void Cli_Create_HelpFlag_SetsHelpFlag()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--help"]);
 
@@ -57,7 +61,7 @@ public class CliTests
     ///     Test that silent flag suppresses console output.
     /// </summary>
     [Fact]
-    public void Cli_SilentFlag_SuppressesOutput()
+    public void Cli_Create_SilentFlag_SuppressesOutput()
     {
         // Arrange
         var originalOut = Console.Out;
@@ -86,7 +90,7 @@ public class CliTests
     ///     Test that log file parameter writes output to file.
     /// </summary>
     [Fact]
-    public void Cli_LogFile_WritesOutputToFile()
+    public void Cli_Create_LogFile_WritesOutputToFile()
     {
         // Arrange
         var logFile = Path.Combine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
@@ -122,8 +126,10 @@ public class CliTests
     ///     Test that enforce flag sets the enforce flag in context.
     /// </summary>
     [Fact]
-    public void Cli_EnforceFlag_SetsEnforceFlag()
+    public void Cli_Create_EnforceFlag_SetsEnforceFlag()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--enforce"]);
 
@@ -136,7 +142,7 @@ public class CliTests
     ///     Test that WriteError writes to stderr and sets exit code to one.
     /// </summary>
     [Fact]
-    public void Cli_WriteError_SetsExitCodeToOne()
+    public void Cli_WriteError_WithMessage_SetsExitCodeToOne()
     {
         // Arrange
         var originalError = Console.Error;
@@ -164,7 +170,7 @@ public class CliTests
     ///     Test that unknown arguments are rejected by throwing ArgumentException.
     /// </summary>
     [Fact]
-    public void Cli_UnknownArgument_ThrowsArgumentException()
+    public void Cli_Create_UnknownArgument_ThrowsArgumentException()
     {
         // Arrange - No special setup needed
 
@@ -179,8 +185,10 @@ public class CliTests
     ///     Test that validate flag sets the validate flag in context.
     /// </summary>
     [Fact]
-    public void Cli_ValidateFlag_SetsValidateFlag()
+    public void Cli_Create_ValidateFlag_SetsValidateFlag()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--validate"]);
 
@@ -193,8 +201,10 @@ public class CliTests
     ///     Test that sarif parameter sets the SARIF file path in context.
     /// </summary>
     [Fact]
-    public void Cli_SarifParameter_SetsSarifFilePath()
+    public void Cli_Create_SarifParameter_SetsSarifFilePath()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--sarif", "analysis.sarif"]);
 
@@ -207,8 +217,10 @@ public class CliTests
     ///     Test that report parameter sets the report file path in context.
     /// </summary>
     [Fact]
-    public void Cli_ReportParameter_SetsReportFilePath()
+    public void Cli_Create_ReportParameter_SetsReportFilePath()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--report", "report.md"]);
 
@@ -221,8 +233,10 @@ public class CliTests
     ///     Test that depth parameter sets the depth in context.
     /// </summary>
     [Fact]
-    public void Cli_DepthParameter_SetsDepth()
+    public void Cli_Create_DepthParameter_SetsDepth()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--depth", "3"]);
 
@@ -235,8 +249,10 @@ public class CliTests
     ///     Test that legacy report-depth parameter sets the report depth in context.
     /// </summary>
     [Fact]
-    public void Cli_ReportDepthParameter_SetsReportDepth()
+    public void Cli_Create_ReportDepthParameter_SetsReportDepth()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--report-depth", "3"]);
 
@@ -249,8 +265,10 @@ public class CliTests
     ///     Test that heading parameter sets the custom heading in context.
     /// </summary>
     [Fact]
-    public void Cli_HeadingParameter_SetsCustomHeading()
+    public void Cli_Create_HeadingParameter_SetsCustomHeading()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--heading", "My Analysis"]);
 
@@ -263,8 +281,10 @@ public class CliTests
     ///     Test that results parameter sets the results file path in context.
     /// </summary>
     [Fact]
-    public void Cli_ResultsParameter_SetsResultsFilePath()
+    public void Cli_Create_ResultsParameter_SetsResultsFilePath()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--results", "results.trx"]);
 
@@ -277,13 +297,67 @@ public class CliTests
     ///     Test that the legacy --result alias sets the results file path in context.
     /// </summary>
     [Fact]
-    public void Cli_ResultLegacyAlias_SetsResultsFilePath()
+    public void Cli_Create_ResultLegacyAlias_SetsResultsFilePath()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--result", "results.trx"]);
 
         // Assert
         Assert.Equal("results.trx", context.ResultsFile);
         Assert.Equal(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that an invalid (non-integer) depth value throws ArgumentException.
+    /// </summary>
+    [Fact]
+    public void Cli_Create_DepthInvalidValue_ThrowsArgumentException()
+    {
+        // Arrange - No special setup needed
+
+        // Act
+        var ex = Assert.Throws<ArgumentException>(() => Context.Create(["--depth", "abc"]));
+
+        // Assert
+        Assert.Contains("--depth requires a positive integer", ex.Message);
+    }
+
+    /// <summary>
+    ///     Test that the log file is written even when silent mode is not active (both console and log receive output).
+    /// </summary>
+    [Fact]
+    public void Cli_Create_LogWithoutSilent_WritesToConsoleAndLogFile()
+    {
+        // Arrange
+        var logFile = Path.Combine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
+        var originalOut = Console.Out;
+        try
+        {
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
+
+            // Act
+            using (var context = Context.Create(["--log", logFile]))
+            {
+                context.WriteLine("Hello from both channels");
+            }
+
+            var consoleOutput = outWriter.ToString();
+            var logContent = File.ReadAllText(logFile);
+
+            // Assert
+            Assert.Contains("Hello from both channels", consoleOutput);
+            Assert.Contains("Hello from both channels", logContent);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            if (File.Exists(logFile))
+            {
+                File.Delete(logFile);
+            }
+        }
     }
 }

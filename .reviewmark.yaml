@@ -184,11 +184,11 @@ reviews:
       - "docs/reqstream/ots/fileassert.yaml"
       - "docs/verification/ots/fileassert.md"
 
-  - id: OTS-MSTest
-    title: Review of MSTest OTS item requirements and verification
+  - id: OTS-XUnitV3
+    title: Review of xUnit v3 OTS item requirements and verification
     paths:
-      - "docs/reqstream/ots/mstest.yaml"
-      - "docs/verification/ots/mstest.md"
+      - "docs/reqstream/ots/xunit-v3.yaml"
+      - "docs/verification/ots/xunit-v3.md"
 
   - id: OTS-Pandoc
     title: Review of Pandoc OTS item requirements and verification

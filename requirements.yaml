@@ -14,7 +14,7 @@ includes:
   - docs/reqstream/sarifmark/utilities/path-helpers.yaml
   - docs/reqstream/sarifmark/platform-requirements.yaml
   - docs/reqstream/sarifmark/program.yaml
-  - docs/reqstream/ots/mstest.yaml
+  - docs/reqstream/ots/xunit-v3.yaml
   - docs/reqstream/ots/reqstream.yaml
   - docs/reqstream/ots/buildmark.yaml
   - docs/reqstream/ots/versionmark.yaml
