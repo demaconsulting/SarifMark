@@ -23,26 +23,25 @@ namespace DemaConsulting.SarifMark.Tests;
 /// <summary>
 ///     Unit tests for the Validation class.
 /// </summary>
-[TestClass]
 public class ValidationTests
 {
     /// <summary>
     ///     Tests that passing a null context throws an ArgumentNullException.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void Validation_Run_NullContext_ThrowsArgumentNullException()
     {
         // Arrange - null context is the condition under test
         Context? context = null;
 
         // Act & Assert - null context must immediately throw ArgumentNullException
-        Assert.ThrowsExactly<ArgumentNullException>(() => Validation.Run(context!));
+        Assert.Throws<ArgumentNullException>(() => Validation.Run(context!));
     }
 
     /// <summary>
     ///     Tests that running validation with a valid context writes a validation header to the log.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void Validation_Run_ValidContext_PrintsValidationHeader()
     {
         // Arrange - silent context that writes all output to a temp log file
@@ -57,16 +56,11 @@ public class ValidationTests
 
             // Assert - log must contain the header table with system-information fields
             var logContent = File.ReadAllText(logFile);
-            Assert.Contains("SarifMark Version", logContent,
-                "Log should contain the 'SarifMark Version' header row");
-            Assert.Contains("Machine Name", logContent,
-                "Log should contain the 'Machine Name' header row");
-            Assert.Contains("OS Version", logContent,
-                "Log should contain the 'OS Version' header row");
-            Assert.Contains("DotNet Runtime", logContent,
-                "Log should contain the 'DotNet Runtime' header row");
-            Assert.Contains("Time Stamp", logContent,
-                "Log should contain the 'Time Stamp' header row");
+            Assert.Contains("SarifMark Version", logContent);
+            Assert.Contains("Machine Name", logContent);
+            Assert.Contains("OS Version", logContent);
+            Assert.Contains("DotNet Runtime", logContent);
+            Assert.Contains("Time Stamp", logContent);
         }
         finally
         {
@@ -77,7 +71,7 @@ public class ValidationTests
     /// <summary>
     ///     Tests that running validation executes all three internal tests and reports them as passed.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void Validation_Run_ValidContext_RunsAllTests()
     {
         // Arrange - silent context that writes all output to a temp log file
@@ -92,14 +86,10 @@ public class ValidationTests
 
             // Assert - log must contain each test name with a passing indicator
             var logContent = File.ReadAllText(logFile);
-            Assert.Contains("SarifMark_SarifReading", logContent,
-                "Log should contain the SarifMark_SarifReading test name");
-            Assert.Contains("SarifMark_MarkdownReportGeneration", logContent,
-                "Log should contain the SarifMark_MarkdownReportGeneration test name");
-            Assert.Contains("SarifMark_Enforcement", logContent,
-                "Log should contain the SarifMark_Enforcement test name");
-            Assert.Contains("Passed", logContent,
-                "Log should report at least one test as Passed");
+            Assert.Contains("SarifMark_SarifReading", logContent);
+            Assert.Contains("SarifMark_MarkdownReportGeneration", logContent);
+            Assert.Contains("SarifMark_Enforcement", logContent);
+            Assert.Contains("Passed", logContent);
         }
         finally
         {
@@ -110,7 +100,7 @@ public class ValidationTests
     /// <summary>
     ///     Tests that the SARIF reading self-test passes within the validation suite.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void Validation_Run_ValidContext_VerifiesSarifReadingOutput()
     {
         // Arrange - silent context that writes all output to a temp log file
@@ -125,8 +115,7 @@ public class ValidationTests
 
             // Assert - SARIF reading test must have passed (no failure for SarifReading test)
             var logContent = File.ReadAllText(logFile);
-            Assert.Contains("✓ SarifMark_SarifReading - Passed", logContent,
-                "Log should indicate SarifMark_SarifReading passed");
+            Assert.Contains("✓ SarifMark_SarifReading - Passed", logContent);
         }
         finally
         {
@@ -137,7 +126,7 @@ public class ValidationTests
     /// <summary>
     ///     Tests that the report generation self-test passes within the validation suite.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void Validation_Run_ValidContext_VerifiesReportGenerationOutput()
     {
         // Arrange - silent context that writes all output to a temp log file
@@ -152,8 +141,7 @@ public class ValidationTests
 
             // Assert - report generation test must have passed
             var logContent = File.ReadAllText(logFile);
-            Assert.Contains("✓ SarifMark_MarkdownReportGeneration - Passed", logContent,
-                "Log should indicate SarifMark_MarkdownReportGeneration passed");
+            Assert.Contains("✓ SarifMark_MarkdownReportGeneration - Passed", logContent);
         }
         finally
         {
@@ -164,7 +152,7 @@ public class ValidationTests
     /// <summary>
     ///     Tests that the enforcement self-test passes within the validation suite.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void Validation_Run_ValidContext_VerifiesEnforcementOutput()
     {
         // Arrange - silent context that writes all output to a temp log file
@@ -179,8 +167,7 @@ public class ValidationTests
 
             // Assert - enforcement test must have passed
             var logContent = File.ReadAllText(logFile);
-            Assert.Contains("✓ SarifMark_Enforcement - Passed", logContent,
-                "Log should indicate SarifMark_Enforcement passed");
+            Assert.Contains("✓ SarifMark_Enforcement - Passed", logContent);
         }
         finally
         {
@@ -191,7 +178,7 @@ public class ValidationTests
     /// <summary>
     ///     Tests that running validation prints a summary with the correct totals.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void Validation_Run_ValidContext_PrintsSummary()
     {
         // Arrange - silent context that writes all output to a temp log file
@@ -206,12 +193,9 @@ public class ValidationTests
 
             // Assert - log must contain the three-line summary with correct counts
             var logContent = File.ReadAllText(logFile);
-            Assert.Contains("Total Tests: 3", logContent,
-                "Summary should report exactly 3 total tests");
-            Assert.Contains("Passed: 3", logContent,
-                "Summary should report exactly 3 passed tests");
-            Assert.Contains("Failed: 0", logContent,
-                "Summary should report 0 failed tests");
+            Assert.Contains("Total Tests: 3", logContent);
+            Assert.Contains("Passed: 3", logContent);
+            Assert.Contains("Failed: 0", logContent);
         }
         finally
         {
@@ -222,7 +206,7 @@ public class ValidationTests
     /// <summary>
     ///     Tests that when a .trx results file path is supplied the file is created and contains TRX content.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void Validation_Run_WithTrxResultsFile_WritesResultsFile()
     {
         // Arrange - supply both a log file and a .trx results file via command-line args
@@ -238,12 +222,10 @@ public class ValidationTests
             }
 
             // Assert - the .trx file must exist and contain TRX XML markers
-            Assert.IsTrue(File.Exists(trxFile), "TRX results file should have been created");
+            Assert.True(File.Exists(trxFile), "TRX results file should have been created");
             var trxContent = File.ReadAllText(trxFile);
-            Assert.Contains("TestRun", trxContent,
-                "TRX file should contain a 'TestRun' XML element");
-            Assert.Contains("SarifMark Self-Validation", trxContent,
-                "TRX file should contain the test suite name");
+            Assert.Contains("TestRun", trxContent);
+            Assert.Contains("SarifMark Self-Validation", trxContent);
         }
         finally
         {
@@ -255,7 +237,7 @@ public class ValidationTests
     /// <summary>
     ///     Tests that when a results file path with an unsupported extension is supplied, an error is reported.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void Validation_Run_WithUnsupportedResultsFileExtension_WritesError()
     {
         // Arrange - supply a .json results path (not a supported format)
@@ -273,11 +255,9 @@ public class ValidationTests
             }
 
             // Assert - error must be reported
-            Assert.AreEqual(1, exitCode,
-                "Exit code should be 1 when an unsupported results file extension is used");
+            Assert.Equal(1, exitCode);
             var logContent = File.ReadAllText(logFile);
-            Assert.Contains("Unsupported results file format", logContent,
-                "Log should contain the unsupported format error message");
+            Assert.Contains("Unsupported results file format", logContent);
         }
         finally
         {
@@ -289,7 +269,7 @@ public class ValidationTests
     /// <summary>
     ///     Tests that when a .xml results file path is supplied the file is created and contains JUnit XML content.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void Validation_Run_WithXmlResultsFile_WritesResultsFile()
     {
         // Arrange - supply both a log file and a .xml results file via command-line args
@@ -305,12 +285,10 @@ public class ValidationTests
             }
 
             // Assert - the .xml file must exist and contain JUnit XML markers
-            Assert.IsTrue(File.Exists(xmlFile), "JUnit XML results file should have been created");
+            Assert.True(File.Exists(xmlFile), "JUnit XML results file should have been created");
             var xmlContent = File.ReadAllText(xmlFile);
-            Assert.Contains("testsuites", xmlContent,
-                "JUnit XML file should contain a 'testsuites' root element");
-            Assert.Contains("SarifMark Self-Validation", xmlContent,
-                "JUnit XML file should contain the test suite name");
+            Assert.Contains("testsuites", xmlContent);
+            Assert.Contains("SarifMark Self-Validation", xmlContent);
         }
         finally
         {
@@ -322,7 +300,7 @@ public class ValidationTests
     /// <summary>
     ///     Tests that when the results file path is in a non-existent directory, an I/O error is reported.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void Validation_Run_WithNonExistentResultsDirectory_WritesError()
     {
         // Arrange - use a .trx path inside a directory that does not exist so File.WriteAllText throws IOException
@@ -342,11 +320,9 @@ public class ValidationTests
             }
 
             // Assert - error must be reported and exit code must be 1
-            Assert.AreEqual(1, exitCode,
-                "Exit code should be 1 when the results file cannot be written");
+            Assert.Equal(1, exitCode);
             var logContent = File.ReadAllText(logFile);
-            Assert.Contains("Error: Failed to write results file", logContent,
-                "Log should contain the write failure error message");
+            Assert.Contains("Error: Failed to write results file", logContent);
         }
         finally
         {
@@ -385,21 +361,21 @@ public class ValidationTests
     /// <summary>
     ///     Tests that TemporaryDirectory creates a directory that exists after construction.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void Validation_TemporaryDirectory_Create_DirectoryExists()
     {
         // Arrange & Act
         using var tempDir = new Validation.TemporaryDirectory();
 
         // Assert
-        Assert.IsTrue(Directory.Exists(tempDir.DirectoryPath),
+        Assert.True(Directory.Exists(tempDir.DirectoryPath),
             "Temporary directory should exist after construction");
     }
 
     /// <summary>
     ///     Tests that TemporaryDirectory deletes the directory on disposal.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void Validation_TemporaryDirectory_Dispose_DirectoryDeleted()
     {
         // Arrange
@@ -407,14 +383,14 @@ public class ValidationTests
         using (var tempDir = new Validation.TemporaryDirectory())
         {
             dirPath = tempDir.DirectoryPath;
-            Assert.IsTrue(Directory.Exists(dirPath),
+            Assert.True(Directory.Exists(dirPath),
                 "Temporary directory should exist before disposal");
 
             // Act - dispose is called at end of using block
         }
 
         // Assert
-        Assert.IsFalse(Directory.Exists(dirPath),
+        Assert.False(Directory.Exists(dirPath),
             "Temporary directory should be deleted after disposal");
     }
 }

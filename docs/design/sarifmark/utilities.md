@@ -1,16 +1,16 @@
-# Utilities Subsystem
+## Utilities Subsystem
 
 The `Utilities` subsystem provides shared utility functions for SarifMark.
 It supplies reusable, independently testable helpers that are consumed by other subsystems.
 
-## Overview
+### Overview
 
 The `Utilities` subsystem contains general-purpose helpers that do not belong to any
 specific feature subsystem. Its primary responsibility is safe file-path manipulation,
 protecting callers from path-traversal vulnerabilities when constructing paths from
 external inputs.
 
-## Units
+### Units
 
 The `Utilities` subsystem contains the following software unit:
 
@@ -18,7 +18,7 @@ The `Utilities` subsystem contains the following software unit:
 |---------------|----------------------------|---------------------------------------------|
 | `PathHelpers` | `Utilities/PathHelpers.cs` | Safe path combination and traversal checks. |
 
-## Interfaces
+### Interfaces
 
 The `Utilities` subsystem exposes the following interface to the rest of the tool:
 
@@ -30,11 +30,11 @@ The `Utilities` subsystem exposes the following interface to the rest of the too
 is `null`; throws `ArgumentException` when the resolved path escapes the base directory or
 contains an invalid path component.
 
-## Interactions
+### Interactions
 
 `PathHelpers` has no dependencies on other tool units or subsystems. It uses only .NET base
 class library types (`Path`, `ArgumentNullException`).
 
-## Class Details
+### Class Details
 
 - **PathHelpers class** — safe path combination utilities

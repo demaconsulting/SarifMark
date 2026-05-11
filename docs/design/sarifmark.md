@@ -19,7 +19,7 @@ The system is organized into four subsystems plus a system-level entry point:
 | `SelfTest`    | Subsystem  | Built-in self-validation for tool qualification              |
 | `Utilities`   | Subsystem  | Shared utility helpers (safe path combination)               |
 
-See the [Software Structure section of the introduction][introduction] for the
+See the *Software Structure* section of the *Introduction* document for the
 full system/subsystem/unit tree.
 
 ## Entry Point and Execution Flow
@@ -81,10 +81,19 @@ flowchart TD
 All subsystems receive a `Cli.Context` reference for output. The `Utilities`
 subsystem is a stateless helper used by `SelfTest` for path construction.
 
+## External Dependencies
+
+SarifMark depends on the following off-the-shelf (OTS) components:
+
+| Dependency         | Purpose                                                       |
+|--------------------|---------------------------------------------------------------|
+| .NET Runtime       | Execution host; provides base class library and runtime APIs  |
+| System.Text.Json   | JSON parsing for SARIF file reading (`JsonDocument.Parse`)    |
+
+Both dependencies are part of the .NET SDK and require no additional packages.
+
 ## System Requirements
 
-System-level requirements are captured in `docs/reqstream/sarifmark/sarifmark.yaml`
+System-level requirements are captured in `docs/reqstream/sarifmark.yaml`
 and are validated through integration tests that exercise the published dotnet
 DLL end-to-end across the supported platforms.
-
-[introduction]: introduction.md

@@ -1,6 +1,6 @@
-# SARIF and Reporting
+## SARIF and Reporting
 
-## Overview
+### Overview
 
 The SARIF and reporting layer is responsible for reading SARIF 2.1.0 files and generating
 markdown reports from the extracted results. It consists of three records:
@@ -15,7 +15,7 @@ logic). This layer satisfies requirements `SarifMark-Sarif-Reading`,
 `SarifMark-Report-Locations`, `SarifMark-Report-Headings`, `SarifMark-Report-LineBreaks`,
 and `SarifMark-Report-FileCount`.
 
-## Architecture
+### Architecture
 
 The SARIF and reporting layer uses a three-record design:
 
@@ -35,7 +35,7 @@ The SARIF and reporting layer uses a three-record design:
   files it concatenates the run reports. See the SarifResults Record document for class-level
   details.
 
-## Reading Pipeline
+### Reading Pipeline
 
 `SarifResults.Read` processes a SARIF file through a pipeline:
 
@@ -52,7 +52,7 @@ The SARIF and reporting layer uses a three-record design:
 7. Construction and return of the `SarifResults` record with all runs
    (satisfies `SarifMark-Sarif-Processing` and `SarifMark-Sarif-MultiRun`)
 
-## Report Generation
+### Report Generation
 
 `SarifResults.ToMarkdown` generates a markdown string from the loaded results. It
 validates the heading depth (1–6), then for a single-run file delegates directly to the
@@ -64,14 +64,14 @@ with location information, result counts, and the analyzed file count. This sati
 `SarifMark-Report-Counts`, `SarifMark-Report-Locations`, `SarifMark-Report-LineBreaks`,
 and `SarifMark-Report-FileCount`.
 
-## CLI Integration
+### CLI Integration
 
 The requirement `SarifMark-System-SarifRequired` (the tool shall require the `--sarif` parameter
 for analysis) is enforced at the application layer rather than within this library. The
 `ProcessSarifAnalysis` method in `Program.cs` validates that `--sarif` is provided before
 invoking the SARIF reading layer. See the Program Class document for full details.
 
-## Class Details
+### Class Details
 
 - **SarifFinding record** — immutable value type for a single analysis finding
 - **SarifRun record** — immutable value type for a single tool run with markdown generation

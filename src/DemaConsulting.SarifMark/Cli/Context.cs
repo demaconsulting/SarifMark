@@ -139,6 +139,7 @@ internal sealed class Context : IDisposable
     ///     Opens the log file for writing.
     /// </summary>
     /// <param name="logFile">Log file path.</param>
+    /// <exception cref="InvalidOperationException">Thrown when the log file at <paramref name="logFile"/> cannot be opened for writing.</exception>
     private void OpenLogFile(string logFile)
     {
         try
@@ -220,6 +221,7 @@ internal sealed class Context : IDisposable
         ///     Parses command-line arguments.
         /// </summary>
         /// <param name="args">Command-line arguments.</param>
+        /// <exception cref="ArgumentException">Thrown when an unsupported argument is encountered, or a value-bearing argument is missing its value, or a depth argument is not a positive integer.</exception>
         public void ParseArguments(string[] args)
         {
             // Validate input
@@ -240,6 +242,7 @@ internal sealed class Context : IDisposable
         /// <param name="args">All arguments.</param>
         /// <param name="index">Current index.</param>
         /// <returns>Updated index.</returns>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is not a recognized argument, or a value-bearing argument is the last token without a following value, or a depth value is not a positive integer.</exception>
         private int ParseArgument(string arg, string[] args, int index)
         {
             switch (arg)
@@ -306,6 +309,7 @@ internal sealed class Context : IDisposable
         /// <param name="index">Current index.</param>
         /// <param name="description">Description of what's required.</param>
         /// <returns>The argument value.</returns>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is the last token in the argument list and has no following value.</exception>
         private static string GetRequiredStringArgument(string arg, string[] args, int index, string description)
         {
             if (index >= args.Length)
@@ -323,6 +327,7 @@ internal sealed class Context : IDisposable
         /// <param name="args">All arguments.</param>
         /// <param name="index">Current index.</param>
         /// <returns>The argument value.</returns>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is the last token in the argument list, or its value is not a positive integer.</exception>
         private static int GetRequiredIntArgument(string arg, string[] args, int index)
         {
             if (index >= args.Length)
@@ -359,6 +364,11 @@ internal sealed class Context : IDisposable
     ///     Writes an error message to the error console and log file (if logging is enabled).
     /// </summary>
     /// <param name="message">The error message to write.</param>
+    /// <remarks>
+    ///     This method sets <see cref="ExitCode"/> to 1 on the first call, and this change is permanent
+    ///     for the lifetime of the <see cref="Context"/> instance. Additionally, this method is not safe
+    ///     for concurrent use because it temporarily modifies <see cref="Console.ForegroundColor"/>.
+    /// </remarks>
     public void WriteError(string message)
     {
         // Mark that we have encountered errors

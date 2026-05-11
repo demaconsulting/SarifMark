@@ -1,19 +1,19 @@
-# Self-Validation
+### Self-Validation
 
-## Overview
+#### Overview
 
 The self-validation layer provides built-in verification of the tool's core functionality.
 It is invoked when the `--validate` flag is passed and can write results to a TRX or
 JUnit XML file when `--results` is also provided. This satisfies requirements
 `SarifMark-Validate-Mode` and `SarifMark-Validate-ResultFiles`.
 
-## Validation Class
+#### Validation Class
 
 The `Validation` class (`Validation.cs`) is declared `internal static`, limiting its use to the
 `DemaConsulting.SarifMark` assembly. It exposes a single public method, `Run`, and organizes
 all test execution internally.
 
-### Run Method
+##### Run Method
 
 Before executing the sequence, `Run` validates its input by calling
 `ArgumentNullException.ThrowIfNull(context)`, throwing `ArgumentNullException` immediately if
@@ -30,7 +30,7 @@ Before executing the sequence, `Run` validates its input by calling
    failed count if any tests failed.
 5. If `context.ResultsFile` is set, calls `WriteResultsFile` to persist the results.
 
-### RunSarifReadingTest
+##### RunSarifReadingTest
 
 `RunSarifReadingTest` verifies end-to-end SARIF reading:
 
@@ -42,7 +42,7 @@ Before executing the sequence, `Run` validates its input by calling
 
 The test name is `SarifMark_SarifReading`, satisfying `SarifMark-Sarif-Reading`.
 
-### RunMarkdownReportGenerationTest
+##### RunMarkdownReportGenerationTest
 
 `RunMarkdownReportGenerationTest` verifies report generation end-to-end:
 
@@ -57,7 +57,7 @@ The test name is `SarifMark_SarifReading`, satisfying `SarifMark-Sarif-Reading`.
 
 The test name is `SarifMark_MarkdownReportGeneration`, satisfying `SarifMark-Report-Markdown`.
 
-### RunEnforcementTest
+##### RunEnforcementTest
 
 `RunEnforcementTest` verifies enforcement mode by delegating to `RunValidationTest` with
 `--enforce` as an extra argument and a validator that:
@@ -68,7 +68,7 @@ The test name is `SarifMark_MarkdownReportGeneration`, satisfying `SarifMark-Rep
 The test name is `SarifMark_Enforcement`, satisfying `SarifMark-Enforce-Mode` and
 `SarifMark-Enforce-ExitCode`.
 
-### RunValidationTest
+##### RunValidationTest
 
 `RunValidationTest` is a private shared helper used by `RunSarifReadingTest`,
 `RunMarkdownReportGenerationTest`, and `RunEnforcementTest`. It accepts a test name, an
@@ -88,7 +88,7 @@ optional report file name, a caller-supplied `validator` function, and an option
 This design avoids duplication across the three test methods while keeping each test's
 validation logic distinct and independently readable.
 
-### WriteResultsFile
+##### WriteResultsFile
 
 `WriteResultsFile` inspects the file extension of `context.ResultsFile`:
 
@@ -102,7 +102,7 @@ On success, writes `"Results written to <path>"` via `context.WriteLine`. Catche
 
 The serialized content is written with `File.WriteAllText`.
 
-### CreateMockSarifFile
+##### CreateMockSarifFile
 
 `CreateMockSarifFile(string filePath)` writes a hard-coded SARIF 2.1.0 JSON file to `filePath`.
 The file contains a single run from a tool named `MockTool` (version `1.0.0`) with exactly two
@@ -110,21 +110,21 @@ results: `TEST001` (warning, `src/Program.cs` line 42) and `TEST002` (error, `sr
 line 15). All three self-tests validate against this specific structure, so any change to
 the mock file must be reflected in the corresponding validator lambdas.
 
-### CreateTestResult
+##### CreateTestResult
 
 `CreateTestResult(string testName)` allocates a new `TestResult` object with `Name` set to
 `testName`, `ClassName` set to `"Validation"`, and `CodeBase` set to `"SarifMark"`. Centralizing
 creation ensures every test result carries consistent metadata without repetition across the
 three test methods.
 
-### FinalizeTestResult
+##### FinalizeTestResult
 
 `FinalizeTestResult(TestResult test, DateTime startTime, TestResults testResults)` sets
 `test.Duration` to the elapsed time since `startTime` and appends `test` to `testResults.Results`.
 It is always called at the end of `RunValidationTest` — whether the test passed, failed, or threw —
 to ensure every started test is recorded with a valid duration.
 
-### HandleTestException
+##### HandleTestException
 
 `HandleTestException(TestResult test, Context context, string testName, Exception ex)` sets
 `test.Outcome` to `Failed`, records the exception message as `test.ErrorMessage`, and calls
@@ -132,7 +132,7 @@ to ensure every started test is recorded with a valid duration.
 `RunValidationTest` to handle any unhandled exception as a test failure rather than propagating
 it as an unhandled crash.
 
-### TemporaryDirectory
+##### TemporaryDirectory
 
 `TemporaryDirectory` is a private nested class implementing `IDisposable`. It creates a
 uniquely-named subdirectory under `Path.GetTempPath()` using `PathHelpers.SafePathCombine`

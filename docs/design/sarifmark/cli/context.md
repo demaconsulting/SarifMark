@@ -1,18 +1,18 @@
-# Context Class
+### Context Class
 
-## Overview
+#### Overview
 
 The `Context` class (`Context.cs`) is a sealed, disposable container for all parsed command-line
 state and output routing. It is the single source of truth for which mode the tool runs in, which
 files it reads and writes, and whether any errors have been reported.
 
-## Class Design
+#### Class Design
 
 `Context` is declared `sealed` and implements `IDisposable`. The constructor is private; all
 instances are created through the `Create` static factory method. This ensures every `Context` is
 fully initialized before use. This satisfies requirement `SarifMark-Context-Create`.
 
-## Create Factory Method
+#### Create Factory Method
 
 `Create(string[] args)` is the sole public entry point for constructing a `Context`. It:
 
@@ -24,7 +24,7 @@ fully initialized before use. This satisfies requirement `SarifMark-Context-Crea
 
 This satisfies requirements `SarifMark-Context-Create` through `SarifMark-Context-LogParam`.
 
-## Properties
+#### Properties
 
 | Property      | Type      | Default | CLI flag(s)              | Description                                 |
 |---------------|-----------|---------|--------------------------|---------------------------------------------|
@@ -51,7 +51,7 @@ These properties satisfy requirements `SarifMark-Context-VersionFlag`, `SarifMar
 `SarifMark-Context-HeadingParam`, `SarifMark-Context-ResultsParam`, `SarifMark-Context-ResultLegacyAlias`,
 and `SarifMark-Context-ExitCode`.
 
-## ArgumentParser Inner Class
+#### ArgumentParser Inner Class
 
 `ArgumentParser` is a private, sealed nested class responsible for token-by-token command-line
 parsing. Its `ParseArguments(string[] args)` method iterates through tokens in order and delegates
@@ -71,13 +71,13 @@ following value. This satisfies requirements `SarifMark-Context-SarifParam-Missi
 `SarifMark-Context-ReportParam-MissingValue`, `SarifMark-Context-ResultsParam-MissingValue`,
 `SarifMark-Context-LogParam-MissingValue`, and `SarifMark-Context-HeadingParam`.
 
-## WriteLine Method
+#### WriteLine Method
 
 `WriteLine(string message)` writes to `Console.Out` unless `Silent` is `true`. If a log file is
 open, the message is also written to the log `StreamWriter` regardless of the `Silent` flag. This
 satisfies requirements `SarifMark-Context-WriteLine-Console` and `SarifMark-Context-WriteLine-Log`.
 
-## WriteError Method
+#### WriteError Method
 
 `WriteError(string message)` unconditionally sets the private `_hasErrors` flag to `true`, which
 causes `ExitCode` to return `1`. Unless `Silent` is `true`, it writes the message to
@@ -86,7 +86,7 @@ the message is also written there. This satisfies requirements `SarifMark-Contex
 `SarifMark-Context-WriteError-Log`, `SarifMark-Context-WriteError-ExitCode`, and
 `SarifMark-Context-ExitCode`.
 
-## OpenLogFile Method
+#### OpenLogFile Method
 
 `OpenLogFile(string logFile)` opens a `StreamWriter` over the specified path with
 `AutoFlush = true`, ensuring log entries are flushed to disk immediately even if the process
@@ -94,13 +94,13 @@ terminates unexpectedly. If the file cannot be opened for any reason, the underl
 caught and wrapped in an `InvalidOperationException` with a message that identifies the failing
 file path. This satisfies requirement `SarifMark-Context-LogParam`.
 
-## Dispose Method
+#### Dispose Method
 
 `Dispose()` disposes the log `StreamWriter` if one was opened and sets the reference to `null`.
 This ensures file handles are released and any remaining buffered content is flushed on disposal.
 This satisfies requirement `SarifMark-Context-Dispose`.
 
-## Cross-References
+#### Cross-References
 
 See the Program Class document for how `Context` is constructed and consumed by `Program.Main`
 and `Program.Run`.

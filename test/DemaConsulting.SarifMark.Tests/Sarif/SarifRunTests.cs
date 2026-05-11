@@ -23,13 +23,12 @@ namespace DemaConsulting.SarifMark.Tests;
 /// <summary>
 ///     Unit tests for the SarifRun record.
 /// </summary>
-[TestClass]
 public class SarifRunTests
 {
     /// <summary>
     ///     Test that the internal constructor creates a valid SarifRun instance.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifRun_InternalConstructor_CreatesValidInstance()
     {
         // Arrange
@@ -39,31 +38,31 @@ public class SarifRunTests
         var run = new SarifRun("MyTool", "1.0.0", results, 3);
 
         // Assert
-        Assert.AreEqual("MyTool", run.ToolName);
-        Assert.AreEqual("1.0.0", run.ToolVersion);
-        Assert.AreEqual(1, run.ResultCount);
-        Assert.AreEqual(3, run.FileCount);
-        Assert.IsNotNull(run.Results);
-        Assert.IsTrue(run.HasIssues);
+        Assert.Equal("MyTool", run.ToolName);
+        Assert.Equal("1.0.0", run.ToolVersion);
+        Assert.Equal(1, run.ResultCount);
+        Assert.Equal(3, run.FileCount);
+        Assert.NotNull(run.Results);
+        Assert.True(run.HasIssues);
     }
 
     /// <summary>
     ///     Test that HasIssues returns false when there are no results.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifRun_HasIssues_NoResults_ReturnsFalse()
     {
         // Arrange
         var run = new SarifRun("Tool", "1.0", [], 0);
 
         // Act & Assert
-        Assert.IsFalse(run.HasIssues);
+        Assert.False(run.HasIssues);
     }
 
     /// <summary>
     ///     Test that HasIssues returns true when results are present.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifRun_HasIssues_WithResults_ReturnsTrue()
     {
         // Arrange
@@ -73,13 +72,13 @@ public class SarifRunTests
         var run = new SarifRun("Tool", "1.0", results, 0);
 
         // Assert
-        Assert.IsTrue(run.HasIssues);
+        Assert.True(run.HasIssues);
     }
 
     /// <summary>
     ///     Test that ToMarkdown with no results shows the correct message.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifRun_ToMarkdown_NoResults_ShowsFoundNoResults()
     {
         // Arrange
@@ -95,7 +94,7 @@ public class SarifRunTests
     /// <summary>
     ///     Test that ToMarkdown with results shows the results correctly.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifRun_ToMarkdown_WithResults_ShowsResults()
     {
         // Arrange
@@ -115,7 +114,7 @@ public class SarifRunTests
     /// <summary>
     ///     Test that ToMarkdown with depth 1 produces the correct output structure.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifRun_ToMarkdown_Depth1_ProducesCorrectOutput()
     {
         // Arrange
@@ -134,33 +133,33 @@ public class SarifRunTests
     /// <summary>
     ///     Test that ToMarkdown with depth less than 1 throws ArgumentOutOfRangeException.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifRun_ToMarkdown_DepthLessThan1_ThrowsArgumentOutOfRangeException()
     {
         // Arrange
         var run = new SarifRun("Tool", "1.0", [], 0);
 
         // Act & Assert
-        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => run.ToMarkdown(0));
+        Assert.Throws<ArgumentOutOfRangeException>(() => run.ToMarkdown(0));
     }
 
     /// <summary>
     ///     Test that ToMarkdown with depth greater than 6 throws ArgumentOutOfRangeException.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifRun_ToMarkdown_DepthGreaterThan6_ThrowsArgumentOutOfRangeException()
     {
         // Arrange
         var run = new SarifRun("Tool", "1.0", [], 0);
 
         // Act & Assert
-        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => run.ToMarkdown(7));
+        Assert.Throws<ArgumentOutOfRangeException>(() => run.ToMarkdown(7));
     }
 
     /// <summary>
     ///     Test that ToMarkdown uses the provided custom heading.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifRun_ToMarkdown_CustomHeading_UsesProvidedHeading()
     {
         // Arrange
@@ -176,7 +175,7 @@ public class SarifRunTests
     /// <summary>
     ///     Test that ToMarkdown with null heading uses the default heading.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifRun_ToMarkdown_NullHeading_UsesDefaultHeading()
     {
         // Arrange
@@ -192,7 +191,7 @@ public class SarifRunTests
     /// <summary>
     ///     Test that ToMarkdown with whitespace heading uses the default heading.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifRun_ToMarkdown_WhitespaceHeading_UsesDefaultHeading()
     {
         // Arrange
@@ -208,7 +207,7 @@ public class SarifRunTests
     /// <summary>
     ///     Test that ToMarkdown shows the file count.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifRun_ToMarkdown_ShowsFileCount()
     {
         // Arrange
@@ -224,7 +223,7 @@ public class SarifRunTests
     /// <summary>
     ///     Test that ToMarkdown formats results without location correctly.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifRun_ToMarkdown_ResultWithoutLocation_ShowsNoLocation()
     {
         // Arrange
@@ -241,7 +240,7 @@ public class SarifRunTests
     /// <summary>
     ///     Test that ToMarkdown formats results with URI but no line number correctly.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifRun_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly()
     {
         // Arrange
@@ -259,7 +258,7 @@ public class SarifRunTests
     /// <summary>
     ///     Test that ToMarkdown uses singular form for one result.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifRun_ToMarkdown_OneResult_UsesSingularForm()
     {
         // Arrange
@@ -277,7 +276,7 @@ public class SarifRunTests
     /// <summary>
     ///     Test that ToMarkdown uses plural form for multiple results.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifRun_ToMarkdown_MultipleResults_UsesPluralForm()
     {
         // Arrange
@@ -300,7 +299,7 @@ public class SarifRunTests
     /// <summary>
     ///     Test that ToMarkdown at depth 6 caps the Issues sub-heading at 6 hashes.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifRun_ToMarkdown_Depth6_IssuesHeadingCappedAtSix()
     {
         // Arrange

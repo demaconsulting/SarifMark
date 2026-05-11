@@ -13,7 +13,7 @@ sections:
             children:
               - SarifMark-SarifResults-ParseResults
             tests:
-              - Sarif_ValidSarifFile_ProcessesSuccessfully
+              - Sarif_Read_ValidSarifFile_ProcessesSuccessfully
 
           - id: SarifMark-Sarif-Validation
             title: The tool shall validate SARIF file format.
@@ -26,8 +26,8 @@ sections:
               - SarifMark-SarifResults-ValidatePathExists
               - SarifMark-SarifResults-ValidateStructure
             tests:
-              - Sarif_NonExistentSarifFile_ThrowsFileNotFoundException
-              - Sarif_InvalidSarifFile_ThrowsInvalidOperationException
+              - Sarif_Read_NonExistentFile_ThrowsFileNotFoundException
+              - Sarif_Read_InvalidSarifFile_ThrowsInvalidOperationException
 
           - id: SarifMark-Sarif-ToolInfo
             title: The tool shall extract tool information from SARIF files.
@@ -39,7 +39,7 @@ sections:
               - SarifMark-SarifResults-ExtractTool
               - SarifMark-SarifResults-VersionPriority
             tests:
-              - Sarif_ValidSarifFile_ProcessesSuccessfully
+              - Sarif_Read_ValidSarifFile_ProcessesSuccessfully
 
           - id: SarifMark-Sarif-Results
             title: The tool shall extract results from SARIF files.
@@ -51,7 +51,7 @@ sections:
               - SarifMark-SarifResults-ParseResults
               - SarifMark-SarifResults-FilterSuppressions
             tests:
-              - Sarif_ValidSarifFile_ProcessesSuccessfully
+              - Sarif_Read_ValidSarifFile_ProcessesSuccessfully
 
           - id: SarifMark-Sarif-Locations
             title: The tool shall extract location information from SARIF results.
@@ -63,7 +63,7 @@ sections:
               - SarifMark-SarifFinding-Uri
               - SarifMark-SarifFinding-StartLine
             tests:
-              - Sarif_Report_ContainsLocationInfo
+              - Sarif_GenerateReport_LocationInfo_ContainsLocationInfo
 
           - id: SarifMark-Sarif-FilePaths
             title: The SARIF subsystem shall require valid file paths for SARIF input.
@@ -75,7 +75,7 @@ sections:
               - SarifMark-SarifResults-ValidatePathArgument
               - SarifMark-SarifResults-ValidatePathExists
             tests:
-              - Sarif_NonExistentSarifFile_ThrowsFileNotFoundException
+              - Sarif_Read_NonExistentFile_ThrowsFileNotFoundException
 
           - id: SarifMark-Sarif-Processing
             title: The tool shall process valid SARIF files successfully.
@@ -86,7 +86,7 @@ sections:
             children:
               - SarifMark-SarifResults-ParseResults
             tests:
-              - Sarif_ValidSarifFile_ProcessesSuccessfully
+              - Sarif_Read_ValidSarifFile_ProcessesSuccessfully
 
           - id: SarifMark-Sarif-FileCount
             title: The tool shall extract the total number of analyzed files from SARIF artifacts.
@@ -97,7 +97,7 @@ sections:
             children:
               - SarifMark-SarifResults-FileCount
             tests:
-              - Sarif_Report_ContainsFileCount
+              - Sarif_GenerateReport_FileCount_ContainsFileCount
 
           - id: SarifMark-Sarif-MultiRun
             title: The tool shall process SARIF files containing multiple runs and return all runs.
@@ -110,4 +110,4 @@ sections:
               - SarifMark-SarifResults-Runs
               - SarifMark-SarifResults-MultiRunMarkdown
             tests:
-              - Sarif_MultiRunSarifFile_ProcessesAllRuns
+              - Sarif_Read_MultiRunSarifFile_ProcessesAllRuns

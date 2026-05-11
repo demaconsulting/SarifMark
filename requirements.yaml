@@ -1,20 +1,20 @@
 ---
 includes:
-  - docs/reqstream/sarifmark/sarifmark.yaml
-  - docs/reqstream/sarifmark/cli/cli.yaml
+  - docs/reqstream/sarifmark.yaml
+  - docs/reqstream/sarifmark/cli.yaml
   - docs/reqstream/sarifmark/cli/context.yaml
-  - docs/reqstream/sarifmark/sarif/sarif.yaml
+  - docs/reqstream/sarifmark/sarif.yaml
   - docs/reqstream/sarifmark/sarif/report.yaml
   - docs/reqstream/sarifmark/sarif/sarif-run.yaml
   - docs/reqstream/sarifmark/sarif/sarif-finding.yaml
   - docs/reqstream/sarifmark/sarif/sarif-results.yaml
-  - docs/reqstream/sarifmark/self-test/self-test.yaml
+  - docs/reqstream/sarifmark/self-test.yaml
   - docs/reqstream/sarifmark/self-test/validation.yaml
-  - docs/reqstream/sarifmark/utilities/utilities.yaml
+  - docs/reqstream/sarifmark/utilities.yaml
   - docs/reqstream/sarifmark/utilities/path-helpers.yaml
   - docs/reqstream/sarifmark/platform-requirements.yaml
   - docs/reqstream/sarifmark/program.yaml
-  - docs/reqstream/ots/mstest.yaml
+  - docs/reqstream/ots/xunit-v3.yaml
   - docs/reqstream/ots/reqstream.yaml
   - docs/reqstream/ots/buildmark.yaml
   - docs/reqstream/ots/versionmark.yaml

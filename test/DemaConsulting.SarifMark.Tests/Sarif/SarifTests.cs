@@ -23,16 +23,14 @@ namespace DemaConsulting.SarifMark.Tests;
 /// <summary>
 ///     Subsystem tests for the SARIF reading subsystem.
 /// </summary>
-[TestClass]
 public class SarifTests
 {
-    private string _testDataPath = string.Empty;
+    private readonly string _testDataPath;
 
     /// <summary>
     ///     Initialize test by locating test data.
     /// </summary>
-    [TestInitialize]
-    public void TestInitialize()
+    public SarifTests()
     {
         _testDataPath = Path.Combine(AppContext.BaseDirectory, "TestData");
     }
@@ -40,44 +38,44 @@ public class SarifTests
     /// <summary>
     ///     Test that processing a valid SARIF file succeeds.
     /// </summary>
-    [TestMethod]
-    public void Sarif_ValidSarifFile_ProcessesSuccessfully()
+    [Fact]
+    public void Sarif_Read_ValidSarifFile_ProcessesSuccessfully()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         // Act
         var results = SarifResults.Read(sarifFile);
 
         // Assert
-        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
-        Assert.AreEqual("1.0.0", results.Runs[0].ToolVersion);
-        Assert.AreEqual(1, results.Runs[0].ResultCount);
+        Assert.Equal("TestTool", results.Runs[0].ToolName);
+        Assert.Equal("1.0.0", results.Runs[0].ToolVersion);
+        Assert.Equal(1, results.Runs[0].ResultCount);
     }
 
     /// <summary>
     ///     Test that reading a non-existent SARIF file throws FileNotFoundException.
     /// </summary>
-    [TestMethod]
-    public void Sarif_NonExistentSarifFile_ThrowsFileNotFoundException()
+    [Fact]
+    public void Sarif_Read_NonExistentFile_ThrowsFileNotFoundException()
     {
         // Arrange
         var nonExistentPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.sarif");
 
         // Act / Assert
-        Assert.ThrowsExactly<FileNotFoundException>(() => SarifResults.Read(nonExistentPath));
+        Assert.Throws<FileNotFoundException>(() => SarifResults.Read(nonExistentPath));
     }
 
     /// <summary>
-    ///     Test that generating a report produces the expected markdown content.
+    ///     Test that generating a report at default depth produces the expected markdown content.
     /// </summary>
-    [TestMethod]
-    public void Sarif_GenerateReport_ProducesMarkdownContent()
+    [Fact]
+    public void Sarif_GenerateReport_DefaultDepth_ProducesMarkdownContent()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         // Act
         var results = SarifResults.Read(sarifFile);
@@ -88,14 +86,14 @@ public class SarifTests
     }
 
     /// <summary>
-    ///     Test that report depth parameter is configurable.
+    ///     Test that the report depth parameter is configurable.
     /// </summary>
-    [TestMethod]
-    public void Sarif_ReportDepth_IsConfigurable()
+    [Fact]
+    public void Sarif_GenerateReport_ReportDepth_IsConfigurable()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         // Act
         var results = SarifResults.Read(sarifFile);
@@ -108,26 +106,26 @@ public class SarifTests
     /// <summary>
     ///     Test that reading an invalid SARIF file throws InvalidOperationException.
     /// </summary>
-    [TestMethod]
-    public void Sarif_InvalidSarifFile_ThrowsInvalidOperationException()
+    [Fact]
+    public void Sarif_Read_InvalidSarifFile_ThrowsInvalidOperationException()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "invalid.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         // Act / Assert
-        Assert.ThrowsExactly<InvalidOperationException>(() => SarifResults.Read(sarifFile));
+        Assert.Throws<InvalidOperationException>(() => SarifResults.Read(sarifFile));
     }
 
     /// <summary>
-    ///     Test that a generated report formats multiple results with proper line breaks.
+    ///     Test that a generated report with multiple results formats them with proper line breaks.
     /// </summary>
-    [TestMethod]
-    public void Sarif_GenerateReport_FormatsMultipleResultsWithLineBreaks()
+    [Fact]
+    public void Sarif_GenerateReport_MultipleResults_FormatsWithLineBreaks()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "multi-result.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         // Act
         var results = SarifResults.Read(sarifFile);
@@ -139,18 +137,18 @@ public class SarifTests
         Assert.Contains("second.cs", reportContent);
 
         // Verify results appear on separate lines with proper markdown line breaks
-        Assert.MatchesRegex(@"first\.cs.*  \r?\nfile:///path/to/second\.cs", reportContent);
+        Assert.Matches(@"first\.cs.*  \r?\nfile:///path/to/second\.cs", reportContent);
     }
 
     /// <summary>
     ///     Test that a generated report contains result count information.
     /// </summary>
-    [TestMethod]
-    public void Sarif_Report_ContainsResultCount()
+    [Fact]
+    public void Sarif_GenerateReport_ResultCount_ContainsResultCount()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         // Act
         var results = SarifResults.Read(sarifFile);
@@ -163,12 +161,12 @@ public class SarifTests
     /// <summary>
     ///     Test that a generated report contains location information for results.
     /// </summary>
-    [TestMethod]
-    public void Sarif_Report_ContainsLocationInfo()
+    [Fact]
+    public void Sarif_GenerateReport_LocationInfo_ContainsLocationInfo()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         // Act
         var results = SarifResults.Read(sarifFile);
@@ -181,12 +179,12 @@ public class SarifTests
     /// <summary>
     ///     Test that a generated report uses a custom heading when provided.
     /// </summary>
-    [TestMethod]
-    public void Sarif_Report_UsesCustomHeading()
+    [Fact]
+    public void Sarif_GenerateReport_CustomHeading_UsesCustomHeading()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         // Act
         var results = SarifResults.Read(sarifFile);
@@ -199,12 +197,12 @@ public class SarifTests
     /// <summary>
     ///     Test that a generated report contains the file count.
     /// </summary>
-    [TestMethod]
-    public void Sarif_Report_ContainsFileCount()
+    [Fact]
+    public void Sarif_GenerateReport_FileCount_ContainsFileCount()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         // Act
         var results = SarifResults.Read(sarifFile);
@@ -217,17 +215,17 @@ public class SarifTests
     /// <summary>
     ///     Test that a multi-run SARIF file is processed correctly and all runs are returned.
     /// </summary>
-    [TestMethod]
-    public void Sarif_MultiRunSarifFile_ProcessesAllRuns()
+    [Fact]
+    public void Sarif_Read_MultiRunSarifFile_ProcessesAllRuns()
     {
         // Arrange
         var sarifFile = Path.Combine(_testDataPath, "multi-run.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         // Act
         var results = SarifResults.Read(sarifFile);
 
         // Assert
-        Assert.AreEqual(2, results.Runs.Count);
+        Assert.Equal(2, results.Runs.Count);
     }
 }

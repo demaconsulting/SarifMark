@@ -30,7 +30,13 @@ internal static class Program
     /// <summary>
     ///     Gets the application version string.
     /// </summary>
-    public static string Version
+    /// <remarks>
+    ///     The version is derived from the assembly metadata in priority order:
+    ///     <see cref="System.Reflection.AssemblyInformationalVersionAttribute"/> (NuGet package version),
+    ///     then <see cref="System.Reflection.AssemblyName.Version"/> (assembly version),
+    ///     then the fallback literal <c>"0.0.0"</c> if neither attribute is present.
+    /// </remarks>
+    internal static string Version
     {
         get
         {
@@ -82,8 +88,14 @@ internal static class Program
     /// <summary>
     ///     Runs the program logic based on the provided context.
     /// </summary>
+    /// <remarks>
+    ///     Implements priority-ordered dispatch: version query is handled first (before banner),
+    ///     then the banner is printed for all other modes, followed by help, validate, and
+    ///     SARIF analysis in priority order. Each mode returns immediately after handling,
+    ///     so only the first matching condition executes.
+    /// </remarks>
     /// <param name="context">The context containing command line arguments and program state.</param>
-    public static void Run(Context context)
+    internal static void Run(Context context)
     {
         // Priority 1: Version query
         if (context.Version)
@@ -149,6 +161,16 @@ internal static class Program
     /// <summary>
     ///     Processes SARIF analysis results and generates reports as requested.
     /// </summary>
+    /// <remarks>
+    ///     This method performs file I/O by reading the SARIF file specified in
+    ///     <see cref="Context.SarifFile"/> and optionally writing a markdown report to
+    ///     <see cref="Context.ReportFile"/>. The following exception types are absorbed and
+    ///     routed through <see cref="Context.WriteError"/> rather than propagated:
+    ///     <see cref="FileNotFoundException"/>, <see cref="InvalidOperationException"/> (SARIF
+    ///     read failures), <see cref="IOException"/>, <see cref="UnauthorizedAccessException"/>,
+    ///     <see cref="ArgumentException"/>, and <see cref="NotSupportedException"/> (report
+    ///     write failures).
+    /// </remarks>
     /// <param name="context">The context containing command line arguments and program state.</param>
     private static void ProcessSarifAnalysis(Context context)
     {

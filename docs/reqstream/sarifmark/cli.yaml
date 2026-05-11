@@ -13,8 +13,8 @@ sections:
             children:
               - SarifMark-Context-Create
             tests:
-              - Cli_VersionFlag_SetsVersionFlag
-              - Cli_HelpFlag_SetsHelpFlag
+              - Cli_Create_VersionFlag_SetsVersionFlag
+              - Cli_Create_HelpFlag_SetsHelpFlag
 
           - id: SarifMark-Cli-Version
             title: The CLI shall recognize the --version flag.
@@ -25,7 +25,7 @@ sections:
             children:
               - SarifMark-Context-VersionFlag
             tests:
-              - Cli_VersionFlag_SetsVersionFlag
+              - Cli_Create_VersionFlag_SetsVersionFlag
 
           - id: SarifMark-Cli-Help
             title: The CLI shall recognize the --help flag.
@@ -36,7 +36,7 @@ sections:
             children:
               - SarifMark-Context-HelpFlag
             tests:
-              - Cli_HelpFlag_SetsHelpFlag
+              - Cli_Create_HelpFlag_SetsHelpFlag
 
           - id: SarifMark-Cli-Silent
             title: The CLI shall suppress console output when the silent flag is set.
@@ -47,7 +47,7 @@ sections:
             children:
               - SarifMark-Context-SilentFlag
             tests:
-              - Cli_SilentFlag_SuppressesOutput
+              - Cli_Create_SilentFlag_SuppressesOutput
 
           - id: SarifMark-Cli-Log
             title: The CLI shall write output to a log file when the log parameter is set.
@@ -58,7 +58,7 @@ sections:
             children:
               - SarifMark-Context-LogParam
             tests:
-              - Cli_LogFile_WritesOutputToFile
+              - Cli_Create_LogFile_WritesOutputToFile
 
           - id: SarifMark-Cli-Enforce
             title: The CLI shall recognize the --enforce flag.
@@ -69,7 +69,7 @@ sections:
             children:
               - SarifMark-Context-EnforceFlag
             tests:
-              - Cli_EnforceFlag_SetsEnforceFlag
+              - Cli_Create_EnforceFlag_SetsEnforceFlag
 
           - id: SarifMark-Cli-WriteError
             title: The CLI shall write errors to stderr and set a non-zero exit code.
@@ -81,7 +81,7 @@ sections:
             children:
               - SarifMark-Context-WriteError
             tests:
-              - Cli_WriteError_SetsExitCodeToOne
+              - Cli_WriteError_WithMessage_SetsExitCodeToOne
 
           - id: SarifMark-Cli-InvalidArgs
             title: The CLI shall reject unknown command-line arguments.
@@ -92,7 +92,7 @@ sections:
             children:
               - SarifMark-Context-UnknownArgs
             tests:
-              - Cli_UnknownArgument_ThrowsArgumentException
+              - Cli_Create_UnknownArgument_ThrowsArgumentException
 
           - id: SarifMark-Cli-Validate
             title: The CLI shall recognize the --validate flag.
@@ -103,7 +103,7 @@ sections:
             children:
               - SarifMark-Context-ValidateFlag
             tests:
-              - Cli_ValidateFlag_SetsValidateFlag
+              - Cli_Create_ValidateFlag_SetsValidateFlag
 
           - id: SarifMark-Cli-Sarif
             title: The CLI shall accept a SARIF file path via the --sarif parameter.
@@ -114,7 +114,7 @@ sections:
             children:
               - SarifMark-Context-SarifParam
             tests:
-              - Cli_SarifParameter_SetsSarifFilePath
+              - Cli_Create_SarifParameter_SetsSarifFilePath
 
           - id: SarifMark-Cli-Report
             title: The CLI shall accept a report file path via the --report parameter.
@@ -125,7 +125,7 @@ sections:
             children:
               - SarifMark-Context-ReportParam
             tests:
-              - Cli_ReportParameter_SetsReportFilePath
+              - Cli_Create_ReportParameter_SetsReportFilePath
 
           - id: SarifMark-Cli-ReportDepth
             title: The CLI shall accept a heading depth via the --depth parameter.
@@ -136,7 +136,7 @@ sections:
             children:
               - SarifMark-Context-ReportDepthParam
             tests:
-              - Cli_DepthParameter_SetsDepth
+              - Cli_Create_DepthParameter_SetsDepth
 
           - id: SarifMark-Cli-Heading
             title: The CLI shall accept a custom heading via the --heading parameter.
@@ -147,7 +147,7 @@ sections:
             children:
               - SarifMark-Context-HeadingParam
             tests:
-              - Cli_HeadingParameter_SetsCustomHeading
+              - Cli_Create_HeadingParameter_SetsCustomHeading
 
           - id: SarifMark-Cli-Results
             title: The CLI shall accept a results file path via the --results parameter.
@@ -158,7 +158,7 @@ sections:
             children:
               - SarifMark-Context-ResultsParam
             tests:
-              - Cli_ResultsParameter_SetsResultsFilePath
+              - Cli_Create_ResultsParameter_SetsResultsFilePath
 
           - id: SarifMark-Cli-ReportDepthLegacyAlias
             title: The CLI shall accept --report-depth as a legacy alias for --depth.
@@ -169,7 +169,7 @@ sections:
             children:
               - SarifMark-Context-ReportDepthParam
             tests:
-              - Cli_ReportDepthParameter_SetsReportDepth
+              - Cli_Create_ReportDepthParameter_SetsReportDepth
 
           - id: SarifMark-Cli-ResultLegacyAlias
             title: The CLI shall accept --result as a legacy alias for --results.
@@ -180,4 +180,4 @@ sections:
             children:
               - SarifMark-Context-ResultLegacyAlias
             tests:
-              - Cli_ResultLegacyAlias_SetsResultsFilePath
+              - Cli_Create_ResultLegacyAlias_SetsResultsFilePath

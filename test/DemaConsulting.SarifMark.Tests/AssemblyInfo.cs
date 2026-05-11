@@ -20,4 +20,5 @@
 
 // Disable parallel test execution to prevent Console.Out/Console.Error redirection conflicts
 // in ProgramTests, which captures console output for assertion purposes.
-[assembly: DoNotParallelize]
+// CollectionBehavior controls xUnit's test parallelization.
+[assembly: CollectionBehavior(DisableTestParallelization = true)]

@@ -23,42 +23,45 @@ namespace DemaConsulting.SarifMark.Tests;
 /// <summary>
 ///     Subsystem tests for the Command-Line Interface subsystem.
 /// </summary>
-[TestClass]
 public class CliTests
 {
     /// <summary>
     ///     Test that version flag sets the version flag in context.
     /// </summary>
-    [TestMethod]
-    public void Cli_VersionFlag_SetsVersionFlag()
+    [Fact]
+    public void Cli_Create_VersionFlag_SetsVersionFlag()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--version"]);
 
         // Assert
-        Assert.IsTrue(context.Version);
-        Assert.AreEqual(0, context.ExitCode);
+        Assert.True(context.Version);
+        Assert.Equal(0, context.ExitCode);
     }
 
     /// <summary>
     ///     Test that help flag sets the help flag in context.
     /// </summary>
-    [TestMethod]
-    public void Cli_HelpFlag_SetsHelpFlag()
+    [Fact]
+    public void Cli_Create_HelpFlag_SetsHelpFlag()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--help"]);
 
         // Assert
-        Assert.IsTrue(context.Help);
-        Assert.AreEqual(0, context.ExitCode);
+        Assert.True(context.Help);
+        Assert.Equal(0, context.ExitCode);
     }
 
     /// <summary>
     ///     Test that silent flag suppresses console output.
     /// </summary>
-    [TestMethod]
-    public void Cli_SilentFlag_SuppressesOutput()
+    [Fact]
+    public void Cli_Create_SilentFlag_SuppressesOutput()
     {
         // Arrange
         var originalOut = Console.Out;
@@ -74,8 +77,8 @@ public class CliTests
             var output = outWriter.ToString();
 
             // Assert
-            Assert.AreEqual(0, context.ExitCode);
-            Assert.AreEqual(string.Empty, output);
+            Assert.Equal(0, context.ExitCode);
+            Assert.Equal(string.Empty, output);
         }
         finally
         {
@@ -86,8 +89,8 @@ public class CliTests
     /// <summary>
     ///     Test that log file parameter writes output to file.
     /// </summary>
-    [TestMethod]
-    public void Cli_LogFile_WritesOutputToFile()
+    [Fact]
+    public void Cli_Create_LogFile_WritesOutputToFile()
     {
         // Arrange
         var logFile = Path.Combine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
@@ -103,7 +106,7 @@ public class CliTests
             }
 
             // Assert
-            Assert.IsTrue(File.Exists(logFile), "Log file was not created");
+            Assert.True(File.Exists(logFile), "Log file was not created");
 
             var logContent = File.ReadAllText(logFile);
             Assert.Contains("SarifMark version", logContent);
@@ -122,22 +125,24 @@ public class CliTests
     /// <summary>
     ///     Test that enforce flag sets the enforce flag in context.
     /// </summary>
-    [TestMethod]
-    public void Cli_EnforceFlag_SetsEnforceFlag()
+    [Fact]
+    public void Cli_Create_EnforceFlag_SetsEnforceFlag()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--enforce"]);
 
         // Assert
-        Assert.IsTrue(context.Enforce);
-        Assert.AreEqual(0, context.ExitCode);
+        Assert.True(context.Enforce);
+        Assert.Equal(0, context.ExitCode);
     }
 
     /// <summary>
     ///     Test that WriteError writes to stderr and sets exit code to one.
     /// </summary>
-    [TestMethod]
-    public void Cli_WriteError_SetsExitCodeToOne()
+    [Fact]
+    public void Cli_WriteError_WithMessage_SetsExitCodeToOne()
     {
         // Arrange
         var originalError = Console.Error;
@@ -152,7 +157,7 @@ public class CliTests
             var output = errWriter.ToString();
 
             // Assert
-            Assert.AreEqual(1, context.ExitCode);
+            Assert.Equal(1, context.ExitCode);
             Assert.Contains("Test error message", output);
         }
         finally
@@ -164,13 +169,13 @@ public class CliTests
     /// <summary>
     ///     Test that unknown arguments are rejected by throwing ArgumentException.
     /// </summary>
-    [TestMethod]
-    public void Cli_UnknownArgument_ThrowsArgumentException()
+    [Fact]
+    public void Cli_Create_UnknownArgument_ThrowsArgumentException()
     {
         // Arrange - No special setup needed
 
         // Act
-        var ex = Assert.ThrowsExactly<ArgumentException>(() => Context.Create(["--unknown-flag"]));
+        var ex = Assert.Throws<ArgumentException>(() => Context.Create(["--unknown-flag"]));
 
         // Assert
         Assert.Contains("unknown-flag", ex.Message);
@@ -179,112 +184,180 @@ public class CliTests
     /// <summary>
     ///     Test that validate flag sets the validate flag in context.
     /// </summary>
-    [TestMethod]
-    public void Cli_ValidateFlag_SetsValidateFlag()
+    [Fact]
+    public void Cli_Create_ValidateFlag_SetsValidateFlag()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--validate"]);
 
         // Assert
-        Assert.IsTrue(context.Validate);
-        Assert.AreEqual(0, context.ExitCode);
+        Assert.True(context.Validate);
+        Assert.Equal(0, context.ExitCode);
     }
 
     /// <summary>
     ///     Test that sarif parameter sets the SARIF file path in context.
     /// </summary>
-    [TestMethod]
-    public void Cli_SarifParameter_SetsSarifFilePath()
+    [Fact]
+    public void Cli_Create_SarifParameter_SetsSarifFilePath()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--sarif", "analysis.sarif"]);
 
         // Assert
-        Assert.AreEqual("analysis.sarif", context.SarifFile);
-        Assert.AreEqual(0, context.ExitCode);
+        Assert.Equal("analysis.sarif", context.SarifFile);
+        Assert.Equal(0, context.ExitCode);
     }
 
     /// <summary>
     ///     Test that report parameter sets the report file path in context.
     /// </summary>
-    [TestMethod]
-    public void Cli_ReportParameter_SetsReportFilePath()
+    [Fact]
+    public void Cli_Create_ReportParameter_SetsReportFilePath()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--report", "report.md"]);
 
         // Assert
-        Assert.AreEqual("report.md", context.ReportFile);
-        Assert.AreEqual(0, context.ExitCode);
+        Assert.Equal("report.md", context.ReportFile);
+        Assert.Equal(0, context.ExitCode);
     }
 
     /// <summary>
     ///     Test that depth parameter sets the depth in context.
     /// </summary>
-    [TestMethod]
-    public void Cli_DepthParameter_SetsDepth()
+    [Fact]
+    public void Cli_Create_DepthParameter_SetsDepth()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--depth", "3"]);
 
         // Assert
-        Assert.AreEqual(3, context.Depth);
-        Assert.AreEqual(0, context.ExitCode);
+        Assert.Equal(3, context.Depth);
+        Assert.Equal(0, context.ExitCode);
     }
 
     /// <summary>
     ///     Test that legacy report-depth parameter sets the report depth in context.
     /// </summary>
-    [TestMethod]
-    public void Cli_ReportDepthParameter_SetsReportDepth()
+    [Fact]
+    public void Cli_Create_ReportDepthParameter_SetsReportDepth()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--report-depth", "3"]);
 
         // Assert
-        Assert.AreEqual(3, context.Depth);
-        Assert.AreEqual(0, context.ExitCode);
+        Assert.Equal(3, context.Depth);
+        Assert.Equal(0, context.ExitCode);
     }
 
     /// <summary>
     ///     Test that heading parameter sets the custom heading in context.
     /// </summary>
-    [TestMethod]
-    public void Cli_HeadingParameter_SetsCustomHeading()
+    [Fact]
+    public void Cli_Create_HeadingParameter_SetsCustomHeading()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--heading", "My Analysis"]);
 
         // Assert
-        Assert.AreEqual("My Analysis", context.Heading);
-        Assert.AreEqual(0, context.ExitCode);
+        Assert.Equal("My Analysis", context.Heading);
+        Assert.Equal(0, context.ExitCode);
     }
 
     /// <summary>
     ///     Test that results parameter sets the results file path in context.
     /// </summary>
-    [TestMethod]
-    public void Cli_ResultsParameter_SetsResultsFilePath()
+    [Fact]
+    public void Cli_Create_ResultsParameter_SetsResultsFilePath()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--results", "results.trx"]);
 
         // Assert
-        Assert.AreEqual("results.trx", context.ResultsFile);
-        Assert.AreEqual(0, context.ExitCode);
+        Assert.Equal("results.trx", context.ResultsFile);
+        Assert.Equal(0, context.ExitCode);
     }
 
     /// <summary>
     ///     Test that the legacy --result alias sets the results file path in context.
     /// </summary>
-    [TestMethod]
-    public void Cli_ResultLegacyAlias_SetsResultsFilePath()
+    [Fact]
+    public void Cli_Create_ResultLegacyAlias_SetsResultsFilePath()
     {
+        // Arrange - No special setup needed
+
         // Act
         using var context = Context.Create(["--result", "results.trx"]);
 
         // Assert
-        Assert.AreEqual("results.trx", context.ResultsFile);
-        Assert.AreEqual(0, context.ExitCode);
+        Assert.Equal("results.trx", context.ResultsFile);
+        Assert.Equal(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that an invalid (non-integer) depth value throws ArgumentException.
+    /// </summary>
+    [Fact]
+    public void Cli_Create_DepthInvalidValue_ThrowsArgumentException()
+    {
+        // Arrange - No special setup needed
+
+        // Act
+        var ex = Assert.Throws<ArgumentException>(() => Context.Create(["--depth", "abc"]));
+
+        // Assert
+        Assert.Contains("--depth requires a positive integer", ex.Message);
+    }
+
+    /// <summary>
+    ///     Test that the log file is written even when silent mode is not active (both console and log receive output).
+    /// </summary>
+    [Fact]
+    public void Cli_Create_LogWithoutSilent_WritesToConsoleAndLogFile()
+    {
+        // Arrange
+        var logFile = Path.Combine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
+        var originalOut = Console.Out;
+        try
+        {
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
+
+            // Act
+            using (var context = Context.Create(["--log", logFile]))
+            {
+                context.WriteLine("Hello from both channels");
+            }
+
+            var consoleOutput = outWriter.ToString();
+            var logContent = File.ReadAllText(logFile);
+
+            // Assert
+            Assert.Contains("Hello from both channels", consoleOutput);
+            Assert.Contains("Hello from both channels", logContent);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            if (File.Exists(logFile))
+            {
+                File.Delete(logFile);
+            }
+        }
     }
 }

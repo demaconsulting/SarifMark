@@ -23,17 +23,15 @@ namespace DemaConsulting.SarifMark.Tests;
 /// <summary>
 ///     Integration tests that run the SarifMark application through dotnet.
 /// </summary>
-[TestClass]
 public class IntegrationTests
 {
-    private string _dllPath = string.Empty;
-    private string _testDataPath = string.Empty;
+    private readonly string _dllPath;
+    private readonly string _testDataPath;
 
     /// <summary>
     ///     Initialize test by locating the SarifMark DLL and test data.
     /// </summary>
-    [TestInitialize]
-    public void TestInitialize()
+    public IntegrationTests()
     {
         // The DLL should be in the same directory as the test assembly
         // because the test project references the main project
@@ -41,13 +39,13 @@ public class IntegrationTests
         _dllPath = PathHelpers.SafePathCombine(baseDir, "DemaConsulting.SarifMark.dll");
         _testDataPath = PathHelpers.SafePathCombine(baseDir, "TestData");
 
-        Assert.IsTrue(File.Exists(_dllPath), $"Could not find SarifMark DLL at {_dllPath}");
+        Assert.True(File.Exists(_dllPath), $"Could not find SarifMark DLL at {_dllPath}");
     }
 
     /// <summary>
     ///     Test that version flag outputs version information.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifMark_VersionFlag_OutputsVersion()
     {
         // Arrange - No special setup needed
@@ -60,16 +58,17 @@ public class IntegrationTests
             "--version");
 
         // Assert
-        Assert.AreEqual(0, exitCode);
-        Assert.IsFalse(string.IsNullOrWhiteSpace(output));
+        Assert.Equal(0, exitCode);
+        Assert.False(string.IsNullOrWhiteSpace(output));
         Assert.DoesNotContain("Error", output);
         Assert.DoesNotContain("Copyright", output);
+        Assert.Matches(@"\d+\.\d+\.\d+", output);
     }
 
     /// <summary>
     ///     Test that help flag outputs usage information.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifMark_HelpFlag_OutputsUsageInformation()
     {
         // Arrange - No special setup needed
@@ -82,19 +81,19 @@ public class IntegrationTests
             "--help");
 
         // Assert
-        Assert.AreEqual(0, exitCode);
+        Assert.Equal(0, exitCode);
         Assert.Contains("Usage: sarifmark", output);
         Assert.Contains("Options:", output);
         Assert.Contains("--version", output);
         Assert.Contains("--help", output);
         Assert.Contains("--sarif", output);
-        Assert.MatchesRegex(@"--report(?!-)", output);
+        Assert.Matches(@"--report(?!-)", output);
     }
 
     /// <summary>
     ///     Test that validate flag runs self-validation.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifMark_ValidateFlag_RunsSelfValidation()
     {
         // Arrange - No special setup needed
@@ -107,7 +106,7 @@ public class IntegrationTests
             "--validate");
 
         // Assert
-        Assert.AreEqual(0, exitCode);
+        Assert.Equal(0, exitCode);
         Assert.Contains("SarifMark version", output);
         Assert.Contains("Total Tests:", output);
     }
@@ -115,7 +114,7 @@ public class IntegrationTests
     /// <summary>
     ///     Test that missing sarif parameter shows error.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifMark_MissingSarifParameter_ShowsError()
     {
         // Arrange - No special setup needed
@@ -127,19 +126,19 @@ public class IntegrationTests
             _dllPath);
 
         // Assert
-        Assert.AreEqual(1, exitCode);
+        Assert.Equal(1, exitCode);
         Assert.Contains("--sarif parameter is required", output);
     }
 
     /// <summary>
     ///     Test that processing a valid SARIF file succeeds.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifMark_ValidSarifFile_ProcessesSuccessfully()
     {
         // Arrange
         var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         // Act
         var exitCode = Runner.Run(
@@ -149,7 +148,7 @@ public class IntegrationTests
             "--sarif", sarifFile);
 
         // Assert
-        Assert.AreEqual(0, exitCode);
+        Assert.Equal(0, exitCode);
         Assert.Contains("SarifMark version", output);
         Assert.Contains("SARIF File:", output);
         Assert.Contains("Reading SARIF file...", output);
@@ -160,7 +159,7 @@ public class IntegrationTests
     /// <summary>
     ///     Test that processing a non-existent SARIF file shows error.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifMark_NonExistentSarifFile_ShowsError()
     {
         // Arrange - No special setup needed
@@ -173,19 +172,19 @@ public class IntegrationTests
             "--sarif", "nonexistent.sarif");
 
         // Assert
-        Assert.AreEqual(1, exitCode);
+        Assert.Equal(1, exitCode);
         Assert.Contains("Error:", output);
     }
 
     /// <summary>
     ///     Test that generating a report file succeeds.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifMark_GenerateReport_CreatesReportFile()
     {
         // Arrange
         var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-report-{Guid.NewGuid()}.md");
 
@@ -200,10 +199,10 @@ public class IntegrationTests
                 "--report", reportFile);
 
             // Assert
-            Assert.AreEqual(0, exitCode);
+            Assert.Equal(0, exitCode);
             Assert.Contains("Writing report to", output);
             Assert.Contains("Report generated successfully", output);
-            Assert.IsTrue(File.Exists(reportFile), "Report file was not created");
+            Assert.True(File.Exists(reportFile), "Report file was not created");
 
             var reportContent = File.ReadAllText(reportFile);
             Assert.Contains("# TestTool Analysis", reportContent);
@@ -221,12 +220,12 @@ public class IntegrationTests
     /// <summary>
     ///     Test that enforce flag with issues returns error exit code.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifMark_EnforceFlagWithIssues_ReturnsError()
     {
         // Arrange
         var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         // Act
         var exitCode = Runner.Run(
@@ -237,19 +236,19 @@ public class IntegrationTests
             "--enforce");
 
         // Assert
-        Assert.AreEqual(1, exitCode);
+        Assert.Equal(1, exitCode);
         Assert.Contains("Issues found in SARIF file", output);
     }
 
     /// <summary>
     ///     Test that silent flag suppresses console output.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifMark_SilentFlag_SuppressesOutput()
     {
         // Arrange
         var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         // Act
         var exitCode = Runner.Run(
@@ -260,7 +259,7 @@ public class IntegrationTests
             "--sarif", sarifFile);
 
         // Assert
-        Assert.AreEqual(0, exitCode);
+        Assert.Equal(0, exitCode);
         Assert.DoesNotContain("SarifMark version", output);
         Assert.DoesNotContain("Copyright", output);
     }
@@ -268,12 +267,12 @@ public class IntegrationTests
     /// <summary>
     ///     Test that log file parameter writes output to file.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifMark_LogFile_WritesOutputToFile()
     {
         // Arrange
         var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         var logFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-log-{Guid.NewGuid()}.log");
 
@@ -288,8 +287,8 @@ public class IntegrationTests
                 "--sarif", sarifFile);
 
             // Assert
-            Assert.AreEqual(0, exitCode);
-            Assert.IsTrue(File.Exists(logFile), "Log file was not created");
+            Assert.Equal(0, exitCode);
+            Assert.True(File.Exists(logFile), "Log file was not created");
 
             var logContent = File.ReadAllText(logFile);
             Assert.Contains("SarifMark version", logContent);
@@ -309,7 +308,7 @@ public class IntegrationTests
     /// <summary>
     ///     Test that unknown arguments are rejected with error.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifMark_UnknownArgument_ShowsError()
     {
         // Arrange - No special setup needed
@@ -322,7 +321,7 @@ public class IntegrationTests
             "--unknown-flag");
 
         // Assert
-        Assert.AreEqual(1, exitCode);
+        Assert.Equal(1, exitCode);
         Assert.Contains("Error:", output);
         Assert.Contains("unknown-flag", output);
     }
@@ -330,12 +329,12 @@ public class IntegrationTests
     /// <summary>
     ///     Test that depth parameter is configurable.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifMark_ReportDepth_IsConfigurable()
     {
         // Arrange
         var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-report-depth-{Guid.NewGuid()}.md");
 
@@ -351,8 +350,8 @@ public class IntegrationTests
                 "--depth", "3");
 
             // Assert
-            Assert.AreEqual(0, exitCode);
-            Assert.IsTrue(File.Exists(reportFile), "Report file was not created");
+            Assert.Equal(0, exitCode);
+            Assert.True(File.Exists(reportFile), "Report file was not created");
 
             var reportContent = File.ReadAllText(reportFile);
             Assert.Contains("### TestTool Analysis", reportContent);
@@ -370,12 +369,12 @@ public class IntegrationTests
     /// <summary>
     ///     Test that legacy report-depth parameter is still accepted.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifMark_LegacyReportDepth_IsAccepted()
     {
         // Arrange
         var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
-        Assert.IsTrue(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
         var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-legacy-report-depth-{Guid.NewGuid()}.md");
 
@@ -391,8 +390,8 @@ public class IntegrationTests
                 "--report-depth", "3");
 
             // Assert
-            Assert.AreEqual(0, exitCode);
-            Assert.IsTrue(File.Exists(reportFile), "Report file was not created");
+            Assert.Equal(0, exitCode);
+            Assert.True(File.Exists(reportFile), "Report file was not created");
 
             var reportContent = File.ReadAllText(reportFile);
             Assert.Contains("### TestTool Analysis", reportContent);

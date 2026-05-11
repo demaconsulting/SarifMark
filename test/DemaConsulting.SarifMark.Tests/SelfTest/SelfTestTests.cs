@@ -23,13 +23,12 @@ namespace DemaConsulting.SarifMark.Tests;
 /// <summary>
 ///     Subsystem tests for the Self-Validation subsystem.
 /// </summary>
-[TestClass]
 public class SelfTestTests
 {
     /// <summary>
     ///     Test that validate flag runs self-validation.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SelfTest_ValidateFlag_RunsSelfValidation()
     {
         // Arrange - silent context that captures all output to a temp log file
@@ -42,7 +41,7 @@ public class SelfTestTests
                 Validation.Run(context);
 
                 // Assert
-                Assert.AreEqual(0, context.ExitCode);
+                Assert.Equal(0, context.ExitCode);
             }
 
             var output = File.ReadAllText(logFile);
@@ -60,7 +59,7 @@ public class SelfTestTests
     /// <summary>
     ///     Test that validate flag with TRX results parameter writes a TRX file.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SelfTest_ResultsFile_TrxPath_WritesTrxFile()
     {
         // Arrange
@@ -73,8 +72,8 @@ public class SelfTestTests
             Validation.Run(context);
 
             // Assert
-            Assert.AreEqual(0, context.ExitCode);
-            Assert.IsTrue(File.Exists(resultsFile), "TRX results file was not created");
+            Assert.Equal(0, context.ExitCode);
+            Assert.True(File.Exists(resultsFile), "TRX results file was not created");
 
             var content = File.ReadAllText(resultsFile);
             Assert.Contains("<TestRun", content);
@@ -91,7 +90,7 @@ public class SelfTestTests
     /// <summary>
     ///     Test that validate flag with JUnit XML results parameter writes a JUnit XML file.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SelfTest_ResultsFile_XmlPath_WritesJUnitFile()
     {
         // Arrange
@@ -104,8 +103,8 @@ public class SelfTestTests
             Validation.Run(context);
 
             // Assert
-            Assert.AreEqual(0, context.ExitCode);
-            Assert.IsTrue(File.Exists(resultsFile), "JUnit XML results file was not created");
+            Assert.Equal(0, context.ExitCode);
+            Assert.True(File.Exists(resultsFile), "JUnit XML results file was not created");
 
             var content = File.ReadAllText(resultsFile);
             Assert.Contains("<testsuite", content);
@@ -122,7 +121,7 @@ public class SelfTestTests
     /// <summary>
     ///     Test that --depth affects the self-validation markdown report depth.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SelfTest_DepthParameter_AffectsSelfValidationReport()
     {
         // Arrange - silent context that captures all output to a temp log file
@@ -135,7 +134,7 @@ public class SelfTestTests
                 Validation.Run(context);
 
                 // Assert - validation passes
-                Assert.AreEqual(0, context.ExitCode);
+                Assert.Equal(0, context.ExitCode);
             }
 
             // Assert - the depth-sensitive report generation test passes
@@ -154,7 +153,7 @@ public class SelfTestTests
     /// <summary>
     ///     Test that enforcement mode behavior is verified by the self-validation suite.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SelfTest_EnforcementTest_RunsWithinValidation()
     {
         // Arrange - silent context that captures all output to a temp log file
@@ -167,7 +166,7 @@ public class SelfTestTests
                 Validation.Run(context);
 
                 // Assert - enforcement test within validation runs and passes
-                Assert.AreEqual(0, context.ExitCode);
+                Assert.Equal(0, context.ExitCode);
             }
 
             var output = File.ReadAllText(logFile);

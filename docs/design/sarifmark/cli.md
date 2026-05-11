@@ -1,17 +1,17 @@
-# Cli Subsystem
+## Cli Subsystem
 
 The `Cli` subsystem provides the command-line interface for SarifMark.
 It is responsible for accepting user input from the command line and routing output to
 the console and an optional log file.
 
-## Overview
+### Overview
 
 The `Cli` subsystem acts as the primary boundary between the user's shell invocation and
 the tool's internal logic. It owns argument parsing, output formatting, and error tracking.
 All other subsystems receive a `Context` object from the `Cli` subsystem to read parsed
 flags and write output.
 
-## Units
+### Units
 
 The `Cli` subsystem contains the following software unit:
 
@@ -19,7 +19,7 @@ The `Cli` subsystem contains the following software unit:
 |-----------|------------------|---------------------------------------------------|
 | `Context` | `Cli/Context.cs` | Argument parsing, output channels, and exit code. |
 
-## Interfaces
+### Interfaces
 
 The `Cli` subsystem exposes the following interface to the rest of the tool:
 
@@ -48,12 +48,12 @@ The `Cli` subsystem exposes the following interface to the rest of the tool:
 | *(log writer)*| —         | `--log <file>`           | Internal log writer; not a property           |
 | `ExitCode`    | `int`     | *(derived)*              | 0 until `WriteError` is called, then 1        |
 
-## Interactions
+### Interactions
 
 The `Cli` subsystem has no dependencies on other tool subsystems. It uses only .NET base
 class library types. The `Program` unit at system level creates the `Context` and passes it
 to all subsystems that need to produce output.
 
-## Class Details
+### Class Details
 
 - **Context class** — argument parsing and output routing

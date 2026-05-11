@@ -23,13 +23,12 @@ namespace DemaConsulting.SarifMark.Tests;
 /// <summary>
 ///     Subsystem tests for the Utilities subsystem.
 /// </summary>
-[TestClass]
 public class UtilitiesTests
 {
     /// <summary>
     ///     Test that the Utilities subsystem provides safe path-handling that combines valid paths.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void Utilities_SafePathHandling_ValidPaths_CombinesSuccessfully()
     {
         // Arrange
@@ -40,13 +39,13 @@ public class UtilitiesTests
         var result = PathHelpers.SafePathCombine(basePath, relativePath);
 
         // Assert
-        Assert.AreEqual(Path.Combine(basePath, relativePath), result);
+        Assert.Equal(Path.Combine(basePath, relativePath), result);
     }
 
     /// <summary>
     ///     Test that the Utilities subsystem rejects path-traversal attacks.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void Utilities_SafePathHandling_PathTraversal_ThrowsException()
     {
         // Arrange
@@ -54,14 +53,14 @@ public class UtilitiesTests
         var maliciousPath = "../../../etc/passwd";
 
         // Act & Assert
-        Assert.ThrowsExactly<ArgumentException>(() =>
+        Assert.Throws<ArgumentException>(() =>
             PathHelpers.SafePathCombine(basePath, maliciousPath));
     }
 
     /// <summary>
     ///     Test that the Utilities subsystem rejects absolute path input.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void Utilities_SafePathHandling_AbsolutePath_ThrowsException()
     {
         // Arrange
@@ -69,21 +68,21 @@ public class UtilitiesTests
         var absolutePath = "/etc/passwd";
 
         // Act & Assert
-        Assert.ThrowsExactly<ArgumentException>(() =>
+        Assert.Throws<ArgumentException>(() =>
             PathHelpers.SafePathCombine(basePath, absolutePath));
     }
 
     /// <summary>
     ///     Test that the Utilities subsystem rejects null relative path input.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void Utilities_SafePathHandling_NullRelativePath_ThrowsException()
     {
         // Arrange
         var basePath = Path.GetTempPath();
 
         // Act & Assert
-        Assert.ThrowsExactly<ArgumentNullException>(() =>
+        Assert.Throws<ArgumentNullException>(() =>
             PathHelpers.SafePathCombine(basePath, null!));
     }
 }

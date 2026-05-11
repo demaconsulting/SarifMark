@@ -13,7 +13,7 @@ sections:
             children:
               - SarifMark-SarifResults-ToMarkdown
             tests:
-              - Sarif_GenerateReport_ProducesMarkdownContent
+              - Sarif_GenerateReport_DefaultDepth_ProducesMarkdownContent
 
           - id: SarifMark-Report-Depth
             title: The tool shall support configurable markdown heading depth.
@@ -24,7 +24,7 @@ sections:
             children:
               - SarifMark-SarifResults-ValidateDepth
             tests:
-              - Sarif_ReportDepth_IsConfigurable
+              - Sarif_GenerateReport_ReportDepth_IsConfigurable
 
           - id: SarifMark-Report-Counts
             title: The tool shall display result counts in reports.
@@ -35,7 +35,7 @@ sections:
             children:
               - SarifMark-SarifRun-FormatCount
             tests:
-              - Sarif_Report_ContainsResultCount
+              - Sarif_GenerateReport_ResultCount_ContainsResultCount
 
           - id: SarifMark-Report-Locations
             title: The tool shall display location information for results.
@@ -46,7 +46,7 @@ sections:
             children:
               - SarifMark-SarifRun-FormatLocation
             tests:
-              - Sarif_Report_ContainsLocationInfo
+              - Sarif_GenerateReport_LocationInfo_ContainsLocationInfo
 
           - id: SarifMark-Report-Headings
             title: The tool shall support custom headings in reports.
@@ -57,7 +57,7 @@ sections:
             children:
               - SarifMark-SarifResults-ToMarkdown
             tests:
-              - Sarif_Report_UsesCustomHeading
+              - Sarif_GenerateReport_CustomHeading_UsesCustomHeading
 
           - id: SarifMark-Report-LineBreaks
             title: The tool shall format multiple results with proper line breaks.
@@ -68,7 +68,7 @@ sections:
             children:
               - SarifMark-SarifResults-ToMarkdown
             tests:
-              - Sarif_GenerateReport_FormatsMultipleResultsWithLineBreaks
+              - Sarif_GenerateReport_MultipleResults_FormatsWithLineBreaks
 
           - id: SarifMark-Report-FileCount
             title: The tool shall include the file count in generated reports.
@@ -80,4 +80,4 @@ sections:
             children:
               - SarifMark-SarifResults-FileCount
             tests:
-              - Sarif_Report_ContainsFileCount
+              - Sarif_GenerateReport_FileCount_ContainsFileCount
