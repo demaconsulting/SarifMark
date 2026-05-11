@@ -16,6 +16,8 @@ sections:
         justification: >-
           Users need to quickly identify the version of the tool they are using for
           troubleshooting and compatibility verification.
+        children:
+          - SarifMark-Program-Version
         tests:
           - SarifMark_VersionFlag_OutputsVersion
 
@@ -25,6 +27,8 @@ sections:
         justification: >-
           Help information improves discoverability and usability by providing users with guidance
           on available options and parameters.
+        children:
+          - SarifMark-Program-Help
         tests:
           - SarifMark_HelpFlag_OutputsUsageInformation
 
@@ -34,6 +38,8 @@ sections:
         justification: >-
           Self-validation mode enables verification that the tool operates correctly in
           the deployment environment.
+        children:
+          - SarifMark-Program-Validation
         tests:
           - SarifMark_ValidateFlag_RunsSelfValidation
 
@@ -54,6 +60,8 @@ sections:
         justification: >-
           Reading and analyzing SARIF files is the core purpose of the tool, enabling
           integration with static analysis workflows.
+        children:
+          - SarifMark-Program-SarifReading
         tests:
           - SarifMark_ValidSarifFile_ProcessesSuccessfully
           - SarifMark_NonExistentSarifFile_ShowsError
@@ -64,6 +72,8 @@ sections:
         justification: >-
           Markdown report generation makes SARIF analysis results accessible to
           stakeholders in a readable format.
+        children:
+          - SarifMark-Program-ReportGeneration
         tests:
           - SarifMark_GenerateReport_CreatesReportFile
 
@@ -72,6 +82,8 @@ sections:
         tags: [public]
         justification: >-
           Non-zero exit codes enable CI/CD pipeline integration for quality gates.
+        children:
+          - SarifMark-Program-EnforcementCheck
         tests:
           - SarifMark_EnforceFlagWithIssues_ReturnsError
 
@@ -108,3 +120,21 @@ sections:
         tests:
           - SarifMark_ReportDepth_IsConfigurable
           - SarifMark_LegacyReportDepth_IsAccepted
+
+      - id: SarifMark-System-ReportHeading
+        title: The tool shall accept a configurable custom heading for generated markdown reports.
+        tags: [public]
+        justification: >-
+          Configurable report heading allows users to customise the section title in generated
+          reports, improving integration into existing documentation workflows.
+        tests:
+          - SarifMark_HelpFlag_OutputsUsageInformation
+
+      - id: SarifMark-System-ValidateResults
+        title: The tool shall support writing self-validation results to a file when the --results parameter is provided.
+        tags: [public]
+        justification: >-
+          Writing validation results to a file enables integration with CI/CD test result
+          reporting infrastructure such as TRX and JUnit XML consumers.
+        tests:
+          - SarifMark_ValidateFlag_RunsSelfValidation

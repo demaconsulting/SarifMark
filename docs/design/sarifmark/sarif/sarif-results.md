@@ -1,12 +1,12 @@
-# SarifResults Record
+### SarifResults Record
 
-## Overview
+#### Overview
 
 The `SarifResults` record (`SarifResults.cs`) is the primary public type for working with SARIF
 file content. It holds the collection of parsed runs and exposes both the `Read` static method
 for file loading and the `ToMarkdown` method for report generation.
 
-## Record Design
+#### Record Design
 
 `SarifResults` is a `record` with an `internal` constructor. External consumers obtain instances
 only through `Read`; the record is immutable once constructed.
@@ -15,7 +15,7 @@ The `DemaConsulting.SarifMark` project file includes `<InternalsVisibleTo Includ
 which grants the test assembly access to the internal constructor. This enables direct unit testing
 of the constructor without relaxing the access restriction for all external consumers.
 
-## Properties
+#### Properties
 
 | Property      | Type                         | Description                                          |
 |---------------|------------------------------|------------------------------------------------------|
@@ -28,7 +28,7 @@ accessed via the `Runs` collection.
 These satisfy requirements `SarifMark-SarifResults-Properties`, `SarifMark-SarifResults-Runs`,
 and `SarifMark-SarifResults-HasIssues`.
 
-## Read Method
+#### Read Method
 
 The static `Read(string filePath)` method loads and parses a SARIF 2.1.0 file through a
 pipeline:
@@ -51,7 +51,7 @@ pipeline:
 6. **Construction and return** — constructs and returns a `SarifResults` from the list of runs.
    This satisfies `SarifMark-Sarif-Processing`.
 
-## ValidateSarifStructure Method
+#### ValidateSarifStructure Method
 
 `ValidateSarifStructure` verifies that the root JSON element contains:
 
@@ -61,14 +61,14 @@ pipeline:
 It returns the runs array element for iteration. This satisfies requirement
 `SarifMark-SarifResults-ValidateStructure`.
 
-## ExtractToolInformation Method
+#### ExtractToolInformation Method
 
 `ExtractToolInformation` navigates from the run element to `tool.driver`, throwing
 `InvalidOperationException` if either `tool` or `driver` is absent. It reads the `name` property
 from `driver`, defaulting to `"Unknown"` if absent, then delegates to `ExtractToolVersion` for the
 version string. This satisfies requirement `SarifMark-SarifResults-ExtractTool`.
 
-## ExtractToolVersion Method
+#### ExtractToolVersion Method
 
 `ExtractToolVersion` checks three fields in the `driver` JSON element in priority order:
 
@@ -81,7 +81,7 @@ version string. This satisfies requirement `SarifMark-SarifResults-ExtractTool`.
 The first field whose value is non-null and non-whitespace is returned. If none of the three fields
 yields a value, `"Unknown"` is returned. This satisfies requirement `SarifMark-SarifResults-VersionPriority`.
 
-## ParseResults Method
+#### ParseResults Method
 
 `ParseResults` iterates the `results` JSON array within the run element. If the array is absent or
 not an array, an empty list is returned. For each element, `IsSuppressed` checks whether a
@@ -89,7 +89,7 @@ non-empty `suppressions` array is present; suppressed entries are skipped. Each 
 is parsed into a `SarifFinding` record. This satisfies requirements `SarifMark-SarifResults-ParseResults`
 and `SarifMark-SarifResults-FilterSuppressions`.
 
-## ToMarkdown Method
+#### ToMarkdown Method
 
 `ToMarkdown(int depth, string? heading = null)` generates a markdown string from the results:
 
@@ -103,7 +103,7 @@ and `SarifMark-SarifResults-FilterSuppressions`.
    `"[heading] (#1)"` if a custom heading is provided). This satisfies
    `SarifMark-SarifResults-MultiRunMarkdown`.
 
-## ExtractFileCount Method
+#### ExtractFileCount Method
 
 `ExtractFileCount(JsonElement runElement)` returns the length of the `artifacts` array of the
 given run element:
@@ -115,7 +115,7 @@ This method is called once per run element during `Read`, so each `SarifRun` in 
 collection carries an independent file count from its own artifacts array. This satisfies
 requirement `SarifMark-SarifResults-FileCount`.
 
-## Cross-References
+#### Cross-References
 
 See the SarifRun Record document for `SarifRun`, which is constructed per-run during SARIF parsing.
 See the SarifFinding Record document for the `SarifFinding` record that `ParseResults` produces.

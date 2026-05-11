@@ -186,7 +186,7 @@ sections:
           - Context_Create_LogWithoutValue_ThrowsArgumentException
 
       - id: SarifMark-Context-UnknownArgs
-        title: The ArgumentParser inner class shall throw ArgumentException for any unrecognized argument.
+        title: The Context unit shall reject unrecognized command-line arguments with an error.
         justification: >-
           Rejecting unknown arguments at parse time prevents silent misconfiguration caused by typos or
           renamed flags, giving users immediate and actionable feedback about incorrect command usage.
@@ -226,6 +226,8 @@ sections:
           - SarifMark-Context-WriteError-Stderr
           - SarifMark-Context-WriteError-Log
           - SarifMark-Context-WriteError-ExitCode
+        tests:
+          - Context_WriteError_WritesToErrorAndSetsExitCode
 
       - id: SarifMark-Context-WriteError-Stderr
         title: >-

@@ -1,6 +1,6 @@
-# PathHelpers Class
+### PathHelpers Class
 
-## Overview
+#### Overview
 
 `PathHelpers` is a static internal utility class that provides a safe path-combination method. It
 protects callers against path-traversal attacks by verifying the resolved combined path stays
@@ -8,13 +8,13 @@ within the base directory. Note that `Path.GetFullPath` normalizes `.`/`..` segm
 not resolve symlinks or reparse points, so this check guards against string-level traversal
 only.
 
-## Class Visibility
+#### Class Visibility
 
 `PathHelpers` is declared `internal`, limiting its use to the `DemaConsulting.SarifMark` assembly.
 The project file includes `<InternalsVisibleTo Include="DemaConsulting.SarifMark.Tests" />`,
 which grants the test assembly access to the class and its methods for direct unit testing.
 
-## SafePathCombine Method
+#### SafePathCombine Method
 
 ```csharp
 internal static string SafePathCombine(string basePath, string relativePath)
@@ -24,17 +24,17 @@ Combines `basePath` and `relativePath` safely, ensuring the resulting path remai
 the base directory. It is used by the `TemporaryDirectory` helper inside `Validation` when
 constructing paths inside a temporary directory from `Guid`-based file names.
 
-### Null Checks
+##### Null Checks
 
 Both `basePath` and `relativePath` are validated with `ArgumentNullException.ThrowIfNull` before
 any other processing. This satisfies requirement `SarifMark-PathHelpers-NullCheck`.
 
-### Path Combination
+##### Path Combination
 
 `Path.Combine(basePath, relativePath)` is called to produce the candidate path, preserving
 the caller's relative/absolute style.
 
-### Post-Combination Security Check
+##### Post-Combination Security Check
 
 The method resolves both `basePath` and the candidate to absolute form with `Path.GetFullPath`,
 then calls `Path.GetRelativePath(absoluteBase, absoluteCombined)` and rejects the input if
@@ -43,12 +43,12 @@ or `Path.AltDirectorySeparatorChar`, or is itself rooted (absolute). These condi
 the combined path escapes the base directory. This satisfies requirement
 `SarifMark-PathHelpers-PostCombineCheck`.
 
-### Return Value
+##### Return Value
 
 On success, the non-resolved combined path (the direct result of `Path.Combine`) is returned.
 This satisfies requirement `SarifMark-PathHelpers-SafeCombine`.
 
-## Design Decisions
+#### Design Decisions
 
 - **`Path.GetRelativePath` for containment check**: Using `GetRelativePath` to verify
   containment handles root paths (e.g. `/`, `C:\`), platform case-sensitivity, and
@@ -63,7 +63,7 @@ This satisfies requirement `SarifMark-PathHelpers-SafeCombine`.
 - **No logging or error accumulation**: `SafePathCombine` is a pure utility method that throws
   on invalid input; it does not interact with the `Context` or any output mechanism.
 
-## Cross-References
+#### Cross-References
 
 See the Self-Validation document for the `TemporaryDirectory` nested class that calls
 `SafePathCombine`.

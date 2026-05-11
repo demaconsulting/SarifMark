@@ -170,3 +170,58 @@ reviews:
       - "docs/verification/sarifmark/utilities/path-helpers.md"
       - "src/**/Utilities/PathHelpers.cs"
       - "test/**/Utilities/PathHelpersTests.cs"
+
+  # OTS Items
+  - id: OTS-BuildMark
+    title: Review of BuildMark OTS item requirements and verification
+    paths:
+      - "docs/reqstream/ots/buildmark.yaml"
+      - "docs/verification/ots/buildmark.md"
+
+  - id: OTS-FileAssert
+    title: Review of FileAssert OTS item requirements and verification
+    paths:
+      - "docs/reqstream/ots/fileassert.yaml"
+      - "docs/verification/ots/fileassert.md"
+
+  - id: OTS-MSTest
+    title: Review of MSTest OTS item requirements and verification
+    paths:
+      - "docs/reqstream/ots/mstest.yaml"
+      - "docs/verification/ots/mstest.md"
+
+  - id: OTS-Pandoc
+    title: Review of Pandoc OTS item requirements and verification
+    paths:
+      - "docs/reqstream/ots/pandoc.yaml"
+      - "docs/verification/ots/pandoc.md"
+
+  - id: OTS-ReqStream
+    title: Review of ReqStream OTS item requirements and verification
+    paths:
+      - "docs/reqstream/ots/reqstream.yaml"
+      - "docs/verification/ots/reqstream.md"
+
+  - id: OTS-ReviewMark
+    title: Review of ReviewMark OTS item requirements and verification
+    paths:
+      - "docs/reqstream/ots/reviewmark.yaml"
+      - "docs/verification/ots/reviewmark.md"
+
+  - id: OTS-SonarMark
+    title: Review of SonarMark OTS item requirements and verification
+    paths:
+      - "docs/reqstream/ots/sonarmark.yaml"
+      - "docs/verification/ots/sonarmark.md"
+
+  - id: OTS-VersionMark
+    title: Review of VersionMark OTS item requirements and verification
+    paths:
+      - "docs/reqstream/ots/versionmark.yaml"
+      - "docs/verification/ots/versionmark.md"
+
+  - id: OTS-WeasyPrint
+    title: Review of WeasyPrint OTS item requirements and verification
+    paths:
+      - "docs/reqstream/ots/weasyprint.yaml"
+      - "docs/verification/ots/weasyprint.md"

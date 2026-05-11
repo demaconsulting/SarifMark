@@ -1,18 +1,18 @@
-# Program Class
+## Program Class
 
-## Overview
+### Overview
 
 The `Program` class (`Program.cs`) is the top-level entry point for the SarifMark tool. It is a
 static internal class that owns the `Main` method, constructs the `Context`, dispatches to the
 appropriate subsystem, and handles top-level exception translation.
 
-## Version Property
+### Version Property
 
 The static `Version` property reads the assembly's `AssemblyInformationalVersionAttribute` at
 runtime. If that attribute is absent, it falls back to the `AssemblyVersion`; if that is also
 unavailable it returns `"0.0.0"`. This satisfies requirement `SarifMark-Program-Version`.
 
-## Main Method
+### Main Method
 
 `Main` orchestrates the top-level execution sequence:
 
@@ -25,7 +25,7 @@ translated to exit code 1. Any other exception has its message printed to `Conso
 an "Unexpected error:" prefix and is then re-thrown so the runtime generates an event-log entry. This satisfies requirements
 `SarifMark-Program-Main` and `SarifMark-Program-Main-Exceptions`.
 
-## Run Method
+### Run Method
 
 `Run` implements priority-ordered dispatch. Each step is evaluated in sequence and the method
 returns after the first matching condition.
@@ -40,14 +40,14 @@ returns after the first matching condition.
 
 This satisfies requirement `SarifMark-Program-Run`.
 
-## PrintBanner Method
+### PrintBanner Method
 
 `PrintBanner` is a private helper called by `Run` immediately after the version check. It writes
 two lines to the context output: the tool version string (e.g. `SarifMark version 1.2.3`) and the
 copyright notice (`Copyright (c) DEMA Consulting`), followed by a blank line. This satisfies
 requirement `SarifMark-Program-Banner`.
 
-## PrintHelp Method
+### PrintHelp Method
 
 `PrintHelp` is a private helper called when the help flag is set. It writes a complete usage block
 to the context output, listing every supported option with its flag syntax and a brief description:
@@ -66,7 +66,7 @@ to the context output, listing every supported option with its flag syntax and a
 
 This satisfies requirement `SarifMark-Program-Help`.
 
-## ProcessSarifAnalysis Method
+### ProcessSarifAnalysis Method
 
 `ProcessSarifAnalysis` is the private orchestrator for the primary SARIF analysis mode. Its
 execution sequence is:
@@ -86,9 +86,9 @@ execution sequence is:
    `UnauthorizedAccessException`, `ArgumentException`, and `NotSupportedException` are caught and
    routed through `context.WriteError`.
 
-This satisfies requirement `SarifMark-Program-SarifAnalysis`.
+This satisfies requirements `SarifMark-Program-SarifArgument`, `SarifMark-Program-SarifReading`, `SarifMark-Program-EnforcementCheck`, and `SarifMark-Program-ReportGeneration`.
 
-## Cross-References
+### Cross-References
 
 See the Context Class document for the `Context` class and the SarifResults Record document
 for the `SarifResults.Read` and `ToMarkdown` methods used in step 2 and step 5 above.

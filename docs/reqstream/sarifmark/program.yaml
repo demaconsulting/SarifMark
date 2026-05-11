@@ -65,7 +65,7 @@ sections:
           - Program_Main_HelpFlag_DisplaysHelp
 
       - id: SarifMark-Program-Validation
-        title: The Program unit shall dispatch to the SelfTest subsystem when the --validate flag is set.
+        title: The Program unit shall execute self-validation when the --validate flag is set.
         justification: >-
           Routing the validate flag to the SelfTest subsystem keeps self-validation logic encapsulated
           and allows it to be tested independently from the primary SARIF analysis workflow.

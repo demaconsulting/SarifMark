@@ -1,12 +1,12 @@
-# SarifRun Record
+### SarifRun Record
 
-## Overview
+#### Overview
 
 The `SarifRun` record (`SarifRun.cs`) represents the results extracted from a single run within a
 SARIF file. It holds the tool metadata and the parsed list of results for that run, and exposes
 the `ToMarkdown` method for generating a markdown report for the run.
 
-## Record Design
+#### Record Design
 
 `SarifRun` is a `record` with an `internal` constructor. External consumers obtain instances only
 through `SarifResults.Read`; the record is immutable once constructed.
@@ -20,7 +20,7 @@ The `SarifRun` type and its sibling types (`SarifResults`, `SarifFinding`) are p
 design decision to keep the public and internal API surface flat and consistent, avoiding the need
 for additional `using` directives in consuming code.
 
-## Properties
+#### Properties
 
 | Property      | Type                          | Description                                     |
 |---------------|-------------------------------|-------------------------------------------------|
@@ -34,7 +34,7 @@ for additional `using` directives in consuming code.
 These satisfy requirements `SarifMark-SarifRun-ToolName`, `SarifMark-SarifRun-ToolVersion`,
 `SarifMark-SarifRun-Results`, `SarifMark-SarifRun-FileCount`, and `SarifMark-SarifRun-HasIssues`.
 
-## ToMarkdown Method
+#### ToMarkdown Method
 
 `ToMarkdown(int depth, string? heading = null)` generates a markdown string from the run results:
 
@@ -50,7 +50,7 @@ These satisfy requirements `SarifMark-SarifRun-ToolName`, `SarifMark-SarifRun-To
 
 This satisfies requirement `SarifMark-SarifRun-ToMarkdown`.
 
-## FormatLocation Method
+#### FormatLocation Method
 
 `FormatLocation(string? uri, int? startLine)` produces the location prefix for each result line,
 treating a `uri` that is `null`, empty, or consists only of whitespace as missing:
@@ -63,7 +63,7 @@ treating a `uri` that is `null`, empty, or consists only of whitespace as missin
 
 This satisfies requirement `SarifMark-SarifRun-FormatLocation`.
 
-## FormatFoundText Method
+#### FormatFoundText Method
 
 `FormatFoundText(int count, string singularNoun)` produces a grammatically correct summary:
 
@@ -75,7 +75,7 @@ This satisfies requirement `SarifMark-SarifRun-FormatLocation`.
 
 This satisfies requirement `SarifMark-SarifRun-FormatCount`.
 
-## Cross-References
+#### Cross-References
 
 See the SarifResults Record document for `SarifResults.Read`, which constructs `SarifRun`
 instances during SARIF file parsing.

@@ -62,6 +62,7 @@ public class IntegrationTests
         Assert.False(string.IsNullOrWhiteSpace(output));
         Assert.DoesNotContain("Error", output);
         Assert.DoesNotContain("Copyright", output);
+        Assert.Matches(@"\d+\.\d+\.\d+", output);
     }
 
     /// <summary>

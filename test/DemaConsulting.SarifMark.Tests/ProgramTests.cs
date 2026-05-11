@@ -182,6 +182,37 @@ public class ProgramTests
             // Assert
             Assert.Equal(0, result);
             Assert.Contains("Tool: TestTool", outWriter.ToString());
+            Assert.Contains("1.0.0", outWriter.ToString());
+            Assert.Contains("Results: 1", outWriter.ToString());
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+        }
+    }
+
+    /// <summary>
+    ///     Test that Main with --silent flag suppresses banner output.
+    /// </summary>
+    [Fact]
+    public void Program_Main_SilentFlag_SuppressesBanner()
+    {
+        // Arrange
+        var sarifFile = Path.Combine(AppContext.BaseDirectory, "TestData", "sample.sarif");
+        var originalOut = Console.Out;
+        try
+        {
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
+
+            // Act
+            var result = Program.Main(["--silent", "--sarif", sarifFile]);
+
+            // Assert
+            Assert.Equal(0, result);
+            var output = outWriter.ToString();
+            Assert.DoesNotContain("SarifMark version", output);
+            Assert.DoesNotContain("Copyright", output);
         }
         finally
         {

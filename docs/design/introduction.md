@@ -30,7 +30,7 @@ architecture, and the requirements it satisfies — followed by **class-level do
 that describe each implementing class in detail.
 
 This document does not cover installation, end-user usage patterns, or the CI/CD pipeline
-configuration. Those topics are addressed in other [SarifMark repository][sarifmark-repo] documentation.
+configuration. Those topics are addressed in other SarifMark repository documentation.
 
 ## Audience
 
@@ -98,4 +98,12 @@ This document describes the intent and structure of that code; any discrepancy b
 this document and the code should be resolved by updating this document to reflect the
 actual implementation, or by raising a defect against the code.
 
-[sarifmark-repo]: https://github.com/demaconsulting/SarifMark
+## Companion Artifact Structure
+
+Each in-house software item has corresponding artifacts in parallel directory trees:
+
+- Requirements: `docs/reqstream/sarifmark.yaml`, `docs/reqstream/sarifmark/{subsystem}/{unit}.yaml`
+- Design docs:  `docs/design/sarifmark.md`, `docs/design/sarifmark/{subsystem}/{unit}.md`
+- Verification: `docs/verification/sarifmark.md`, `docs/verification/sarifmark/{subsystem}/{unit}.md`
+- Source code:  `src/DemaConsulting.SarifMark/{Subsystem}/{Unit}.cs`
+- Tests:        `test/DemaConsulting.SarifMark.Tests/{Subsystem}/{Unit}Tests.cs`
