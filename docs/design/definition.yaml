@@ -10,17 +10,17 @@ resource-path:
 input-files:
   - docs/design/title.txt
   - docs/design/introduction.md
-  - docs/design/sarifmark/sarifmark.md
+  - docs/design/sarifmark.md
   - docs/design/sarifmark/program.md
-  - docs/design/sarifmark/cli/cli.md
+  - docs/design/sarifmark/cli.md
   - docs/design/sarifmark/cli/context.md
-  - docs/design/sarifmark/sarif/sarif.md
+  - docs/design/sarifmark/sarif.md
   - docs/design/sarifmark/sarif/sarif-finding.md
   - docs/design/sarifmark/sarif/sarif-run.md
   - docs/design/sarifmark/sarif/sarif-results.md
-  - docs/design/sarifmark/self-test/self-test.md
+  - docs/design/sarifmark/self-test.md
   - docs/design/sarifmark/self-test/validation.md
-  - docs/design/sarifmark/utilities/utilities.md
+  - docs/design/sarifmark/utilities.md
   - docs/design/sarifmark/utilities/path-helpers.md
 template: template.html
 table-of-contents: true

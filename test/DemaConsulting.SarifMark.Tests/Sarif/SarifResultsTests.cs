@@ -23,31 +23,26 @@ namespace DemaConsulting.SarifMark.Tests;
 /// <summary>
 ///     Unit tests for the SarifResults class.
 /// </summary>
-[TestClass]
-public class SarifResultsTests
+public sealed class SarifResultsTests : IDisposable
 {
     /// <summary>
     ///     Test directory for temporary test files.
     /// </summary>
-    private string? _testDirectory;
+    private readonly string _testDirectory;
 
     /// <summary>
     ///     Initialize test resources before each test.
     /// </summary>
-    [TestInitialize]
-    public void TestInitialize()
+    public SarifResultsTests()
     {
         _testDirectory = PathHelpers.SafePathCombine(Path.GetTempPath(), $"SarifMarkTests_{Guid.NewGuid()}");
         Directory.CreateDirectory(_testDirectory);
     }
 
-    /// <summary>
-    ///     Clean up test resources after each test.
-    /// </summary>
-    [TestCleanup]
-    public void TestCleanup()
+    /// <summary>Releases resources after each test.</summary>
+    public void Dispose()
     {
-        if (_testDirectory != null && Directory.Exists(_testDirectory))
+        if (Directory.Exists(_testDirectory))
         {
             Directory.Delete(_testDirectory, true);
         }
@@ -56,69 +51,69 @@ public class SarifResultsTests
     /// <summary>
     ///     Test that Read throws ArgumentException when file path is null.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_NullPath_ThrowsArgumentException()
     {
         // Act & Assert
-        Assert.ThrowsExactly<ArgumentException>(() => SarifResults.Read(null!));
+        Assert.Throws<ArgumentException>(() => SarifResults.Read(null!));
     }
 
     /// <summary>
     ///     Test that Read throws ArgumentException when file path is empty.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_EmptyPath_ThrowsArgumentException()
     {
         // Act & Assert
-        Assert.ThrowsExactly<ArgumentException>(() => SarifResults.Read(string.Empty));
+        Assert.Throws<ArgumentException>(() => SarifResults.Read(string.Empty));
     }
 
     /// <summary>
     ///     Test that Read throws ArgumentException when file path is whitespace.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_WhitespacePath_ThrowsArgumentException()
     {
         // Act & Assert
-        Assert.ThrowsExactly<ArgumentException>(() => SarifResults.Read("   "));
+        Assert.Throws<ArgumentException>(() => SarifResults.Read("   "));
     }
 
     /// <summary>
     ///     Test that Read throws FileNotFoundException when file does not exist.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException()
     {
         // Arrange
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "nonexistent.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "nonexistent.sarif");
 
         // Act & Assert
-        Assert.ThrowsExactly<FileNotFoundException>(() => SarifResults.Read(filePath));
+        Assert.Throws<FileNotFoundException>(() => SarifResults.Read(filePath));
     }
 
     /// <summary>
     ///     Test that Read throws InvalidOperationException for invalid JSON.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_InvalidJson_ThrowsInvalidOperationException()
     {
         // Arrange - SARIF file with invalid JSON content
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "invalid.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "invalid.sarif");
         File.WriteAllText(filePath, "{ invalid json }");
 
         // Act & Assert
-        var exception = Assert.ThrowsExactly<InvalidOperationException>(() => SarifResults.Read(filePath));
+        var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
         Assert.Contains("Invalid JSON", exception.Message);
     }
 
     /// <summary>
     ///     Test that Read throws InvalidOperationException when version is missing.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_MissingVersion_ThrowsInvalidOperationException()
     {
         // Arrange - SARIF file missing the required 'version' field
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "missing-version.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "missing-version.sarif");
         File.WriteAllText(filePath, """
             {
                 "runs": []
@@ -126,18 +121,18 @@ public class SarifResultsTests
             """);
 
         // Act & Assert
-        var exception = Assert.ThrowsExactly<InvalidOperationException>(() => SarifResults.Read(filePath));
+        var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
         Assert.Contains("missing 'version'", exception.Message);
     }
 
     /// <summary>
     ///     Test that Read throws InvalidOperationException when runs is missing.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_MissingRuns_ThrowsInvalidOperationException()
     {
         // Arrange - SARIF file missing the required 'runs' array
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "missing-runs.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "missing-runs.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0"
@@ -145,18 +140,18 @@ public class SarifResultsTests
             """);
 
         // Act & Assert
-        var exception = Assert.ThrowsExactly<InvalidOperationException>(() => SarifResults.Read(filePath));
+        var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
         Assert.Contains("missing or invalid 'runs'", exception.Message);
     }
 
     /// <summary>
     ///     Test that Read throws InvalidOperationException when runs array is empty.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_EmptyRuns_ThrowsInvalidOperationException()
     {
         // Arrange - SARIF file with an empty 'runs' array
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "empty-runs.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "empty-runs.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -165,18 +160,18 @@ public class SarifResultsTests
             """);
 
         // Act & Assert
-        var exception = Assert.ThrowsExactly<InvalidOperationException>(() => SarifResults.Read(filePath));
+        var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
         Assert.Contains("'runs' array is empty", exception.Message);
     }
 
     /// <summary>
     ///     Test that Read throws InvalidOperationException when tool is missing.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_MissingTool_ThrowsInvalidOperationException()
     {
         // Arrange - SARIF file with a run missing the 'tool' field
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "missing-tool.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "missing-tool.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -187,18 +182,18 @@ public class SarifResultsTests
             """);
 
         // Act & Assert
-        var exception = Assert.ThrowsExactly<InvalidOperationException>(() => SarifResults.Read(filePath));
+        var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
         Assert.Contains("missing 'tool'", exception.Message);
     }
 
     /// <summary>
     ///     Test that Read throws InvalidOperationException when driver is missing.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_MissingDriver_ThrowsInvalidOperationException()
     {
         // Arrange - SARIF file with a tool missing the 'driver' field
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "missing-driver.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "missing-driver.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -211,18 +206,18 @@ public class SarifResultsTests
             """);
 
         // Act & Assert
-        var exception = Assert.ThrowsExactly<InvalidOperationException>(() => SarifResults.Read(filePath));
+        var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
         Assert.Contains("missing 'driver'", exception.Message);
     }
 
     /// <summary>
     ///     Test that Read successfully reads SARIF file with no results.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_NoResults_ReturnsValidResults()
     {
         // Arrange - SARIF file with no results array
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "no-results.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "no-results.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -243,20 +238,20 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - returns valid results with empty collection
-        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
-        Assert.AreEqual("1.0.0", results.Runs[0].ToolVersion);
-        Assert.AreEqual(0, results.Runs[0].ResultCount);
-        Assert.IsEmpty(results.Runs[0].Results);
+        Assert.Equal("TestTool", results.Runs[0].ToolName);
+        Assert.Equal("1.0.0", results.Runs[0].ToolVersion);
+        Assert.Equal(0, results.Runs[0].ResultCount);
+        Assert.Empty(results.Runs[0].Results);
     }
 
     /// <summary>
     ///     Test that Read successfully reads SARIF file with empty results array.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_EmptyResults_ReturnsValidResults()
     {
         // Arrange - SARIF file with an empty results array
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "empty-results.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "empty-results.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -278,20 +273,20 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - returns valid results with zero count
-        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
-        Assert.AreEqual("1.0.0", results.Runs[0].ToolVersion);
-        Assert.AreEqual(0, results.Runs[0].ResultCount);
-        Assert.IsEmpty(results.Runs[0].Results);
+        Assert.Equal("TestTool", results.Runs[0].ToolName);
+        Assert.Equal("1.0.0", results.Runs[0].ToolVersion);
+        Assert.Equal(0, results.Runs[0].ResultCount);
+        Assert.Empty(results.Runs[0].Results);
     }
 
     /// <summary>
     ///     Test that Read successfully reads SARIF file with results.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_WithResults_ReturnsValidResults()
     {
         // Arrange - SARIF file with three results of varying levels
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "with-results.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "with-results.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -335,32 +330,32 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - returns all three results with correct properties
-        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
-        Assert.AreEqual("1.0.0", results.Runs[0].ToolVersion);
-        Assert.AreEqual(3, results.Runs[0].ResultCount);
-        Assert.HasCount(3, results.Runs[0].Results);
+        Assert.Equal("TestTool", results.Runs[0].ToolName);
+        Assert.Equal("1.0.0", results.Runs[0].ToolVersion);
+        Assert.Equal(3, results.Runs[0].ResultCount);
+        Assert.Equal(3, results.Runs[0].Results.Count);
 
-        Assert.AreEqual("TEST001", results.Runs[0].Results[0].RuleId);
-        Assert.AreEqual("error", results.Runs[0].Results[0].Level);
-        Assert.AreEqual("Error 1", results.Runs[0].Results[0].Message);
+        Assert.Equal("TEST001", results.Runs[0].Results[0].RuleId);
+        Assert.Equal("error", results.Runs[0].Results[0].Level);
+        Assert.Equal("Error 1", results.Runs[0].Results[0].Message);
 
-        Assert.AreEqual("TEST002", results.Runs[0].Results[1].RuleId);
-        Assert.AreEqual("warning", results.Runs[0].Results[1].Level);
-        Assert.AreEqual("Warning 1", results.Runs[0].Results[1].Message);
+        Assert.Equal("TEST002", results.Runs[0].Results[1].RuleId);
+        Assert.Equal("warning", results.Runs[0].Results[1].Level);
+        Assert.Equal("Warning 1", results.Runs[0].Results[1].Message);
 
-        Assert.AreEqual("TEST003", results.Runs[0].Results[2].RuleId);
-        Assert.AreEqual("note", results.Runs[0].Results[2].Level);
-        Assert.AreEqual("Note 1", results.Runs[0].Results[2].Message);
+        Assert.Equal("TEST003", results.Runs[0].Results[2].RuleId);
+        Assert.Equal("note", results.Runs[0].Results[2].Level);
+        Assert.Equal("Note 1", results.Runs[0].Results[2].Message);
     }
 
     /// <summary>
     ///     Test that Read handles missing tool name gracefully.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_MissingToolName_UsesUnknown()
     {
         // Arrange - SARIF file with driver missing the 'name' field
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "missing-tool-name.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "missing-tool-name.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -380,20 +375,20 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - tool name defaults to 'Unknown'
-        Assert.AreEqual("Unknown", results.Runs[0].ToolName);
-        Assert.AreEqual("1.0.0", results.Runs[0].ToolVersion);
-        Assert.AreEqual(0, results.Runs[0].ResultCount);
-        Assert.IsEmpty(results.Runs[0].Results);
+        Assert.Equal("Unknown", results.Runs[0].ToolName);
+        Assert.Equal("1.0.0", results.Runs[0].ToolVersion);
+        Assert.Equal(0, results.Runs[0].ResultCount);
+        Assert.Empty(results.Runs[0].Results);
     }
 
     /// <summary>
     ///     Test that Read handles missing tool version gracefully.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_MissingToolVersion_UsesUnknown()
     {
         // Arrange - SARIF file with driver missing the 'version' field
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "missing-tool-version.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "missing-tool-version.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -413,20 +408,20 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - tool version defaults to 'Unknown'
-        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
-        Assert.AreEqual("Unknown", results.Runs[0].ToolVersion);
-        Assert.AreEqual(0, results.Runs[0].ResultCount);
-        Assert.IsEmpty(results.Runs[0].Results);
+        Assert.Equal("TestTool", results.Runs[0].ToolName);
+        Assert.Equal("Unknown", results.Runs[0].ToolVersion);
+        Assert.Equal(0, results.Runs[0].ResultCount);
+        Assert.Empty(results.Runs[0].Results);
     }
 
     /// <summary>
     ///     Test that Read uses semanticVersion field when version field is missing.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_SemanticVersionField_ReturnsSemanticVersion()
     {
         // Arrange - SARIF file with semanticVersion field and no version field
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "semantic-version.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "semantic-version.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -447,20 +442,20 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - semanticVersion is used as the tool version
-        Assert.AreEqual("CodeQL", results.Runs[0].ToolName);
-        Assert.AreEqual("2.15.0", results.Runs[0].ToolVersion);
-        Assert.AreEqual(0, results.Runs[0].ResultCount);
-        Assert.IsEmpty(results.Runs[0].Results);
+        Assert.Equal("CodeQL", results.Runs[0].ToolName);
+        Assert.Equal("2.15.0", results.Runs[0].ToolVersion);
+        Assert.Equal(0, results.Runs[0].ResultCount);
+        Assert.Empty(results.Runs[0].Results);
     }
 
     /// <summary>
     ///     Test that Read uses dottedQuadFileVersion field when version and semanticVersion are missing.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_DottedQuadFileVersionField_ReturnsDottedQuadFileVersion()
     {
         // Arrange - SARIF file with only dottedQuadFileVersion field
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "dotted-quad-version.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "dotted-quad-version.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -481,20 +476,20 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - dottedQuadFileVersion is used as the tool version
-        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
-        Assert.AreEqual("3.0.0.0", results.Runs[0].ToolVersion);
-        Assert.AreEqual(0, results.Runs[0].ResultCount);
-        Assert.IsEmpty(results.Runs[0].Results);
+        Assert.Equal("TestTool", results.Runs[0].ToolName);
+        Assert.Equal("3.0.0.0", results.Runs[0].ToolVersion);
+        Assert.Equal(0, results.Runs[0].ResultCount);
+        Assert.Empty(results.Runs[0].Results);
     }
 
     /// <summary>
     ///     Test that Read prioritizes version field over semanticVersion.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_VersionAndSemanticVersion_PrioritizesVersion()
     {
         // Arrange - SARIF file with both version and semanticVersion fields
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "version-priority.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "version-priority.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -516,20 +511,20 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - version field takes priority over semanticVersion
-        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
-        Assert.AreEqual("1.0.0", results.Runs[0].ToolVersion);
-        Assert.AreEqual(0, results.Runs[0].ResultCount);
-        Assert.IsEmpty(results.Runs[0].Results);
+        Assert.Equal("TestTool", results.Runs[0].ToolName);
+        Assert.Equal("1.0.0", results.Runs[0].ToolVersion);
+        Assert.Equal(0, results.Runs[0].ResultCount);
+        Assert.Empty(results.Runs[0].Results);
     }
 
     /// <summary>
     ///     Test that Read prioritizes semanticVersion field over dottedQuadFileVersion.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_SemanticAndDottedQuad_PrioritizesSemanticVersion()
     {
         // Arrange - SARIF file with semanticVersion and dottedQuadFileVersion fields
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "semantic-priority.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "semantic-priority.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -551,20 +546,20 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - semanticVersion takes priority over dottedQuadFileVersion
-        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
-        Assert.AreEqual("2.0.0", results.Runs[0].ToolVersion);
-        Assert.AreEqual(0, results.Runs[0].ResultCount);
-        Assert.IsEmpty(results.Runs[0].Results);
+        Assert.Equal("TestTool", results.Runs[0].ToolName);
+        Assert.Equal("2.0.0", results.Runs[0].ToolVersion);
+        Assert.Equal(0, results.Runs[0].ResultCount);
+        Assert.Empty(results.Runs[0].Results);
     }
 
     /// <summary>
     ///     Test that Read handles all three version fields with correct priority.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_AllVersionFields_PrioritizesVersion()
     {
         // Arrange - SARIF file with all three version fields present
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "all-versions.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "all-versions.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -587,20 +582,20 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - version field takes highest priority
-        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
-        Assert.AreEqual("1.0.0", results.Runs[0].ToolVersion);
-        Assert.AreEqual(0, results.Runs[0].ResultCount);
-        Assert.IsEmpty(results.Runs[0].Results);
+        Assert.Equal("TestTool", results.Runs[0].ToolName);
+        Assert.Equal("1.0.0", results.Runs[0].ToolVersion);
+        Assert.Equal(0, results.Runs[0].ResultCount);
+        Assert.Empty(results.Runs[0].Results);
     }
 
     /// <summary>
     ///     Test that Read handles empty version field and falls back to semanticVersion.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_EmptyVersionField_FallsBackToSemanticVersion()
     {
         // Arrange - SARIF file with empty version field and a semanticVersion field
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "empty-version.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "empty-version.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -622,20 +617,20 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - semanticVersion is used when version field is empty
-        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
-        Assert.AreEqual("2.0.0", results.Runs[0].ToolVersion);
-        Assert.AreEqual(0, results.Runs[0].ResultCount);
-        Assert.IsEmpty(results.Runs[0].Results);
+        Assert.Equal("TestTool", results.Runs[0].ToolName);
+        Assert.Equal("2.0.0", results.Runs[0].ToolVersion);
+        Assert.Equal(0, results.Runs[0].ResultCount);
+        Assert.Empty(results.Runs[0].Results);
     }
 
     /// <summary>
     ///     Test that Read successfully parses result with location information.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_WithLocations_ReturnsResultsWithLocationData()
     {
         // Arrange - SARIF file with a result that includes location information
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "with-locations.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "with-locations.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -677,18 +672,18 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - result contains the expected location information
-        Assert.AreEqual(1, results.Runs[0].ResultCount);
-        Assert.AreEqual("CA1001", results.Runs[0].Results[0].RuleId);
-        Assert.AreEqual("warning", results.Runs[0].Results[0].Level);
-        Assert.AreEqual("Types that own disposable fields should be disposable", results.Runs[0].Results[0].Message);
-        Assert.AreEqual("src/MyClass.cs", results.Runs[0].Results[0].Uri);
-        Assert.AreEqual(42, results.Runs[0].Results[0].StartLine);
+        Assert.Equal(1, results.Runs[0].ResultCount);
+        Assert.Equal("CA1001", results.Runs[0].Results[0].RuleId);
+        Assert.Equal("warning", results.Runs[0].Results[0].Level);
+        Assert.Equal("Types that own disposable fields should be disposable", results.Runs[0].Results[0].Message);
+        Assert.Equal("src/MyClass.cs", results.Runs[0].Results[0].Uri);
+        Assert.Equal(42, results.Runs[0].Results[0].StartLine);
     }
 
     /// <summary>
     ///     Test that ToMarkdown with depth 1 produces correct output.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput()
     {
         // Arrange
@@ -704,7 +699,7 @@ public class SarifResultsTests
         var markdown = results.ToMarkdown(1);
 
         // Assert
-        Assert.IsNotNull(markdown);
+        Assert.NotNull(markdown);
         Assert.Contains("# TestTool Analysis", markdown);
         Assert.Contains("**Tool:** TestTool 1.0.0", markdown);
         Assert.Contains("## Issues", markdown);
@@ -716,7 +711,7 @@ public class SarifResultsTests
     /// <summary>
     ///     Test that ToMarkdown with depth 3 uses correct heading levels.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_ToMarkdown_Depth3_UsesCorrectHeadingLevels()
     {
         // Arrange
@@ -734,7 +729,7 @@ public class SarifResultsTests
     /// <summary>
     ///     Test that ToMarkdown with no results shows correct message.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults()
     {
         // Arrange
@@ -750,7 +745,7 @@ public class SarifResultsTests
     /// <summary>
     ///     Test that ToMarkdown with one result uses singular form.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_ToMarkdown_OneResult_UsesSingularForm()
     {
         // Arrange
@@ -772,35 +767,35 @@ public class SarifResultsTests
     /// <summary>
     ///     Test that ToMarkdown with depth less than 1 throws exception.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_ToMarkdown_DepthLessThan1_ThrowsArgumentOutOfRangeException()
     {
         // Arrange
         var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
         // Act & Assert
-        var exception = Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => results.ToMarkdown(0));
+        var exception = Assert.Throws<ArgumentOutOfRangeException>(() => results.ToMarkdown(0));
         Assert.Contains("Depth must be between 1 and 6", exception.Message);
     }
 
     /// <summary>
     ///     Test that ToMarkdown with depth greater than 6 throws exception.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_ToMarkdown_DepthGreaterThan6_ThrowsArgumentOutOfRangeException()
     {
         // Arrange
         var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
         // Act & Assert
-        var exception = Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => results.ToMarkdown(7));
+        var exception = Assert.Throws<ArgumentOutOfRangeException>(() => results.ToMarkdown(7));
         Assert.Contains("Depth must be between 1 and 6", exception.Message);
     }
 
     /// <summary>
     ///     Test that ToMarkdown with maximum depth of 6 produces correct output.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_ToMarkdown_Depth6_ProducesCorrectOutput()
     {
         // Arrange
@@ -818,7 +813,7 @@ public class SarifResultsTests
     /// <summary>
     ///     Test that ToMarkdown handles result without location information.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation()
     {
         // Arrange
@@ -839,7 +834,7 @@ public class SarifResultsTests
     /// <summary>
     ///     Test that ToMarkdown handles result with URI but no line number.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly()
     {
         // Arrange
@@ -861,7 +856,7 @@ public class SarifResultsTests
     /// <summary>
     ///     Test that ToMarkdown with custom heading uses the provided heading.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_ToMarkdown_CustomHeading_UsesProvidedHeading()
     {
         // Arrange
@@ -879,7 +874,7 @@ public class SarifResultsTests
     /// <summary>
     ///     Test that ToMarkdown with null heading uses default heading.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_ToMarkdown_NullHeading_UsesDefaultHeading()
     {
         // Arrange
@@ -896,7 +891,7 @@ public class SarifResultsTests
     /// <summary>
     ///     Test that ToMarkdown without heading parameter uses default heading.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_ToMarkdown_NoHeadingParameter_UsesDefaultHeading()
     {
         // Arrange
@@ -913,7 +908,7 @@ public class SarifResultsTests
     /// <summary>
     ///     Test that ToMarkdown enforces line breaks between results.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks()
     {
         // Arrange
@@ -938,11 +933,11 @@ public class SarifResultsTests
     /// <summary>
     ///     Test that Read excludes suppressed results from the results collection.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_WithSuppressedResults_ExcludesSuppressedResults()
     {
         // Arrange
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "with-suppressions.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "with-suppressions.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -992,26 +987,26 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert
-        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
-        Assert.AreEqual("1.0.0", results.Runs[0].ToolVersion);
-        Assert.AreEqual(2, results.Runs[0].ResultCount);
-        Assert.HasCount(2, results.Runs[0].Results);
+        Assert.Equal("TestTool", results.Runs[0].ToolName);
+        Assert.Equal("1.0.0", results.Runs[0].ToolVersion);
+        Assert.Equal(2, results.Runs[0].ResultCount);
+        Assert.Equal(2, results.Runs[0].Results.Count);
 
-        Assert.AreEqual("TEST001", results.Runs[0].Results[0].RuleId);
-        Assert.AreEqual("Unsuppressed warning", results.Runs[0].Results[0].Message);
+        Assert.Equal("TEST001", results.Runs[0].Results[0].RuleId);
+        Assert.Equal("Unsuppressed warning", results.Runs[0].Results[0].Message);
 
-        Assert.AreEqual("TEST003", results.Runs[0].Results[1].RuleId);
-        Assert.AreEqual("Another unsuppressed error", results.Runs[0].Results[1].Message);
+        Assert.Equal("TEST003", results.Runs[0].Results[1].RuleId);
+        Assert.Equal("Another unsuppressed error", results.Runs[0].Results[1].Message);
     }
 
     /// <summary>
     ///     Test that Read does not suppress results with an empty suppressions array.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_EmptySuppressions_DoesNotExcludeResult()
     {
         // Arrange - SARIF file with a result that has an empty suppressions array
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "empty-suppressions.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "empty-suppressions.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -1042,20 +1037,19 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - result with empty suppressions array is not excluded
-        Assert.AreEqual(1, results.Runs[0].ResultCount,
-            "Result with an empty suppressions array should not be excluded");
-        Assert.AreEqual("TEST001", results.Runs[0].Results[0].RuleId);
-        Assert.AreEqual("Unsuppressed result with empty suppressions", results.Runs[0].Results[0].Message);
+        Assert.Equal(1, results.Runs[0].ResultCount);
+        Assert.Equal("TEST001", results.Runs[0].Results[0].RuleId);
+        Assert.Equal("Unsuppressed result with empty suppressions", results.Runs[0].Results[0].Message);
     }
 
     /// <summary>
     ///     Test that Read returns zero file count when no artifacts array is present.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_NoArtifacts_ReturnsZeroFileCount()
     {
         // Arrange
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "no-artifacts.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "no-artifacts.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -1076,17 +1070,17 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - no artifacts array means zero file count
-        Assert.AreEqual(0, results.Runs[0].FileCount);
+        Assert.Equal(0, results.Runs[0].FileCount);
     }
 
     /// <summary>
     ///     Test that Read sums artifacts across all runs.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_WithArtifacts_ReturnsFileCount()
     {
         // Arrange
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "with-artifacts.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "with-artifacts.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -1112,17 +1106,17 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - file count equals the number of artifacts
-        Assert.AreEqual(3, results.Runs[0].FileCount);
+        Assert.Equal(3, results.Runs[0].FileCount);
     }
 
     /// <summary>
     ///     Test that Read extracts independent file counts for each run.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_MultipleRuns_EachRunHasOwnFileCount()
     {
         // Arrange
-        var filePath = PathHelpers.SafePathCombine(_testDirectory!, "multi-run-artifacts.sarif");
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "multi-run-artifacts.sarif");
         File.WriteAllText(filePath, """
             {
                 "version": "2.1.0",
@@ -1158,14 +1152,14 @@ public class SarifResultsTests
         var results = SarifResults.Read(filePath);
 
         // Assert - each run has its own independent file count
-        Assert.AreEqual(2, results.Runs[0].FileCount);
-        Assert.AreEqual(1, results.Runs[1].FileCount);
+        Assert.Equal(2, results.Runs[0].FileCount);
+        Assert.Equal(1, results.Runs[1].FileCount);
     }
 
     /// <summary>
     ///     Test that ToMarkdown includes the file count in the header.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_ToMarkdown_ShowsFileCount()
     {
         // Arrange
@@ -1181,7 +1175,7 @@ public class SarifResultsTests
     /// <summary>
     ///     Test that ToMarkdown shows zero file count when no files were analyzed.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_ToMarkdown_ZeroFileCount_ShowsZero()
     {
         // Arrange
@@ -1197,7 +1191,7 @@ public class SarifResultsTests
     /// <summary>
     ///     Test that the internal constructor stores the runs collection and exposes HasIssues.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_InternalConstructor_ExposesRunsAndHasIssues()
     {
         // Arrange
@@ -1207,42 +1201,42 @@ public class SarifResultsTests
         var results = new SarifResults([run]);
 
         // Assert
-        Assert.AreEqual(1, results.Runs.Count);
-        Assert.AreSame(run, results.Runs[0]);
-        Assert.IsFalse(results.HasIssues);
+        Assert.Single(results.Runs);
+        Assert.Same(run, results.Runs[0]);
+        Assert.False(results.HasIssues);
     }
 
     /// <summary>
     ///     Test that Runs property returns a single run for a single-run SarifResults.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Runs_SingleRun_ReturnsSingleRun()
     {
         // Arrange & Act
         var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
         // Assert
-        Assert.AreEqual(1, results.Runs.Count);
-        Assert.AreEqual("TestTool", results.Runs[0].ToolName);
+        Assert.Single(results.Runs);
+        Assert.Equal("TestTool", results.Runs[0].ToolName);
     }
 
     /// <summary>
     ///     Test that HasIssues returns false when there are no issues.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_HasIssues_NoIssues_ReturnsFalse()
     {
         // Arrange & Act
         var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
         // Assert
-        Assert.IsFalse(results.HasIssues);
+        Assert.False(results.HasIssues);
     }
 
     /// <summary>
     ///     Test that HasIssues returns true when there are issues.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_HasIssues_WithIssues_ReturnsTrue()
     {
         // Arrange
@@ -1252,13 +1246,13 @@ public class SarifResultsTests
         var results = new SarifResults([new SarifRun("TestTool", "1.0.0", resultList)]);
 
         // Assert
-        Assert.IsTrue(results.HasIssues);
+        Assert.True(results.HasIssues);
     }
 
     /// <summary>
     ///     Test that HasIssues returns true when any run has issues.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_HasIssues_AnyRunHasIssues_ReturnsTrue()
     {
         // Arrange
@@ -1270,13 +1264,13 @@ public class SarifResultsTests
         var results = new SarifResults(new List<SarifRun> { run1, run2 });
 
         // Assert
-        Assert.IsTrue(results.HasIssues);
+        Assert.True(results.HasIssues);
     }
 
     /// <summary>
     ///     Test that Read parses all runs in a multi-run SARIF file.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_Read_MultipleRuns_ReturnsAllRuns()
     {
         // Arrange
@@ -1286,15 +1280,15 @@ public class SarifResultsTests
         var results = SarifResults.Read(sarifFile);
 
         // Assert
-        Assert.AreEqual(2, results.Runs.Count);
-        Assert.AreEqual("Tool1", results.Runs[0].ToolName);
-        Assert.AreEqual("Tool2", results.Runs[1].ToolName);
+        Assert.Equal(2, results.Runs.Count);
+        Assert.Equal("Tool1", results.Runs[0].ToolName);
+        Assert.Equal("Tool2", results.Runs[1].ToolName);
     }
 
     /// <summary>
     ///     Test that ToMarkdown for multi-run files includes run indices.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifResults_ToMarkdown_MultipleRuns_IncludesRunIndices()
     {
         // Arrange

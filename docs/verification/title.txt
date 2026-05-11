@@ -1,0 +1,16 @@
+---
+title: SarifMark Software Verification Design
+subtitle: Verification Design Documentation
+author: DEMA Consulting
+description: Software verification design document for the SarifMark .NET tool for generating markdown reports from SARIF files
+lang: en-US
+keywords:
+  - SarifMark
+  - Verification
+  - Testing
+  - C#
+  - .NET
+  - CLI Tool
+  - SARIF
+  - Static Analysis
+---

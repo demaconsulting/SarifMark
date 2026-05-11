@@ -23,49 +23,48 @@ namespace DemaConsulting.SarifMark.Tests;
 /// <summary>
 ///     Unit tests for the SarifFinding record.
 /// </summary>
-[TestClass]
 public class SarifFindingTests
 {
     /// <summary>
     ///     Test that the constructor stores all properties when all properties are provided.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties()
     {
         // Arrange & Act
         var result = new SarifFinding("RULE001", "error", "Error message", "src/File.cs", 42);
 
         // Assert
-        Assert.AreEqual("RULE001", result.RuleId);
-        Assert.AreEqual("error", result.Level);
-        Assert.AreEqual("Error message", result.Message);
-        Assert.AreEqual("src/File.cs", result.Uri);
-        Assert.AreEqual(42, result.StartLine);
+        Assert.Equal("RULE001", result.RuleId);
+        Assert.Equal("error", result.Level);
+        Assert.Equal("Error message", result.Message);
+        Assert.Equal("src/File.cs", result.Uri);
+        Assert.Equal(42, result.StartLine);
     }
 
     /// <summary>
     ///     Test that the Uri property is null when a null uri is provided to the constructor.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifFinding_Constructor_NullUri_UriPropertyIsNull()
     {
         // Arrange & Act
         var result = new SarifFinding("RULE001", "error", "Error message", null, null);
 
         // Assert
-        Assert.IsNull(result.Uri);
+        Assert.Null(result.Uri);
     }
 
     /// <summary>
     ///     Test that the StartLine property is null when a null start line is provided to the constructor.
     /// </summary>
-    [TestMethod]
+    [Fact]
     public void SarifFinding_Constructor_NullStartLine_StartLinePropertyIsNull()
     {
         // Arrange & Act
         var result = new SarifFinding("RULE001", "error", "Error message", "src/File.cs", null);
 
         // Assert
-        Assert.IsNull(result.StartLine);
+        Assert.Null(result.StartLine);
     }
 }
