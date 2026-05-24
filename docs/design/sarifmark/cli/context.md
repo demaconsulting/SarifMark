@@ -1,106 +1,105 @@
-### Context Class
+### Context
 
-#### Overview
+#### Purpose
 
-The `Context` class (`Context.cs`) is a sealed, disposable container for all parsed command-line
-state and output routing. It is the single source of truth for which mode the tool runs in, which
-files it reads and writes, and whether any errors have been reported.
+`Context` is a sealed, disposable container for all parsed command-line state and output
+routing. It is the single source of truth for which mode the tool runs in, which files it
+reads and writes, and whether any errors have been reported. All other units receive a
+`Context` instance to read parsed flags and write output.
 
-#### Class Design
+#### Data Model
 
-`Context` is declared `sealed` and implements `IDisposable`. The constructor is private; all
-instances are created through the `Create` static factory method. This ensures every `Context` is
-fully initialized before use. This satisfies requirement `SarifMark-Context-Create`.
+**Version**: `bool` — True when `-v` or `--version` is present; default `false`. Causes
+`Program.Run` to print the version string and exit.
 
-#### Create Factory Method
+**Help**: `bool` — True when `-?`, `-h`, or `--help` is present; default `false`. Causes
+`Program.Run` to print usage and exit.
 
-`Create(string[] args)` is the sole public entry point for constructing a `Context`. It:
+**Silent**: `bool` — True when `--silent` is present; default `false`. Suppresses all output
+to `Console.Out` and `Console.Error` while still writing to the log if one is open.
 
-1. Validates that `args` is non-null.
-2. Constructs an `ArgumentParser` and calls `ParseArguments(args)`.
-3. Copies all parsed values into a new `Context` using `init`-only property setters.
-4. If a log file was specified, calls `OpenLogFile`.
-5. Returns the fully configured instance.
+**Validate**: `bool` — True when `--validate` is present; default `false`. Causes
+`Program.Run` to invoke `Validation.Run` instead of the analysis path.
 
-This satisfies requirements `SarifMark-Context-Create` through `SarifMark-Context-LogParam`.
+**Enforce**: `bool` — True when `--enforce` is present; default `false`. Causes
+`ProcessSarifAnalysis` to set the error exit code if any SARIF findings are present.
 
-#### Properties
+**SarifFile**: `string?` — Path to the SARIF input file supplied via `--sarif`; `null` when
+not provided.
 
-| Property      | Type      | Default | CLI flag(s)              | Description                                 |
-|---------------|-----------|---------|--------------------------|---------------------------------------------|
-| `Version`     | `bool`    | `false` | `-v`, `--version`        | Version query flag                          |
-| `Help`        | `bool`    | `false` | `-?`, `-h`, `--help`     | Help flag                                   |
-| `Silent`      | `bool`    | `false` | `--silent`               | Suppress console output                     |
-| `Validate`    | `bool`    | `false` | `--validate`             | Self-validation mode flag                   |
-| `Enforce`     | `bool`    | `false` | `--enforce`              | Enforcement mode flag                       |
-| `SarifFile`   | `string?` | `null`  | `--sarif <file>`         | Path to the SARIF file                      |
-| `ReportFile`  | `string?` | `null`  | `--report <file>`        | Path to the markdown report output file     |
-| `Depth`       | `int`     | `1`     | `--depth <depth>`        | Heading depth; `--report-depth` is legacy   |
-| `Heading`     | `string?` | `null`  | `--heading <text>`       | Custom heading text for the report          |
-| `ResultsFile` | `string?` | `null`  | `--results <file>`       | Results file; `--result` is a legacy alias  |
-| *(log writer)*| —         | —       | `--log <file>`           | Internal log writer; not a property         |
-| `ExitCode`    | `int`     | `0`     | *(derived)*              | 0 until `WriteError` is called, then 1      |
+**ReportFile**: `string?` — Path to the markdown report output file supplied via `--report`;
+`null` when not provided.
 
-The `--report-depth` flag is accepted as a legacy alias for `--depth`, preserving backwards compatibility
-(see requirement `SarifMark-Context-ReportDepthParam`). The `--result` flag is similarly accepted as a
-legacy alias for `--results` (see requirement `SarifMark-Context-ResultLegacyAlias`).
+**Depth**: `int` — Heading depth for the generated report supplied via `--depth` or the
+legacy alias `--report-depth`; must be a positive integer; default `1`.
 
-These properties satisfy requirements `SarifMark-Context-VersionFlag`, `SarifMark-Context-HelpFlag`,
-`SarifMark-Context-SilentFlag`, `SarifMark-Context-ValidateFlag`, `SarifMark-Context-EnforceFlag`,
-`SarifMark-Context-SarifParam`, `SarifMark-Context-ReportParam`, `SarifMark-Context-ReportDepthParam`,
-`SarifMark-Context-HeadingParam`, `SarifMark-Context-ResultsParam`, `SarifMark-Context-ResultLegacyAlias`,
-and `SarifMark-Context-ExitCode`.
+**Heading**: `string?` — Custom heading text supplied via `--heading`; `null` when not provided.
+When null, the report heading defaults to `"[ToolName] Analysis"`.
 
-#### ArgumentParser Inner Class
+**ResultsFile**: `string?` — Path for self-validation results supplied via `--results` or the
+legacy alias `--result`; `null` when not provided.
 
-`ArgumentParser` is a private, sealed nested class responsible for token-by-token command-line
-parsing. Its `ParseArguments(string[] args)` method iterates through tokens in order and delegates
-each to `ParseArgument`. Value-bearing flags (e.g. `--sarif`, `--depth`) consume the
-following token as their argument value.
+**ExitCode**: `int` — Returns `0` until `WriteError` is called; returns `1` thereafter.
+Derived from the internal `_hasErrors` flag.
 
-Any unrecognized token causes `ParseArgument` to throw `ArgumentException` with a message
-identifying the unsupported argument. This satisfies requirement `SarifMark-Context-UnknownArgs`.
+#### Key Methods
 
-`--depth` requires a positive integer value; non-integer or non-positive values also throw
-`ArgumentException`. The legacy alias `--report-depth` behaves identically.
-This satisfies requirement `SarifMark-Context-ReportDepthParam`.
+**Create**: Factory method; the only way to construct a `Context`.
 
-The value-bearing string flags (`--sarif`, `--report`, `--results`, `--log`, and `--heading`)
-also throw `ArgumentException` when they are the last token in the argument list without a
-following value. This satisfies requirements `SarifMark-Context-SarifParam-MissingValue`,
-`SarifMark-Context-ReportParam-MissingValue`, `SarifMark-Context-ResultsParam-MissingValue`,
-`SarifMark-Context-LogParam-MissingValue`, and `SarifMark-Context-HeadingParam`.
+- *Parameters*: `string[] args` — command-line arguments from the runtime
+- *Returns*: `Context` — fully initialized instance
+- *Preconditions*: `args` is not null.
+- *Postconditions*: All properties are set from `args`; if `--log` was specified the
+  log `StreamWriter` is open and `AutoFlush` is `true`.
 
-#### WriteLine Method
+`Create` validates that `args` is non-null, constructs an `ArgumentParser`, calls
+`ParseArguments`, copies parsed values into the new `Context` via `init`-only setters,
+and calls `OpenLogFile` when a log path was specified.
 
-`WriteLine(string message)` writes to `Console.Out` unless `Silent` is `true`. If a log file is
-open, the message is also written to the log `StreamWriter` regardless of the `Silent` flag. This
-satisfies requirements `SarifMark-Context-WriteLine-Console` and `SarifMark-Context-WriteLine-Log`.
+**WriteLine**: Writes a message to the console and optional log.
 
-#### WriteError Method
+- *Parameters*: `string message` — text to write
+- *Returns*: `void`
+- *Preconditions*: None.
+- *Postconditions*: `message` has been written to `Console.Out` (unless `Silent`) and to
+  the log `StreamWriter` (if open).
 
-`WriteError(string message)` unconditionally sets the private `_hasErrors` flag to `true`, which
-causes `ExitCode` to return `1`. Unless `Silent` is `true`, it writes the message to
-`Console.Error` with the console foreground color temporarily set to red. If a log file is open,
-the message is also written there. This satisfies requirements `SarifMark-Context-WriteError-Stderr`,
-`SarifMark-Context-WriteError-Log`, `SarifMark-Context-WriteError-ExitCode`, and
-`SarifMark-Context-ExitCode`.
+**WriteError**: Writes an error message and sets the error exit code.
 
-#### OpenLogFile Method
+- *Parameters*: `string message` — error text to write
+- *Returns*: `void`
+- *Preconditions*: None.
+- *Postconditions*: `ExitCode` is `1`; `message` has been written to `Console.Error`
+  in red (unless `Silent`) and to the log `StreamWriter` (if open).
 
-`OpenLogFile(string logFile)` opens a `StreamWriter` over the specified path with
-`AutoFlush = true`, ensuring log entries are flushed to disk immediately even if the process
-terminates unexpectedly. If the file cannot be opened for any reason, the underlying exception is
-caught and wrapped in an `InvalidOperationException` with a message that identifies the failing
-file path. This satisfies requirement `SarifMark-Context-LogParam`.
+**Dispose**: Releases the log file handle.
 
-#### Dispose Method
+- *Parameters*: None.
+- *Returns*: `void`
+- *Preconditions*: None.
+- *Postconditions*: Log `StreamWriter` is disposed and set to `null`; any buffered log
+  content is flushed to disk.
 
-`Dispose()` disposes the log `StreamWriter` if one was opened and sets the reference to `null`.
-This ensures file handles are released and any remaining buffered content is flushed on disposal.
-This satisfies requirement `SarifMark-Context-Dispose`.
+#### Error Handling
 
-#### Cross-References
+`Create` throws `ArgumentException` for unrecognized tokens and for malformed value-bearing
+flags (e.g., `--depth` not followed by a positive integer, or a string flag at end of args).
+It throws `InvalidOperationException` if the log file cannot be opened. `ArgumentNullException`
+is thrown immediately if `args` is null. These exceptions propagate to `Program.Main`, which
+translates them to exit code 1.
 
-See the Program Class document for how `Context` is constructed and consumed by `Program.Main`
-and `Program.Run`.
+The private `ArgumentParser` inner class throws `ArgumentException` on any unrecognized
+token. Value-bearing string flags throw `ArgumentException` when they appear as the last
+token without a following value.
+
+#### Dependencies
+
+- **.NET base class library** — `Console`, `StreamWriter`, `Path`, `ArgumentException`,
+  `ArgumentNullException`, `IDisposable`.
+
+#### Callers
+
+- **Program** — constructs `Context.Create(args)` inside a `using` block and passes the
+  instance to `Validation.Run` and `ProcessSarifAnalysis`.
+- **Validation** — constructs additional `Context` instances internally during test execution
+  (using `Context.Create` with test-specific argument arrays).

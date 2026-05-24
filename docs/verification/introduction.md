@@ -1,5 +1,7 @@
 # Introduction
 
+This document describes how each software item in SarifMark is verified.
+
 ## Purpose
 
 This document describes how each SarifMark requirement is verified. It maps requirements to named test scenarios and
@@ -14,20 +16,30 @@ procedures, end-user guides, or CI/CD pipeline configuration.
 
 ## Companion Artifact Structure
 
-For each in-house software item, the companion artifacts are organized as follows:
+Local items have parallel artifacts in:
 
-- Requirements: `docs/reqstream/sarifmark.yaml` and `docs/reqstream/sarifmark/{item}.yaml`
-- Design: `docs/design/sarifmark.md` and `docs/design/sarifmark/{item}.md`
-- Verification: this document
-- Source: `src/DemaConsulting.SarifMark/`
-- Tests: `test/DemaConsulting.SarifMark.Tests/`
+- Requirements: `docs/reqstream/sarifmark.yaml`,
+  `docs/reqstream/sarifmark[/{subsystem-name}...]/{item}.yaml`
+- Design: `docs/design/sarifmark.md`,
+  `docs/design/sarifmark[/{subsystem-name}...]/{item}.md`
+- Verification: `docs/verification/sarifmark.md`,
+  `docs/verification/sarifmark[/{subsystem-name}...]/{item}.md`
+- Source: `src/DemaConsulting.SarifMark[/{SubsystemName}...]/{Item}.cs`
+- Tests: `test/DemaConsulting.SarifMark.Tests[/{SubsystemName}...]/{Item}Tests.cs`
 
-For each OTS software item, the companion artifacts are organized as follows:
+OTS items have integration/usage design documentation parallel to system folders:
 
 - Requirements: `docs/reqstream/ots/{ots-name}.yaml`
+- Design: `docs/design/ots/{ots-name}.md`
 - Verification: `docs/verification/ots/{ots-name}.md`
 
-Review-sets for formal review coverage are defined in `.reviewmark.yaml`.
+Shared Packages have integration/usage design documentation parallel to system and OTS folders:
+
+- Requirements: `docs/reqstream/shared/{package-name}.yaml`
+- Design: `docs/design/shared/{package-name}.md`
+- Verification: `docs/verification/shared/{package-name}.md`
+
+Review-sets are defined in `.reviewmark.yaml`.
 
 ## Audience
 
@@ -36,4 +48,4 @@ test coverage and that the test approach is sound.
 
 ## References
 
-N/A
+- [SarifMark releases](https://github.com/demaconsulting/SarifMark/releases)

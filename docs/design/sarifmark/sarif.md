@@ -1,78 +1,66 @@
-## SARIF and Reporting
+## Sarif
+
+The `Sarif` subsystem is responsible for reading SARIF 2.1.0 files and generating
+markdown reports from the extracted results. It provides the core analysis capability
+of SarifMark through a three-record immutable pipeline.
 
 ### Overview
 
-The SARIF and reporting layer is responsible for reading SARIF 2.1.0 files and generating
-markdown reports from the extracted results. It consists of three records:
-`SarifFinding` (a single result entry),
-`SarifRun` (results from a single tool run), and
-`SarifResults` (the full results collection with reading and reporting
-logic). This layer satisfies requirements `SarifMark-Sarif-Reading`,
-`SarifMark-Sarif-Validation`, `SarifMark-Sarif-ToolInfo`, `SarifMark-Sarif-Results`,
-`SarifMark-Sarif-Locations`, `SarifMark-Sarif-FilePaths`,
-`SarifMark-Sarif-Processing`, `SarifMark-Sarif-MultiRun`, `SarifMark-Sarif-FileCount`,
-`SarifMark-Report-Markdown`, `SarifMark-Report-Depth`, `SarifMark-Report-Counts`,
-`SarifMark-Report-Locations`, `SarifMark-Report-Headings`, `SarifMark-Report-LineBreaks`,
-and `SarifMark-Report-FileCount`.
+The `Sarif` subsystem processes a SARIF file through a validated JSON parsing pipeline
+and produces an immutable record graph from which a markdown report can be generated.
+It has no dependency on the `Cli` subsystem and contains no mutable state. The subsystem
+contains three units:
 
-### Architecture
+- **SarifFinding**: an immutable record representing a single analysis finding (rule ID,
+  severity, message, optional location).
+- **SarifRun**: an immutable record representing all results from a single tool run,
+  plus a `ToMarkdown` method for generating a per-run report.
+- **SarifResults**: the root record holding all runs from a SARIF file, providing
+  the `Read` static factory method and the `ToMarkdown` method for multi-run aggregation.
 
-The SARIF and reporting layer uses a three-record design:
+### Interfaces
 
-- **`SarifFinding`** is an immutable record representing a single static analysis finding.
-  It stores the rule identifier, severity level, message, optional file URI, and optional
-  start line. It is constructed internally by the parsing pipeline. See the SarifFinding
-  Record document for class-level details.
+**SarifResults.Read**: Parses a SARIF 2.1.0 file and returns an immutable record graph.
 
-- **`SarifRun`** is an immutable record representing the results from a single run within a
-  SARIF file. It holds tool metadata, the parsed list of results, and the file count for that
-  run. It provides the `ToMarkdown` method for generating a markdown report for the run.
-  See the SarifRun Record document for class-level details.
+- *Type*: In-process .NET static method
+- *Role*: Provider
+- *Contract*: Accepts `string filePath`; validates the path, reads and parses the JSON,
+  validates SARIF structure, and returns a `SarifResults` record containing one or more
+  `SarifRun` records, each containing zero or more `SarifFinding` records.
+- *Constraints*: `filePath` must be non-null, non-empty, and refer to an existing file.
+  The file must be valid JSON conforming to SARIF 2.1.0. Violations produce
+  `ArgumentException`, `FileNotFoundException`, or `InvalidOperationException`.
 
-- **`SarifResults`** holds the collection of all parsed runs. It provides the static `Read`
-  method for loading a SARIF file and the `ToMarkdown` method for generating a markdown
-  report. For single-run files it delegates directly to the run's `ToMarkdown`; for multi-run
-  files it concatenates the run reports. See the SarifResults Record document for class-level
-  details.
+**SarifResults.ToMarkdown**: Generates a markdown string from the loaded results.
 
-### Reading Pipeline
+- *Type*: In-process .NET instance method
+- *Role*: Provider
+- *Contract*: Accepts `int depth` (1–6) and optional `string? heading`; returns a
+  UTF-8 markdown string. For single-run files, delegates to `SarifRun.ToMarkdown`.
+  For multi-run files, concatenates indexed run reports.
+- *Constraints*: `depth` must be between 1 and 6 inclusive; violations throw
+  `ArgumentOutOfRangeException`.
 
-`SarifResults.Read` processes a SARIF file through a pipeline:
+**SarifResults.HasIssues**: Aggregated indicator of whether any findings were found.
 
-1. Path and file existence validation (satisfies `SarifMark-Sarif-FilePaths`)
-2. JSON parsing with error translation (satisfies `SarifMark-Sarif-Validation`)
-3. SARIF structure validation — `version` and `runs` fields
-   (satisfies `SarifMark-Sarif-Validation`)
-4. Per-run tool information extraction from `tool.driver`
-   (satisfies `SarifMark-Sarif-ToolInfo`)
-5. Per-run result parsing with suppression filtering
-   (satisfies `SarifMark-Sarif-Results` and `SarifMark-Sarif-Reading`)
-6. Per-run file count extraction from the `artifacts` array
-   (satisfies `SarifMark-Sarif-FileCount`)
-7. Construction and return of the `SarifResults` record with all runs
-   (satisfies `SarifMark-Sarif-Processing` and `SarifMark-Sarif-MultiRun`)
+- *Type*: In-process .NET instance property
+- *Role*: Provider
+- *Contract*: Returns `true` if any run contains at least one result.
+- *Constraints*: None.
 
-### Report Generation
+### Design
 
-`SarifResults.ToMarkdown` generates a markdown string from the loaded results. It
-validates the heading depth (1–6), then for a single-run file delegates directly to the
-run's `ToMarkdown`. For multi-run files it concatenates the markdown output of all runs,
-emitting indexed headings (e.g., `"Tool1 Analysis (#1)"`, `"Tool2 Analysis (#2)"`). Each
-run's report includes a configurable heading with tool attribution, and formats each result
-with location information, result counts, and the analyzed file count. This satisfies
-`SarifMark-Report-Markdown`, `SarifMark-Report-Depth`, `SarifMark-Report-Headings`,
-`SarifMark-Report-Counts`, `SarifMark-Report-Locations`, `SarifMark-Report-LineBreaks`,
-and `SarifMark-Report-FileCount`.
+The SARIF reading and reporting pipeline flows through the three units in sequence:
 
-### CLI Integration
-
-The requirement `SarifMark-System-SarifRequired` (the tool shall require the `--sarif` parameter
-for analysis) is enforced at the application layer rather than within this library. The
-`ProcessSarifAnalysis` method in `Program.cs` validates that `--sarif` is provided before
-invoking the SARIF reading layer. See the Program Class document for full details.
-
-### Class Details
-
-- **SarifFinding record** — immutable value type for a single analysis finding
-- **SarifRun record** — immutable value type for a single tool run with markdown generation
-- **SarifResults record** — SARIF file reading and markdown report generation
+1. `Program.ProcessSarifAnalysis` calls `SarifResults.Read(context.SarifFile)`.
+2. `SarifResults.Read` validates the file path, reads the file content, and delegates
+   to `JsonDocument.Parse` for JSON parsing (any `JsonException` is translated to
+   `InvalidOperationException`).
+3. `ValidateSarifStructure` verifies the presence of `version` and a non-empty `runs`
+   array, returning the runs JSON element.
+4. For each run element, `ExtractToolInformation`, `ParseResults`, and `ExtractFileCount`
+   produce a `SarifRun` record. `ParseResults` uses `IsSuppressed` to filter suppressed
+   results before constructing `SarifFinding` records.
+5. The completed `SarifResults` record is returned to `Program`.
+6. `Program` calls `SarifResults.ToMarkdown` when `--report` is specified; the markdown
+   string is written to disk with `File.WriteAllText`.

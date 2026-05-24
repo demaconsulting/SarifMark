@@ -1,52 +1,41 @@
-# Introduction
+## Introduction
 
-This document describes the internal design of the SarifMark .NET tool. It provides a
-structured account of the key components, their responsibilities, and how they interact to
-deliver the tool's capabilities.
+SarifMark is a .NET command-line tool that generates markdown reports from SARIF (Static Analysis Results
+Interchange Format) 2.1.0 files. This document describes the design of the SarifMark software system,
+covering the architecture and detailed design of all local software items — system, subsystems, and
+units — and the integration and usage design for all OTS software items used in the project pipeline.
 
-## Purpose
+### Purpose
 
-The purpose of this document is to:
+This document defines the design for each software item in SarifMark. It provides full architectural
+and detailed design for local items (system, subsystems, and units), and integration and usage design
+for OTS software items. A reviewer should be able to understand how each item satisfies its
+requirements without reading source code. This document also establishes traceability between
+requirements and the components that fulfil them, and provides a reference for developers
+contributing to or reviewing the tool.
 
-- Describe the design decisions and structure of the SarifMark tool
-- Provide a reference for developers contributing to or reviewing the tool
-- Establish traceability between requirements and the components that fulfil them
-- Document each conceptual group in sufficient detail to support code review
+### Scope
 
-## Scope
+This document covers the following software items:
 
-This document covers the design of four primary functional layers within SarifMark:
+Local items:
 
-- The **command-line layer**: the `Program` entry point and `Context` class that handle
-  argument parsing, output routing, and program flow control
-- The **SARIF and reporting layer**: the `SarifFinding`, `SarifRun`, and `SarifResults` classes that
-  read SARIF files and generate markdown reports
-- The **self-validation layer**: the `Validation` class that provides built-in
-  verification of the tool's core functionality
-- The **utilities layer**: the `PathHelpers` class that provides shared path-combination helpers
+- **SarifMark**: system, subsystem, and unit design for all components of the SarifMark tool, including
+  the command-line interface, SARIF reading and reporting, self-validation, and path utilities.
 
-Each functional layer is first described at a **concept level** — covering its purpose,
-architecture, and the requirements it satisfies — followed by **class-level documents**
-that describe each implementing class in detail.
+OTS items:
 
-This document does not cover installation, end-user usage patterns, or the CI/CD pipeline
-configuration. Those topics are addressed in other SarifMark repository documentation.
+- **BuildMark**, **FileAssert**, **Pandoc**, **ReqStream**, **ReviewMark**, **SonarMark**,
+  **VersionMark**, **WeasyPrint**, **xUnit v3**: integration and usage design for each OTS software
+  item used in the project pipeline.
 
-## Audience
+This document does not cover test projects, the CI/CD pipeline configuration, installation procedures,
+end-user usage patterns, or the internal design of OTS items.
 
-This document is intended for:
+### Software Structure
 
-- Software developers implementing features or fixing defects in the tool
-- Reviewers conducting formal design and code reviews
-- Quality assurance engineers tracing requirements to implementation
-
-Readers are assumed to be familiar with C# and .NET development and general concepts of
-command-line tool design.
-
-## Software Structure
-
-The following tree shows how the SarifMark software items are organized across the
-system, subsystem, and unit levels:
+The following tree shows how the SarifMark software items are organized across the system, subsystem,
+and unit levels:
 
 ```text
 SarifMark (System)
@@ -61,49 +50,73 @@ SarifMark (System)
 │   └── Validation (Unit)
 └── Utilities (Subsystem)
     └── PathHelpers (Unit)
+
+OTS Dependencies:
+├── BuildMark (OTS)
+├── FileAssert (OTS)
+├── Pandoc (OTS)
+├── ReqStream (OTS)
+├── ReviewMark (OTS)
+├── SonarMark (OTS)
+├── VersionMark (OTS)
+├── WeasyPrint (OTS)
+└── xUnit v3 (OTS)
 ```
 
-Each unit is described in detail in its own chapter within this document.
+### Folder Layout
 
-## Folder Layout
-
-The source code folder structure mirrors the top-level subsystem breakdown above, giving
-reviewers an explicit navigation aid from design to code:
+The source code folder structure mirrors the top-level subsystem breakdown, giving reviewers an
+explicit navigation aid from design to code:
 
 ```text
 src/DemaConsulting.SarifMark/
-├── Program.cs                  — entry point and execution orchestrator
+├── Program.cs                   — entry point and execution orchestrator
 ├── Cli/
-│   └── Context.cs              — command-line argument parser and I/O owner
+│   └── Context.cs               — command-line argument parser and I/O owner
 ├── Sarif/
 │   ├── SarifFinding.cs          — immutable record for a single analysis finding
-│   ├── SarifRun.cs             — immutable record for a single tool run
-│   └── SarifResults.cs         — SARIF file reading and markdown report generation
+│   ├── SarifRun.cs              — immutable record for a single tool run
+│   └── SarifResults.cs          — SARIF file reading and markdown report generation
 ├── SelfTest/
-│   └── Validation.cs           — self-validation test runner
+│   └── Validation.cs            — self-validation test runner
 └── Utilities/
-    └── PathHelpers.cs          — safe path combination utilities
+    └── PathHelpers.cs           — safe path combination utilities
+
+test/DemaConsulting.SarifMark.Tests/
+├── Cli/
+│   └── ContextTests.cs          — Context unit tests
+├── Sarif/
+│   ├── SarifFindingTests.cs     — SarifFinding unit tests
+│   ├── SarifRunTests.cs         — SarifRun unit tests
+│   └── SarifResultsTests.cs     — SarifResults unit tests
+├── SelfTest/
+│   └── ValidationTests.cs       — Validation unit tests
+└── Utilities/
+    └── PathHelpersTests.cs      — PathHelpers unit tests
 ```
 
-The test project mirrors the same layout under `test/DemaConsulting.SarifMark.Tests/`.
+### Companion Artifact Structure
 
-## Relationship to Requirements and Code
+Each local software item has corresponding artifacts in parallel directory trees:
 
-Each component described here corresponds to one or more requirements defined in the
-`docs/reqstream/` files. Requirements identifiers are referenced inline where relevant to
-make traceability explicit.
+- Requirements: `docs/reqstream/{system-name}.yaml`,
+  `docs/reqstream/{system-name}[/{subsystem-name}...]/{item}.yaml`
+- Design: `docs/design/{system-name}.md`,
+  `docs/design/{system-name}[/{subsystem-name}...]/{item}.md`
+- Verification: `docs/verification/{system-name}.md`,
+  `docs/verification/{system-name}[/{subsystem-name}...]/{item}.md`
+- Source: `src/{SystemName}[/{SubsystemName}...]/{Unit}.cs`
+- Tests: `test/{SystemName}.Tests[/{SubsystemName}...]/{Unit}Tests.cs`
 
-The source code in `src/DemaConsulting.SarifMark/` is the authoritative implementation.
-This document describes the intent and structure of that code; any discrepancy between
-this document and the code should be resolved by updating this document to reflect the
-actual implementation, or by raising a defect against the code.
+OTS items have integration and usage design documentation parallel to system folders:
 
-## Companion Artifact Structure
+- Requirements: `docs/reqstream/ots/{ots-name}.yaml`
+- Design: `docs/design/ots/{ots-name}.md`
+- Verification: `docs/verification/ots/{ots-name}.md`
 
-Each in-house software item has corresponding artifacts in parallel directory trees:
+Review-sets: defined in `.reviewmark.yaml`
 
-- Requirements: `docs/reqstream/sarifmark.yaml`, `docs/reqstream/sarifmark/{subsystem}/{unit}.yaml`
-- Design docs:  `docs/design/sarifmark.md`, `docs/design/sarifmark/{subsystem}/{unit}.md`
-- Verification: `docs/verification/sarifmark.md`, `docs/verification/sarifmark/{subsystem}/{unit}.md`
-- Source code:  `src/DemaConsulting.SarifMark/{Subsystem}/{Unit}.cs`
-- Tests:        `test/DemaConsulting.SarifMark.Tests/{Subsystem}/{Unit}Tests.cs`
+### References
+
+- [SARIF 2.1.0 Specification](https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html)
+- [SarifMark releases](https://github.com/demaconsulting/SarifMark/releases)

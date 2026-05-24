@@ -1,30 +1,30 @@
-## xUnit v3 Verification
+## xUnit v3
 
-### Overview
+### Verification Approach
 
-xUnit v3 (`xunit.v3` and `xunit.runner.visualstudio` packages) is used to discover and execute
-all unit and integration tests in `test/DemaConsulting.SarifMark.Tests/`. The VSTest adapter
-(`xunit.runner.visualstudio`) produces TRX result files consumed by ReqStream for traceability
-enforcement.
+xUnit v3 (`xunit.v3` and `xunit.runner.visualstudio` packages) is used to discover and execute all unit and
+integration tests in `test/DemaConsulting.SarifMark.Tests/`. The VSTest adapter (`xunit.runner.visualstudio`)
+produces TRX result files consumed by ReqStream for traceability enforcement. The test framework is verified
+implicitly by the successful discovery and execution of the test suite. Representative passing tests from multiple
+test classes confirm the framework is operational across all test categories. TRX output is verified by the presence
+of the result files produced during `dotnet test --results-directory` invocations in the build pipeline.
 
-### Verification Strategy
+### Test Scenarios
 
-The test framework is verified implicitly by the successful discovery and execution of the test
-suite. Representative passing tests from multiple test classes confirm the framework is operational
-across all test categories. TRX output is verified by the presence of the result files produced
-during `dotnet test --results-directory` invocations in the build pipeline.
+**XUnitV3_TestDiscoveryAndExecution**: The test suite runs with `dotnet test` and discovers and executes tests across
+all test classes, including `SarifResultsTests`, `ContextTests`, and integration tests, producing passing results.
+This confirms xUnit v3 framework discovery and execution are operational.
+This scenario is tested by representative test methods across all test classes in
+`test/DemaConsulting.SarifMark.Tests/`.
 
-### Requirement Coverage
+**XUnitV3_TrxOutputGeneration**: The `dotnet test --results-directory` invocation produces TRX result files in the
+specified directory, confirming that the `xunit.runner.visualstudio` adapter serialises test results in TRX format
+as required by ReqStream for traceability enforcement.
+This scenario is verified by the presence of TRX result files in the CI pipeline test-results artefacts.
 
-- **`SarifMark-OTS-XUnitV3-Discovery`**: xUnit v3 discovers and executes unit tests —
-  `SarifResults_Read_NoResults_ReturnsValidResults`,
-  `SarifResults_Read_WithResults_ReturnsValidResults`,
-  `SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults`,
-  `Context_Create_VersionFlag_SetsVersionTrue`,
-  `Context_Create_HelpFlag_SetsHelpTrue`
+### Requirements Coverage
+
+- **`SarifMark-OTS-XUnitV3-Discovery`**: xUnit v3 discovers and executes tests across all test classes —
+  `XUnitV3_TestDiscoveryAndExecution`
 - **`SarifMark-OTS-XUnitV3-TrxOutput`**: xUnit v3 writes TRX result files —
-  `SarifResults_Read_NoResults_ReturnsValidResults`,
-  `SarifResults_Read_WithResults_ReturnsValidResults`,
-  `SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults`,
-  `Context_Create_VersionFlag_SetsVersionTrue`,
-  `Context_Create_HelpFlag_SetsHelpTrue`
+  `XUnitV3_TrxOutputGeneration`

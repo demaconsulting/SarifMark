@@ -1,19 +1,25 @@
 # Introduction
 
-This document contains the review plan for the SarifMark project.
+This document defines the formal code review plan for SarifMark.
 
 ## Purpose
 
-This review plan provides a comprehensive overview of all files requiring formal review
-in the SarifMark project. It identifies which review-sets cover which files and serves
-as evidence that every file requiring review is covered by at least one named review-set.
+To define review-sets and the evidence required to demonstrate that each software item
+has been reviewed according to the project's compliance requirements. This review plan
+identifies which review-sets cover which files and serves as evidence that every file
+requiring review is covered by at least one named review-set.
 
 ## Scope
 
-This review plan covers:
+This document covers all review-sets defined in `.reviewmark.yaml` for SarifMark.
+Specifically, this review plan covers:
 
 - C# source code files requiring formal review
 - Mapping of C# source files to named review-sets
+
+## References
+
+- [SarifMark releases](https://github.com/demaconsulting/SarifMark/releases)
 
 ## Generation Source
 

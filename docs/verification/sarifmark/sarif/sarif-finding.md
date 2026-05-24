@@ -1,4 +1,4 @@
-### SarifFinding Unit Verification
+### SarifFinding
 
 #### Verification Approach
 
@@ -19,25 +19,20 @@ at least one named test scenario (IEC 62304 §5.5.2).
 
 #### Test Scenarios
 
-- `SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties`: Construct with all properties provided;
-  assert each property stores the provided value.
-- `SarifFinding_Constructor_NullUri_UriPropertyIsNull`: Construct with `null` URI; assert `Uri` property is `null`.
-- `SarifFinding_Constructor_NullStartLine_StartLinePropertyIsNull`: Construct with `null` start line; assert
-  `StartLine` property is `null`.
+**SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties**: Construct with all properties provided;
+assert each property stores the provided value.
+This scenario is tested by `SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties`.
 
-#### Overview
+**SarifFinding_Constructor_NullUri_UriPropertyIsNull**: Construct with `null` URI; assert `Uri` property is `null`.
+This scenario is tested by `SarifFinding_Constructor_NullUri_UriPropertyIsNull`.
 
-The `SarifFinding` record is verified by the `SarifFindingTests` test class in
-`test/DemaConsulting.SarifMark.Tests/Sarif/SarifFindingTests.cs`. The internal constructor is accessed via the
-`InternalsVisibleTo` grant. All tests exercise construction only; properties are nullable strings or a nullable integer.
+**SarifFinding_Constructor_NullStartLine_StartLinePropertyIsNull**: Construct with `null` start line; assert
+`StartLine` property is `null`.
+This scenario is tested by `SarifFinding_Constructor_NullStartLine_StartLinePropertyIsNull`.
 
-#### Requirement Coverage
+#### Requirements Coverage
 
-- **`SarifMark-SarifFinding-Properties`**: Properties —
-  `SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties`
-- **`SarifMark-SarifFinding-Uri`**: Null URI accepted as null —
-  `SarifFinding_Constructor_NullUri_UriPropertyIsNull`
-- **`SarifMark-SarifFinding-StartLine`**: Null line —
-  `SarifFinding_Constructor_NullStartLine_StartLinePropertyIsNull`
-- **`SarifMark-SarifFinding-Internal`**: Internal ctor —
-  `SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties`
+- **`SarifMark-SarifFinding-Properties`**: `SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties`
+- **`SarifMark-SarifFinding-Uri`**: `SarifFinding_Constructor_NullUri_UriPropertyIsNull`
+- **`SarifMark-SarifFinding-StartLine`**: `SarifFinding_Constructor_NullStartLine_StartLinePropertyIsNull`
+- **`SarifMark-SarifFinding-Internal`**: `SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties`

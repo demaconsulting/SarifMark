@@ -6,6 +6,7 @@ resource-path:
   - docs/design/sarifmark/sarif
   - docs/design/sarifmark/self-test
   - docs/design/sarifmark/utilities
+  - docs/design/ots
   - docs/template
 input-files:
   - docs/design/title.txt
@@ -22,6 +23,16 @@ input-files:
   - docs/design/sarifmark/self-test/validation.md
   - docs/design/sarifmark/utilities.md
   - docs/design/sarifmark/utilities/path-helpers.md
+  - docs/design/ots.md
+  - docs/design/ots/buildmark.md
+  - docs/design/ots/fileassert.md
+  - docs/design/ots/pandoc.md
+  - docs/design/ots/reqstream.md
+  - docs/design/ots/reviewmark.md
+  - docs/design/ots/sonarmark.md
+  - docs/design/ots/versionmark.md
+  - docs/design/ots/weasyprint.md
+  - docs/design/ots/xunit-v3.md
 template: template.html
 table-of-contents: true
 number-sections: true

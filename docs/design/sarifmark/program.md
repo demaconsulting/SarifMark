@@ -1,95 +1,76 @@
-## Program Class
+## Program
 
-### Overview
+### Purpose
 
-The `Program` class (`Program.cs`) is the top-level entry point for the SarifMark tool. It is a
-static internal class that owns the `Main` method, constructs the `Context`, dispatches to the
-appropriate subsystem, and handles top-level exception translation.
+`Program` is the top-level entry point for the SarifMark tool. It is a static internal
+class that owns the `Main` method, constructs the `Context`, dispatches to the appropriate
+subsystem based on the parsed flags, and handles top-level exception translation.
 
-### Version Property
+### Data Model
 
-The static `Version` property reads the assembly's `AssemblyInformationalVersionAttribute` at
-runtime. If that attribute is absent, it falls back to the `AssemblyVersion`; if that is also
-unavailable it returns `"0.0.0"`. This satisfies requirement `SarifMark-Program-Version`.
+**Version**: `string` — The assembly informational version string; derived at runtime from
+`AssemblyInformationalVersionAttribute`, falling back to `AssemblyVersion`, then to `"0.0.0"`.
+This property is read-only and is computed on first access.
 
-### Main Method
+### Key Methods
 
-`Main` orchestrates the top-level execution sequence:
+**Main**: Top-level entry point invoked by the .NET runtime.
 
-1. Constructs a `Context` by calling `Context.Create(args)` inside a `using` block.
-2. Calls `Run(context)` to execute the selected mode.
-3. Returns `context.ExitCode` to the shell.
+- *Parameters*: `string[] args` — command-line arguments supplied by the shell
+- *Returns*: `int` — exit code; 0 for success, 1 for any error
+- *Preconditions*: None.
+- *Postconditions*: Returns 0 when execution completes without error; returns 1 when
+  `ArgumentException` or `InvalidOperationException` is caught; rethrows any other
+  exception after printing its message to `Console.Error` with an `"Unexpected error:"` prefix.
 
-`ArgumentException` and `InvalidOperationException` are caught, written to `Console.Error`, and
-translated to exit code 1. Any other exception has its message printed to `Console.Error` with
-an "Unexpected error:" prefix and is then re-thrown so the runtime generates an event-log entry. This satisfies requirements
-`SarifMark-Program-Main` and `SarifMark-Program-Main-Exceptions`.
+`Main` constructs a `Context` inside a `using` block (ensuring disposal), calls `Run`,
+and returns `context.ExitCode`.
 
-### Run Method
+**Run**: Selects and executes the correct execution mode based on the parsed context.
 
-`Run` implements priority-ordered dispatch. Each step is evaluated in sequence and the method
-returns after the first matching condition.
+- *Parameters*: `Context context` — fully initialized context
+- *Returns*: `void`
+- *Preconditions*: `context` is not null.
+- *Postconditions*: Exactly one execution path has been invoked (version, help, validate,
+  or analysis); `context.ExitCode` reflects the outcome.
 
-| Priority | Condition          | Action                                 |
-|----------|--------------------|----------------------------------------|
-| 1        | `context.Version`  | Print version string and return        |
-| —        | *(always)*         | Call `PrintBanner`                     |
-| 2        | `context.Help`     | Call `PrintHelp` and return            |
-| 3        | `context.Validate` | Call `Validation.Run` and return       |
-| 4        | *(default)*        | Call `ProcessSarifAnalysis` and return |
+`Run` evaluates conditions in priority order: version flag → print version and return;
+then always print the banner; help flag → print help and return; validate flag → call
+`Validation.Run` and return; default → call `ProcessSarifAnalysis`.
 
-This satisfies requirement `SarifMark-Program-Run`.
+**ProcessSarifAnalysis**: Orchestrates the primary SARIF analysis execution path.
 
-### PrintBanner Method
+- *Parameters*: `Context context` — context with analysis mode active
+- *Returns*: `void`
+- *Preconditions*: `context.Version`, `context.Help`, and `context.Validate` are all false.
+- *Postconditions*: If `context.SarifFile` is a valid path to an existing SARIF file, the
+  results have been reported to the context output; if `context.ReportFile` is set, the
+  markdown report has been written to disk.
 
-`PrintBanner` is a private helper called by `Run` immediately after the version check. It writes
-two lines to the context output: the tool version string (e.g. `SarifMark version 1.2.3`) and the
-copyright notice (`Copyright (c) DEMA Consulting`), followed by a blank line. This satisfies
-requirement `SarifMark-Program-Banner`.
+The method validates that `context.SarifFile` is non-null and non-whitespace; calls
+`SarifResults.Read`; checks `context.Enforce` against `sarifResults.HasIssues`; and
+conditionally writes the markdown report using `sarifResults.ToMarkdown` and
+`File.WriteAllText`.
 
-### PrintHelp Method
+### Error Handling
 
-`PrintHelp` is a private helper called when the help flag is set. It writes a complete usage block
-to the context output, listing every supported option with its flag syntax and a brief description:
+`Main` catches `ArgumentException` and `InvalidOperationException`, writes the message to
+`Console.Error`, and returns exit code 1. Any other exception is printed to `Console.Error`
+with an `"Unexpected error:"` prefix and rethrown, allowing the .NET runtime to produce a
+stack trace and terminate with a non-zero exit code.
 
-- `-v, --version` — display version information
-- `-?, -h, --help` — display the help message
-- `--silent` — suppress console output
-- `--validate` — run self-validation
-- `--results <file>` — write validation results to a `.trx` or `.xml` file
-- `--enforce` — return a non-zero exit code when issues are found
-- `--log <file>` — write output to a log file
-- `--sarif <file>` — SARIF file to process
-- `--report <file>` — export analysis results to a markdown file
-- `--depth <depth>` — markdown header depth for the report (default: 1)
-- `--heading <text>` — custom heading for the report (default: `[ToolName] Analysis`)
+`ProcessSarifAnalysis` catches `FileNotFoundException` and `InvalidOperationException` from
+`SarifResults.Read`, routing them through `context.WriteError`. File-write failures
+(`IOException`, `UnauthorizedAccessException`, `ArgumentException`, `NotSupportedException`)
+are similarly caught and routed through `context.WriteError`.
 
-This satisfies requirement `SarifMark-Program-Help`.
+### Dependencies
 
-### ProcessSarifAnalysis Method
+- **Context** — receives parsed arguments and provides the output channel for all tool output.
+- **SarifResults** — reads SARIF files and generates markdown in analysis mode.
+- **Validation** — runs self-validation tests in validate mode.
 
-`ProcessSarifAnalysis` is the private orchestrator for the primary SARIF analysis mode. Its
-execution sequence is:
+### Callers
 
-1. Validates that `context.SarifFile` is non-null and non-whitespace; if not, calls
-   `context.WriteError` and returns.
-2. Writes the SARIF file path and a `"Reading SARIF file..."` status message, then calls
-   `SarifResults.Read(context.SarifFile)` to load the file. Catches `FileNotFoundException`
-   and `InvalidOperationException`, routing them through `context.WriteError` and returning
-   on failure.
-3. Reports the tool name, tool version, and result count via `context.WriteLine`.
-4. If `context.Enforce` is set and `sarifResults.HasIssues` is true, calls
-   `context.WriteError("Error: Issues found in SARIF file")`.
-5. If `context.ReportFile` is set, writes a `"Writing report to..."` progress message, calls
-   `sarifResults.ToMarkdown` and writes the result to the specified file with
-   `File.WriteAllText`, then writes `"Report generated successfully."` on success. `IOException`,
-   `UnauthorizedAccessException`, `ArgumentException`, and `NotSupportedException` are caught and
-   routed through `context.WriteError`.
-
-This satisfies requirements `SarifMark-Program-SarifArgument`, `SarifMark-Program-SarifReading`,
-`SarifMark-Program-EnforcementCheck`, and `SarifMark-Program-ReportGeneration`.
-
-### Cross-References
-
-See the Context Class document for the `Context` class and the SarifResults Record document
-for the `SarifResults.Read` and `ToMarkdown` methods used in step 2 and step 5 above.
+N/A - entry point, called by the .NET host environment via `Main`. `Program.Run` is also
+called internally by `Validation` when executing the self-validation tests.

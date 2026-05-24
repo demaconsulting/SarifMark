@@ -1,10 +1,13 @@
 # SarifMark
 
+<!-- IMPORTANT: All links in this file must be absolute URLs.
+     This file is distributed in packages and relative links will not resolve. -->
+
 [![GitHub forks](https://img.shields.io/github/forks/demaconsulting/SarifMark?style=plastic)](https://github.com/demaconsulting/SarifMark/network/members)
 [![GitHub stars](https://img.shields.io/github/stars/demaconsulting/SarifMark?style=plastic)](https://github.com/demaconsulting/SarifMark/stargazers)
 [![GitHub contributors](https://img.shields.io/github/contributors/demaconsulting/SarifMark?style=plastic)](https://github.com/demaconsulting/SarifMark/graphs/contributors)
 [![License](https://img.shields.io/github/license/demaconsulting/SarifMark?style=plastic)](https://github.com/demaconsulting/SarifMark/blob/main/LICENSE)
-[![Build](https://img.shields.io/github/actions/workflow/status/demaconsulting/SarifMark/build_on_push.yaml)](https://github.com/demaconsulting/SarifMark/actions/workflows/build_on_push.yaml)
+[![Build](https://img.shields.io/github/actions/workflow/status/demaconsulting/SarifMark/build.yaml)](https://github.com/demaconsulting/SarifMark/actions/workflows/build.yaml)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=demaconsulting_SarifMark&metric=alert_status)](https://sonarcloud.io/dashboard?id=demaconsulting_SarifMark)
 [![Security](https://sonarcloud.io/api/project_badges/measure?project=demaconsulting_SarifMark&metric=security_rating)](https://sonarcloud.io/dashboard?id=demaconsulting_SarifMark)
 [![NuGet](https://img.shields.io/nuget/v/DemaConsulting.SarifMark?style=plastic)](https://www.nuget.org/packages/DemaConsulting.SarifMark)
@@ -27,14 +30,6 @@ pipelines and documentation workflows.
 - 🌐 **Multi-Platform** - Builds and runs on Windows, Linux, and macOS with .NET 8, 9, and 10
 - ✅ **Self-Validation** - Built-in tests without requiring external tools
 - 📊 **Detailed Reporting** - Extract tool information, results, and locations
-
-## Project Development Practices
-
-- 🔍 **Linting Enforcement** - markdownlint, cspell, and yamllint enforced on every CI run
-- 📋 **Continuous Compliance** - Compliance evidence generated automatically on every CI run,
-  following the [Continuous Compliance](https://github.com/demaconsulting/ContinuousCompliance) methodology
-- ☁️ **SonarCloud Integration** - Quality gate and security analysis on every build
-- 🔗 **Requirements Traceability** - Requirements linked to passing tests with auto-generated trace matrix
 
 ## Installation
 
@@ -156,28 +151,50 @@ sarifmark --validate
 sarifmark --validate --results validation-results.trx
 ```
 
-### Self-Validation Tests
+## Building
 
-SarifMark includes built-in self-validation tests that verify the tool's functionality without requiring external
-static analysis tools. These tests use mock SARIF data to validate core features and generate test result files
-in TRX or JUnit format.
+```pwsh
+pwsh ./build.ps1
+```
 
-The self-validation suite includes the following tests:
+## User Guide
 
-| Test Name | Description |
-| :-------- | :---------- |
-| `SarifMark_SarifReading` | Verifies reading and parsing SARIF 2.1.0 format files |
-| `SarifMark_MarkdownReportGeneration` | Verifies generating markdown reports from SARIF data |
-| `SarifMark_Enforcement` | Verifies enforcement mode returns non-zero exit code when issues are found |
+The SarifMark User Guide is available on the
+[SarifMark releases page](https://github.com/demaconsulting/SarifMark/releases).
 
-These tests provide evidence of the tool's functionality and are particularly useful for:
+## Contributing
 
-- Verifying the installation is working correctly
-- Running automated tests in CI/CD pipelines without requiring static analysis tools
-- Generating test evidence for compliance and traceability requirements
+Contributions are welcome! We appreciate your interest in improving SarifMark.
 
-For detailed usage instructions, command-line options, and examples, including tool update instructions, see the
-[Usage Guide](https://github.com/demaconsulting/SarifMark/blob/main/docs/user_guide/introduction.md).
+Please see our [Contributing Guide](https://github.com/demaconsulting/SarifMark/blob/main/CONTRIBUTING.md) for
+development setup, coding standards, and submission guidelines. Also review our
+[Code of Conduct](https://github.com/demaconsulting/SarifMark/blob/main/CODE_OF_CONDUCT.md) for community guidelines.
+
+For bug reports, feature requests, and questions, please use
+[GitHub Issues](https://github.com/demaconsulting/SarifMark/issues).
+
+## License
+
+This project is licensed under the MIT License - see the
+[LICENSE](https://github.com/demaconsulting/SarifMark/blob/main/LICENSE) file for details.
+
+By contributing to this project, you agree that your contributions will be licensed under the MIT License.
+
+## Support
+
+- 🐛 **Report Bugs**: [GitHub Issues](https://github.com/demaconsulting/SarifMark/issues)
+- 💡 **Request Features**: [GitHub Issues](https://github.com/demaconsulting/SarifMark/issues)
+- ❓ **Ask Questions**: [GitHub Discussions](https://github.com/demaconsulting/SarifMark/discussions)
+- 📖 **User Guide**: [SarifMark releases page](https://github.com/demaconsulting/SarifMark/releases)
+- 🤝 **Contributing**: [Contributing Guide](https://github.com/demaconsulting/SarifMark/blob/main/CONTRIBUTING.md)
+
+## Project Development Practices
+
+- 🔍 **Linting Enforcement** - markdownlint, cspell, and yamllint enforced on every CI run
+- 📋 **Continuous Compliance** - Compliance evidence generated automatically on every CI run,
+  following the [Continuous Compliance](https://github.com/demaconsulting/ContinuousCompliance) methodology
+- ☁️ **SonarCloud Integration** - Quality gate and security analysis on every build
+- 🔗 **Requirements Traceability** - Requirements linked to passing tests with auto-generated trace matrix
 
 ## Report Format
 
@@ -207,6 +224,18 @@ src/Helper.cs(15): error [TEST002] Test issue 2
 
 ## Self Validation
 
+SarifMark includes built-in self-validation tests that verify the tool's functionality without requiring external
+static analysis tools. These tests use mock SARIF data to validate core features and generate test result files
+in TRX or JUnit format.
+
+The self-validation suite includes the following tests:
+
+| Test Name | Description |
+| :-------- | :---------- |
+| `SarifMark_SarifReading` | Verifies reading and parsing SARIF 2.1.0 format files |
+| `SarifMark_MarkdownReportGeneration` | Verifies generating markdown reports from SARIF data |
+| `SarifMark_Enforcement` | Verifies enforcement mode returns non-zero exit code when issues are found |
+
 Running self-validation produces a report containing the following information:
 
 ```text
@@ -235,40 +264,7 @@ Each test in the report proves:
 - **`SarifMark_MarkdownReportGeneration`** - Markdown report generation from SARIF data works correctly.
 - **`SarifMark_Enforcement`** - Enforcement mode returns a non-zero exit code when issues are found.
 
-See the [Usage Guide](https://github.com/demaconsulting/SarifMark/blob/main/docs/user_guide/introduction.md) for more details
-on the self-validation tests.
-
 On validation failure the tool will exit with a non-zero exit code.
-
-## Contributing
-
-Contributions are welcome! We appreciate your interest in improving SarifMark.
-
-Please see our [Contributing Guide](https://github.com/demaconsulting/SarifMark/blob/main/CONTRIBUTING.md) for
-development setup, coding standards, and submission guidelines. Also review our
-[Code of Conduct](https://github.com/demaconsulting/SarifMark/blob/main/CODE_OF_CONDUCT.md) for community guidelines.
-
-For bug reports, feature requests, and questions, please use [GitHub Issues](https://github.com/demaconsulting/SarifMark/issues).
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/demaconsulting/SarifMark/blob/main/LICENSE)
-file for details.
-
-By contributing to this project, you agree that your contributions will be licensed under the MIT License.
-
-## Support
-
-- 🐛 **Report Bugs**: [GitHub Issues](https://github.com/demaconsulting/SarifMark/issues)
-- 💡 **Request Features**: [GitHub Issues](https://github.com/demaconsulting/SarifMark/issues)
-- ❓ **Ask Questions**: [GitHub Discussions](https://github.com/demaconsulting/SarifMark/discussions)
-- 📖 **Documentation**: [Usage Guide](https://github.com/demaconsulting/SarifMark/blob/main/docs/user_guide/introduction.md)
-- 🤝 **Contributing**: [Contributing Guide](https://github.com/demaconsulting/SarifMark/blob/main/CONTRIBUTING.md)
-
-## Security
-
-For security concerns and vulnerability reporting, please see our
-[Security Policy](https://github.com/demaconsulting/SarifMark/blob/main/SECURITY.md).
 
 ## Acknowledgements
 

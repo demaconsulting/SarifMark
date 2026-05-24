@@ -1,181 +1,230 @@
 ---
+# SarifResults unit requirements
+
 sections:
-  - title: SarifResults Unit Requirements
-    requirements:
-      - id: SarifMark-SarifResults-ValidatePathArgument
-        title: >-
-          The SARIF results unit shall reject null, empty, or whitespace file path
-          arguments with an informative error.
-        justification: >-
-          Early argument validation produces a clear, actionable error message before any I/O is
-          attempted, improving diagnostic quality and preventing confusing low-level exceptions
-          from propagating to the caller.
-        tags: [internal]
-        tests:
-          - SarifResults_Read_NullPath_ThrowsArgumentException
-          - SarifResults_Read_EmptyPath_ThrowsArgumentException
-          - SarifResults_Read_WhitespacePath_ThrowsArgumentException
+  - title: 'SarifMark Requirements'
+    sections:
+      - title: Sarif Requirements
+        sections:
+          - title: SarifResults Requirements
+            requirements:
+              - id: SarifMark-SarifResults-ValidatePathArgument
+                title: >-
+                  The SARIF results unit shall reject null, empty, or whitespace file
+                  path
+                  arguments with an informative error.
+                justification: >-
+                  Early argument validation produces a clear, actionable error message
+                  before any I/O is
+                  attempted, improving diagnostic quality and preventing confusing
+                  low-level exceptions
+                  from propagating to the caller.
+                tags: [internal]
+                tests:
+                  - SarifResults_Read_NullPath_ThrowsArgumentException
+                  - SarifResults_Read_EmptyPath_ThrowsArgumentException
+                  - SarifResults_Read_WhitespacePath_ThrowsArgumentException
 
-      - id: SarifMark-SarifResults-ValidatePathExists
-        title: The SARIF results unit shall report a clear error when the specified SARIF file does not exist.
-        justification: >-
-          Checking file existence before attempting to read produces a clear error rather than a
-          confusing low-level I/O error, making it easier for callers to diagnose missing input files.
-        tags: [internal]
-        tests:
-          - SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException
+              - id: SarifMark-SarifResults-ValidatePathExists
+                title: The SARIF results unit shall report a clear error when the
+                  specified SARIF file does not exist.
+                justification: >-
+                  Checking file existence before attempting to read produces a clear
+                  error rather than a
+                  confusing low-level I/O error, making it easier for callers to diagnose
+                  missing input files.
+                tags: [internal]
+                tests:
+                  - SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException
 
-      - id: SarifMark-SarifResults-ValidateStructure
-        title: >-
-          The SARIF results unit shall reject SARIF documents that do not contain
-          the required version and runs fields.
-        justification: >-
-          Structural validation at read time ensures that downstream processing always operates on
-          well-formed data, preventing cryptic errors and producing informative messages that guide
-          users to fix malformed input files.
-        tags: [internal]
-        tests:
-          - SarifResults_Read_InvalidJson_ThrowsInvalidOperationException
-          - SarifResults_Read_MissingVersion_ThrowsInvalidOperationException
-          - SarifResults_Read_MissingRuns_ThrowsInvalidOperationException
-          - SarifResults_Read_EmptyRuns_ThrowsInvalidOperationException
+              - id: SarifMark-SarifResults-ValidateStructure
+                title: >-
+                  The SARIF results unit shall reject SARIF documents that do not
+                  contain
+                  the required version and runs fields.
+                justification: >-
+                  Structural validation at read time ensures that downstream processing
+                  always operates on
+                  well-formed data, preventing cryptic errors and producing informative
+                  messages that guide
+                  users to fix malformed input files.
+                tags: [internal]
+                tests:
+                  - SarifResults_Read_InvalidJson_ThrowsInvalidOperationException
+                  - SarifResults_Read_MissingVersion_ThrowsInvalidOperationException
+                  - SarifResults_Read_MissingRuns_ThrowsInvalidOperationException
+                  - SarifResults_Read_EmptyRuns_ThrowsInvalidOperationException
 
-      - id: SarifMark-SarifResults-ExtractTool
-        title: >-
-          The SARIF results unit shall extract tool name and version from each run,
-          substituting "Unknown" for missing values.
-        justification: >-
-          Requiring tool identification and extracting a name and version ensures that every generated
-          report correctly identifies its source tool, while gracefully substituting "Unknown" when
-          optional fields are absent.
-        tags: [internal]
-        tests:
-          - SarifResults_Read_MissingTool_ThrowsInvalidOperationException
-          - SarifResults_Read_MissingDriver_ThrowsInvalidOperationException
-          - SarifResults_Read_MissingToolName_UsesUnknown
-          - SarifResults_Read_MissingToolVersion_UsesUnknown
+              - id: SarifMark-SarifResults-ExtractTool
+                title: >-
+                  The SARIF results unit shall extract tool name and version from
+                  each run,
+                  substituting "Unknown" for missing values.
+                justification: >-
+                  Requiring tool identification and extracting a name and version
+                  ensures that every generated
+                  report correctly identifies its source tool, while gracefully substituting
+                  "Unknown" when
+                  optional fields are absent.
+                tags: [internal]
+                tests:
+                  - SarifResults_Read_MissingTool_ThrowsInvalidOperationException
+                  - SarifResults_Read_MissingDriver_ThrowsInvalidOperationException
+                  - SarifResults_Read_MissingToolName_UsesUnknown
+                  - SarifResults_Read_MissingToolVersion_UsesUnknown
 
-      - id: SarifMark-SarifResults-VersionPriority
-        title: >-
-          The SARIF results unit shall select the most specific tool version field
-          available, preferring version over semantic version over dotted-quad file version.
-        justification: >-
-          The defined priority order matches the SARIF specification's preference ordering and ensures
-          that the most semantically meaningful version string is always selected when multiple version
-          fields are present.
-        tags: [internal]
-        tests:
-          - SarifResults_Read_SemanticVersionField_ReturnsSemanticVersion
-          - SarifResults_Read_DottedQuadFileVersionField_ReturnsDottedQuadFileVersion
-          - SarifResults_Read_VersionAndSemanticVersion_PrioritizesVersion
-          - SarifResults_Read_SemanticAndDottedQuad_PrioritizesSemanticVersion
-          - SarifResults_Read_AllVersionFields_PrioritizesVersion
-          - SarifResults_Read_EmptyVersionField_FallsBackToSemanticVersion
+              - id: SarifMark-SarifResults-VersionPriority
+                title: >-
+                  The SARIF results unit shall select the most specific tool version
+                  field
+                  available, preferring version over semantic version over dotted-quad
+                  file version.
+                justification: >-
+                  The defined priority order matches the SARIF specification's preference
+                  ordering and ensures
+                  that the most semantically meaningful version string is always selected
+                  when multiple version
+                  fields are present.
+                tags: [internal]
+                tests:
+                  - SarifResults_Read_SemanticVersionField_ReturnsSemanticVersion
+                  - SarifResults_Read_DottedQuadFileVersionField_ReturnsDottedQuadFileVersion
+                  - SarifResults_Read_VersionAndSemanticVersion_PrioritizesVersion
+                  - SarifResults_Read_SemanticAndDottedQuad_PrioritizesSemanticVersion
+                  - SarifResults_Read_AllVersionFields_PrioritizesVersion
+                  - SarifResults_Read_EmptyVersionField_FallsBackToSemanticVersion
 
-      - id: SarifMark-SarifResults-ParseResults
-        title: The SARIF results unit shall collect all result entries from each run.
-        justification: >-
-          Iterating every entry in the results array, including empty arrays and missing results nodes,
-          ensures that the collection accurately reflects the SARIF file contents and that no findings
-          are silently dropped during parsing.
-        tags: [internal]
-        tests:
-          - SarifResults_Read_NoResults_ReturnsValidResults
-          - SarifResults_Read_EmptyResults_ReturnsValidResults
-          - SarifResults_Read_WithResults_ReturnsValidResults
-          - SarifResults_Read_WithLocations_ReturnsResultsWithLocationData
+              - id: SarifMark-SarifResults-ParseResults
+                title: The SARIF results unit shall collect all result entries from
+                  each run.
+                justification: >-
+                  Iterating every entry in the results array, including empty arrays
+                  and missing results nodes,
+                  ensures that the collection accurately reflects the SARIF file contents
+                  and that no findings
+                  are silently dropped during parsing.
+                tags: [internal]
+                tests:
+                  - SarifResults_Read_NoResults_ReturnsValidResults
+                  - SarifResults_Read_EmptyResults_ReturnsValidResults
+                  - SarifResults_Read_WithResults_ReturnsValidResults
+                  - SarifResults_Read_WithLocations_ReturnsResultsWithLocationData
 
-      - id: SarifMark-SarifResults-FilterSuppressions
-        title: The SARIF results unit shall exclude suppressed results from the collected findings.
-        justification: >-
-          Filtering suppressed results mirrors standard SARIF tooling behavior and ensures that
-          intentionally suppressed findings do not appear in generated reports, preventing noise and
-          correctly representing the effective set of active issues.
-        tags: [internal]
-        tests:
-          - SarifResults_Read_WithSuppressedResults_ExcludesSuppressedResults
-          - SarifResults_Read_EmptySuppressions_DoesNotExcludeResult
+              - id: SarifMark-SarifResults-FilterSuppressions
+                title: The SARIF results unit shall exclude suppressed results from
+                  the collected findings.
+                justification: >-
+                  Filtering suppressed results mirrors standard SARIF tooling behavior
+                  and ensures that
+                  intentionally suppressed findings do not appear in generated reports,
+                  preventing noise and
+                  correctly representing the effective set of active issues.
+                tags: [internal]
+                tests:
+                  - SarifResults_Read_WithSuppressedResults_ExcludesSuppressedResults
+                  - SarifResults_Read_EmptySuppressions_DoesNotExcludeResult
 
-      - id: SarifMark-SarifResults-ToMarkdown
-        title: >-
-          The SARIF results unit shall generate a complete markdown report for
-          a single run or a combined report for multiple runs.
-        justification: >-
-          For a single run, delegating directly to the run's report generation preserves the output format.
-          For multiple runs, concatenating each run's output with indexed headings produces a
-          complete combined report. In both cases the caller needs only one method call.
-        tags: [internal]
-        tests:
-          - SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput
-          - SarifResults_ToMarkdown_CustomHeading_UsesProvidedHeading
-          - SarifResults_ToMarkdown_NullHeading_UsesDefaultHeading
-          - SarifResults_ToMarkdown_NoHeadingParameter_UsesDefaultHeading
-          - SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks
-          - SarifResults_ToMarkdown_ShowsFileCount
-          - SarifResults_ToMarkdown_ZeroFileCount_ShowsZero
-          - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
-          - SarifResults_ToMarkdown_OneResult_UsesSingularForm
-          - SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
-          - SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
+              - id: SarifMark-SarifResults-ToMarkdown
+                title: >-
+                  The SARIF results unit shall generate a complete markdown report
+                  for
+                  a single run or a combined report for multiple runs.
+                justification: >-
+                  For a single run, delegating directly to the run's report generation
+                  preserves the output format.
+                  For multiple runs, concatenating each run's output with indexed
+                  headings produces a
+                  complete combined report. In both cases the caller needs only one
+                  method call.
+                tags: [internal]
+                tests:
+                  - SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput
+                  - SarifResults_ToMarkdown_CustomHeading_UsesProvidedHeading
+                  - SarifResults_ToMarkdown_NullHeading_UsesDefaultHeading
+                  - SarifResults_ToMarkdown_NoHeadingParameter_UsesDefaultHeading
+                  - SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks
+                  - SarifResults_ToMarkdown_ShowsFileCount
+                  - SarifResults_ToMarkdown_ZeroFileCount_ShowsZero
+                  - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
+                  - SarifResults_ToMarkdown_OneResult_UsesSingularForm
+                  - SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
+                  - SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
 
-      - id: SarifMark-SarifResults-ValidateDepth
-        title: The SARIF results unit shall require a heading depth between 1 and 6 inclusive for report generation.
-        justification: >-
-          Restricting depth to the valid markdown heading range of 1–6 prevents generation of invalid
-          markdown syntax and ensures that the output heading levels are always accepted by standard
-          markdown renderers.
-        tags: [internal]
-        tests:
-          - SarifResults_ToMarkdown_DepthLessThan1_ThrowsArgumentOutOfRangeException
-          - SarifResults_ToMarkdown_DepthGreaterThan6_ThrowsArgumentOutOfRangeException
-          - SarifResults_ToMarkdown_Depth3_UsesCorrectHeadingLevels
-          - SarifResults_ToMarkdown_Depth6_ProducesCorrectOutput
+              - id: SarifMark-SarifResults-ValidateDepth
+                title: >-
+                  The SARIF results unit shall require a heading depth between 1 and
+                  6 inclusive
+                  for report generation.
+                justification: >-
+                  Restricting depth to the valid markdown heading range of 1–6 prevents
+                  generation of invalid
+                  markdown syntax and ensures that the output heading levels are always
+                  accepted by standard
+                  markdown renderers.
+                tags: [internal]
+                tests:
+                  - SarifResults_ToMarkdown_DepthLessThan1_ThrowsArgumentOutOfRangeException
+                  - SarifResults_ToMarkdown_DepthGreaterThan6_ThrowsArgumentOutOfRangeException
+                  - SarifResults_ToMarkdown_Depth3_UsesCorrectHeadingLevels
+                  - SarifResults_ToMarkdown_Depth6_ProducesCorrectOutput
 
-      - id: SarifMark-SarifResults-FileCount
-        title: >-
-          The SARIF results unit shall extract the number of analyzed files from each run's artifacts.
-        justification: >-
-          Providing an independent file count per run gives consumers verifiable evidence that
-          analysis was performed on a known set of files. Including it in each run's generated
-          report header lets stakeholders quickly assess the scope of analysis for that run
-          without reading the raw SARIF file.
-        tags: [internal]
-        tests:
-          - SarifResults_Read_NoArtifacts_ReturnsZeroFileCount
-          - SarifResults_Read_WithArtifacts_ReturnsFileCount
-          - SarifResults_Read_MultipleRuns_EachRunHasOwnFileCount
+              - id: SarifMark-SarifResults-FileCount
+                title: >-
+                  The SARIF results unit shall extract the number of analyzed files
+                  from each run's artifacts.
+                justification: >-
+                  Providing an independent file count per run gives consumers verifiable
+                  evidence that
+                  analysis was performed on a known set of files. Including it in
+                  each run's generated
+                  report header lets stakeholders quickly assess the scope of analysis
+                  for that run
+                  without reading the raw SARIF file.
+                tags: [internal]
+                tests:
+                  - SarifResults_Read_NoArtifacts_ReturnsZeroFileCount
+                  - SarifResults_Read_WithArtifacts_ReturnsFileCount
+                  - SarifResults_Read_MultipleRuns_EachRunHasOwnFileCount
 
-      - id: SarifMark-SarifResults-Runs
-        title: The SARIF results unit shall expose all parsed runs from the SARIF file.
-        justification: >-
-          Exposing all runs provides consumers with full access to multi-run SARIF files,
-          enabling reporting across all runs from different tools.
-        tags: [internal]
-        tests:
-          - SarifResults_Runs_SingleRun_ReturnsSingleRun
-          - SarifResults_Read_MultipleRuns_ReturnsAllRuns
-          - SarifResults_InternalConstructor_ExposesRunsAndHasIssues
+              - id: SarifMark-SarifResults-Runs
+                title: The SARIF results unit shall expose all parsed runs from the
+                  SARIF file.
+                justification: >-
+                  Exposing all runs provides consumers with full access to multi-run
+                  SARIF files,
+                  enabling reporting across all runs from different tools.
+                tags: [internal]
+                tests:
+                  - SarifResults_Runs_SingleRun_ReturnsSingleRun
+                  - SarifResults_Read_MultipleRuns_ReturnsAllRuns
+                  - SarifResults_InternalConstructor_ExposesRunsAndHasIssues
 
-      - id: SarifMark-SarifResults-HasIssues
-        title: The SARIF results unit shall indicate whether any run contains findings.
-        justification: >-
-          An aggregate issue indicator across all runs simplifies enforcement logic by not requiring
-          callers to iterate all runs manually.
-        tags: [internal]
-        tests:
-          - SarifResults_HasIssues_NoIssues_ReturnsFalse
-          - SarifResults_HasIssues_WithIssues_ReturnsTrue
-          - SarifResults_HasIssues_AnyRunHasIssues_ReturnsTrue
-          - SarifResults_InternalConstructor_ExposesRunsAndHasIssues
+              - id: SarifMark-SarifResults-HasIssues
+                title: The SARIF results unit shall indicate whether any run contains
+                  findings.
+                justification: >-
+                  An aggregate issue indicator across all runs simplifies enforcement
+                  logic by not requiring
+                  callers to iterate all runs manually.
+                tags: [internal]
+                tests:
+                  - SarifResults_HasIssues_NoIssues_ReturnsFalse
+                  - SarifResults_HasIssues_WithIssues_ReturnsTrue
+                  - SarifResults_HasIssues_AnyRunHasIssues_ReturnsTrue
+                  - SarifResults_InternalConstructor_ExposesRunsAndHasIssues
 
-      - id: SarifMark-SarifResults-MultiRunMarkdown
-        title: >-
-          The SARIF results unit shall generate a combined report for SARIF files containing multiple runs.
-        justification: >-
-          Full multi-run support ensures that SARIF files produced by tools that generate
-          multiple runs (e.g., running analysis on different targets) are handled correctly
-          and produce comprehensive reports. The parsing behavior for multiple runs is
-          separately covered by SarifMark-SarifResults-Runs.
-        tags: [internal]
-        tests:
-          - SarifResults_ToMarkdown_MultipleRuns_IncludesRunIndices
+              - id: SarifMark-SarifResults-MultiRunMarkdown
+                title: >-
+                  The SARIF results unit shall generate a combined report for SARIF
+                  files containing multiple runs.
+                justification: >-
+                  Full multi-run support ensures that SARIF files produced by tools
+                  that generate
+                  multiple runs (e.g., running analysis on different targets) are
+                  handled correctly
+                  and produce comprehensive reports. The parsing behavior for multiple
+                  runs is
+                  separately covered by SarifMark-SarifResults-Runs.
+                tags: [internal]
+                tests:
+                  - SarifResults_ToMarkdown_MultipleRuns_IncludesRunIndices

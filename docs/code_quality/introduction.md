@@ -1,35 +1,25 @@
 # Introduction
 
-This document contains the code quality analysis report for the SarifMark project.
+This document records the static analysis results for SarifMark. It accompanies the generated code
+quality sections and summarizes the evidence used to assess ongoing code health for developers,
+reviewers, and project stakeholders.
 
 ## Purpose
 
-This report provides a comprehensive analysis of the SarifMark codebase including quality gate status,
-code issues, and security hot-spots. The analysis helps ensure code quality and security standards are
-maintained throughout development.
+To provide evidence that SarifMark has been analyzed for code quality issues and that any findings
+have been reviewed and resolved or accepted.
 
 ## Scope
 
 This code quality report covers:
 
+- Static analysis of source code in `src/` for SarifMark using SonarCloud and CodeQL
 - Quality gate status and conditions
-- Code issues categorized by type and severity
-- Security hot-spots requiring review
-- Security analysis results
-- Technical debt assessment
-- Code coverage and duplication metrics
+- Code issues, including security findings and hot-spots requiring review
+- Technical debt, code coverage, and duplication metrics when reported by the analysis tools
 
-## Analysis Source
+Test code is excluded from static analysis requirements.
 
-This report contains quality analysis results captured at the time this version of SarifMark was built.
-It serves as evidence that the code maintains good quality standards and provides transparency about the
-project's code health. The analysis includes results from various quality tools run during the build process.
+## References
 
-## Audience
-
-This document is intended for:
-
-- Software developers working on SarifMark
-- Quality assurance teams reviewing code quality
-- Project stakeholders evaluating project health
-- Contributors understanding quality standards
+- [SarifMark releases](https://github.com/demaconsulting/SarifMark/releases)

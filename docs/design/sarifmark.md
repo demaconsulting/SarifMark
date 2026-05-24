@@ -1,99 +1,138 @@
-# SarifMark System Design
+## SarifMark
 
-## Overview
+### Architecture
 
-SarifMark is a .NET command-line tool that reads SARIF (Static Analysis Results
-Interchange Format) 2.1.0 files and generates human-readable markdown reports.
-It is designed for integration into CI/CD pipelines to surface static analysis
-findings in pull requests, dashboards, and compliance documentation.
-
-## Subsystems
-
-The system is organized into four subsystems plus a system-level entry point:
-
-| Item          | Type       | Responsibility                                               |
-|---------------|------------|--------------------------------------------------------------|
-| `Program`     | Unit       | Entry point, argument handling, and subsystem orchestration  |
-| `Cli`         | Subsystem  | Command-line argument parsing and console output routing     |
-| `Sarif`       | Subsystem  | SARIF file reading and markdown report generation            |
-| `SelfTest`    | Subsystem  | Built-in self-validation for tool qualification              |
-| `Utilities`   | Subsystem  | Shared utility helpers (safe path combination)               |
-
-See the *Software Structure* section of the *Introduction* document for the
-full system/subsystem/unit tree.
-
-## Entry Point and Execution Flow
-
-The system entry point is `Program.Main`. On every invocation it:
-
-1. Constructs a `Context` (owned by the `Cli` subsystem) from `string[] args`.
-1. Delegates to `Program.Run`, which selects the execution mode based on the
-   parsed flags and calls the appropriate subsystem.
-1. Returns `Context.ExitCode` to the shell (0 for success, 1 on error).
-
-`ArgumentException` and `InvalidOperationException` are caught at the
-`Main` level and translated to exit code 1, so these expected error paths
-produce a non-zero exit code without an unhandled-exception stack trace. Any
-other unexpected `Exception` has its message printed to `Console.Error` with an
-"Unexpected error:" prefix and is then rethrown, allowing the default .NET
-unhandled-exception behavior (stack trace and process termination with a non-zero
-exit code) to occur.
-
-`Program.Run` first prints the standard banner for all non-`--version`
-invocations, then evaluates conditions in priority order:
-
-| Mode       | Condition                                  | Subsystem Invoked                          |
-|------------|--------------------------------------------|--------------------------------------------|
-| Version    | `--version` flag                           | None (prints version string)               |
-| Banner     | Any non-`--version` invocation             | `Program` (prints standard banner)         |
-| Help       | `--help` flag                              | None (prints usage)                        |
-| Validate   | `--validate` flag                          | `SelfTest.Validation.Run`                  |
-| Analysis   | *(default)*                                | `Sarif.SarifResults.Read` + `ToMarkdown`   |
-
-## Subsystem Interactions
+SarifMark is organized into four subsystems plus a system-level entry point:
 
 ```mermaid
 flowchart TD
-    Main["Program\n(Main / Run)"]
+    Program["Program\n(Entry point / Dispatcher)"]
 
     subgraph Cli
-        Context["Context\n(args, output, exit)"]
-    end
-
-    subgraph SelfTest
-        Validation["Validation.Run"]
+        Context["Context\n(Argument parsing, output, exit code)"]
     end
 
     subgraph Sarif
-        SarifResults["SarifResults.Read\nSarifResults.ToMarkdown"]
+        SarifResults["SarifResults\n(Read, ToMarkdown)"]
+        SarifRun["SarifRun\n(ToMarkdown)"]
+        SarifFinding["SarifFinding\n(Immutable result record)"]
+    end
+
+    subgraph SelfTest
+        Validation["Validation\n(Self-test runner)"]
     end
 
     subgraph Utilities
-        PathHelpers["PathHelpers"]
+        PathHelpers["PathHelpers\n(SafePathCombine)"]
     end
 
-    Main -->|creates| Context
-    Main -->|calls| Validation
-    Main -->|calls| SarifResults
-    SelfTest -->|uses| PathHelpers
+    Program -->|creates| Context
+    Program -->|calls| Validation
+    Program -->|calls| SarifResults
+    SarifResults --> SarifRun
+    SarifRun --> SarifFinding
+    Validation -->|uses| PathHelpers
+    Validation -->|calls| Program
 ```
 
-All subsystems receive a `Cli.Context` reference for output. The `Utilities`
-subsystem is a stateless helper used by `SelfTest` for path construction.
+`Program` is the system-level entry point and dispatcher. It constructs a `Context`
+(via `Cli`) from the command-line arguments, selects the execution mode based on the
+parsed flags, and delegates to the appropriate subsystem. The `Sarif` subsystem reads
+SARIF 2.1.0 files and generates markdown reports. The `SelfTest` subsystem exercises the
+tool's own capabilities to confirm it is functioning correctly. The `Utilities` subsystem
+provides path-safety helpers shared across the system.
 
-## External Dependencies
+### External Interfaces
 
-SarifMark depends on the following off-the-shelf (OTS) components:
+**CLI Arguments**: The command-line interface through which users invoke the tool.
 
-| Dependency         | Purpose                                                       |
-|--------------------|---------------------------------------------------------------|
-| .NET Runtime       | Execution host; provides base class library and runtime APIs  |
-| System.Text.Json   | JSON parsing for SARIF file reading (`JsonDocument.Parse`)    |
+- *Type*: CLI
+- *Role*: Provider (the tool accepts arguments from the shell)
+- *Contract*: Accepts flags and parameters (`--sarif`, `--report`, `--depth`, `--heading`,
+  `--validate`, `--results`, `--enforce`, `--log`, `--silent`, `--version`, `--help`).
+  Exits with code 0 on success and 1 on any error or when `--enforce` detects issues.
+- *Constraints*: Unrecognized arguments cause an `ArgumentException`, producing exit code 1
+  with an error message. Value-bearing flags require a following token.
 
-Both dependencies are part of the .NET SDK and require no additional packages.
+**SARIF File Input**: The SARIF 2.1.0 JSON files read by the analysis mode.
 
-## System Requirements
+- *Type*: File
+- *Role*: Consumer (the tool reads the file from disk)
+- *Contract*: Expects a UTF-8 JSON file conforming to the SARIF 2.1.0 schema with a
+  `version` string property and a non-empty `runs` array. Each run must contain a
+  `tool.driver` object.
+- *Constraints*: File must exist and must be valid JSON. Missing required SARIF properties
+  produce `InvalidOperationException` with a descriptive message.
 
-System-level requirements are captured in `docs/reqstream/sarifmark.yaml`
-and are validated through integration tests that exercise the published dotnet
-DLL end-to-end across the supported platforms.
+**Markdown Report Output**: The markdown report files written by the analysis mode.
+
+- *Type*: File
+- *Role*: Provider (the tool writes the file to disk)
+- *Contract*: Writes a UTF-8 markdown file containing a heading, tool attribution, file
+  count, issue count, and one line per finding in compiler-style format.
+- *Constraints*: Target directory must exist and be writable. I/O errors are caught and
+  reported through the CLI output channel.
+
+**Validation Results Output**: TRX or JUnit XML results files written by the validation mode.
+
+- *Type*: File
+- *Role*: Provider (the tool writes the file to disk)
+- *Contract*: Writes a TRX (VSTest) file when the extension is `.trx`; writes JUnit XML
+  when the extension is `.xml`.
+- *Constraints*: File extension must be `.trx` or `.xml`; other extensions produce an
+  error message. I/O errors are caught and reported through the CLI output channel.
+
+### Dependencies
+
+- **xUnit v3**: the testing framework used for all automated unit and integration tests —
+  see *xUnit v3 Integration Design*
+- **BuildMark**: generates build-notes documentation from CI metadata —
+  see *BuildMark Integration Design*
+- **FileAssert**: validates generated HTML and PDF documents against acceptance criteria —
+  see *FileAssert Integration Design*
+- **Pandoc**: converts Markdown sources to HTML as part of the documentation pipeline —
+  see *Pandoc Integration Design*
+- **ReqStream**: enforces that every requirement is linked to passing test evidence —
+  see *ReqStream Integration Design*
+- **ReviewMark**: generates review plan and review report from the review configuration —
+  see *ReviewMark Integration Design*
+- **SonarMark**: retrieves and renders SonarCloud quality-gate metrics —
+  see *SonarMark Integration Design*
+- **VersionMark**: captures and publishes tool-version information —
+  see *VersionMark Integration Design*
+- **WeasyPrint**: converts HTML documents to PDF —
+  see *WeasyPrint Integration Design*
+
+### Risk Control Measures
+
+N/A - not a safety-classified software item.
+
+### Data Flow
+
+The primary analysis data flow from SARIF input to markdown output:
+
+1. The shell invokes `Program.Main` with command-line arguments.
+2. `Context.Create` parses the arguments, setting mode flags and file paths.
+3. `Program.Run` evaluates flags in priority order (version → help → validate → analysis).
+4. In analysis mode, `SarifResults.Read` validates the file path, parses the JSON, validates
+   the SARIF structure, and constructs an immutable graph of `SarifRun` and `SarifFinding`
+   records.
+5. `SarifResults.ToMarkdown` traverses the record graph and produces a UTF-8 markdown string.
+6. If `--report` was supplied, the markdown string is written to the specified file with
+   `File.WriteAllText`.
+7. If `--enforce` is set and issues were found, `Context.WriteError` sets the exit code to 1.
+8. `Program.Main` returns `Context.ExitCode` to the shell.
+
+The self-validation flow is a separate path in step 3 where `Validation.Run` exercises the
+analysis flow end-to-end using a mock SARIF file and verifies the output.
+
+### Design Constraints
+
+- Platform: targets .NET 8, 9, and 10 on Windows, Linux, and macOS.
+- Input format: SARIF 2.1.0 JSON only.
+- Output format: UTF-8 Markdown for reports; TRX or JUnit XML for validation results.
+- No external process invocations at runtime.
+- No network access at runtime.
+- Heading depth parameter must be an integer between 1 and 6 inclusive.
+- All path-combination operations on externally supplied paths use `PathHelpers.SafePathCombine`
+  to prevent path-traversal vulnerabilities.

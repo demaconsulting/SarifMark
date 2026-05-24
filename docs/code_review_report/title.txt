@@ -1,13 +1,12 @@
 ---
-title: SarifMark Review Report
-subtitle: File Review Report for SarifMark
-author: DEMA Consulting
-description: File Review Report for SarifMark
+title: "SarifMark Code Review Report"
+subtitle: "SARIF Report Generation Tool"
+author: "DEMA Consulting"
+description: "Code Review Report for SarifMark"
 lang: en-US
 keywords:
+  - Code Review
   - SarifMark
-  - Review Report
-  - File Reviews
   - .NET
-  - Tool
+  - SARIF
 ---
