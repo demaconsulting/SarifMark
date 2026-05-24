@@ -1,285 +1,372 @@
 ---
+# Context unit requirements
+
 sections:
-  - title: Context Unit Requirements
-    requirements:
-      - id: SarifMark-Context-Create
-        title: The Context unit shall make all parsed values available before command execution begins.
-        justification: >-
-          Completing all argument parsing before any command executes ensures that every
-          value is fully validated and available, preventing partially configured state from
-          reaching the rest of the application.
-        tags: [internal]
-        tests:
-          - Context_Create_NoArguments_ReturnsDefaultContext
+  - title: 'SarifMark Requirements'
+    sections:
+      - title: CLI Requirements
+        sections:
+          - title: Context Requirements
+            requirements:
+              - id: SarifMark-Context-Create
+                title: The Context unit shall make all parsed values available before
+                  command execution begins.
+                justification: >-
+                  Completing all argument parsing before any command executes ensures
+                  that every
+                  value is fully validated and available, preventing partially configured
+                  state from
+                  reaching the rest of the application.
+                tags: [internal]
+                tests:
+                  - Context_Create_NoArguments_ReturnsDefaultContext
 
-      - id: SarifMark-Context-VersionFlag
-        title: The Context unit shall recognize -v and --version as version-display requests.
-        justification: >-
-          Recognizing both short and long forms of the version flag provides a consistent command-line
-          experience aligned with common POSIX conventions, making the tool approachable to users
-          familiar with standard Unix utilities.
-        tags: [internal]
-        tests:
-          - Context_Create_VersionFlag_SetsVersionTrue
-          - Context_Create_ShortVersionFlag_SetsVersionTrue
+              - id: SarifMark-Context-VersionFlag
+                title: The Context unit shall recognize -v and --version as version-display
+                  requests.
+                justification: >-
+                  Recognizing both short and long forms of the version flag provides
+                  a consistent command-line
+                  experience aligned with common POSIX conventions, making the tool
+                  approachable to users
+                  familiar with standard Unix utilities.
+                tags: [internal]
+                tests:
+                  - Context_Create_VersionFlag_SetsVersionTrue
+                  - Context_Create_ShortVersionFlag_SetsVersionTrue
 
-      - id: SarifMark-Context-HelpFlag
-        title: The Context unit shall recognize -?, -h, and --help as help-display requests.
-        justification: >-
-          Supporting multiple help flag aliases accommodates different user conventions and shell
-          environments, ensuring the help option is easily discoverable regardless of user background.
-        tags: [internal]
-        tests:
-          - Context_Create_QuestionMarkHelpFlag_SetsHelpTrue
-          - Context_Create_ShortHelpFlag_SetsHelpTrue
-          - Context_Create_HelpFlag_SetsHelpTrue
+              - id: SarifMark-Context-HelpFlag
+                title: The Context unit shall recognize -?, -h, and --help as help-display
+                  requests.
+                justification: >-
+                  Supporting multiple help flag aliases accommodates different user
+                  conventions and shell
+                  environments, ensuring the help option is easily discoverable regardless
+                  of user background.
+                tags: [internal]
+                tests:
+                  - Context_Create_QuestionMarkHelpFlag_SetsHelpTrue
+                  - Context_Create_ShortHelpFlag_SetsHelpTrue
+                  - Context_Create_HelpFlag_SetsHelpTrue
 
-      - id: SarifMark-Context-SilentFlag
-        title: The Context unit shall suppress console output when the --silent flag is present.
-        justification: >-
-          Silent mode allows the tool to be embedded in pipelines and scripts without polluting stdout,
-          while still allowing the caller to inspect the exit code and any log file for diagnostic
-          information.
-        tags: [internal]
-        tests:
-          - Context_Create_SilentFlag_SetsSilentTrue
-          - Context_WriteLine_SilentMode_DoesNotWriteToConsole
-          - Context_WriteError_SilentMode_DoesNotWriteToConsoleButSetsExitCode
+              - id: SarifMark-Context-SilentFlag
+                title: The Context unit shall suppress console output when the --silent
+                  flag is present.
+                justification: >-
+                  Silent mode allows the tool to be embedded in pipelines and scripts
+                  without polluting stdout,
+                  while still allowing the caller to inspect the exit code and any
+                  log file for diagnostic
+                  information.
+                tags: [internal]
+                tests:
+                  - Context_Create_SilentFlag_SetsSilentTrue
+                  - Context_WriteLine_SilentMode_DoesNotWriteToConsole
+                  - Context_WriteError_SilentMode_DoesNotWriteToConsoleButSetsExitCode
 
-      - id: SarifMark-Context-ValidateFlag
-        title: The Context unit shall recognize --validate as a self-validation request.
-        justification: >-
-          The validate flag activates self-validation mode, enabling the tool to exercise its own core
-          functionality and report pass/fail results, which is essential for verifying correct installation
-          in new environments.
-        tags: [internal]
-        tests:
-          - Context_Create_ValidateFlag_SetsValidateTrue
+              - id: SarifMark-Context-ValidateFlag
+                title: The Context unit shall recognize --validate as a self-validation
+                  request.
+                justification: >-
+                  The validate flag activates self-validation mode, enabling the tool
+                  to exercise its own core
+                  functionality and report pass/fail results, which is essential for
+                  verifying correct installation
+                  in new environments.
+                tags: [internal]
+                tests:
+                  - Context_Create_ValidateFlag_SetsValidateTrue
 
-      - id: SarifMark-Context-EnforceFlag
-        title: The Context unit shall recognize --enforce as an enforcement-mode request.
-        justification: >-
-          The enforce flag enables quality gate behavior so the tool can signal build failure when SARIF
-          results are present, making it suitable for integration into CI/CD pipelines.
-        tags: [internal]
-        tests:
-          - Context_Create_EnforceFlag_SetsEnforceTrue
+              - id: SarifMark-Context-EnforceFlag
+                title: The Context unit shall recognize --enforce as an enforcement-mode
+                  request.
+                justification: >-
+                  The enforce flag enables quality gate behavior so the tool can signal
+                  build failure when SARIF
+                  results are present, making it suitable for integration into CI/CD
+                  pipelines.
+                tags: [internal]
+                tests:
+                  - Context_Create_EnforceFlag_SetsEnforceTrue
 
-      - id: SarifMark-Context-SarifParam
-        title: The Context unit shall capture the --sarif parameter value as the SARIF file path to analyze.
-        justification: >-
-          Capturing the SARIF file path as a named value decouples argument parsing from file
-          processing, allowing downstream code to operate on a validated, named value rather than raw
-          argument strings.
-        tags: [internal]
-        tests:
-          - Context_Create_SarifParameter_SetsSarifFile
+              - id: SarifMark-Context-SarifParam
+                title: The Context unit shall capture the --sarif parameter value
+                  as the SARIF file path to analyze.
+                justification: >-
+                  Capturing the SARIF file path as a named value decouples argument
+                  parsing from file
+                  processing, allowing downstream code to operate on a validated,
+                  named value rather than raw
+                  argument strings.
+                tags: [internal]
+                tests:
+                  - Context_Create_SarifParameter_SetsSarifFile
 
-      - id: SarifMark-Context-SarifParam-MissingValue
-        title: The Context unit shall throw ArgumentException when --sarif is provided without a value.
-        justification: >-
-          Detecting a missing value immediately prevents downstream processing from receiving a
-          null or empty file path, producing a clear diagnostic message that identifies the exact
-          flag that is missing its argument.
-        tags: [internal]
-        tests:
-          - Context_Create_SarifWithoutValue_ThrowsArgumentException
+              - id: SarifMark-Context-SarifParam-MissingValue
+                title: The Context unit shall throw ArgumentException when --sarif
+                  is provided without a value.
+                justification: >-
+                  Detecting a missing value immediately prevents downstream processing
+                  from receiving a
+                  null or empty file path, producing a clear diagnostic message that
+                  identifies the exact
+                  flag that is missing its argument.
+                tags: [internal]
+                tests:
+                  - Context_Create_SarifWithoutValue_ThrowsArgumentException
 
-      - id: SarifMark-Context-ReportParam
-        title: The Context unit shall capture the --report parameter value as the report output file path.
-        justification: >-
-          A dedicated report file value gives the application a clear output target and allows callers
-          to omit the flag when only console output is required, keeping the interface flexible.
-        tags: [internal]
-        tests:
-          - Context_Create_ReportParameter_SetsReportFile
+              - id: SarifMark-Context-ReportParam
+                title: The Context unit shall capture the --report parameter value
+                  as the report output file path.
+                justification: >-
+                  A dedicated report file value gives the application a clear output
+                  target and allows callers
+                  to omit the flag when only console output is required, keeping the
+                  interface flexible.
+                tags: [internal]
+                tests:
+                  - Context_Create_ReportParameter_SetsReportFile
 
-      - id: SarifMark-Context-ReportParam-MissingValue
-        title: The Context unit shall throw ArgumentException when --report is provided without a value.
-        justification: >-
-          Detecting a missing value immediately prevents report generation from being directed to
-          a null or empty path, producing a clear diagnostic message that identifies the exact
-          flag that is missing its argument.
-        tags: [internal]
-        tests:
-          - Context_Create_ReportWithoutValue_ThrowsArgumentException
+              - id: SarifMark-Context-ReportParam-MissingValue
+                title: The Context unit shall throw ArgumentException when --report
+                  is provided without a value.
+                justification: >-
+                  Detecting a missing value immediately prevents report generation
+                  from being directed to
+                  a null or empty path, producing a clear diagnostic message that
+                  identifies the exact
+                  flag that is missing its argument.
+                tags: [internal]
+                tests:
+                  - Context_Create_ReportWithoutValue_ThrowsArgumentException
 
-      - id: SarifMark-Context-ReportDepthParam
-        title: >-
-          The Context unit shall accept --depth (and --report-depth for legacy compatibility) as a
-          positive integer heading depth, defaulting to 1 when omitted.
-        justification: >-
-          Validating the depth value at parse time prevents invalid heading levels from propagating into
-          markdown generation, and defaulting to 1 ensures sensible behavior when the parameter is omitted.
-        tags: [internal]
-        tests:
-          - Context_Create_DepthParameter_SetsDepth
-          - Context_Create_DepthWithoutValue_ThrowsArgumentException
-          - Context_Create_DepthInvalidValue_ThrowsArgumentException
-          - Context_Create_DepthZero_ThrowsArgumentException
-          - Context_Create_ReportDepthParameter_SetsReportDepth
-          - Context_Create_ReportDepthWithoutValue_ThrowsArgumentException
-          - Context_Create_ReportDepthInvalidValue_ThrowsArgumentException
-          - Context_Create_ReportDepthZero_ThrowsArgumentException
+              - id: SarifMark-Context-ReportDepthParam
+                title: >-
+                  The Context unit shall accept --depth (and --report-depth for legacy
+                  compatibility) as a
+                  positive integer heading depth, defaulting to 1 when omitted.
+                justification: >-
+                  Validating the depth value at parse time prevents invalid heading
+                  levels from propagating into
+                  markdown generation, and defaulting to 1 ensures sensible behavior
+                  when the parameter is omitted.
+                tags: [internal]
+                tests:
+                  - Context_Create_DepthParameter_SetsDepth
+                  - Context_Create_DepthWithoutValue_ThrowsArgumentException
+                  - Context_Create_DepthInvalidValue_ThrowsArgumentException
+                  - Context_Create_DepthZero_ThrowsArgumentException
+                  - Context_Create_ReportDepthParameter_SetsReportDepth
+                  - Context_Create_ReportDepthWithoutValue_ThrowsArgumentException
+                  - Context_Create_ReportDepthInvalidValue_ThrowsArgumentException
+                  - Context_Create_ReportDepthZero_ThrowsArgumentException
 
-      - id: SarifMark-Context-HeadingParam
-        title: The Context unit shall accept a --heading parameter value as the custom report heading text.
-        justification: >-
-          Capturing the custom heading in a named property keeps downstream report generation free of
-          argument-parsing logic and ensures consistent propagation of user-specified headings to the
-          output formatter.
-        tags: [internal]
-        tests:
-          - Context_Create_HeadingArgument_SetsHeading
-          - Context_Create_HeadingWithoutValue_ThrowsArgumentException
+              - id: SarifMark-Context-HeadingParam
+                title: The Context unit shall accept a --heading parameter value as
+                  the custom report heading text.
+                justification: >-
+                  Capturing the custom heading in a named property keeps downstream
+                  report generation free of
+                  argument-parsing logic and ensures consistent propagation of user-specified
+                  headings to the
+                  output formatter.
+                tags: [internal]
+                tests:
+                  - Context_Create_HeadingArgument_SetsHeading
+                  - Context_Create_HeadingWithoutValue_ThrowsArgumentException
 
-      - id: SarifMark-Context-ResultsParam
-        title: The Context unit shall capture the --results parameter value as the validation results output file path.
-        justification: >-
-          Storing the results file path in a dedicated property cleanly separates argument parsing from
-          validation output logic, making it straightforward to direct test result output to the correct
-          file during self-validation.
-        tags: [internal]
-        tests:
-          - Context_Create_ResultsParameter_SetsResultsFile
+              - id: SarifMark-Context-ResultsParam
+                title: >-
+                  The Context unit shall capture the --results parameter value as
+                  the validation
+                  results output file path.
+                justification: >-
+                  Storing the results file path in a dedicated property cleanly separates
+                  argument parsing from
+                  validation output logic, making it straightforward to direct test
+                  result output to the correct
+                  file during self-validation.
+                tags: [internal]
+                tests:
+                  - Context_Create_ResultsParameter_SetsResultsFile
 
-      - id: SarifMark-Context-ResultLegacyAlias
-        title: The Context unit shall accept --result as a legacy alias for --results.
-        justification: >-
-          Accepting the legacy --result alias preserves backwards compatibility for existing scripts and
-          workflows that used the earlier parameter name, preventing breaking changes when users upgrade.
-        tags: [internal]
-        tests:
-          - Context_Create_ResultLegacyAlias_SetsResultsFile
+              - id: SarifMark-Context-ResultLegacyAlias
+                title: The Context unit shall accept --result as a legacy alias for
+                  --results.
+                justification: >-
+                  Accepting the legacy --result alias preserves backwards compatibility
+                  for existing scripts and
+                  workflows that used the earlier parameter name, preventing breaking
+                  changes when users upgrade.
+                tags: [internal]
+                tests:
+                  - Context_Create_ResultLegacyAlias_SetsResultsFile
 
-      - id: SarifMark-Context-ResultsParam-MissingValue
-        title: The Context unit shall throw ArgumentException when --results is provided without a value.
-        justification: >-
-          Detecting a missing value immediately prevents results output from being directed to
-          a null or empty path, producing a clear diagnostic message that identifies the exact
-          flag that is missing its argument.
-        tags: [internal]
-        tests:
-          - Context_Create_ResultsWithoutValue_ThrowsArgumentException
+              - id: SarifMark-Context-ResultsParam-MissingValue
+                title: The Context unit shall throw ArgumentException when --results
+                  is provided without a value.
+                justification: >-
+                  Detecting a missing value immediately prevents results output from
+                  being directed to
+                  a null or empty path, producing a clear diagnostic message that
+                  identifies the exact
+                  flag that is missing its argument.
+                tags: [internal]
+                tests:
+                  - Context_Create_ResultsWithoutValue_ThrowsArgumentException
 
-      - id: SarifMark-Context-LogParam
-        title: >-
-          The Context unit shall open the specified --log file for writing during initialization,
-          and shall throw InvalidOperationException if the file cannot be opened.
-        justification: >-
-          Opening the log file during Context creation ensures that all subsequent output, including early
-          diagnostic messages, is captured in the file and that file access errors are reported before any
-          processing begins.
-        tags: [internal]
-        tests:
-          - Context_Create_LogFile_OpensFileSuccessfully
-          - Context_Create_InvalidLogFilePath_ThrowsInvalidOperationException
+              - id: SarifMark-Context-LogParam
+                title: >-
+                  The Context unit shall open the specified --log file for writing
+                  during initialization,
+                  and shall throw InvalidOperationException if the file cannot be
+                  opened.
+                justification: >-
+                  Opening the log file during Context creation ensures that all subsequent
+                  output, including early
+                  diagnostic messages, is captured in the file and that file access
+                  errors are reported before any
+                  processing begins.
+                tags: [internal]
+                tests:
+                  - Context_Create_LogFile_OpensFileSuccessfully
+                  - Context_Create_InvalidLogFilePath_ThrowsInvalidOperationException
 
-      - id: SarifMark-Context-LogParam-MissingValue
-        title: The Context unit shall throw ArgumentException when --log is provided without a value.
-        justification: >-
-          Detecting a missing value at parse time prevents the tool from attempting to open a
-          null or empty log file path, producing a clear diagnostic message that identifies the
-          exact flag that is missing its argument.
-        tags: [internal]
-        tests:
-          - Context_Create_LogWithoutValue_ThrowsArgumentException
+              - id: SarifMark-Context-LogParam-MissingValue
+                title: The Context unit shall throw ArgumentException when --log is
+                  provided without a value.
+                justification: >-
+                  Detecting a missing value at parse time prevents the tool from attempting
+                  to open a
+                  null or empty log file path, producing a clear diagnostic message
+                  that identifies the
+                  exact flag that is missing its argument.
+                tags: [internal]
+                tests:
+                  - Context_Create_LogWithoutValue_ThrowsArgumentException
 
-      - id: SarifMark-Context-UnknownArgs
-        title: The Context unit shall reject unrecognized command-line arguments with an error.
-        justification: >-
-          Rejecting unknown arguments at parse time prevents silent misconfiguration caused by typos or
-          renamed flags, giving users immediate and actionable feedback about incorrect command usage.
-        tags: [internal]
-        tests:
-          - Context_Create_UnknownArgument_ThrowsArgumentException
+              - id: SarifMark-Context-UnknownArgs
+                title: The Context unit shall reject unrecognized command-line arguments
+                  with an error.
+                justification: >-
+                  Rejecting unknown arguments at parse time prevents silent misconfiguration
+                  caused by typos or
+                  renamed flags, giving users immediate and actionable feedback about
+                  incorrect command usage.
+                tags: [internal]
+                tests:
+                  - Context_Create_UnknownArgument_ThrowsArgumentException
 
-      - id: SarifMark-Context-WriteLine-Console
-        title: The WriteLine method shall write the message to the console output unless the silent flag is set.
-        justification: >-
-          Writing to the console by default while respecting the silent flag ensures that the tool
-          provides visual feedback during interactive use without polluting standard output during
-          automated or pipeline execution.
-        tags: [internal]
-        tests:
-          - Context_WriteLine_WritesToConsole
-          - Context_WriteLine_SilentMode_DoesNotWriteToConsole
+              - id: SarifMark-Context-WriteLine-Console
+                title: The WriteLine method shall write the message to the console
+                  output unless the silent flag is set.
+                justification: >-
+                  Writing to the console by default while respecting the silent flag
+                  ensures that the tool
+                  provides visual feedback during interactive use without polluting
+                  standard output during
+                  automated or pipeline execution.
+                tags: [internal]
+                tests:
+                  - Context_WriteLine_WritesToConsole
+                  - Context_WriteLine_SilentMode_DoesNotWriteToConsole
 
-      - id: SarifMark-Context-WriteLine-Log
-        title: The WriteLine method shall write the message to the log file when one is open, regardless of silent mode.
-        justification: >-
-          Writing to the log regardless of the silent flag ensures that all output is captured for
-          diagnostic purposes even in silent mode, giving operators a complete record without
-          requiring separate control of logging and console verbosity.
-        tags: [internal]
-        tests:
-          - Context_WriteLine_WithLogFile_WritesToLog
-          - Context_WriteLine_SilentModeWithLogFile_WritesToLog
+              - id: SarifMark-Context-WriteLine-Log
+                title: >-
+                  The WriteLine method shall write the message to the log file when
+                  one is open,
+                  regardless of silent mode.
+                justification: >-
+                  Writing to the log regardless of the silent flag ensures that all
+                  output is captured for
+                  diagnostic purposes even in silent mode, giving operators a complete
+                  record without
+                  requiring separate control of logging and console verbosity.
+                tags: [internal]
+                tests:
+                  - Context_WriteLine_WithLogFile_WritesToLog
+                  - Context_WriteLine_SilentModeWithLogFile_WritesToLog
 
-      - id: SarifMark-Context-WriteError
-        title: The WriteError method shall write errors to stderr and set a non-zero exit code.
-        justification: >-
-          Writing errors to stderr and setting a non-zero exit code ensures that callers receive
-          a failure signal without requiring explicit exit code management.
-        tags: [internal]
-        children:
-          - SarifMark-Context-WriteError-Stderr
-          - SarifMark-Context-WriteError-Log
-          - SarifMark-Context-WriteError-ExitCode
-        tests:
-          - Context_WriteError_WritesToErrorAndSetsExitCode
+              - id: SarifMark-Context-WriteError
+                title: The WriteError method shall write errors to stderr and set
+                  a non-zero exit code.
+                justification: >-
+                  Writing errors to stderr and setting a non-zero exit code ensures
+                  that callers receive
+                  a failure signal without requiring explicit exit code management.
+                tags: [internal]
+                children:
+                  - SarifMark-Context-WriteError-Stderr
+                  - SarifMark-Context-WriteError-Log
+                  - SarifMark-Context-WriteError-ExitCode
+                tests:
+                  - Context_WriteError_WritesToErrorAndSetsExitCode
 
-      - id: SarifMark-Context-WriteError-Stderr
-        title: >-
-          The WriteError method shall write the error message to the standard error stream
-          unless the silent flag is set.
-        justification: >-
-          Writing errors to stderr separates diagnostic output from standard output, preventing
-          error messages from corrupting piped output in automated environments.
-        tags: [internal]
-        tests:
-          - Context_WriteError_WritesToErrorAndSetsExitCode
-          - Context_WriteError_SilentMode_DoesNotWriteToConsoleButSetsExitCode
+              - id: SarifMark-Context-WriteError-Stderr
+                title: >-
+                  The WriteError method shall write the error message to the standard
+                  error stream
+                  unless the silent flag is set.
+                justification: >-
+                  Writing errors to stderr separates diagnostic output from standard
+                  output, preventing
+                  error messages from corrupting piped output in automated environments.
+                tags: [internal]
+                tests:
+                  - Context_WriteError_WritesToErrorAndSetsExitCode
+                  - Context_WriteError_SilentMode_DoesNotWriteToConsoleButSetsExitCode
 
-      - id: SarifMark-Context-WriteError-Log
-        title: >-
-          The WriteError method shall write the error message to the log file when one is open,
-          regardless of silent mode.
-        justification: >-
-          Capturing all error messages in the log file regardless of silent mode ensures that
-          operators always have a complete diagnostic record, even in unattended or pipeline scenarios.
-        tags: [internal]
-        tests:
-          - Context_WriteError_WritesToErrorAndSetsExitCode
-          - Context_WriteError_WithLogFile_WritesToLog
+              - id: SarifMark-Context-WriteError-Log
+                title: >-
+                  The WriteError method shall write the error message to the log file
+                  when one is open,
+                  regardless of silent mode.
+                justification: >-
+                  Capturing all error messages in the log file regardless of silent
+                  mode ensures that
+                  operators always have a complete diagnostic record, even in unattended
+                  or pipeline scenarios.
+                tags: [internal]
+                tests:
+                  - Context_WriteError_WritesToErrorAndSetsExitCode
+                  - Context_WriteError_WithLogFile_WritesToLog
 
-      - id: SarifMark-Context-WriteError-ExitCode
-        title: The WriteError method shall set the exit code to 1 upon the first call.
-        justification: >-
-          Automatically setting the exit code on error eliminates the need for callers to
-          explicitly track failures across multiple WriteError calls, ensuring a non-zero exit
-          code is always produced when any error has been reported.
-        tags: [internal]
-        tests:
-          - Context_WriteError_WritesToErrorAndSetsExitCode
-          - Context_WriteError_SilentMode_DoesNotWriteToConsoleButSetsExitCode
+              - id: SarifMark-Context-WriteError-ExitCode
+                title: The WriteError method shall set the exit code to 1 upon the
+                  first call.
+                justification: >-
+                  Automatically setting the exit code on error eliminates the need
+                  for callers to
+                  explicitly track failures across multiple WriteError calls, ensuring
+                  a non-zero exit
+                  code is always produced when any error has been reported.
+                tags: [internal]
+                tests:
+                  - Context_WriteError_WritesToErrorAndSetsExitCode
+                  - Context_WriteError_SilentMode_DoesNotWriteToConsoleButSetsExitCode
 
-      - id: SarifMark-Context-ExitCode
-        title: The ExitCode property shall start at zero and change to one after the first call to WriteError.
-        justification: >-
-          A default exit code of zero ensures success is the initial assumption, while transitioning to
-          one on the first error provides a clean binary success/failure signal compatible with
-          standard shell scripting conventions.
-        tags: [internal]
-        tests:
-          - Context_ExitCode_StartsAtZero_ChangesToOneAfterError
+              - id: SarifMark-Context-ExitCode
+                title: The ExitCode property shall start at zero and change to one
+                  after the first call to WriteError.
+                justification: >-
+                  A default exit code of zero ensures success is the initial assumption,
+                  while transitioning to
+                  one on the first error provides a clean binary success/failure signal
+                  compatible with
+                  standard shell scripting conventions.
+                tags: [internal]
+                tests:
+                  - Context_ExitCode_StartsAtZero_ChangesToOneAfterError
 
-      - id: SarifMark-Context-Dispose
-        title: The Dispose method shall close the log StreamWriter when one is open.
-        justification: >-
-          Explicitly closing the StreamWriter on disposal ensures all buffered log content is flushed to
-          disk and file handles are released promptly, preventing data loss and resource leaks in
-          long-running or automated scenarios.
-        tags: [internal]
-        tests:
-          - Context_Dispose_ProperlyClosesLogFile
+              - id: SarifMark-Context-Dispose
+                title: The Dispose method shall close the log StreamWriter when one
+                  is open.
+                justification: >-
+                  Explicitly closing the StreamWriter on disposal ensures all buffered
+                  log content is flushed to
+                  disk and file handles are released promptly, preventing data loss
+                  and resource leaks in
+                  long-running or automated scenarios.
+                tags: [internal]
+                tests:
+                  - Context_Dispose_ProperlyClosesLogFile

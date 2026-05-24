@@ -6,22 +6,19 @@
 # Patterns identifying all files that require review.
 # Processed in order; prefix a pattern with '!' to exclude.
 needs-review:
-  - "README.md"                   # Root README file
-  - "requirements.yaml"           # Root requirements file
-  - "**/*.cs"                     # All C# source and test files
-  - "docs/reqstream/**/*.yaml"    # Requirements files
-  - "docs/design/**/*.md"         # Design documentation files
-  - "docs/verification/**/*.md"   # Verification documentation files
-  - "docs/user_guide/**/*.md"     # User guide documentation
-  - "!**/obj/**"                  # Exclude build output
-  - "!**/bin/**"                  # Exclude build output
-  - "!node_modules/**"            # Exclude npm dependencies
-  - "!**/.venv/**"                # Exclude Python virtual environment
+  - README.md
+  - requirements.yaml
+  - '**/*.cs'
+  - docs/reqstream/**/*.yaml
+  - docs/design/**/*.md
+  - docs/verification/**/*.md
+  - docs/user_guide/**/*.md
+  - '!**/obj/**'
+  - '!**/bin/**'
+  - '!**/generated/**'
 
 # Evidence source: review data and index.json are located in the 'reviews' branch
 # of this repository, accessed through the GitHub public HTTPS raw content access.
-# Note: The 'reviews' branch must be created and populated with review evidence PDFs
-# and an index.json before enforcement (--enforce flag) can be enabled in the pipeline.
 evidence-source:
   type: url
   location: https://raw.githubusercontent.com/demaconsulting/SarifMark/reviews/index.json
@@ -29,199 +26,226 @@ evidence-source:
 # Review sets following hierarchical scope principles.
 # Each review-set focuses on a single compliance question with manageable file counts.
 reviews:
-  # Purpose
+
+  # Purpose Review (only one per repository)
   - id: Purpose
-    title: Review of user-facing capabilities and system promises
+    title: Review that Advertised Features Match System Design
     paths:
-      - "README.md"
-      - "docs/user_guide/**/*.md"
-      - "docs/reqstream/sarifmark.yaml"
-      - "docs/design/introduction.md"
-      - "docs/design/sarifmark.md"
+      - README.md
+      - docs/user_guide/**/*.md
+      - docs/reqstream/sarifmark.yaml
+      - docs/design/introduction.md
+      - docs/design/sarifmark.md
 
-  # SarifMark - Specials
+  # SarifMark-Architecture Review
   - id: SarifMark-Architecture
-    title: Review of SarifMark system architecture and operational validation
+    title: Review that SarifMark Architecture Satisfies Requirements
     paths:
-      - "docs/reqstream/sarifmark.yaml"
-      - "docs/design/introduction.md"
-      - "docs/design/sarifmark.md"
-      - "docs/verification/sarifmark.md"
-      - "test/**/IntegrationTests.cs"
-      - "test/**/Runner.cs"
-      - "test/**/AssemblyInfo.cs"
+      - docs/reqstream/sarifmark.yaml
+      - docs/design/introduction.md
+      - docs/design/sarifmark.md
+      - docs/verification/introduction.md
+      - docs/verification/sarifmark.md
+      - test/**/IntegrationTests.cs
+      - test/**/Runner.cs
+      - test/**/AssemblyInfo.cs
 
+  # SarifMark-Design Review
   - id: SarifMark-Design
-    title: Review of SarifMark architectural and design consistency
+    title: Review that SarifMark Design is Consistent and Complete
     paths:
-      - "docs/reqstream/sarifmark.yaml"
-      - "docs/reqstream/sarifmark/platform-requirements.yaml"
-      - "docs/design/introduction.md"
-      - "docs/design/sarifmark.md"
-      - "docs/design/sarifmark/**/*.md"
-      - "docs/verification/introduction.md"
-      - "docs/verification/ots.md"
+      - docs/reqstream/sarifmark.yaml
+      - docs/reqstream/sarifmark/platform-requirements.yaml
+      - docs/design/introduction.md
+      - docs/design/sarifmark.md
+      - docs/design/sarifmark/**/*.md
 
+  # SarifMark-Verification Review
+  - id: SarifMark-Verification
+    title: Review that SarifMark Verification is Consistent and Complete
+    paths:
+      - docs/reqstream/sarifmark.yaml
+      - docs/verification/introduction.md
+      - docs/verification/sarifmark.md
+      - docs/verification/sarifmark/**/*.md
+      - docs/verification/ots.md
+
+  # SarifMark-AllRequirements Review
   - id: SarifMark-AllRequirements
-    title: Review of SarifMark requirements quality and traceability
+    title: Review that All SarifMark Requirements are Complete
     paths:
-      - "requirements.yaml"
-      - "docs/reqstream/sarifmark.yaml"
-      - "docs/reqstream/sarifmark/**/*.yaml"
-      - "docs/reqstream/ots/**/*.yaml"
+      - requirements.yaml
+      - docs/reqstream/sarifmark.yaml
+      - docs/reqstream/sarifmark/**/*.yaml
+      - docs/reqstream/ots/**/*.yaml
 
-  # SarifMark - Program
+  # SarifMark-Program Review
   - id: SarifMark-Program
-    title: Review of SarifMark Program unit implementation
+    title: Review that SarifMark Program Implementation is Correct
     paths:
-      - "docs/reqstream/sarifmark/program.yaml"
-      - "docs/design/sarifmark/program.md"
-      - "docs/verification/sarifmark/program.md"
-      - "src/**/Program.cs"
-      - "test/**/ProgramTests.cs"
+      - docs/reqstream/sarifmark/program.yaml
+      - docs/design/sarifmark/program.md
+      - docs/verification/sarifmark/program.md
+      - src/**/Program.cs
+      - test/**/ProgramTests.cs
 
-  # SarifMark - Cli
+  # SarifMark-Cli Review
   - id: SarifMark-Cli
-    title: Review of SarifMark Cli subsystem architecture and interfaces
+    title: Review that SarifMark Cli Satisfies Subsystem Requirements
     paths:
-      - "docs/reqstream/sarifmark/cli.yaml"
-      - "docs/design/sarifmark/cli.md"
-      - "docs/verification/sarifmark/cli.md"
-      - "test/**/Cli/CliTests.cs"
+      - docs/reqstream/sarifmark/cli.yaml
+      - docs/design/sarifmark/cli.md
+      - docs/verification/sarifmark/cli.md
+      - test/**/Cli/CliTests.cs
 
+  # SarifMark-Cli-Context Review
   - id: SarifMark-Cli-Context
-    title: Review of SarifMark Cli Context unit implementation
+    title: Review that SarifMark Cli Context Implementation is Correct
     paths:
-      - "docs/reqstream/sarifmark/cli/context.yaml"
-      - "docs/design/sarifmark/cli/context.md"
-      - "docs/verification/sarifmark/cli/context.md"
-      - "src/**/Cli/Context.cs"
-      - "test/**/Cli/ContextTests.cs"
+      - docs/reqstream/sarifmark/cli/context.yaml
+      - docs/design/sarifmark/cli/context.md
+      - docs/verification/sarifmark/cli/context.md
+      - src/**/Cli/Context.cs
+      - test/**/Cli/ContextTests.cs
 
-  # SarifMark - Sarif
+  # SarifMark-Sarif Review
   - id: SarifMark-Sarif
     title: Review that SarifMark Sarif Satisfies Subsystem Requirements
     paths:
-      - "docs/reqstream/sarifmark/sarif.yaml"
-      - "docs/reqstream/sarifmark/sarif/report.yaml"
-      - "docs/design/sarifmark/sarif.md"
-      - "docs/verification/sarifmark/sarif.md"
-      - "test/**/Sarif/SarifTests.cs"
+      - docs/reqstream/sarifmark/sarif.yaml
+      - docs/reqstream/sarifmark/sarif/report.yaml
+      - docs/design/sarifmark/sarif.md
+      - docs/verification/sarifmark/sarif.md
+      - test/**/Sarif/SarifTests.cs
 
+  # SarifMark-Sarif-SarifFinding Review
   - id: SarifMark-Sarif-SarifFinding
-    title: Review of SarifMark Sarif SarifFinding unit implementation
+    title: Review that SarifMark Sarif SarifFinding Implementation is Correct
     paths:
-      - "docs/reqstream/sarifmark/sarif/sarif-finding.yaml"
-      - "docs/design/sarifmark/sarif/sarif-finding.md"
-      - "docs/verification/sarifmark/sarif/sarif-finding.md"
-      - "src/**/Sarif/SarifFinding.cs"
-      - "test/**/Sarif/SarifFindingTests.cs"
+      - docs/reqstream/sarifmark/sarif/sarif-finding.yaml
+      - docs/design/sarifmark/sarif/sarif-finding.md
+      - docs/verification/sarifmark/sarif/sarif-finding.md
+      - src/**/Sarif/SarifFinding.cs
+      - test/**/Sarif/SarifFindingTests.cs
 
+  # SarifMark-Sarif-SarifRun Review
   - id: SarifMark-Sarif-SarifRun
-    title: Review of SarifMark Sarif SarifRun unit implementation
+    title: Review that SarifMark Sarif SarifRun Implementation is Correct
     paths:
-      - "docs/reqstream/sarifmark/sarif/sarif-run.yaml"
-      - "docs/design/sarifmark/sarif/sarif-run.md"
-      - "docs/verification/sarifmark/sarif/sarif-run.md"
-      - "src/**/Sarif/SarifRun.cs"
-      - "test/**/Sarif/SarifRunTests.cs"
+      - docs/reqstream/sarifmark/sarif/sarif-run.yaml
+      - docs/design/sarifmark/sarif/sarif-run.md
+      - docs/verification/sarifmark/sarif/sarif-run.md
+      - src/**/Sarif/SarifRun.cs
+      - test/**/Sarif/SarifRunTests.cs
 
+  # SarifMark-Sarif-SarifResults Review
   - id: SarifMark-Sarif-SarifResults
-    title: Review of SarifMark Sarif SarifResults unit implementation
+    title: Review that SarifMark Sarif SarifResults Implementation is Correct
     paths:
-      - "docs/reqstream/sarifmark/sarif/sarif-results.yaml"
-      - "docs/design/sarifmark/sarif/sarif-results.md"
-      - "docs/verification/sarifmark/sarif/sarif-results.md"
-      - "src/**/Sarif/SarifResults.cs"
-      - "test/**/Sarif/SarifResultsTests.cs"
+      - docs/reqstream/sarifmark/sarif/sarif-results.yaml
+      - docs/design/sarifmark/sarif/sarif-results.md
+      - docs/verification/sarifmark/sarif/sarif-results.md
+      - src/**/Sarif/SarifResults.cs
+      - test/**/Sarif/SarifResultsTests.cs
 
-  # SarifMark - SelfTest
+  # SarifMark-SelfTest Review
   - id: SarifMark-SelfTest
     title: Review that SarifMark SelfTest Satisfies Subsystem Requirements
     paths:
-      - "docs/reqstream/sarifmark/self-test.yaml"
-      - "docs/design/sarifmark/self-test.md"
-      - "docs/verification/sarifmark/self-test.md"
-      - "test/**/SelfTest/SelfTestTests.cs"
+      - docs/reqstream/sarifmark/self-test.yaml
+      - docs/design/sarifmark/self-test.md
+      - docs/verification/sarifmark/self-test.md
+      - test/**/SelfTest/SelfTestTests.cs
 
+  # SarifMark-SelfTest-Validation Review
   - id: SarifMark-SelfTest-Validation
-    title: Review of SarifMark SelfTest Validation unit implementation
+    title: Review that SarifMark SelfTest Validation Implementation is Correct
     paths:
-      - "docs/reqstream/sarifmark/self-test/validation.yaml"
-      - "docs/design/sarifmark/self-test/validation.md"
-      - "docs/verification/sarifmark/self-test/validation.md"
-      - "src/**/SelfTest/Validation.cs"
-      - "test/**/SelfTest/ValidationTests.cs"
+      - docs/reqstream/sarifmark/self-test/validation.yaml
+      - docs/design/sarifmark/self-test/validation.md
+      - docs/verification/sarifmark/self-test/validation.md
+      - src/**/SelfTest/Validation.cs
+      - test/**/SelfTest/ValidationTests.cs
 
-  # SarifMark - Utilities
+  # SarifMark-Utilities Review
   - id: SarifMark-Utilities
     title: Review that SarifMark Utilities Satisfies Subsystem Requirements
     paths:
-      - "docs/reqstream/sarifmark/utilities.yaml"
-      - "docs/design/sarifmark/utilities.md"
-      - "docs/verification/sarifmark/utilities.md"
-      - "test/**/Utilities/UtilitiesTests.cs"
+      - docs/reqstream/sarifmark/utilities.yaml
+      - docs/design/sarifmark/utilities.md
+      - docs/verification/sarifmark/utilities.md
+      - test/**/Utilities/UtilitiesTests.cs
 
+  # SarifMark-Utilities-PathHelpers Review
   - id: SarifMark-Utilities-PathHelpers
-    title: Review of SarifMark Utilities PathHelpers unit implementation
+    title: Review that SarifMark Utilities PathHelpers Implementation is Correct
     paths:
-      - "docs/reqstream/sarifmark/utilities/path-helpers.yaml"
-      - "docs/design/sarifmark/utilities/path-helpers.md"
-      - "docs/verification/sarifmark/utilities/path-helpers.md"
-      - "src/**/Utilities/PathHelpers.cs"
-      - "test/**/Utilities/PathHelpersTests.cs"
+      - docs/reqstream/sarifmark/utilities/path-helpers.yaml
+      - docs/design/sarifmark/utilities/path-helpers.md
+      - docs/verification/sarifmark/utilities/path-helpers.md
+      - src/**/Utilities/PathHelpers.cs
+      - test/**/Utilities/PathHelpersTests.cs
 
-  # OTS Items
+  # OTS Reviews
   - id: OTS-BuildMark
-    title: Review of BuildMark OTS item requirements and verification
+    title: Review that BuildMark Provides Required Functionality
     paths:
-      - "docs/reqstream/ots/buildmark.yaml"
-      - "docs/verification/ots/buildmark.md"
+      - docs/reqstream/ots/buildmark.yaml
+      - docs/design/ots/buildmark.md
+      - docs/verification/ots/buildmark.md
 
   - id: OTS-FileAssert
-    title: Review of FileAssert OTS item requirements and verification
+    title: Review that FileAssert Provides Required Functionality
     paths:
-      - "docs/reqstream/ots/fileassert.yaml"
-      - "docs/verification/ots/fileassert.md"
+      - docs/reqstream/ots/fileassert.yaml
+      - docs/design/ots/fileassert.md
+      - docs/verification/ots/fileassert.md
 
   - id: OTS-XUnitV3
-    title: Review of xUnit v3 OTS item requirements and verification
+    title: Review that xUnit v3 Provides Required Functionality
     paths:
-      - "docs/reqstream/ots/xunit-v3.yaml"
-      - "docs/verification/ots/xunit-v3.md"
+      - docs/reqstream/ots/xunit-v3.yaml
+      - docs/design/ots/xunit-v3.md
+      - docs/verification/ots/xunit-v3.md
 
   - id: OTS-Pandoc
-    title: Review of Pandoc OTS item requirements and verification
+    title: Review that Pandoc Provides Required Functionality
     paths:
-      - "docs/reqstream/ots/pandoc.yaml"
-      - "docs/verification/ots/pandoc.md"
+      - docs/reqstream/ots/pandoc.yaml
+      - docs/design/ots/pandoc.md
+      - docs/verification/ots/pandoc.md
 
   - id: OTS-ReqStream
-    title: Review of ReqStream OTS item requirements and verification
+    title: Review that ReqStream Provides Required Functionality
     paths:
-      - "docs/reqstream/ots/reqstream.yaml"
-      - "docs/verification/ots/reqstream.md"
+      - docs/reqstream/ots/reqstream.yaml
+      - docs/design/ots/reqstream.md
+      - docs/verification/ots/reqstream.md
 
   - id: OTS-ReviewMark
-    title: Review of ReviewMark OTS item requirements and verification
+    title: Review that ReviewMark Provides Required Functionality
     paths:
-      - "docs/reqstream/ots/reviewmark.yaml"
-      - "docs/verification/ots/reviewmark.md"
+      - docs/reqstream/ots/reviewmark.yaml
+      - docs/design/ots/reviewmark.md
+      - docs/verification/ots/reviewmark.md
 
   - id: OTS-SonarMark
-    title: Review of SonarMark OTS item requirements and verification
+    title: Review that SonarMark Provides Required Functionality
     paths:
-      - "docs/reqstream/ots/sonarmark.yaml"
-      - "docs/verification/ots/sonarmark.md"
+      - docs/reqstream/ots/sonarmark.yaml
+      - docs/design/ots/sonarmark.md
+      - docs/verification/ots/sonarmark.md
 
   - id: OTS-VersionMark
-    title: Review of VersionMark OTS item requirements and verification
+    title: Review that VersionMark Provides Required Functionality
     paths:
-      - "docs/reqstream/ots/versionmark.yaml"
-      - "docs/verification/ots/versionmark.md"
+      - docs/reqstream/ots/versionmark.yaml
+      - docs/design/ots/versionmark.md
+      - docs/verification/ots/versionmark.md
 
   - id: OTS-WeasyPrint
-    title: Review of WeasyPrint OTS item requirements and verification
+    title: Review that WeasyPrint Provides Required Functionality
     paths:
-      - "docs/reqstream/ots/weasyprint.yaml"
-      - "docs/verification/ots/weasyprint.md"
+      - docs/reqstream/ots/weasyprint.yaml
+      - docs/design/ots/weasyprint.md
+      - docs/verification/ots/weasyprint.md

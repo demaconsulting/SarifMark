@@ -1,13 +1,15 @@
 ---
+# Sarif subsystem requirements
 sections:
-  - title: SarifMark Requirements
+  - title: 'SarifMark Requirements'
     sections:
-      - title: SARIF Integration
+      - title: Sarif Requirements
         requirements:
           - id: SarifMark-Sarif-Reading
             title: The tool shall read SARIF 2.1.0 format files.
             justification: >-
-              Support for SARIF 2.1.0 is essential as it is the standard format for static analysis results,
+              Support for SARIF 2.1.0 is essential as it is the standard format for
+              static analysis results,
               enabling interoperability with a wide range of analysis tools and platforms.
             tags: [public]
             children:
@@ -18,7 +20,8 @@ sections:
           - id: SarifMark-Sarif-Validation
             title: The tool shall validate SARIF file format.
             justification: >-
-              Format validation ensures the tool processes only well-formed SARIF files, preventing runtime
+              Format validation ensures the tool processes only well-formed SARIF
+              files, preventing runtime
               errors and providing clear feedback when inputs are malformed or corrupted.
             tags: [public]
             children:
@@ -32,7 +35,8 @@ sections:
           - id: SarifMark-Sarif-ToolInfo
             title: The tool shall extract tool information from SARIF files.
             justification: >-
-              Extracting tool information enables reports to identify which analysis tool generated the results,
+              Extracting tool information enables reports to identify which analysis
+              tool generated the results,
               providing context and traceability for findings in the generated documentation.
             tags: [public]
             children:
@@ -44,8 +48,10 @@ sections:
           - id: SarifMark-Sarif-Results
             title: The tool shall extract results from SARIF files.
             justification: >-
-              Result extraction is the core functionality that enables conversion of analysis findings into
-              readable markdown reports, making issues accessible to developers and stakeholders.
+              Result extraction is the core functionality that enables conversion
+              of analysis findings into
+              readable markdown reports, making issues accessible to developers and
+              stakeholders.
             tags: [public]
             children:
               - SarifMark-SarifResults-ParseResults
@@ -56,8 +62,10 @@ sections:
           - id: SarifMark-Sarif-Locations
             title: The tool shall extract location information from SARIF results.
             justification: >-
-              Location information allows users to quickly identify where issues exist in their codebase,
-              improving the actionability of analysis results by pinpointing specific files and lines.
+              Location information allows users to quickly identify where issues exist
+              in their codebase,
+              improving the actionability of analysis results by pinpointing specific
+              files and lines.
             tags: [public]
             children:
               - SarifMark-SarifFinding-Uri
@@ -68,7 +76,8 @@ sections:
           - id: SarifMark-Sarif-FilePaths
             title: The SARIF subsystem shall require valid file paths for SARIF input.
             justification: >-
-              Path validation ensures clear error messages when files are missing or incorrectly specified,
+              Path validation ensures clear error messages when files are missing
+              or incorrectly specified,
               improving user experience and preventing confusing runtime failures.
             tags: [public]
             children:
@@ -80,8 +89,10 @@ sections:
           - id: SarifMark-Sarif-Processing
             title: The tool shall process valid SARIF files successfully.
             justification: >-
-              Successful processing of valid SARIF files is the fundamental capability that enables the tool to
-              fulfill its primary purpose of converting analysis results to markdown documentation.
+              Successful processing of valid SARIF files is the fundamental capability
+              that enables the tool to
+              fulfill its primary purpose of converting analysis results to markdown
+              documentation.
             tags: [public]
             children:
               - SarifMark-SarifResults-ParseResults
@@ -89,10 +100,13 @@ sections:
               - Sarif_Read_ValidSarifFile_ProcessesSuccessfully
 
           - id: SarifMark-Sarif-FileCount
-            title: The tool shall extract the total number of analyzed files from SARIF artifacts.
+            title: The tool shall extract the total number of analyzed files from
+              SARIF artifacts.
             justification: >-
-              Extracting the file count from SARIF artifacts provides evidence of analysis scope, allowing
-              users and auditors to verify that the tool analyzed the expected set of files.
+              Extracting the file count from SARIF artifacts provides evidence of
+              analysis scope, allowing
+              users and auditors to verify that the tool analyzed the expected set
+              of files.
             tags: [public]
             children:
               - SarifMark-SarifResults-FileCount
@@ -100,14 +114,36 @@ sections:
               - Sarif_GenerateReport_FileCount_ContainsFileCount
 
           - id: SarifMark-Sarif-MultiRun
-            title: The tool shall process SARIF files containing multiple runs and return all runs.
+            title: The tool shall process SARIF files containing multiple runs and
+              return all runs.
             justification: >-
-              Multi-run SARIF files are produced when more than one analysis tool writes results into a single
-              file. Supporting multi-run files ensures the tool works correctly with all conformant SARIF
-              producers, including CI pipelines that aggregate results from several tools.
+              Multi-run SARIF files are produced when more than one analysis tool
+              writes results into a single
+              file. Supporting multi-run files ensures the tool works correctly with
+              all conformant SARIF
+              producers, including CI pipelines that aggregate results from several
+              tools.
             tags: [public]
             children:
               - SarifMark-SarifResults-Runs
               - SarifMark-SarifResults-MultiRunMarkdown
             tests:
               - Sarif_Read_MultiRunSarifFile_ProcessesAllRuns
+
+          - id: SarifMark-Sarif-Report
+            title: The tool shall generate markdown reports from SARIF files.
+            justification: >-
+              Report generation transforms machine-readable SARIF into human-readable
+              documentation, enabling better understanding and communication of
+              analysis results across development teams.
+            tags: [public]
+            children:
+              - SarifMark-Report-Markdown
+              - SarifMark-Report-Depth
+              - SarifMark-Report-Counts
+              - SarifMark-Report-Locations
+              - SarifMark-Report-Headings
+              - SarifMark-Report-LineBreaks
+              - SarifMark-Report-FileCount
+            tests:
+              - Sarif_GenerateReport_DefaultDepth_ProducesMarkdownContent

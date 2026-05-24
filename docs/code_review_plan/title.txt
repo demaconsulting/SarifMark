@@ -1,13 +1,13 @@
 ---
-title: SarifMark Review Plan
-subtitle: File Review Plan for SarifMark
-author: DEMA Consulting
-description: File Review Plan for SarifMark
+title: "SarifMark Code Review Plan"
+subtitle: "SARIF Report Generation Tool"
+author: "DEMA Consulting"
+description: "Code Review Plan for SarifMark"
 lang: en-US
 keywords:
+  - Code Review
   - SarifMark
-  - Review Plan
-  - File Reviews
+  - SARIF
   - .NET
-  - Tool
+  - C#
 ---

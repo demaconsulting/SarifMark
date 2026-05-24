@@ -50,7 +50,7 @@ public class SarifFindingTests
     {
         // Arrange - No special setup needed
 
-        // Arrange & Act
+        // Act
         var result = new SarifFinding("RULE001", "error", "Error message", null, 42);
 
         // Assert

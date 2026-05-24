@@ -109,6 +109,7 @@ public class IntegrationTests
         Assert.Equal(0, exitCode);
         Assert.Contains("SarifMark version", output);
         Assert.Contains("Total Tests:", output);
+        Assert.Contains("Failed: 0", output);
     }
 
     /// <summary>
@@ -395,6 +396,120 @@ public class IntegrationTests
 
             var reportContent = File.ReadAllText(reportFile);
             Assert.Contains("### TestTool Analysis", reportContent);
+        }
+        finally
+        {
+            // Clean up the temporary report file
+            if (File.Exists(reportFile))
+            {
+                File.Delete(reportFile);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Test that a custom heading appears in the generated report.
+    /// </summary>
+    [Fact]
+    public void SarifMark_CustomHeading_AppearsInReport()
+    {
+        // Arrange
+        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "sample.sarif");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+
+        var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-custom-heading-{Guid.NewGuid()}.md");
+
+        try
+        {
+            // Act
+            var exitCode = Runner.Run(
+                out _,
+                "dotnet",
+                _dllPath,
+                "--sarif", sarifFile,
+                "--report", reportFile,
+                "--heading", "Custom Analysis");
+
+            // Assert
+            Assert.Equal(0, exitCode);
+            Assert.True(File.Exists(reportFile), "Report file was not created");
+
+            var reportContent = File.ReadAllText(reportFile);
+            Assert.Contains("# Custom Analysis", reportContent);
+        }
+        finally
+        {
+            // Clean up the temporary report file
+            if (File.Exists(reportFile))
+            {
+                File.Delete(reportFile);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Test that validate mode writes a results file when the results parameter is provided.
+    /// </summary>
+    [Fact]
+    public void SarifMark_ValidateResultsParameter_WritesResultsFile()
+    {
+        // Arrange
+        var resultsFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-validate-results-{Guid.NewGuid()}.trx");
+
+        try
+        {
+            // Act
+            var exitCode = Runner.Run(
+                out _,
+                "dotnet",
+                _dllPath,
+                "--validate",
+                "--results", resultsFile);
+
+            // Assert
+            Assert.Equal(0, exitCode);
+            Assert.True(File.Exists(resultsFile), "Results file was not created");
+            Assert.Contains("<TestRun", File.ReadAllText(resultsFile));
+        }
+        finally
+        {
+            // Clean up the temporary results file
+            if (File.Exists(resultsFile))
+            {
+                File.Delete(resultsFile);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Test that a multi-run SARIF file creates a report with sections for each run.
+    /// </summary>
+    [Fact]
+    public void SarifMark_MultiRunSarifFile_CreatesReport()
+    {
+        // Arrange
+        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "multi-run.sarif");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+
+        var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-multi-run-report-{Guid.NewGuid()}.md");
+
+        try
+        {
+            // Act
+            var exitCode = Runner.Run(
+                out _,
+                "dotnet",
+                _dllPath,
+                "--sarif", sarifFile,
+                "--report", reportFile);
+
+            // Assert
+            Assert.Equal(0, exitCode);
+            Assert.True(File.Exists(reportFile), "Report file was not created");
+
+            var reportContent = File.ReadAllText(reportFile);
+            Assert.Contains("Tool1", reportContent);
+            Assert.Contains("Tool2", reportContent);
         }
         finally
         {

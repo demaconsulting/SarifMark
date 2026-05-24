@@ -1,82 +1,77 @@
-### SarifRun Record
+### SarifRun
 
-#### Overview
+#### Purpose
 
-The `SarifRun` record (`SarifRun.cs`) represents the results extracted from a single run within a
-SARIF file. It holds the tool metadata and the parsed list of results for that run, and exposes
-the `ToMarkdown` method for generating a markdown report for the run.
+`SarifRun` is an immutable record that represents all results extracted from a single run
+within a SARIF file. It holds the tool metadata and the parsed list of findings, and
+provides the `ToMarkdown` method for generating a per-run markdown report.
 
-#### Record Design
+#### Data Model
 
-`SarifRun` is a `record` with an `internal` constructor. External consumers obtain instances only
-through `SarifResults.Read`; the record is immutable once constructed.
+**ToolName**: `string` — Name of the analysis tool sourced from `tool.driver.name`; defaults
+to `"Unknown"` if the property is absent.
 
-The `DemaConsulting.SarifMark` project file includes `<InternalsVisibleTo Include="DemaConsulting.SarifMark.Tests" />`,
-which grants the test assembly access to the internal constructor. This enables direct unit testing
-of the constructor without relaxing the access restriction for all external consumers.
+**ToolVersion**: `string` — Version of the analysis tool; resolved in priority order from
+`tool.driver.version`, then `tool.driver.semanticVersion`, then
+`tool.driver.dottedQuadFileVersion`; defaults to `"Unknown"` if none of the three fields
+is present.
 
-The `SarifRun` type and its sibling types (`SarifResults`, `SarifFinding`) are placed in the root
-`DemaConsulting.SarifMark` namespace rather than a `.Sarif` sub-namespace. This is an intentional
-design decision to keep the public and internal API surface flat and consistent, avoiding the need
-for additional `using` directives in consuming code.
+**Results**: `IReadOnlyList<SarifFinding>` — The collection of non-suppressed analysis
+findings for this run. Suppressed results (those with a non-empty `suppressions` array) are
+excluded during parsing.
 
-#### Properties
+**ResultCount**: `int` — Derived count; equals `Results.Count`.
 
-| Property      | Type                          | Description                                     |
-|---------------|-------------------------------|-------------------------------------------------|
-| `ToolName`    | `string`                      | Name of the analysis tool                       |
-| `ToolVersion` | `string`                      | Version of the analysis tool                    |
-| `Results`     | `IReadOnlyList<SarifFinding>` | Collection of non-suppressed results            |
-| `ResultCount` | `int`                         | Total number of results (derived count)         |
-| `FileCount`   | `int`                         | Total number of files analyzed in this run      |
-| `HasIssues`   | `bool`                        | True if any results are present (derived)       |
+**FileCount**: `int` — Number of files analyzed in this run; derived from the length of the
+`artifacts` array in the run element; `0` when the array is absent.
 
-These satisfy requirements `SarifMark-SarifRun-ToolName`, `SarifMark-SarifRun-ToolVersion`,
-`SarifMark-SarifRun-Results`, `SarifMark-SarifRun-FileCount`, and `SarifMark-SarifRun-HasIssues`.
+**HasIssues**: `bool` — Derived; `true` when `ResultCount` is greater than `0`.
 
-#### ToMarkdown Method
+#### Key Methods
 
-`ToMarkdown(int depth, string? heading = null)` generates a markdown string from the run results:
+**ToMarkdown**: Generates a markdown string for this run's results.
 
-1. **Depth validation** — throws `ArgumentOutOfRangeException` if `depth` is less than 1 or
-   greater than 6. This satisfies `SarifMark-SarifRun-ValidateDepth`.
-2. **Header** — calls `AppendHeader` to emit the main heading (using `heading` if provided, or
-   `"[ToolName] Analysis"` by default) followed by a `**Tool:**` line with name and version,
-   then a `**Files:**` line with the file count.
-3. **Issues section** — calls `AppendIssuesSection` to emit the `Issues` sub-heading at
-   `depth + 1` (capped at `6` to remain within the valid markdown heading range), the result
-   count formatted by `FormatFoundText`, and one line per result formatted by `FormatLocation`.
-   Each result line is appended with a trailing two-space markdown hard line break.
+- *Parameters*: `int depth` — heading depth (1–6); `string? heading` — optional custom
+  heading text (default: `null`, which produces `"[ToolName] Analysis"`)
+- *Returns*: `string` — UTF-8 markdown content
+- *Preconditions*: `depth` must be between 1 and 6 inclusive.
+- *Postconditions*: Returns a non-null string containing the heading, tool attribution,
+  file count, issue count summary, and one line per finding.
 
-This satisfies requirement `SarifMark-SarifRun-ToMarkdown`.
+`ToMarkdown` calls `AppendHeader` to emit the main heading and tool/file lines, then calls
+`AppendIssuesSection` to emit the issues sub-heading at `depth + 1` (capped at 6),
+the count summary from `FormatFoundText`, and one formatted line per result from
+`FormatLocation`. Each result line ends with a trailing two-space markdown hard line break.
 
-#### FormatLocation Method
+**FormatLocation**: Formats the location prefix for a single finding line.
 
-`FormatLocation(string? uri, int? startLine)` produces the location prefix for each result line,
-treating a `uri` that is `null`, empty, or consists only of whitespace as missing:
+- *Parameters*: `string? uri` — file URI; `int? startLine` — start line
+- *Returns*: `string` — location string for insertion into the report
 
-| `uri`                     | `startLine`  | Output           |
-|---------------------------|--------------|------------------|
-| null / empty / whitespace | any          | `(no location)`  |
-| set                       | null         | `uri`            |
-| set                       | set          | `uri(startLine)` |
+When `uri` is null, empty, or whitespace, returns `"(no location)"`. When `uri` is set and
+`startLine` is null, returns `uri`. When both are set, returns `"uri(startLine)"`.
 
-This satisfies requirement `SarifMark-SarifRun-FormatLocation`.
+**FormatFoundText**: Produces a grammatically correct issues summary.
 
-#### FormatFoundText Method
+- *Parameters*: `int count` — number of findings; `string singularNoun` — noun in singular form
+- *Returns*: `string` — `"Found no {noun}s"`, `"Found 1 {noun}"`, or `"Found {count} {noun}s"`
 
-`FormatFoundText(int count, string singularNoun)` produces a grammatically correct summary:
+#### Error Handling
 
-| `count` | Output                        |
-|---------|-------------------------------|
-| `0`     | Found no {singularNoun}s      |
-| `1`     | Found 1 {singularNoun}        |
-| `> 1`   | Found {count} {singularNoun}s |
+`ToMarkdown` throws `ArgumentOutOfRangeException` when `depth` is less than 1 or greater
+than 6. The internal constructor performs no validation; all field validation is the
+responsibility of `SarifResults.Read`, which constructs `SarifRun` instances only after
+verifying the JSON structure.
 
-This satisfies requirement `SarifMark-SarifRun-FormatCount`.
+The project file includes `<InternalsVisibleTo Include="DemaConsulting.SarifMark.Tests" />`
+to allow the test assembly to construct instances directly for unit testing.
 
-#### Cross-References
+#### Dependencies
 
-See the SarifResults Record document for `SarifResults.Read`, which constructs `SarifRun`
-instances during SARIF file parsing.
-See the SarifFinding Record document for the `SarifFinding` record that each run's results contain.
+- **SarifFinding** — the `Results` collection holds `SarifFinding` instances produced by
+  `SarifResults.ParseResults`.
+
+#### Callers
+
+- **SarifResults** — constructs `SarifRun` instances inside `Read` during per-run processing,
+  and delegates to `SarifRun.ToMarkdown` from `SarifResults.ToMarkdown`.

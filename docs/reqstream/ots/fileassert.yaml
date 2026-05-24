@@ -1,7 +1,5 @@
 ---
-# FileAssert OTS Software Requirements
-#
-# Requirements for the FileAssert document assertion tool functionality.
+# FileAssert OTS requirements
 
 sections:
   - title: OTS Software Requirements
@@ -9,7 +7,8 @@ sections:
       - title: FileAssert Requirements
         requirements:
           - id: SarifMark-OTS-FileAssert
-            title: FileAssert shall validate generated documents against acceptance criteria.
+            title: FileAssert shall validate generated documents against acceptance
+              criteria.
             justification: |
               DemaConsulting.FileAssert validates HTML and PDF documents produced during the
               build, asserting that each document exists, has a non-trivial size, is structurally

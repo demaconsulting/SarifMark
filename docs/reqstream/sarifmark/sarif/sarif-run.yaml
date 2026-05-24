@@ -1,102 +1,131 @@
 ---
+# SarifRun unit requirements
+
 sections:
-  - title: SarifRun Unit Requirements
-    requirements:
-      - id: SarifMark-SarifRun-ToolName
-        title: The SarifRun unit shall expose the name of the analysis tool that produced the run.
-        justification: >-
-          Exposing the tool name enables report generation to identify the producing tool by name,
-          making reports self-contained and readable without requiring access to the original SARIF file.
-        tags: [internal]
-        tests:
-          - SarifRun_InternalConstructor_CreatesValidInstance
+  - title: 'SarifMark Requirements'
+    sections:
+      - title: Sarif Requirements
+        sections:
+          - title: SarifRun Requirements
+            requirements:
+              - id: SarifMark-SarifRun-ToolName
+                title: The SarifRun unit shall expose the name of the analysis tool
+                  that produced the run.
+                justification: >-
+                  Exposing the tool name enables report generation to identify the
+                  producing tool by name,
+                  making reports self-contained and readable without requiring access
+                  to the original SARIF file.
+                tags: [internal]
+                tests:
+                  - SarifRun_InternalConstructor_CreatesValidInstance
 
-      - id: SarifMark-SarifRun-ToolVersion
-        title: The SarifRun unit shall expose the version of the analysis tool that produced the run.
-        justification: >-
-          Exposing the tool version allows generated reports to show which version of a tool produced
-          the results, supporting reproducibility verification and version-specific issue tracking.
-        tags: [internal]
-        tests:
-          - SarifRun_InternalConstructor_CreatesValidInstance
+              - id: SarifMark-SarifRun-ToolVersion
+                title: The SarifRun unit shall expose the version of the analysis
+                  tool that produced the run.
+                justification: >-
+                  Exposing the tool version allows generated reports to show which
+                  version of a tool produced
+                  the results, supporting reproducibility verification and version-specific
+                  issue tracking.
+                tags: [internal]
+                tests:
+                  - SarifRun_InternalConstructor_CreatesValidInstance
 
-      - id: SarifMark-SarifRun-Results
-        title: The SarifRun unit shall expose the collection of non-suppressed findings and their total count.
-        justification: >-
-          Providing the full results collection enables report formatters to iterate and render
-          individual findings, while the derived result count avoids repeated collection traversal
-          across callers.
-        tags: [internal]
-        tests:
-          - SarifRun_InternalConstructor_CreatesValidInstance
+              - id: SarifMark-SarifRun-Results
+                title: The SarifRun unit shall expose the collection of non-suppressed
+                  findings and their total count.
+                justification: >-
+                  Providing the full results collection enables report formatters
+                  to iterate and render
+                  individual findings, while the derived result count avoids repeated
+                  collection traversal
+                  across callers.
+                tags: [internal]
+                tests:
+                  - SarifRun_InternalConstructor_CreatesValidInstance
 
-      - id: SarifMark-SarifRun-FileCount
-        title: The SarifRun unit shall expose the number of files analyzed in the run.
-        justification: >-
-          Exposing the file count provides consumers with scope information about the analysis,
-          allowing generated reports to show how many files were examined alongside the findings.
-        tags: [internal]
-        tests:
-          - SarifRun_InternalConstructor_CreatesValidInstance
+              - id: SarifMark-SarifRun-FileCount
+                title: The SarifRun unit shall expose the number of files analyzed
+                  in the run.
+                justification: >-
+                  Exposing the file count provides consumers with scope information
+                  about the analysis,
+                  allowing generated reports to show how many files were examined
+                  alongside the findings.
+                tags: [internal]
+                tests:
+                  - SarifRun_InternalConstructor_CreatesValidInstance
 
-      - id: SarifMark-SarifRun-HasIssues
-        title: The SarifRun unit shall indicate whether any findings are present.
-        justification: >-
-          An issue presence indicator provides a convenient way to check if a run has any findings
-          without requiring callers to inspect the result count directly.
-        tags: [internal]
-        tests:
-          - SarifRun_HasIssues_NoResults_ReturnsFalse
-          - SarifRun_HasIssues_WithResults_ReturnsTrue
+              - id: SarifMark-SarifRun-HasIssues
+                title: The SarifRun unit shall indicate whether any findings are present.
+                justification: >-
+                  An issue presence indicator provides a convenient way to check if
+                  a run has any findings
+                  without requiring callers to inspect the result count directly.
+                tags: [internal]
+                tests:
+                  - SarifRun_HasIssues_NoResults_ReturnsFalse
+                  - SarifRun_HasIssues_WithResults_ReturnsTrue
 
-      - id: SarifMark-SarifRun-ToMarkdown
-        title: The SarifRun unit shall generate a complete markdown report for the run.
-        justification: >-
-          Generating the full report from a single operation provides a cohesive output
-          document for a single tool run.
-        tags: [internal]
-        tests:
-          - SarifRun_ToMarkdown_Depth1_ProducesCorrectOutput
-          - SarifRun_ToMarkdown_WithResults_ShowsResults
-          - SarifRun_ToMarkdown_ShowsFileCount
-          - SarifRun_ToMarkdown_CustomHeading_UsesProvidedHeading
-          - SarifRun_ToMarkdown_NullHeading_UsesDefaultHeading
-          - SarifRun_ToMarkdown_WhitespaceHeading_UsesDefaultHeading
+              - id: SarifMark-SarifRun-ToMarkdown
+                title: The SarifRun unit shall generate a complete markdown report
+                  for the run.
+                justification: >-
+                  Generating the full report from a single operation provides a cohesive
+                  output
+                  document for a single tool run.
+                tags: [internal]
+                tests:
+                  - SarifRun_ToMarkdown_Depth1_ProducesCorrectOutput
+                  - SarifRun_ToMarkdown_WithResults_ShowsResults
+                  - SarifRun_ToMarkdown_ShowsFileCount
+                  - SarifRun_ToMarkdown_CustomHeading_UsesProvidedHeading
+                  - SarifRun_ToMarkdown_NullHeading_UsesDefaultHeading
+                  - SarifRun_ToMarkdown_WhitespaceHeading_UsesDefaultHeading
 
-      - id: SarifMark-SarifRun-ValidateDepth
-        title: The SarifRun unit shall require a heading depth between 1 and 6 inclusive for markdown report generation.
-        justification: >-
-          Restricting depth to the valid markdown heading range of 1-6 prevents generation of
-          invalid markdown syntax.
-        tags: [internal]
-        tests:
-          - SarifRun_ToMarkdown_DepthLessThan1_ThrowsArgumentOutOfRangeException
-          - SarifRun_ToMarkdown_DepthGreaterThan6_ThrowsArgumentOutOfRangeException
-          - SarifRun_ToMarkdown_Depth6_IssuesHeadingCappedAtSix
+              - id: SarifMark-SarifRun-ValidateDepth
+                title: >-
+                  The SarifRun unit shall require a heading depth between 1 and 6
+                  inclusive for
+                  markdown report generation.
+                justification: >-
+                  Restricting depth to the valid markdown heading range of 1-6 prevents
+                  generation of
+                  invalid markdown syntax.
+                tags: [internal]
+                tests:
+                  - SarifRun_ToMarkdown_DepthLessThan1_ThrowsArgumentOutOfRangeException
+                  - SarifRun_ToMarkdown_DepthGreaterThan6_ThrowsArgumentOutOfRangeException
+                  - SarifRun_ToMarkdown_Depth6_IssuesHeadingCappedAtSix
 
-      - id: SarifMark-SarifRun-FormatLocation
-        title: >-
-          The SarifRun unit shall include the most precise location information
-          available for each finding in the markdown report.
-        justification: >-
-          Producing the most precise location string the data supports ensures reports are as actionable
-          as possible, while gracefully degrading to partial or absent location information without
-          requiring special handling from callers.
-        tags: [internal]
-        tests:
-          - SarifRun_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
-          - SarifRun_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
+              - id: SarifMark-SarifRun-FormatLocation
+                title: >-
+                  The SarifRun unit shall include the most precise location information
+                  available for each finding in the markdown report.
+                justification: >-
+                  Producing the most precise location string the data supports ensures
+                  reports are as actionable
+                  as possible, while gracefully degrading to partial or absent location
+                  information without
+                  requiring special handling from callers.
+                tags: [internal]
+                tests:
+                  - SarifRun_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
+                  - SarifRun_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
 
-      - id: SarifMark-SarifRun-FormatCount
-        title: >-
-          The SarifRun unit shall use grammatically correct singular and plural
-          forms for result counts in the markdown report.
-        justification: >-
-          Correct singular and plural forms produce grammatically accurate summaries that improve
-          readability and convey the right sense of magnitude, which is particularly important for
-          single-issue results where "1 issues" would be confusing.
-        tags: [internal]
-        tests:
-          - SarifRun_ToMarkdown_NoResults_ShowsFoundNoResults
-          - SarifRun_ToMarkdown_OneResult_UsesSingularForm
-          - SarifRun_ToMarkdown_MultipleResults_UsesPluralForm
+              - id: SarifMark-SarifRun-FormatCount
+                title: >-
+                  The SarifRun unit shall use grammatically correct singular and plural
+                  forms for result counts in the markdown report.
+                justification: >-
+                  Correct singular and plural forms produce grammatically accurate
+                  summaries that improve
+                  readability and convey the right sense of magnitude, which is particularly
+                  important for
+                  single-issue results where "1 issues" would be confusing.
+                tags: [internal]
+                tests:
+                  - SarifRun_ToMarkdown_NoResults_ShowsFoundNoResults
+                  - SarifRun_ToMarkdown_OneResult_UsesSingularForm
+                  - SarifRun_ToMarkdown_MultipleResults_UsesPluralForm

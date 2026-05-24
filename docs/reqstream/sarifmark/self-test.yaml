@@ -1,13 +1,16 @@
 ---
+# SelfTest subsystem requirements
+
 sections:
-  - title: SarifMark Requirements
+  - title: 'SarifMark Requirements'
     sections:
-      - title: Validation and Testing
+      - title: SelfTest Requirements
         requirements:
           - id: SarifMark-Validate-Mode
             title: The tool shall support self-validation mode.
             justification: >-
-              Self-validation mode enables verification that the tool operates correctly in the user's
+              Self-validation mode enables verification that the tool operates correctly
+              in the user's
               environment, ensuring proper installation and configuration.
             tags: [public]
             children:
@@ -18,7 +21,8 @@ sections:
           - id: SarifMark-Validate-ResultFiles
             title: The tool shall write validation results to test result files.
             justification: >-
-              Writing test results to files enables integration with CI/CD systems and provides persistent
+              Writing test results to files enables integration with CI/CD systems
+              and provides persistent
               records of validation outcomes for tracking quality trends and compliance.
             tags: [public]
             children:
@@ -31,7 +35,8 @@ sections:
           - id: SarifMark-Validate-TrxFormat
             title: The tool shall support TRX format for test results.
             justification: >-
-              TRX format support enables integration with Microsoft testing ecosystems and Azure DevOps,
+              TRX format support enables integration with Microsoft testing ecosystems
+              and Azure DevOps,
               providing native compatibility with Visual Studio and .NET tooling.
             tags: [public]
             children:
@@ -42,7 +47,8 @@ sections:
           - id: SarifMark-Validate-JUnitFormat
             title: The tool shall support JUnit format for test results.
             justification: >-
-              JUnit format support enables broad compatibility with CI/CD platforms like Jenkins, GitHub Actions,
+              JUnit format support enables broad compatibility with CI/CD platforms
+              like Jenkins, GitHub Actions,
               and GitLab CI, which commonly use this standard format for test reporting.
             tags: [public]
             children:
@@ -50,13 +56,14 @@ sections:
             tests:
               - SelfTest_ResultsFile_XmlPath_WritesJUnitFile
 
-      - title: Quality Enforcement
-        requirements:
           - id: SarifMark-Enforce-Mode
-            title: The SelfTest subsystem shall support enforcement mode to fail on issues found.
+            title: The SelfTest subsystem shall support enforcement mode to fail on
+              issues found.
             justification: >-
-              Enforcement mode enables the tool to act as a quality gate in CI/CD pipelines, preventing code
-              with analysis issues from being merged or deployed, thereby maintaining code quality standards.
+              Enforcement mode enables the tool to act as a quality gate in CI/CD
+              pipelines, preventing code
+              with analysis issues from being merged or deployed, thereby maintaining
+              code quality standards.
             tags: [public]
             children:
               - SarifMark-Validation-EnforcementTest
@@ -64,10 +71,13 @@ sections:
               - SelfTest_EnforcementTest_RunsWithinValidation
 
           - id: SarifMark-Enforce-ExitCode
-            title: The SelfTest subsystem shall return non-zero exit code when issues found in enforcement mode.
+            title: The SelfTest subsystem shall return non-zero exit code when issues
+              found in enforcement mode.
             justification: >-
-              Non-zero exit codes signal failure to CI/CD systems and scripts, enabling automated build failures
-              and preventing the progression of problematic code through deployment pipelines.
+              Non-zero exit codes signal failure to CI/CD systems and scripts, enabling
+              automated build failures
+              and preventing the progression of problematic code through deployment
+              pipelines.
             tags: [public]
             children:
               - SarifMark-Validation-EnforcementTest

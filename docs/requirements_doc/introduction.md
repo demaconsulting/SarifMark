@@ -1,17 +1,17 @@
 # Introduction
 
-This document contains the requirements for the SarifMark project.
+This document lists all requirements for SarifMark.
 
 ## Purpose
 
-SarifMark is a .NET command-line tool that generates comprehensive markdown reports from
-SARIF (Static Analysis Results Interchange Format) files. It processes SARIF files
-produced by various static analysis tools and creates formatted markdown reports suitable
-for documentation and quality tracking.
+To provide a complete, traceable record of all requirements for SarifMark,
+including requirements at the system, subsystem, and unit levels, plus OTS and
+Shared Package requirements.
 
 ## Scope
 
-This requirements document covers:
+This document covers all requirements defined in `docs/reqstream/` for SarifMark.
+Requirements span the following areas:
 
 - Command-line interface and options
 - SARIF file integration and parsing
@@ -21,11 +21,6 @@ This requirements document covers:
 - Path security
 - Platform support
 
-## Audience
+## References
 
-This document is intended for:
-
-- Software developers working on SarifMark
-- Quality assurance teams validating requirements
-- Project stakeholders reviewing project scope
-- Users understanding the tool's capabilities
+N/A

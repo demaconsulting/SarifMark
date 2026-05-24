@@ -1,17 +1,12 @@
 ---
-# SarifMark System-Level Requirements
-#
-# PURPOSE:
-# - Define system-level requirements describing what end-users need the tool to provide
-# - These requirements capture the externally visible behavior of the complete system
-# - System requirements are validated through integration tests that exercise the
-#   published dotnet DLL end-to-end
+# SarifMark system-level requirements
 
 sections:
-  - title: System-Level Requirements
+  - title: 'SarifMark Requirements'
     requirements:
       - id: SarifMark-System-Version
-        title: The tool shall display version information when the version flag is provided.
+        title: The tool shall display version information when the version flag is
+          provided.
         tags: [public]
         justification: >-
           Users need to quickly identify the version of the tool they are using for
@@ -25,7 +20,8 @@ sections:
         title: The tool shall display help information when the help flag is provided.
         tags: [public]
         justification: >-
-          Help information improves discoverability and usability by providing users with guidance
+          Help information improves discoverability and usability by providing users
+          with guidance
           on available options and parameters.
         children:
           - SarifMark-Program-Help
@@ -36,7 +32,8 @@ sections:
         title: The tool shall support self-validation mode.
         tags: [public]
         justification: >-
-          Self-validation mode enables verification that the tool operates correctly in
+          Self-validation mode enables verification that the tool operates correctly
+          in
           the deployment environment.
         children:
           - SarifMark-Program-Validation
@@ -47,7 +44,8 @@ sections:
         title: The tool shall require the --sarif parameter for SARIF analysis.
         tags: [public]
         justification: >-
-          Requiring explicit SARIF file specification ensures intentional operation and prevents
+          Requiring explicit SARIF file specification ensures intentional operation
+          and prevents
           accidental execution without proper input, improving tool safety and predictability.
         children:
           - SarifMark-Sarif-FilePaths
@@ -66,6 +64,23 @@ sections:
           - SarifMark_ValidSarifFile_ProcessesSuccessfully
           - SarifMark_NonExistentSarifFile_ShowsError
 
+      - id: SarifMark-System-SarifSummary
+        title: >-
+          The tool shall report the tool name, version, and result count for each
+          run
+          after processing.
+        tags: [public]
+        justification: >-
+          Reporting tool identity and result count after reading confirms successful
+          processing
+          and gives users immediate feedback about what was analyzed and how many
+          findings
+          were found.
+        children:
+          - SarifMark-Program-SarifReading
+        tests:
+          - SarifMark_ValidSarifFile_ProcessesSuccessfully
+
       - id: SarifMark-System-Report
         title: The tool shall generate markdown reports from SARIF files.
         tags: [public]
@@ -78,7 +93,8 @@ sections:
           - SarifMark_GenerateReport_CreatesReportFile
 
       - id: SarifMark-System-Enforce
-        title: The tool shall return non-zero exit code when enforcement mode detects issues.
+        title: The tool shall return non-zero exit code when enforcement mode detects
+          issues.
         tags: [public]
         justification: >-
           Non-zero exit codes enable CI/CD pipeline integration for quality gates.
@@ -92,6 +108,8 @@ sections:
         tags: [public]
         justification: >-
           Silent mode enables cleaner integration into automated workflows.
+        children:
+          - SarifMark-Cli-Silent
         tests:
           - SarifMark_SilentFlag_SuppressesOutput
 
@@ -100,6 +118,8 @@ sections:
         tags: [public]
         justification: >-
           Log file support enables persistent record-keeping and audit trails.
+        children:
+          - SarifMark-Cli-Log
         tests:
           - SarifMark_LogFile_WritesOutputToFile
 
@@ -108,27 +128,39 @@ sections:
         tags: [public]
         justification: >-
           Rejecting unknown arguments prevents silent failures from typos.
+        children:
+          - SarifMark-Cli-InvalidArgs
         tests:
           - SarifMark_UnknownArgument_ShowsError
 
       - id: SarifMark-System-ReportDepth
-        title: The tool shall accept a configurable heading depth for generated markdown reports.
+        title: The tool shall accept a configurable heading depth for generated markdown
+          reports.
         tags: [public]
         justification: >-
-          Configurable report depth allows the generated report to be embedded at any heading
-          level within a larger document, improving flexibility for documentation workflows.
+          Configurable report depth allows the generated report to be embedded at
+          any heading
+          level within a larger document, improving flexibility for documentation
+          workflows.
+        children:
+          - SarifMark-Cli-ReportDepth
+          - SarifMark-Cli-ReportDepthLegacyAlias
         tests:
           - SarifMark_ReportDepth_IsConfigurable
           - SarifMark_LegacyReportDepth_IsAccepted
 
       - id: SarifMark-System-ReportHeading
-        title: The tool shall accept a configurable custom heading for generated markdown reports.
+        title: The tool shall accept a configurable custom heading for generated markdown
+          reports.
         tags: [public]
         justification: >-
-          Configurable report heading allows users to customize the section title in generated
+          Configurable report heading allows users to customize the section title
+          in generated
           reports, improving integration into existing documentation workflows.
+        children:
+          - SarifMark-Cli-Heading
         tests:
-          - SarifMark_HelpFlag_OutputsUsageInformation
+          - SarifMark_CustomHeading_AppearsInReport
 
       - id: SarifMark-System-ValidateResults
         title: >-
@@ -136,7 +168,59 @@ sections:
           when the --results parameter is provided.
         tags: [public]
         justification: >-
-          Writing validation results to a file enables integration with CI/CD test result
+          Writing validation results to a file enables integration with CI/CD test
+          result
           reporting infrastructure such as TRX and JUnit XML consumers.
+        children:
+          - SarifMark-Validate-ResultFiles
         tests:
-          - SarifMark_ValidateFlag_RunsSelfValidation
+          - SarifMark_ValidateResultsParameter_WritesResultsFile
+
+      - id: SarifMark-System-Platform
+        title: The tool shall run on Windows, Linux, and macOS.
+        tags: [public]
+        justification: >-
+          Cross-platform support ensures the tool can be used in any CI/CD environment
+          regardless of the underlying operating system.
+        children:
+          - SarifMark-Plt-Windows
+          - SarifMark-Plt-Linux
+          - SarifMark-Plt-MacOS
+        tests:
+          - windows@SarifMark_VersionFlag_OutputsVersion
+          - ubuntu@SarifMark_VersionFlag_OutputsVersion
+          - macos@SarifMark_VersionFlag_OutputsVersion
+
+      - id: SarifMark-System-MultiRunSarif
+        title: >-
+          The tool shall generate a combined report from SARIF files containing multiple
+          runs,
+          with each run represented as a separate section.
+        tags: [public]
+        justification: >-
+          Multi-run SARIF files may be produced by tools that analyze different targets
+          or
+          configurations in a single invocation. Supporting combined reports ensures
+          all runs
+          are visible in generated documentation without requiring multiple separate
+          invocations.
+        children:
+          - SarifMark-Sarif-MultiRun
+        tests:
+          - SarifMark_MultiRunSarifFile_CreatesReport
+
+      - id: SarifMark-System-SafePaths
+        title: >-
+          The tool shall use safe path-handling functions to protect against
+          path-traversal vulnerabilities.
+        tags: [public]
+        justification: >-
+          Centralizing path-safety logic prevents path-traversal vulnerabilities from
+          being
+          independently reimplemented and ensures consistent protection wherever external
+          inputs are combined with base paths.
+        children:
+          - SarifMark-Utilities-SafePathHandling
+        tests:
+          - Utilities_SafePathHandling_PathTraversal_ThrowsException
+          - Utilities_SafePathHandling_AbsolutePath_ThrowsException

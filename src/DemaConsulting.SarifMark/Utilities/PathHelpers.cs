@@ -30,9 +30,22 @@ internal static class PathHelpers
     /// <summary>
     ///     Safely combines two paths, ensuring the resolved combined path stays within the base directory.
     /// </summary>
-    /// <param name="basePath">The base path.</param>
-    /// <param name="relativePath">The relative path to combine.</param>
-    /// <returns>The combined path.</returns>
+    /// <remarks>
+    ///     This method exists to provide centralized path-traversal protection for all file operations
+    ///     that accept externally supplied path components. It uses <see cref="Path.GetRelativePath(string, string)"/>
+    ///     to compute the relative relationship between the resolved base and the resolved combined
+    ///     path; any result that equals <c>..</c>, starts with <c>..</c> followed by a directory
+    ///     separator, or is itself rooted indicates an escape attempt and triggers an
+    ///     <see cref="ArgumentException"/>. The method is stateless and thread-safe —
+    ///     it reads no shared state and modifies nothing.
+    ///
+    ///     Edge case: when <paramref name="basePath"/> is empty, <see cref="Path.GetFullPath(string)"/> resolves
+    ///     it to the process current working directory. Callers that require a specific root should
+    ///     supply an absolute base path.
+    /// </remarks>
+    /// <param name="basePath">The base directory path. Must not be null.</param>
+    /// <param name="relativePath">The relative path to append. Must not be null.</param>
+    /// <returns>The direct result of <c>Path.Combine(basePath, relativePath)</c>, not the resolved absolute path.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="basePath"/> or <paramref name="relativePath"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentException">
     ///     Thrown when the resolved combined path escapes the base directory, or when a supplied path is invalid.

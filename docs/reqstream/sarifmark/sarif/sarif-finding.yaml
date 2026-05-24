@@ -1,49 +1,73 @@
 ---
+# SarifFinding unit requirements
+
 sections:
-  - title: SarifFinding Unit Requirements
-    requirements:
-      - id: SarifMark-SarifFinding-Properties
-        title: >-
-          The SarifFinding unit shall preserve the rule identifier, severity level, message,
-          optional file location, and optional line number provided at creation.
-        justification: >-
-          Capturing all five pieces of data on a single record provides a self-contained representation of
-          one SARIF finding, making it straightforward to pass findings between parsing and formatting
-          stages without repeated JSON traversal. The five properties form an indivisible record
-          contract: a finding is only meaningful when all five slots (three required, two optional) are
-          present together, so they are specified as a single requirement rather than five separate ones.
-        tags: [internal]
-        tests:
-          - SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties
+  - title: 'SarifMark Requirements'
+    sections:
+      - title: Sarif Requirements
+        sections:
+          - title: SarifFinding Requirements
+            requirements:
+              - id: SarifMark-SarifFinding-Properties
+                title: >-
+                  The SarifFinding unit shall preserve the rule identifier, severity
+                  level, message,
+                  optional file location, and optional line number provided at creation.
+                justification: >-
+                  Capturing all five pieces of data on a single record provides a
+                  self-contained representation of
+                  one SARIF finding, making it straightforward to pass findings between
+                  parsing and formatting
+                  stages without repeated JSON traversal. The five properties form
+                  an indivisible record
+                  contract: a finding is only meaningful when all five slots (three
+                  required, two optional) are
+                  present together, so they are specified as a single requirement
+                  rather than five separate ones.
+                tags: [internal]
+                tests:
+                  - SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties
 
-      - id: SarifMark-SarifFinding-Uri
-        title: >-
-          The SarifFinding unit shall accept an absent file location to represent
-          findings with no physical location.
-        justification: >-
-          Making the file location optional correctly reflects the SARIF specification, where not all results
-          include physical location data, and prevents the record from requiring placeholder values
-          for findings that have no associated file.
-        tags: [internal]
-        tests:
-          - SarifFinding_Constructor_NullUri_UriPropertyIsNull
+              - id: SarifMark-SarifFinding-Uri
+                title: >-
+                  The SarifFinding unit shall accept an absent file location to represent
+                  findings with no physical location.
+                justification: >-
+                  Making the file location optional correctly reflects the SARIF specification,
+                  where not all results
+                  include physical location data, and prevents the record from requiring
+                  placeholder values
+                  for findings that have no associated file.
+                tags: [internal]
+                tests:
+                  - SarifFinding_Constructor_NullUri_UriPropertyIsNull
 
-      - id: SarifMark-SarifFinding-StartLine
-        title: The SarifFinding unit shall accept an absent line number to represent findings with no specific line.
-        justification: >-
-          An optional line number mirrors the SARIF specification where line information may be absent,
-          and enables the report formatter to present precise location data when available while
-          gracefully omitting it when not.
-        tags: [internal]
-        tests:
-          - SarifFinding_Constructor_NullStartLine_StartLinePropertyIsNull
+              - id: SarifMark-SarifFinding-StartLine
+                title: >-
+                  The SarifFinding unit shall accept an absent line number to represent
+                  findings
+                  with no specific line.
+                justification: >-
+                  An optional line number mirrors the SARIF specification where line
+                  information may be absent,
+                  and enables the report formatter to present precise location data
+                  when available while
+                  gracefully omitting it when not.
+                tags: [internal]
+                tests:
+                  - SarifFinding_Constructor_NullStartLine_StartLinePropertyIsNull
 
-      - id: SarifMark-SarifFinding-Internal
-        title: The SarifFinding unit shall not be directly instantiable by consumers outside the SarifMark assembly.
-        justification: >-
-          Restricting construction to the SARIF parsing subsystem enforces that finding instances are
-          always produced through the validated parsing pipeline, preventing external consumers from
-          creating invalid or inconsistent finding objects.
-        tags: [internal]
-        tests:
-          - SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties
+              - id: SarifMark-SarifFinding-Internal
+                title: >-
+                  The SarifFinding unit shall not be directly instantiable by consumers
+                  outside
+                  the SarifMark assembly.
+                justification: >-
+                  Restricting construction to the SARIF parsing subsystem enforces
+                  that finding instances are
+                  always produced through the validated parsing pipeline, preventing
+                  external consumers from
+                  creating invalid or inconsistent finding objects.
+                tags: [internal]
+                tests:
+                  - SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties

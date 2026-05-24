@@ -1,15 +1,15 @@
 ---
-title: SarifMark Software Design
-subtitle: Design Documentation
-author: DEMA Consulting
-description: Software design document for the SarifMark .NET tool for generating markdown reports from SARIF files
+title: "SarifMark Software Design Document"
+subtitle: "SARIF Report Generation Tool"
+author: "DEMA Consulting"
+description: "Software design document for SarifMark"
 lang: en-US
 keywords:
-  - SarifMark
   - Design
+  - Software Design Document
+  - SarifMark
   - C#
   - .NET
-  - CLI Tool
   - SARIF
-  - Static Analysis
+  - CLI Tool
 ---

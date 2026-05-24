@@ -1,7 +1,5 @@
 ---
-# ReviewMark OTS Software Requirements
-#
-# Requirements for the ReviewMark file review tool functionality.
+# ReviewMark OTS requirements
 
 sections:
   - title: OTS Software Requirements
@@ -9,7 +7,8 @@ sections:
       - title: ReviewMark Requirements
         requirements:
           - id: SarifMark-OTS-ReviewMark
-            title: ReviewMark shall generate a review plan and review report from the review configuration.
+            title: ReviewMark shall generate a review plan and review report from
+              the review configuration.
             justification: |
               DemaConsulting.ReviewMark reads the .reviewmark.yaml configuration and the review
               evidence store to produce a review plan and review report documenting file review

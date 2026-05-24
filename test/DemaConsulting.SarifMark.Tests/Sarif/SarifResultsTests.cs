@@ -1273,11 +1273,45 @@ public sealed class SarifResultsTests : IDisposable
     [Fact]
     public void SarifResults_Read_MultipleRuns_ReturnsAllRuns()
     {
-        // Arrange
-        var sarifFile = PathHelpers.SafePathCombine(Path.Combine(AppContext.BaseDirectory, "TestData"), "multi-run.sarif");
+        // Arrange - inline multi-run SARIF: Tool1 (1 result, 1 artifact) and Tool2 (0 results, 2 artifacts)
+        var filePath = PathHelpers.SafePathCombine(_testDirectory, "multi-run.sarif");
+        File.WriteAllText(filePath, """
+            {
+              "version": "2.1.0",
+              "runs": [
+                {
+                  "tool": { "driver": { "name": "Tool1", "version": "1.0.0" } },
+                  "results": [
+                    {
+                      "ruleId": "RULE001",
+                      "level": "warning",
+                      "message": { "text": "A warning from Tool1" },
+                      "locations": [
+                        {
+                          "physicalLocation": {
+                            "artifactLocation": { "uri": "file1.cs" },
+                            "region": { "startLine": 10 }
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "artifacts": [ { "location": { "uri": "file1.cs" } } ]
+                },
+                {
+                  "tool": { "driver": { "name": "Tool2", "version": "2.0.0" } },
+                  "results": [],
+                  "artifacts": [
+                    { "location": { "uri": "file2.cs" } },
+                    { "location": { "uri": "file3.cs" } }
+                  ]
+                }
+              ]
+            }
+            """);
 
         // Act
-        var results = SarifResults.Read(sarifFile);
+        var results = SarifResults.Read(filePath);
 
         // Assert
         Assert.Equal(2, results.Runs.Count);

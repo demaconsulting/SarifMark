@@ -1,59 +1,71 @@
-## Cli Subsystem
+## Cli
 
-The `Cli` subsystem provides the command-line interface for SarifMark.
-It is responsible for accepting user input from the command line and routing output to
-the console and an optional log file.
+The `Cli` subsystem provides the command-line interface layer for SarifMark. It is
+responsible for accepting user input from the command line and routing all tool output
+to the console and an optional log file.
 
 ### Overview
 
 The `Cli` subsystem acts as the primary boundary between the user's shell invocation and
 the tool's internal logic. It owns argument parsing, output formatting, and error tracking.
-All other subsystems receive a `Context` object from the `Cli` subsystem to read parsed
-flags and write output.
+All other subsystems receive a `Context` object from `Cli` to read parsed flags and write
+output. The subsystem contains a single unit:
 
-### Units
-
-The `Cli` subsystem contains the following software unit:
-
-| Unit      | File             | Responsibility                                    |
-|-----------|------------------|---------------------------------------------------|
-| `Context` | `Cli/Context.cs` | Argument parsing, output channels, and exit code. |
+- **Context**: argument parsing, output channels, and exit-code management.
 
 ### Interfaces
 
-The `Cli` subsystem exposes the following interface to the rest of the tool:
+**Context.Create**: Factory method that constructs a fully initialized `Context` from
+command-line arguments.
 
-**Methods:**
+- *Type*: In-process .NET static method
+- *Role*: Provider
+- *Contract*: Accepts `string[] args`; returns a `Context` with all flags and parameters
+  parsed, and the log file opened if `--log` was specified.
+- *Constraints*: `args` must not be null. Throws `ArgumentException` for unrecognized or
+  malformed arguments; throws `InvalidOperationException` if the log file cannot be opened.
 
-| Interface            | Direction | Description                                                   |
-|----------------------|-----------|---------------------------------------------------------------|
-| `Context.Create`     | Outbound  | Factory method constructing a `Context` from `string[] args`. |
-| `Context.WriteLine`  | Outbound  | Writes a message to console and optional log file.            |
-| `Context.WriteError` | Outbound  | Writes an error to stderr and sets the error exit code.       |
+**Context.WriteLine**: Writes a message to the console and optional log file.
 
-**Parsed flags and parameters** (set by `Create`, read by the application layer):
+- *Type*: In-process .NET instance method
+- *Role*: Provider
+- *Contract*: Accepts `string message`; writes to `Console.Out` unless `Silent` is `true`;
+  always writes to the log `StreamWriter` if one is open.
+- *Constraints*: None.
 
-| Property      | Type      | CLI flag(s)              | Description                                   |
-|---------------|-----------|--------------------------|-----------------------------------------------|
-| `Version`     | `bool`    | `-v`, `--version`        | Version query flag                            |
-| `Help`        | `bool`    | `-?`, `-h`, `--help`     | Help flag                                     |
-| `Silent`      | `bool`    | `--silent`               | Suppress console output flag                  |
-| `Validate`    | `bool`    | `--validate`             | Self-validation mode flag                     |
-| `Enforce`     | `bool`    | `--enforce`              | Enforcement mode flag                         |
-| `SarifFile`   | `string?` | `--sarif <file>`         | Path to the SARIF input file                  |
-| `ReportFile`  | `string?` | `--report <file>`        | Path for the markdown report output file      |
-| `Depth`       | `int`     | `--depth <depth>`        | Heading depth (legacy: `--report-depth`)      |
-| `Heading`     | `string?` | `--heading <text>`       | Custom heading text for the report            |
-| `ResultsFile` | `string?` | `--results <file>`       | Results file (legacy: `--result`)             |
-| *(log writer)*| —         | `--log <file>`           | Internal log writer; not a property           |
-| `ExitCode`    | `int`     | *(derived)*              | 0 until `WriteError` is called, then 1        |
+**Context.WriteError**: Writes an error message and sets the non-zero exit code.
 
-### Interactions
+- *Type*: In-process .NET instance method
+- *Role*: Provider
+- *Contract*: Accepts `string message`; unconditionally sets the internal error flag (causing
+  `ExitCode` to return `1`); writes to `Console.Error` in red unless `Silent` is `true`;
+  always writes to the log if open.
+- *Constraints*: None.
 
-The `Cli` subsystem has no dependencies on other tool subsystems. It uses only .NET base
-class library types. The `Program` unit at system level creates the `Context` and passes it
-to all subsystems that need to produce output.
+**Context properties**: The read-only parsed state exposed to the application layer.
 
-### Class Details
+- *Type*: In-process .NET instance properties
+- *Role*: Provider
+- *Contract*: Exposes `Version`, `Help`, `Silent`, `Validate`, `Enforce` (bool);
+  `SarifFile`, `ReportFile`, `Heading`, `ResultsFile` (string?); `Depth` (int); `ExitCode` (int).
+  All values are set during `Create` and are immutable after construction.
+- *Constraints*: Properties are read-only after construction; `Depth` must be a positive
+  integer supplied after `--depth` (or legacy `--report-depth`).
 
-- **Context class** — argument parsing and output routing
+### Design
+
+The `Cli` subsystem contains a single unit (`Context`) so there is no inter-unit data flow
+to describe. `Context.Create` is the subsystem entry point:
+
+1. `Create` receives `string[] args` and delegates to the private `ArgumentParser` inner class.
+2. `ArgumentParser.ParseArguments` iterates tokens in order; value-bearing flags consume the
+   following token.
+3. On any unrecognized token, `ParseArgument` throws `ArgumentException`.
+4. The fully parsed state is transferred into a new `Context` instance through `init`-only
+   property setters.
+5. If `--log` was specified, `OpenLogFile` is called to open the log `StreamWriter` with
+   `AutoFlush = true`.
+6. The `Context` instance is returned to the caller and used for all subsequent output.
+
+All subsystems that need to produce output hold a reference to the same `Context` instance
+created in step 6; no subsystem constructs its own `Context`.

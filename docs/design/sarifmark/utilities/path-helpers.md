@@ -1,69 +1,54 @@
-### PathHelpers Class
+### PathHelpers
 
-#### Overview
+#### Purpose
 
-`PathHelpers` is a static internal utility class that provides a safe path-combination method. It
-protects callers against path-traversal attacks by verifying the resolved combined path stays
-within the base directory. Note that `Path.GetFullPath` normalizes `.`/`..` segments but does
-not resolve symlinks or reparse points, so this check guards against string-level traversal
-only.
+`PathHelpers` is a static internal utility class that provides a single method,
+`SafePathCombine`, for combining two path segments while verifying that the result
+remains within the base directory. It protects callers from string-level path-traversal
+attacks by resolving both paths to absolute form and checking containment before
+returning the combined result.
 
-#### Class Visibility
+#### Data Model
 
-`PathHelpers` is declared `internal`, limiting its use to the `DemaConsulting.SarifMark` assembly.
-The project file includes `<InternalsVisibleTo Include="DemaConsulting.SarifMark.Tests" />`,
-which grants the test assembly access to the class and its methods for direct unit testing.
+N/A - `PathHelpers` is a `static` class with no instance or static fields.
 
-#### SafePathCombine Method
+#### Key Methods
 
-```csharp
-internal static string SafePathCombine(string basePath, string relativePath)
-```
+**SafePathCombine**: Combines two path segments and rejects traversal.
 
-Combines `basePath` and `relativePath` safely, ensuring the resulting path remains within
-the base directory. It is used by the `TemporaryDirectory` helper inside `Validation` when
-constructing paths inside a temporary directory from `Guid`-based file names.
+- *Parameters*: `string basePath` — the base directory path; `string relativePath` —
+  the relative path to append
+- *Returns*: `string` — the non-resolved combined path (direct result of `Path.Combine`)
+- *Preconditions*: Both `basePath` and `relativePath` are non-null.
+- *Postconditions*: The resolved combined path remains within the resolved base directory.
+  Returns the direct (non-resolved) result of `Path.Combine(basePath, relativePath)`.
 
-##### Null Checks
+The method validates both arguments for null using `ArgumentNullException.ThrowIfNull`,
+combines them with `Path.Combine`, resolves both the base and the candidate to absolute
+form with `Path.GetFullPath`, calls `Path.GetRelativePath(absoluteBase, absoluteCombined)`,
+and rejects the result if it is `".."`, starts with `".."` followed by a directory
+separator, or is itself rooted (absolute). Valid paths are returned as the direct result
+of `Path.Combine`.
 
-Both `basePath` and `relativePath` are validated with `ArgumentNullException.ThrowIfNull` before
-any other processing. This satisfies requirement `SarifMark-PathHelpers-NullCheck`.
+The use of `Path.GetRelativePath` for containment checking handles root paths, platform
+case-sensitivity, and directory-separator normalization natively, without fragile
+pre-combine string inspection of `relativePath`.
 
-##### Path Combination
+#### Error Handling
 
-`Path.Combine(basePath, relativePath)` is called to produce the candidate path, preserving
-the caller's relative/absolute style.
+`SafePathCombine` throws `ArgumentNullException` when either `basePath` or `relativePath`
+is null. It throws `ArgumentException` identifying `relativePath` as the problematic
+parameter when the resolved combined path escapes the base directory (traversal detected)
+or contains an invalid path component. No logging or error accumulation is performed; the
+method is a pure utility that throws on invalid input.
 
-##### Post-Combination Security Check
+#### Dependencies
 
-The method resolves both `basePath` and the candidate to absolute form with `Path.GetFullPath`,
-then calls `Path.GetRelativePath(absoluteBase, absoluteCombined)` and rejects the input if
-the result is exactly `".."`, starts with `".."` followed by `Path.DirectorySeparatorChar`
-or `Path.AltDirectorySeparatorChar`, or is itself rooted (absolute). These conditions indicate
-the combined path escapes the base directory. This satisfies requirement
-`SarifMark-PathHelpers-PostCombineCheck`.
+- **.NET base class library** — `Path.Combine`, `Path.GetFullPath`, `Path.GetRelativePath`,
+  `Path.DirectorySeparatorChar`, `Path.AltDirectorySeparatorChar`,
+  `ArgumentNullException.ThrowIfNull`, `ArgumentException`.
 
-##### Return Value
+#### Callers
 
-On success, the non-resolved combined path (the direct result of `Path.Combine`) is returned.
-This satisfies requirement `SarifMark-PathHelpers-SafeCombine`.
-
-#### Design Decisions
-
-- **`Path.GetRelativePath` for containment check**: Using `GetRelativePath` to verify
-  containment handles root paths (e.g. `/`, `C:\`), platform case-sensitivity, and
-  directory-separator normalization natively. The containment test treats `..` as an
-  escaping segment only when it is the entire relative result or is followed by a directory
-  separator, avoiding false positives for valid in-base names such as `..data`.
-- **Post-combine canonical-path check**: Resolving paths after combining handles all traversal
-  patterns — `../`, embedded `/../`, absolute-path overrides, and platform edge cases —
-  without fragile pre-combine string inspection of `relativePath`.
-- **ArgumentException on invalid input**: Callers receive a specific `ArgumentException`
-  identifying `relativePath` as the problematic parameter, making debugging straightforward.
-- **No logging or error accumulation**: `SafePathCombine` is a pure utility method that throws
-  on invalid input; it does not interact with the `Context` or any output mechanism.
-
-#### Cross-References
-
-See the Self-Validation document for the `TemporaryDirectory` nested class that calls
-`SafePathCombine`.
+- **Validation** — calls `PathHelpers.SafePathCombine` inside the `TemporaryDirectory`
+  nested class to construct file paths within the temporary directory from GUID-based names.

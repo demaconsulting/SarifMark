@@ -1,14 +1,13 @@
 ---
-title: SarifMark User Guide
-subtitle: A .NET Command-Line Tool for SARIF Report Generation
-author: DEMA Consulting
-description: A .NET Command-Line Tool for SARIF Report Generation
+title: "SarifMark User Guide"
+subtitle: "SARIF Report Generation Tool"
+author: "DEMA Consulting"
+description: "User Guide for SARIF Report Generation Tool"
 lang: en-US
 keywords:
+  - User Guide
   - SarifMark
   - SARIF
-  - Code Quality
   - .NET
   - Command-Line Tool
-  - Documentation
 ---

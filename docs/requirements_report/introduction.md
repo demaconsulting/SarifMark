@@ -1,21 +1,27 @@
 # Introduction
 
-This document contains the requirements traceability matrix for the SarifMark project.
+This document provides the requirements Trace Matrix for SarifMark,
+mapping each requirement to its corresponding test evidence.
 
 ## Purpose
 
-The trace matrix provides traceability between requirements and test cases, ensuring that
-all requirements are validated through appropriate testing. This demonstrates that the
+To demonstrate that every requirement is covered by at least one passing test,
+providing compliance evidence for SarifMark. The trace matrix shows that the
 SarifMark tool meets its specified requirements.
 
 ## Scope
 
-This traceability matrix covers:
+This document covers all requirements in `docs/reqstream/` and their test evidence,
+including:
 
 - Mapping of requirements to test cases
 - Test execution results linked to requirements
 - Validation of requirement coverage
 - Platform-specific test execution
+
+## References
+
+- [SarifMark releases](https://github.com/demaconsulting/SarifMark/releases)
 
 ## Audience
 

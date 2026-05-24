@@ -1,13 +1,16 @@
 ---
+# CLI subsystem requirements
 sections:
-  - title: SarifMark Requirements
+  - title: 'SarifMark Requirements'
     sections:
-      - title: CLI Subsystem
+      - title: CLI Requirements
         requirements:
           - id: SarifMark-Cli-Interface
-            title: The CLI subsystem shall accept command-line arguments and route output.
+            title: The CLI subsystem shall accept command-line arguments and route
+              output.
             justification: >-
-              A command-line interface enables automation, scripting, and integration into CI/CD pipelines,
+              A command-line interface enables automation, scripting, and integration
+              into CI/CD pipelines,
               making the tool suitable for DevOps workflows and batch processing scenarios.
             tags: [public]
             children:
@@ -19,8 +22,10 @@ sections:
           - id: SarifMark-Cli-Version
             title: The CLI shall recognize the --version flag.
             justification: >-
-              Recognizing the version flag allows the application layer to identify the requested operation
-              and display the tool version, supporting troubleshooting and compatibility verification.
+              Recognizing the version flag allows the application layer to identify
+              the requested operation
+              and display the tool version, supporting troubleshooting and compatibility
+              verification.
             tags: [public]
             children:
               - SarifMark-Context-VersionFlag
@@ -30,7 +35,8 @@ sections:
           - id: SarifMark-Cli-Help
             title: The CLI shall recognize the --help flag.
             justification: >-
-              Recognizing the help flag allows the application layer to display usage information,
+              Recognizing the help flag allows the application layer to display usage
+              information,
               improving discoverability without consulting external documentation.
             tags: [public]
             children:
@@ -41,8 +47,10 @@ sections:
           - id: SarifMark-Cli-Silent
             title: The CLI shall suppress console output when the silent flag is set.
             justification: >-
-              Silent mode enables cleaner integration into automated workflows and CI/CD pipelines where console
-              noise needs to be minimized, while still allowing log files to capture detailed information.
+              Silent mode enables cleaner integration into automated workflows and
+              CI/CD pipelines where console
+              noise needs to be minimized, while still allowing log files to capture
+              detailed information.
             tags: [public]
             children:
               - SarifMark-Context-SilentFlag
@@ -50,9 +58,11 @@ sections:
               - Cli_Create_SilentFlag_SuppressesOutput
 
           - id: SarifMark-Cli-Log
-            title: The CLI shall write output to a log file when the log parameter is set.
+            title: The CLI shall write output to a log file when the log parameter
+              is set.
             justification: >-
-              Log file support enables persistent record-keeping, debugging, and audit trails, especially valuable
+              Log file support enables persistent record-keeping, debugging, and audit
+              trails, especially valuable
               in automated environments where console output may not be readily available.
             tags: [public]
             children:
@@ -63,8 +73,10 @@ sections:
           - id: SarifMark-Cli-Enforce
             title: The CLI shall recognize the --enforce flag.
             justification: >-
-              Recognizing the enforce flag allows the application layer to determine whether to apply
-              quality gate behavior, making it suitable for integration into CI/CD pipelines.
+              Recognizing the enforce flag allows the application layer to determine
+              whether to apply
+              quality gate behavior, making it suitable for integration into CI/CD
+              pipelines.
             tags: [public]
             children:
               - SarifMark-Context-EnforceFlag
@@ -74,8 +86,10 @@ sections:
           - id: SarifMark-Cli-WriteError
             title: The CLI shall write errors to stderr and set a non-zero exit code.
             justification: >-
-              Writing errors to stderr separates diagnostic output from the regular output stream, and
-              automatically setting a non-zero exit code ensures that callers receive a failure signal
+              Writing errors to stderr separates diagnostic output from the regular
+              output stream, and
+              automatically setting a non-zero exit code ensures that callers receive
+              a failure signal
               without requiring explicit exit code management throughout the codebase.
             tags: [public]
             children:
@@ -86,7 +100,8 @@ sections:
           - id: SarifMark-Cli-InvalidArgs
             title: The CLI shall reject unknown command-line arguments.
             justification: >-
-              Rejecting unknown arguments prevents silent failures from typos or incorrect parameters, ensuring
+              Rejecting unknown arguments prevents silent failures from typos or incorrect
+              parameters, ensuring
               users receive immediate feedback about misconfigured commands.
             tags: [public]
             children:
@@ -97,8 +112,10 @@ sections:
           - id: SarifMark-Cli-Validate
             title: The CLI shall recognize the --validate flag.
             justification: >-
-              Recognizing the validate flag allows the application layer to activate self-validation mode,
-              enabling verification that the tool operates correctly in the deployment environment.
+              Recognizing the validate flag allows the application layer to activate
+              self-validation mode,
+              enabling verification that the tool operates correctly in the deployment
+              environment.
             tags: [public]
             children:
               - SarifMark-Context-ValidateFlag
@@ -108,7 +125,8 @@ sections:
           - id: SarifMark-Cli-Sarif
             title: The CLI shall accept a SARIF file path via the --sarif parameter.
             justification: >-
-              Exposing a dedicated SARIF file path parameter gives the application layer a clean, named value
+              Exposing a dedicated SARIF file path parameter gives the application
+              layer a clean, named value
               that decouples argument parsing from file processing.
             tags: [public]
             children:
@@ -119,7 +137,8 @@ sections:
           - id: SarifMark-Cli-Report
             title: The CLI shall accept a report file path via the --report parameter.
             justification: >-
-              A dedicated report file path parameter gives the application layer a clear output target,
+              A dedicated report file path parameter gives the application layer a
+              clear output target,
               keeping argument parsing separate from report generation logic.
             tags: [public]
             children:
@@ -130,19 +149,24 @@ sections:
           - id: SarifMark-Cli-ReportDepth
             title: The CLI shall accept a heading depth via the --depth parameter.
             justification: >-
-              Exposing a validated heading depth parameter allows the application layer to control markdown
-              report heading levels without reimplementing argument parsing or range checking.
+              Exposing a validated heading depth parameter allows the application
+              layer to control markdown
+              report heading levels without reimplementing argument parsing or range
+              checking.
             tags: [public]
             children:
               - SarifMark-Context-ReportDepthParam
             tests:
               - Cli_Create_DepthParameter_SetsDepth
+              - Cli_Create_DepthInvalidValue_ThrowsArgumentException
 
           - id: SarifMark-Cli-Heading
             title: The CLI shall accept a custom heading via the --heading parameter.
             justification: >-
-              Exposing a custom heading parameter lets the application layer pass user-specified titles
-              directly to the report formatter, keeping argument handling separate from output logic.
+              Exposing a custom heading parameter lets the application layer pass
+              user-specified titles
+              directly to the report formatter, keeping argument handling separate
+              from output logic.
             tags: [public]
             children:
               - SarifMark-Context-HeadingParam
@@ -152,8 +176,10 @@ sections:
           - id: SarifMark-Cli-Results
             title: The CLI shall accept a results file path via the --results parameter.
             justification: >-
-              A dedicated results file path parameter gives the application layer a clear destination for
-              test result output during self-validation, keeping argument parsing separate from output logic.
+              A dedicated results file path parameter gives the application layer
+              a clear destination for
+              test result output during self-validation, keeping argument parsing
+              separate from output logic.
             tags: [public]
             children:
               - SarifMark-Context-ResultsParam
@@ -163,8 +189,10 @@ sections:
           - id: SarifMark-Cli-ReportDepthLegacyAlias
             title: The CLI shall accept --report-depth as a legacy alias for --depth.
             justification: >-
-              Supporting the legacy --report-depth alias preserves backwards compatibility for users and scripts
-              that relied on the earlier parameter name, avoiding breaking changes in automated workflows.
+              Supporting the legacy --report-depth alias preserves backwards compatibility
+              for users and scripts
+              that relied on the earlier parameter name, avoiding breaking changes
+              in automated workflows.
             tags: [public]
             children:
               - SarifMark-Context-ReportDepthParam
@@ -174,8 +202,10 @@ sections:
           - id: SarifMark-Cli-ResultLegacyAlias
             title: The CLI shall accept --result as a legacy alias for --results.
             justification: >-
-              Supporting the legacy --result alias preserves backwards compatibility for users and scripts
-              that relied on the earlier parameter name, avoiding breaking changes in automated workflows.
+              Supporting the legacy --result alias preserves backwards compatibility
+              for users and scripts
+              that relied on the earlier parameter name, avoiding breaking changes
+              in automated workflows.
             tags: [public]
             children:
               - SarifMark-Context-ResultLegacyAlias
