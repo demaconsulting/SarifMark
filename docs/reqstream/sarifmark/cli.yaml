@@ -1,6 +1,5 @@
 ---
 # CLI subsystem requirements
-
 sections:
   - title: 'SarifMark Requirements'
     sections:
@@ -159,6 +158,7 @@ sections:
               - SarifMark-Context-ReportDepthParam
             tests:
               - Cli_Create_DepthParameter_SetsDepth
+              - Cli_Create_DepthInvalidValue_ThrowsArgumentException
 
           - id: SarifMark-Cli-Heading
             title: The CLI shall accept a custom heading via the --heading parameter.

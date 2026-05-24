@@ -40,7 +40,10 @@ through `ExtractToolInformation`, `ParseResults`, and `ExtractFileCount`.
 
 For single-run files, delegates directly to `Runs[0].ToMarkdown(depth, heading)`. For
 multi-run files, emits indexed headings (`"[ToolName] Analysis (#1)"`) and concatenates
-all run reports.
+all run reports. When a custom heading is provided for a multi-run file, the heading format
+becomes `"{customHeading} (#N)"` — consistent with the default multi-run format `"[ToolName] Analysis (#N)"`.
+This ensures the custom heading prefix is preserved while the run index suffix still distinguishes
+each run.
 
 **ValidateSarifStructure**: Verifies the root JSON element and returns the runs array.
 

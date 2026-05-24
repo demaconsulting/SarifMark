@@ -60,6 +60,15 @@ public record SarifFinding
     /// <summary>
     ///     Internal constructor to enforce that instances are only created through the validated parsing pipeline.
     /// </summary>
+    /// <remarks>
+    ///     The constructor is <see langword="internal"/> to restrict instantiation to the parsing pipeline:
+    ///     only <c>SarifResults.ParseResults</c> should construct <see cref="SarifFinding"/> instances,
+    ///     ensuring every finding passes through the validated SARIF extraction logic before it reaches
+    ///     report generation. The project file includes
+    ///     <c>&lt;InternalsVisibleTo Include="DemaConsulting.SarifMark.Tests" /&gt;</c>,
+    ///     which grants the test assembly permission to construct instances directly for unit testing
+    ///     without relaxing the access restriction for production consumers.
+    /// </remarks>
     /// <param name="ruleId">The rule identifier.</param>
     /// <param name="level">The level of the finding.</param>
     /// <param name="message">The message text.</param>

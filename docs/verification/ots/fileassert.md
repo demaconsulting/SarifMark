@@ -18,6 +18,15 @@ This scenario is verified by the self-validation CI pipeline step.
 information and exits with code 0, confirming the CLI interface is functioning as expected.
 This scenario is verified by the self-validation CI pipeline step.
 
+**FileAssert_HtmlDocumentAssertions**: FileAssert validates generated HTML documents in the CI pipeline, asserting
+that each HTML output file exists, has non-trivial size, contains a valid `<title>` element, and includes expected
+document content. This scenario is verified by the file-assertion CI pipeline steps that validate Pandoc HTML outputs.
+
+**FileAssert_PdfDocumentAssertions**: FileAssert validates generated PDF documents in the CI pipeline, asserting
+that each PDF output file exists, has non-trivial size, contains at least one page, and includes expected rendered
+text. This scenario is verified by the file-assertion CI pipeline steps that validate WeasyPrint PDF outputs.
+
 ### Requirements Coverage
 
-- **`SarifMark-OTS-FileAssert`**: CI file assertions pass — `FileAssert_VersionDisplay`, `FileAssert_HelpDisplay`
+- **`SarifMark-OTS-FileAssert`**: CI file assertions pass — `FileAssert_VersionDisplay`, `FileAssert_HelpDisplay`,
+  `FileAssert_HtmlDocumentAssertions`, `FileAssert_PdfDocumentAssertions`

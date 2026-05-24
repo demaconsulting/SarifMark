@@ -18,9 +18,9 @@ This scenario is tested by representative test methods across all test classes i
 `test/DemaConsulting.SarifMark.Tests/`.
 
 **XUnitV3_TrxOutputGeneration**: The `dotnet test --results-directory` invocation produces TRX result files in the
-specified directory, confirming that the `xunit.runner.visualstudio` adapter serialises test results in TRX format
+specified directory, confirming that the `xunit.runner.visualstudio` adapter serializes test results in TRX format
 as required by ReqStream for traceability enforcement.
-This scenario is verified by the presence of TRX result files in the CI pipeline test-results artefacts.
+This scenario is verified by the presence of TRX result files in the CI pipeline test-results artifacts.
 
 ### Requirements Coverage
 

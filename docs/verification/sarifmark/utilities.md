@@ -10,8 +10,8 @@ mocking is required at any level.
 ### Test Environment
 
 Standard xUnit v3 test runner with `dotnet test`. No external services, files, or configuration beyond the standard test
-runner are required. Platform-specific tests are guarded by `OperatingSystem.IsWindows()` and are skipped on
-non-Windows platforms.
+runner are required. All tests are cross-platform by design and require no runtime platform guards, relying on
+.NET's `Path.Combine`, `Path.GetFullPath`, and `Path.GetRelativePath` cross-platform semantics.
 
 ### Acceptance Criteria
 
@@ -26,6 +26,23 @@ non-Windows platforms.
 path and a relative child path; assert the combined path equals the expected value.
 This scenario is tested by `Utilities_SafePathHandling_ValidPaths_CombinesSuccessfully`.
 
+**Utilities_SafePathHandling_PathTraversal_ThrowsException**: Call `PathHelpers.SafePathCombine` with a path traversal
+component (`../../../etc/passwd`); assert `ArgumentException` is thrown, confirming path traversal attacks are rejected
+at the subsystem boundary.
+This scenario is tested by `Utilities_SafePathHandling_PathTraversal_ThrowsException`.
+
+**Utilities_SafePathHandling_AbsolutePath_ThrowsException**: Call `PathHelpers.SafePathCombine` with an absolute child
+path (`/etc/passwd`); assert `ArgumentException` is thrown, confirming absolute path injection is rejected.
+This scenario is tested by `Utilities_SafePathHandling_AbsolutePath_ThrowsException`.
+
+**Utilities_SafePathHandling_NullRelativePath_ThrowsException**: Call `PathHelpers.SafePathCombine` with a `null`
+relative path; assert `ArgumentNullException` is thrown, confirming null-argument validation works at the subsystem
+boundary.
+This scenario is tested by `Utilities_SafePathHandling_NullRelativePath_ThrowsException`.
+
 ### Requirements Coverage
 
-- **`SarifMark-Utilities-SafePathHandling`**: `Utilities_SafePathHandling_ValidPaths_CombinesSuccessfully`
+- **`SarifMark-Utilities-SafePathHandling`**: `Utilities_SafePathHandling_ValidPaths_CombinesSuccessfully`,
+  `Utilities_SafePathHandling_PathTraversal_ThrowsException`,
+  `Utilities_SafePathHandling_AbsolutePath_ThrowsException`,
+  `Utilities_SafePathHandling_NullRelativePath_ThrowsException`

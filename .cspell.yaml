@@ -12,6 +12,7 @@ version: '0.2'
 language: en
 words:
   - buildmark
+  - callees
   - Checkmarx
   - Dema
   - fileassert
@@ -29,6 +30,7 @@ words:
   - SonarQube
   - sonarmark
   - Unwritable
+  - unopenable
   - versionmark
   - Weasyprint
   - xunit

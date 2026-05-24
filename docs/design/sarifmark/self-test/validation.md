@@ -30,10 +30,23 @@ and optionally calls `WriteResultsFile`.
 mock SARIF file, constructs a `Context`, calls `Program.Run`, reads outputs, and invokes
 a caller-supplied validator lambda.
 
-- *Parameters*: `string testName`, optional `string? reportFileName`, `Action` validator,
-  optional `string[]? extraArgs`
+- *Parameters*: `Context context` — the active output channel and settings;
+  `DemaConsulting.TestResults.TestResults testResults` — the shared results collection;
+  `string testName` — the name of the test; `string? reportFileName` — optional report
+  file name to generate; `Func<int, string, string?, string?> validator` — function
+  receiving the exit code, log content, and nullable report content, returning `null` on
+  success or an error message string on failure; `IEnumerable<string>? extraArgs` —
+  optional extra command-line arguments (default `null`)
 - Appends a `TestResult` (pass or fail) to the shared `TestResults` collection; writes a
   `✓` or `✗` status line to the context output.
+
+Each of the three self-validation test methods (`RunSarifReadingTest`, `RunMarkdownReportGenerationTest`,
+`RunEnforcementTest`) calls `RunValidationTest` with the appropriate validator lambda.
+`RunMarkdownReportGenerationTest` extracts `context.Depth` and constructs
+`depthArgs = new[] { "--depth", context.Depth.ToString() }`, passing them as `extraArgs` to
+`RunValidationTest`. This ensures report heading depth is consistent between normal analysis
+mode and self-validation mode — the same `--depth` value the caller supplied is honoured
+inside the self-validation subprocess.
 
 **WriteResultsFile** (private): Serializes the `TestResults` collection.
 
@@ -68,8 +81,10 @@ graceful cleanup in constrained environments.
 
 - **Program** — `Program.Run` is called within `RunValidationTest` to exercise the full
   analysis and enforcement pipelines.
-- **PathHelpers** — `PathHelpers.SafePathCombine` is used by the `TemporaryDirectory` nested
-  class to construct paths within the temporary directory from GUID-based file names.
+- **PathHelpers** — `PathHelpers.SafePathCombine` is used both directly in
+  `RunValidationTest` to construct log, SARIF, and report file paths within the temporary
+  directory, and by the `TemporaryDirectory` nested class to construct the temporary
+  directory path itself from a GUID-based name.
 - **Context** — used both as the external output channel passed to `Run` and as internally
   constructed test contexts passed to `Program.Run` during each test.
 

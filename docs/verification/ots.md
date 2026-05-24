@@ -28,21 +28,21 @@ For each OTS item, the following evidence is collected during CI pipeline execut
   a valid `<title>` element, and includes expected document content.
 - **WeasyPrint**: FileAssert assertions confirm that each generated PDF file exists, is non-trivial in size,
   contains at least one page, and includes expected rendered text.
-- **BuildMark**: The build-notes markdown file is present in the pipeline artefacts, confirming successful execution.
+- **BuildMark**: The build-notes markdown file is present in the pipeline artifacts, confirming successful execution.
 - **VersionMark**: The tool-versions markdown file is present, confirming all configured tool versions were captured.
 - **SonarMark**: The code-quality markdown file is present, confirming successful SonarCloud connection and report
   generation.
 - **ReviewMark**: Both the review plan and review report markdown files are present, confirming successful execution
   of both pipeline steps.
 - **xUnit v3**: The test suite produces passing results across all test classes, and TRX result files are generated
-  by `dotnet test --results-directory`, confirming test discovery, execution, and result serialisation.
+  by `dotnet test --results-directory`, confirming test discovery, execution, and result serialization.
 
 ## Regression Approach
 
 On any OTS item version upgrade, the CI pipeline is run in full. All three evidence categories are re-evaluated:
 
 - Self-validation tests must pass.
-- All CI pipeline steps that produce artefacts must complete without error.
+- All CI pipeline steps that produce artifacts must complete without error.
 - All FileAssert output assertions on generated HTML and PDF files must continue to hold.
 
 If a tool upgrade changes its output format, API, or CLI interface in a way that affects verification evidence,

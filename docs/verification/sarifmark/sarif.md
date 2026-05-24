@@ -35,17 +35,36 @@ This scenario is tested by `Sarif_Read_NonExistentFile_ThrowsFileNotFoundExcepti
 `InvalidOperationException` is thrown.
 This scenario is tested by `Sarif_Read_InvalidSarifFile_ThrowsInvalidOperationException`.
 
-**Sarif_Read_MultiRunSarifFile_ProcessesAllRuns**: Read `multi-run.sarif`; assert all runs are returned with correct
-tool metadata.
+**Sarif_Read_MultiRunSarifFile_ProcessesAllRuns**: Read `multi-run.sarif`; assert the run count equals 2.
 This scenario is tested by `Sarif_Read_MultiRunSarifFile_ProcessesAllRuns`.
 
 **Sarif_GenerateReport_LocationInfo_ContainsLocationInfo**: Generate a markdown report from a SARIF file with location
-data; assert file path and line number appear in the output.
+data; assert the file URI appears in the output.
 This scenario is tested by `Sarif_GenerateReport_LocationInfo_ContainsLocationInfo`.
 
 **Sarif_GenerateReport_FileCount_ContainsFileCount**: Generate a markdown report from a SARIF file with artifact data;
 assert the file count is present in the report header.
 This scenario is tested by `Sarif_GenerateReport_FileCount_ContainsFileCount`.
+
+**Sarif_GenerateReport_DefaultDepth_ProducesMarkdownContent**: Read `sample.sarif` and call `ToMarkdown(1)`; assert the
+report contains the `# TestTool Analysis` heading, confirming the default heading format is correct.
+This scenario is tested by `Sarif_GenerateReport_DefaultDepth_ProducesMarkdownContent`.
+
+**Sarif_GenerateReport_ReportDepth_IsConfigurable**: Read `sample.sarif` and call `ToMarkdown(3)`; assert the report
+uses `### TestTool Analysis` headings, confirming the depth parameter controls heading level.
+This scenario is tested by `Sarif_GenerateReport_ReportDepth_IsConfigurable`.
+
+**Sarif_GenerateReport_MultipleResults_FormatsWithLineBreaks**: Read `multi-result.sarif` and call `ToMarkdown(1)`;
+assert both file paths appear and are separated by proper markdown line breaks (two trailing spaces).
+This scenario is tested by `Sarif_GenerateReport_MultipleResults_FormatsWithLineBreaks`.
+
+**Sarif_GenerateReport_ResultCount_ContainsResultCount**: Read `sample.sarif` and generate a report; assert the
+singular "Found 1 issue" string appears in the output.
+This scenario is tested by `Sarif_GenerateReport_ResultCount_ContainsResultCount`.
+
+**Sarif_GenerateReport_CustomHeading_UsesCustomHeading**: Read `sample.sarif` and call `ToMarkdown(1, "Custom Analysis
+Heading")`; assert the custom heading string appears in the output instead of the default tool-name heading.
+This scenario is tested by `Sarif_GenerateReport_CustomHeading_UsesCustomHeading`.
 
 ### Requirements Coverage
 
@@ -53,9 +72,18 @@ This scenario is tested by `Sarif_GenerateReport_FileCount_ContainsFileCount`.
 - **`SarifMark-Sarif-Validation`**: `Sarif_Read_NonExistentFile_ThrowsFileNotFoundException`,
   `Sarif_Read_InvalidSarifFile_ThrowsInvalidOperationException`
 - **`SarifMark-Sarif-ToolInfo`**: `Sarif_Read_ValidSarifFile_ProcessesSuccessfully`
-- **`SarifMark-Sarif-Results`**: `Sarif_Read_ValidSarifFile_ProcessesSuccessfully`
+- **`SarifMark-Sarif-Results`**: `Sarif_Read_ValidSarifFile_ProcessesSuccessfully`,
+  `Sarif_GenerateReport_ResultCount_ContainsResultCount`
 - **`SarifMark-Sarif-Locations`**: `Sarif_GenerateReport_LocationInfo_ContainsLocationInfo`
 - **`SarifMark-Sarif-FilePaths`**: `Sarif_Read_NonExistentFile_ThrowsFileNotFoundException`
-- **`SarifMark-Sarif-Processing`**: `Sarif_Read_ValidSarifFile_ProcessesSuccessfully`
+- **`SarifMark-Sarif-Processing`**: `Sarif_Read_ValidSarifFile_ProcessesSuccessfully`,
+  `Sarif_GenerateReport_DefaultDepth_ProducesMarkdownContent`
 - **`SarifMark-Sarif-FileCount`**: `Sarif_GenerateReport_FileCount_ContainsFileCount`
 - **`SarifMark-Sarif-MultiRun`**: `Sarif_Read_MultiRunSarifFile_ProcessesAllRuns`
+- **`SarifMark-Report-Depth`**: `Sarif_GenerateReport_ReportDepth_IsConfigurable`
+- **`SarifMark-Report-LineBreaks`**: `Sarif_GenerateReport_MultipleResults_FormatsWithLineBreaks`
+- **`SarifMark-Report-Headings`**: `Sarif_GenerateReport_CustomHeading_UsesCustomHeading`
+- **`SarifMark-Report-Markdown`**: `Sarif_GenerateReport_DefaultDepth_ProducesMarkdownContent`
+- **`SarifMark-Report-Counts`**: `Sarif_GenerateReport_ResultCount_ContainsResultCount`
+- **`SarifMark-Report-Locations`**: `Sarif_GenerateReport_LocationInfo_ContainsLocationInfo`
+- **`SarifMark-Report-FileCount`**: `Sarif_GenerateReport_FileCount_ContainsFileCount`

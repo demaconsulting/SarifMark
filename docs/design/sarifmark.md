@@ -1,6 +1,6 @@
-## SarifMark
+# SarifMark
 
-### Architecture
+## Architecture
 
 SarifMark is organized into four subsystems plus a system-level entry point:
 
@@ -42,7 +42,7 @@ SARIF 2.1.0 files and generates markdown reports. The `SelfTest` subsystem exerc
 tool's own capabilities to confirm it is functioning correctly. The `Utilities` subsystem
 provides path-safety helpers shared across the system.
 
-### External Interfaces
+## External Interfaces
 
 **CLI Arguments**: The command-line interface through which users invoke the tool.
 
@@ -82,7 +82,7 @@ provides path-safety helpers shared across the system.
 - *Constraints*: File extension must be `.trx` or `.xml`; other extensions produce an
   error message. I/O errors are caught and reported through the CLI output channel.
 
-### Dependencies
+## Dependencies
 
 - **xUnit v3**: the testing framework used for all automated unit and integration tests —
   see *xUnit v3 Integration Design*
@@ -103,11 +103,11 @@ provides path-safety helpers shared across the system.
 - **WeasyPrint**: converts HTML documents to PDF —
   see *WeasyPrint Integration Design*
 
-### Risk Control Measures
+## Risk Control Measures
 
 N/A - not a safety-classified software item.
 
-### Data Flow
+## Data Flow
 
 The primary analysis data flow from SARIF input to markdown output:
 
@@ -126,7 +126,7 @@ The primary analysis data flow from SARIF input to markdown output:
 The self-validation flow is a separate path in step 3 where `Validation.Run` exercises the
 analysis flow end-to-end using a mock SARIF file and verifies the output.
 
-### Design Constraints
+## Design Constraints
 
 - Platform: targets .NET 8, 9, and 10 on Windows, Linux, and macOS.
 - Input format: SARIF 2.1.0 JSON only.
@@ -136,3 +136,26 @@ analysis flow end-to-end using a mock SARIF file and verifies the output.
 - Heading depth parameter must be an integer between 1 and 6 inclusive.
 - All path-combination operations on externally supplied paths use `PathHelpers.SafePathCombine`
   to prevent path-traversal vulnerabilities.
+
+## Error Handling
+
+Errors are handled at three levels:
+
+1. **Argument errors** (`ArgumentException`): thrown by `Context.Create` when the command-line
+   arguments are invalid (unrecognized flags, missing values, non-integer depth). Caught in
+   `Program.Main` and written to stderr with exit code 1.
+
+2. **Operation errors** (`InvalidOperationException`): thrown by subsystems when a runtime
+   precondition fails (e.g., log file cannot be opened, SARIF file is structurally invalid).
+   Caught in `Program.Main` and written to stderr with exit code 1.
+
+3. **Unexpected exceptions**: any exception not of the two types above propagates unhandled
+   from `Program.Main`, causing the .NET runtime to write a crash report and return a non-zero
+   exit code. Unexpected exceptions are intentionally not caught so they surface as unhandled
+   errors and aid debugging.
+
+Only `ArgumentException` and `InvalidOperationException` represent expected user-facing error
+conditions. All other exception types indicate programming errors or environmental failures that
+should not be silently swallowed. See the unit-level Error Handling sections in the
+*Program*, *Context*, *SarifResults*, and *Validation* unit design documents for
+per-subsystem error-handling detail.

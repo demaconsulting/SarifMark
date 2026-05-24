@@ -26,9 +26,9 @@ SARIF specification does not require location data for every result.
 
 #### Key Methods
 
-N/A - `SarifFinding` is a positional record with no public instance methods beyond the
-auto-generated equality and deconstruction members. All construction is performed by the
-`SarifResults.ParseResults` method.
+N/A - `SarifFinding` is a record class with no public instance methods beyond the
+auto-generated equality members. All construction is performed through the `internal`
+constructor by `SarifResults.ParseResults`.
 
 #### Error Handling
 

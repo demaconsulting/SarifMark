@@ -14,7 +14,21 @@ the code-quality markdown document, confirming SonarMark successfully connected 
 gate status, issues, and hotspots into the expected report format.
 This scenario is verified by successful completion of the SonarMark pipeline step in CI.
 
+**SonarMark_IssuesRetrieval**: The CI pipeline step that invokes SonarMark completes without error, confirming
+SonarMark successfully retrieved the issues list from SonarCloud and rendered it in the code-quality markdown report.
+This scenario is verified by successful completion of the SonarMark pipeline step in CI.
+
+**SonarMark_HotSpotsRetrieval**: The CI pipeline step that invokes SonarMark completes without error, confirming
+SonarMark successfully retrieved the hot spots list from SonarCloud and rendered it in the code-quality markdown
+report. This scenario is verified by successful completion of the SonarMark pipeline step in CI.
+
+**SonarMark_MarkdownReportGeneration**: The CI pipeline step that invokes SonarMark produces the code-quality
+markdown document, confirming SonarMark successfully generated a complete markdown report containing quality-gate,
+issues, and hot spots sections.
+This scenario is verified by successful completion of the SonarMark pipeline step in CI.
+
 ### Requirements Coverage
 
 - **`SarifMark-OTS-SonarMark`**: Retrieves quality data and generates markdown report —
-  `SonarMark_QualityGateRetrieval`
+  `SonarMark_QualityGateRetrieval`, `SonarMark_IssuesRetrieval`, `SonarMark_HotSpotsRetrieval`,
+  `SonarMark_MarkdownReportGeneration`

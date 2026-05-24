@@ -202,7 +202,7 @@ The generated markdown report includes:
 
 1. **Report Header** - Custom heading or tool name with "Analysis" suffix
 2. **Tool Information** - Tool name and version extracted from SARIF file
-3. **File Count** - Total number of files analyzed (sum of artifacts across all runs)
+3. **File Count** - Number of files analyzed in this run
 4. **Issues Summary** - Count of issues found in the analysis
 5. **Issues List** - Detailed list of issues in compiler-style format with file, line, level, rule ID, and message
 

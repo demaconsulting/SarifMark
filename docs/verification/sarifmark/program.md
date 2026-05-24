@@ -21,7 +21,7 @@ No `Program` unit requirement may remain without at least one named test scenari
 ### Test Scenarios
 
 **Program_Main_NoArguments_ReturnsError**: Invoke `Program.Main` with no arguments; assert exit code is 1 and an
-error message is written to the console.
+error message is written to stderr (`Console.Error`).
 This scenario is tested by `Program_Main_NoArguments_ReturnsError`.
 
 **Program_Main_VersionFlag_DisplaysVersionOnly**: Invoke with `--version`; assert the version string is the only
@@ -32,7 +32,7 @@ This scenario is tested by `Program_Main_VersionFlag_DisplaysVersionOnly`.
 banner, and all supported flags; assert exit code is 0.
 This scenario is tested by `Program_Main_HelpFlag_DisplaysHelp`.
 
-**Program_Main_UnknownArgument_ReturnsError**: Invoke with an unrecognised argument; assert exit code is 1.
+**Program_Main_UnknownArgument_ReturnsError**: Invoke with an unrecognized argument; assert exit code is 1.
 This scenario is tested by `Program_Main_UnknownArgument_ReturnsError`.
 
 **Program_Main_ValidateFlag_RunsValidation**: Invoke with `--validate`; assert self-validation runs and exit code

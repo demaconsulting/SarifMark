@@ -100,6 +100,16 @@ internal sealed class Context : IDisposable
     /// <summary>
     ///     Creates a Context instance from command-line arguments.
     /// </summary>
+    /// <remarks>
+    ///     A factory method is used instead of a public constructor because all settable
+    ///     properties on <see cref="Context"/> use <see langword="private init"/> accessors
+    ///     that can only be assigned during object-initializer syntax. The factory method
+    ///     delegates the actual parsing to the private <see cref="ArgumentParser"/> helper,
+    ///     validates and transforms the parsed values, and then constructs the immutable
+    ///     <see cref="Context"/> record in a single initializer block. This pattern keeps
+    ///     the public surface of <see cref="Context"/> read-only while still allowing
+    ///     thorough validation before any property is set.
+    /// </remarks>
     /// <param name="args">Command-line arguments.</param>
     /// <returns>A new Context instance.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="args"/> is null.</exception>

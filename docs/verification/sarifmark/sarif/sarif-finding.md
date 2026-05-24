@@ -2,7 +2,7 @@
 
 #### Verification Approach
 
-`SarifFinding` is an immutable record whose only behaviour is property storage via its internal constructor.
+`SarifFinding` is an immutable record whose only behavior is property storage via its internal constructor.
 Tests construct instances via the `InternalsVisibleTo` grant and assert property values. No mocking or file I/O
 is required; all test data is constructed inline.
 
@@ -30,7 +30,7 @@ This scenario is tested by `SarifFinding_Constructor_NullUri_UriPropertyIsNull`.
 `StartLine` property is `null`.
 This scenario is tested by `SarifFinding_Constructor_NullStartLine_StartLinePropertyIsNull`.
 
-#### Requirements Coverage
+### Requirements Coverage
 
 - **`SarifMark-SarifFinding-Properties`**: `SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties`
 - **`SarifMark-SarifFinding-Uri`**: `SarifFinding_Constructor_NullUri_UriPropertyIsNull`
