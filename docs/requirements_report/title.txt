@@ -2,7 +2,7 @@
 title: "SarifMark Trace Matrix"
 subtitle: "SARIF Report Generation Tool"
 author: "DEMA Consulting"
-description: "Trace Matrix for SarifMark"
+description: "Traceability Matrix for SarifMark"
 lang: en-US
 keywords:
   - Requirements

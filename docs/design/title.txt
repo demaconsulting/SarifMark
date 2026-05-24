@@ -2,7 +2,7 @@
 title: "SarifMark Software Design Document"
 subtitle: "SARIF Report Generation Tool"
 author: "DEMA Consulting"
-description: "Software Design Document for SarifMark"
+description: "Software design document for SarifMark"
 lang: en-US
 keywords:
   - Design

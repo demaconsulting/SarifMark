@@ -448,6 +448,40 @@ public class IntegrationTests
     }
 
     /// <summary>
+    ///     Test that validate mode writes a results file when the results parameter is provided.
+    /// </summary>
+    [Fact]
+    public void SarifMark_ValidateResultsParameter_WritesResultsFile()
+    {
+        // Arrange
+        var resultsFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-validate-results-{Guid.NewGuid()}.trx");
+
+        try
+        {
+            // Act
+            var exitCode = Runner.Run(
+                out _,
+                "dotnet",
+                _dllPath,
+                "--validate",
+                "--results", resultsFile);
+
+            // Assert
+            Assert.Equal(0, exitCode);
+            Assert.True(File.Exists(resultsFile), "Results file was not created");
+            Assert.Contains("<TestRun", File.ReadAllText(resultsFile));
+        }
+        finally
+        {
+            // Clean up the temporary results file
+            if (File.Exists(resultsFile))
+            {
+                File.Delete(resultsFile);
+            }
+        }
+    }
+
+    /// <summary>
     ///     Test that a multi-run SARIF file creates a report with sections for each run.
     /// </summary>
     [Fact]

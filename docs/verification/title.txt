@@ -2,7 +2,7 @@
 title: "SarifMark Verification Design Document"
 subtitle: "SARIF Report Generation Tool"
 author: "DEMA Consulting"
-description: "Verification Design Document for SarifMark"
+description: "Verification design document for SarifMark"
 lang: en-US
 keywords:
   - Verification

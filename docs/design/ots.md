@@ -32,8 +32,8 @@ versions; upgrades are applied by updating the manifest entry and re-running
 Version numbers are not recorded in design documentation; version information is captured
 in the project SBOM produced by the CI pipeline. Major version upgrades trigger a design
 review to assess whether the integration pattern documented in `ots/{item}.md` remains
-accurate. Reproducible builds are ensured through `package-lock.json` for Node.js tools
-and through the pinned tool manifest for .NET tools.
+accurate. Node.js tool versions are pinned directly in `package.json`, and .NET tool
+versions are pinned in the local tool manifest.
 
 ### General Integration Approach
 

@@ -160,7 +160,7 @@ sections:
         children:
           - SarifMark-Cli-Heading
         tests:
-          - Sarif_GenerateReport_CustomHeading_UsesCustomHeading
+          - SarifMark_CustomHeading_AppearsInReport
 
       - id: SarifMark-System-ValidateResults
         title: >-
@@ -174,8 +174,7 @@ sections:
         children:
           - SarifMark-Validate-ResultFiles
         tests:
-          - SelfTest_ResultsFile_TrxPath_WritesTrxFile
-          - SelfTest_ResultsFile_XmlPath_WritesJUnitFile
+          - SarifMark_ValidateResultsParameter_WritesResultsFile
 
       - id: SarifMark-System-Platform
         title: The tool shall run on Windows, Linux, and macOS.
@@ -208,7 +207,7 @@ sections:
         children:
           - SarifMark-Sarif-MultiRun
         tests:
-          - Sarif_Read_MultiRunSarifFile_ProcessesAllRuns
+          - SarifMark_MultiRunSarifFile_CreatesReport
 
       - id: SarifMark-System-SafePaths
         title: >-

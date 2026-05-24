@@ -2,7 +2,7 @@
 title: "SarifMark Build Notes"
 subtitle: "SARIF Report Generation Tool"
 author: "DEMA Consulting"
-description: "Build Notes for SarifMark"
+description: "Build notes for SarifMark"
 lang: en-US
 keywords:
   - SarifMark

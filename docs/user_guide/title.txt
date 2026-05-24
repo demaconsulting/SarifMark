@@ -2,7 +2,7 @@
 title: "SarifMark User Guide"
 subtitle: "SARIF Report Generation Tool"
 author: "DEMA Consulting"
-description: "User Guide for SarifMark"
+description: "User Guide for SARIF Report Generation Tool"
 lang: en-US
 keywords:
   - User Guide

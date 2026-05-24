@@ -34,8 +34,9 @@ internal static class PathHelpers
     ///     This method exists to provide centralized path-traversal protection for all file operations
     ///     that accept externally supplied path components. It uses <see cref="Path.GetRelativePath(string, string)"/>
     ///     to compute the relative relationship between the resolved base and the resolved combined
-    ///     path; any result that starts with <c>..</c> or is itself rooted indicates an escape attempt
-    ///     and triggers an <see cref="ArgumentException"/>. The method is stateless and thread-safe —
+    ///     path; any result that equals <c>..</c>, starts with <c>..</c> followed by a directory
+    ///     separator, or is itself rooted indicates an escape attempt and triggers an
+    ///     <see cref="ArgumentException"/>. The method is stateless and thread-safe —
     ///     it reads no shared state and modifies nothing.
     ///
     ///     Edge case: when <paramref name="basePath"/> is empty, <see cref="Path.GetFullPath(string)"/> resolves
