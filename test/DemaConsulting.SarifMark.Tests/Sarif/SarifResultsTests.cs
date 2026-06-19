@@ -1337,5 +1337,6 @@ public sealed class SarifResultsTests : IDisposable
         Assert.Contains("(#1)", md);
         Assert.Contains("(#2)", md);
     }
+
 }
 

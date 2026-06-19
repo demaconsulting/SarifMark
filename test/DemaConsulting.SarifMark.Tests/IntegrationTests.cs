@@ -520,4 +520,45 @@ public class IntegrationTests
             }
         }
     }
+
+    /// <summary>
+    ///     Test that a SARIF file with no issues generates a valid report.
+    /// </summary>
+    [Fact]
+    public void SarifMark_ValidSarif_NoIssues_GeneratesReport()
+    {
+        // Arrange
+        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "no-issues.sarif");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+
+        var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-no-issues-report-{Guid.NewGuid()}.md");
+
+        try
+        {
+            // Act
+            var exitCode = Runner.Run(
+                out _,
+                "dotnet",
+                _dllPath,
+                "--sarif", sarifFile,
+                "--report", reportFile);
+
+            // Assert
+            Assert.Equal(0, exitCode);
+            Assert.True(File.Exists(reportFile), "Report file was not created");
+
+            var reportContent = File.ReadAllText(reportFile);
+            Assert.Contains("**Tool:**", reportContent);
+            Assert.Contains("Found no issues", reportContent);
+        }
+        finally
+        {
+            // Clean up the temporary report file
+            if (File.Exists(reportFile))
+            {
+                File.Delete(reportFile);
+            }
+        }
+    }
 }
+

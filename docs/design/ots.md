@@ -1,7 +1,7 @@
 ## OTS Dependencies
 
-SarifMark uses nine OTS software items: eight DEMA Consulting pipeline tools and the
-xUnit v3 testing framework. All nine items are consumed as .NET tools or NuGet packages
+SarifMark uses ten OTS software items: nine DEMA Consulting pipeline tools and the
+xUnit v3 testing framework. All ten items are consumed as .NET tools or NuGet packages
 and are managed through the local tool manifest and the project dependency lock files.
 Per-item integration designs are documented in the `ots/` sub-folder.
 
@@ -13,7 +13,7 @@ All OTS packages must carry an OSI-approved open-source license that is compatib
 the MIT License under which SarifMark is distributed. Each package must demonstrate
 active maintenance through regular releases and publicly available source code.
 
-DEMA Consulting pipeline tools (BuildMark, FileAssert, Pandoc, ReqStream, ReviewMark,
+DEMA Consulting pipeline tools (BuildMark, DemaConsulting.TestResults, FileAssert, Pandoc, ReqStream, ReviewMark,
 SonarMark, VersionMark, WeasyPrint) are preferred because they are designed specifically
 for the Continuous Compliance workflow and provide documented compliance evidence that
 integrates directly with the project's traceability pipeline.

@@ -31,13 +31,15 @@ not provided.
 `null` when not provided.
 
 **Depth**: `int` — Heading depth for the generated report supplied via `--depth` or the
-legacy alias `--report-depth`; must be a positive integer; default `1`.
+deprecated alias `--report-depth`; must be a positive integer; default `1`. The deprecated
+alias is accepted for backwards compatibility but is intentionally omitted from `--help` output.
 
 **Heading**: `string?` — Custom heading text supplied via `--heading`; `null` when not provided.
 When null, the report heading defaults to `"[ToolName] Analysis"`.
 
 **ResultsFile**: `string?` — Path for self-validation results supplied via `--results` or the
-legacy alias `--result`; `null` when not provided.
+deprecated alias `--result`; `null` when not provided. The deprecated alias is accepted for
+backwards compatibility but is intentionally omitted from `--help` output.
 
 **ExitCode**: `int` — Returns `0` until `WriteError` is called; returns `1` thereafter.
 Derived from the internal `_hasErrors` flag.

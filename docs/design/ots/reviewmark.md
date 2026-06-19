@@ -32,6 +32,9 @@ ReviewMark is invoked as a .NET tool from CI pipeline steps:
    the review evidence store.
 3. ReviewMark writes the review plan and review report to the configured output paths.
 4. The generated documents are published as release artifacts.
+5. The `--validate` flag runs ReviewMark's built-in self-validation suite, confirming all
+   advertised features are operational. The CI pipeline invokes
+   `dotnet reviewmark --validate --results {path}` to collect self-validation evidence.
 
 The review configuration in `.reviewmark.yaml` defines the review sets and their member
 files. No application-level code in SarifMark references ReviewMark directly.

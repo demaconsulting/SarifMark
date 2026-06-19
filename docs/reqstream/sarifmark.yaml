@@ -316,3 +316,18 @@ sections:
           - SarifMark-SarifResults-FileCount
         tests:
           - Sarif_GenerateReport_FileCount_ContainsFileCount
+
+      - id: SarifMark-Report-NoIssues
+        title: >-
+          The SarifMark system shall produce a valid markdown report when
+          the SARIF file contains no findings.
+        justification: >-
+          A clean SARIF file with zero findings is the expected output of a
+          passing analysis. The report must still be generated with the tool
+          attribution and file count, confirming the analysis completed
+          successfully even when no issues are found.
+        tags: [public]
+        children:
+          - SarifMark-SarifResults-ToMarkdown
+        tests:
+          - SarifMark_ValidSarif_NoIssues_GeneratesReport

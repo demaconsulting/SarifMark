@@ -54,7 +54,7 @@ public record SarifResults
     /// <returns>A SarifResults record containing the extracted information.</returns>
     /// <exception cref="ArgumentException">Thrown when the file path is null or empty.</exception>
     /// <exception cref="FileNotFoundException">Thrown when the file does not exist.</exception>
-    /// <exception cref="InvalidOperationException">Thrown when the SARIF file is invalid or malformed.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the SARIF file cannot be read or is invalid or malformed.</exception>
     public static SarifResults Read(string filePath)
     {
         if (string.IsNullOrWhiteSpace(filePath))
@@ -84,6 +84,10 @@ public record SarifResults
             }
 
             return new SarifResults(runs);
+        }
+        catch (IOException ex)
+        {
+            throw new InvalidOperationException($"Could not read SARIF file: {ex.Message}", ex);
         }
         catch (JsonException ex)
         {

@@ -6,13 +6,33 @@ sections:
     sections:
       - title: ReviewMark Requirements
         requirements:
+          - id: SarifMark-OTS-ReviewMark-VersionDisplay
+            title: ReviewMark shall display its version when invoked with --version.
+            justification: |
+              Version display confirms the tool is correctly installed and the version
+              string is accessible. The self-validation test ReviewMark_VersionDisplay
+              confirms this feature works in the installed environment.
+            tags: [ots]
+            tests:
+              - ReviewMark_VersionDisplay
+
+          - id: SarifMark-OTS-ReviewMark-HelpDisplay
+            title: ReviewMark shall display usage information when invoked with --help.
+            justification: |
+              Help display confirms the CLI interface is operational and the tool's
+              features are discoverable. The self-validation test ReviewMark_HelpDisplay
+              confirms this feature works in the installed environment.
+            tags: [ots]
+            tests:
+              - ReviewMark_HelpDisplay
+
           - id: SarifMark-OTS-ReviewMark-Plan
             title: ReviewMark shall generate a review plan from the review configuration.
             justification: |
-              DemaConsulting.ReviewMark reads the .reviewmark.yaml configuration and the review
-              evidence store to produce a review plan documenting file review coverage. It runs
-              in the same CI pipeline that produces the TRX test results, so a successful
-              pipeline run is evidence that ReviewMark executed without error.
+              DemaConsulting.ReviewMark reads the .reviewmark.yaml configuration and the
+              review evidence store to produce a review plan documenting file review
+              coverage. The self-validation test ReviewMark_ReviewPlanGeneration confirms
+              plan generation works correctly in the installed environment.
             tags: [ots]
             tests:
               - ReviewMark_ReviewPlanGeneration
@@ -20,10 +40,63 @@ sections:
           - id: SarifMark-OTS-ReviewMark-Report
             title: ReviewMark shall generate a review report from the review configuration.
             justification: |
-              DemaConsulting.ReviewMark reads the .reviewmark.yaml configuration and the review
-              evidence store to produce a review report documenting file review currency. It runs
-              in the same CI pipeline that produces the TRX test results, so a successful
-              pipeline run is evidence that ReviewMark executed without error.
+              DemaConsulting.ReviewMark reads the .reviewmark.yaml configuration and the
+              review evidence store to produce a review report documenting file review
+              currency. The self-validation test ReviewMark_ReviewReportGeneration confirms
+              report generation works correctly in the installed environment.
             tags: [ots]
             tests:
               - ReviewMark_ReviewReportGeneration
+
+          - id: SarifMark-OTS-ReviewMark-IndexScan
+            title: ReviewMark shall scan PDF evidence files and write an index.
+            justification: |
+              The --index mode scans a directory of PDF evidence files and writes an
+              up-to-date index.json catalogue. The self-validation test
+              ReviewMark_IndexScan confirms index scanning works correctly.
+            tags: [ots]
+            tests:
+              - ReviewMark_IndexScan
+
+          - id: SarifMark-OTS-ReviewMark-WorkingDirectory
+            title: ReviewMark shall support overriding the working directory for file
+              operations.
+            justification: |
+              The --dir flag overrides the working directory used for default paths
+              and glob resolution. The self-validation test
+              ReviewMark_WorkingDirectoryOverride confirms this feature works correctly.
+            tags: [ots]
+            tests:
+              - ReviewMark_WorkingDirectoryOverride
+
+          - id: SarifMark-OTS-ReviewMark-Enforce
+            title: ReviewMark shall exit non-zero when reviews have issues.
+            justification: |
+              The --enforce flag causes ReviewMark to exit with a non-zero code when
+              any review-set is stale, missing, or failed, or any file is uncovered.
+              The self-validation test ReviewMark_Enforce confirms enforcement mode
+              functions correctly.
+            tags: [ots]
+            tests:
+              - ReviewMark_Enforce
+
+          - id: SarifMark-OTS-ReviewMark-Elaborate
+            title: ReviewMark shall print a markdown elaboration of a review set.
+            justification: |
+              The --elaborate flag prints the ID, title, fingerprint, and file list for
+              a named review set. The self-validation test ReviewMark_Elaborate confirms
+              elaboration works correctly.
+            tags: [ots]
+            tests:
+              - ReviewMark_Elaborate
+
+          - id: SarifMark-OTS-ReviewMark-Lint
+            title: ReviewMark shall validate the review configuration file and report
+              issues.
+            justification: |
+              The --lint mode validates the .reviewmark.yaml definition file for
+              structural and semantic issues. The self-validation test ReviewMark_Lint
+              confirms lint validation works correctly.
+            tags: [ots]
+            tests:
+              - ReviewMark_Lint

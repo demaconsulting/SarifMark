@@ -1,25 +1,49 @@
-﻿## BuildMark
+## BuildMark
 
 ### Verification Approach
 
-BuildMark is used in the SarifMark CI pipeline to generate a build-notes markdown document containing build metadata
-(workflow run ID, trigger event, branch, and timestamp) from the GitHub Actions API. Tool-version information is
-captured separately by VersionMark, not by BuildMark.
+BuildMark is verified through its built-in `--validate` self-validation mechanism. Running
+`dotnet buildmark --validate` executes five internal test scenarios that confirm the tool
+is installed and functioning correctly in the current environment. Each scenario exercises
+a specific advertised feature using mock data or the local Git repository, without requiring
+live GitHub API access.
 
-BuildMark provides a built-in self-test mechanism: the pipeline invokes `dotnet buildmark --validate` and writes the
-results to a `.trx` file. Verification evidence is provided by two observable outcomes: (1) the self-validation step
-completes without error and produces a passing `.trx` results file, and (2) the subsequent build-notes generation step
-completes without error and produces the build-notes markdown file, which is subsequently converted to HTML and PDF by
-Pandoc and WeasyPrint.
+### Test Environment
+
+Tests require:
+
+- A local Git repository (used by `BuildMark_GitIntegration` to read version tags).
+- Network access to the GitHub API (used by `BuildMark_IssueTracking`); the test uses
+  a token sourced from `GH_TOKEN`, `GITHUB_TOKEN`, or the `gh` CLI.
+- A writable temporary directory for output files.
+
+### Acceptance Criteria
+
+All five self-validation scenarios must pass with exit code 0 and zero failures, confirming
+that BuildMark is correctly installed and all advertised features are operational.
 
 ### Test Scenarios
 
-**BuildMark_SelfValidation**: The CI pipeline step `dotnet buildmark --validate` completes without error and produces a
-passing `.trx` results file, confirming BuildMark's built-in self-test passed in the current environment.
-This scenario is verified by successful completion of the BuildMark self-validation pipeline step in CI.
+**BuildMark_MarkdownReportGeneration**: Invokes `dotnet buildmark --validate`; the
+`BuildMark_MarkdownReportGeneration` scenario generates a markdown build-notes document
+from mock data and confirms the report contains the expected content.
+This scenario is tested by `BuildMark_MarkdownReportGeneration`.
 
-**BuildMark_MarkdownReportGeneration**: The CI pipeline step that invokes `dotnet buildmark` to generate the
-build-notes document completes without error and produces the build-notes markdown file containing build metadata
-(workflow run ID, trigger event, branch, and timestamp), confirming BuildMark executed successfully and generated
-the expected output.
-This scenario is verified by successful completion of the build-notes generation pipeline step in CI.
+**BuildMark_GitIntegration**: The `BuildMark_GitIntegration` self-validation scenario reads
+version tags and commits from the local Git repository and confirms the Git connector
+returns expected data.
+This scenario is tested by `BuildMark_GitIntegration`.
+
+**BuildMark_IssueTracking**: The `BuildMark_IssueTracking` self-validation scenario connects
+to the GitHub API, retrieves issue and pull request data, and confirms the integration
+returns expected results.
+This scenario is tested by `BuildMark_IssueTracking`.
+
+**BuildMark_KnownIssuesReporting**: The `BuildMark_KnownIssuesReporting` self-validation
+scenario generates a report with the `--include-known-issues` flag and confirms the Known
+Issues section is included in the output.
+This scenario is tested by `BuildMark_KnownIssuesReporting`.
+
+**BuildMark_RulesRouting**: The `BuildMark_RulesRouting` self-validation scenario applies
+routing rules and confirms that items are assigned to the correct report sections.
+This scenario is tested by `BuildMark_RulesRouting`.

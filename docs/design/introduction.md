@@ -25,14 +25,9 @@ Local items:
 
 OTS items:
 
-- **BuildMark**, **FileAssert**, **Pandoc**, **ReqStream**, **ReviewMark**, **SonarMark**,
+- **BuildMark**, **DemaConsulting.TestResults**, **FileAssert**, **Pandoc**, **ReqStream**, **ReviewMark**, **SonarMark**,
   **VersionMark**, **WeasyPrint**, **xUnit v3**: integration and usage design for each OTS software
   item used in the project pipeline.
-
-Shared packages:
-
-- **DemaConsulting.TestResults**: integration and usage design for the shared package used by the
-  SarifMark self-validation feature to collect test outcomes and serialize results.
 
 This document does not cover test projects, the CI/CD pipeline configuration, installation procedures,
 end-user usage patterns, or the internal design of OTS items.
@@ -55,6 +50,7 @@ end-user usage patterns, or the internal design of OTS items.
 **OTS Dependencies:**
 
 - BuildMark (OTS)
+- DemaConsulting.TestResults (OTS)
 - FileAssert (OTS)
 - Pandoc (OTS)
 - ReqStream (OTS)
@@ -63,10 +59,6 @@ end-user usage patterns, or the internal design of OTS items.
 - VersionMark (OTS)
 - WeasyPrint (OTS)
 - xUnit v3 (OTS)
-
-**Shared Packages:**
-
-- DemaConsulting.TestResults (Shared Package)
 
 ## Folder Layout
 
@@ -101,12 +93,6 @@ OTS items have integration and usage design documentation parallel to system fol
 - Requirements: `docs/reqstream/ots/{ots-name}.yaml`
 - Design: `docs/design/ots/{ots-name}.md`
 - Verification: `docs/verification/ots/{ots-name}.md`
-
-Shared Package items have integration and usage design documentation parallel to system and OTS folders:
-
-- Requirements: `docs/reqstream/shared/{package-name}.yaml`
-- Design: `docs/design/shared/{package-name}.md`
-- Verification: `docs/verification/shared/{package-name}.md`
 
 Review-sets: defined in `.reviewmark.yaml`
 

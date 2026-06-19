@@ -6,18 +6,53 @@ sections:
     sections:
       - title: FileAssert Requirements
         requirements:
-          - id: SarifMark-OTS-FileAssert
-            title: FileAssert shall validate generated documents against acceptance
-              criteria.
+          - id: SarifMark-OTS-FileAssert-VersionDisplay
+            title: FileAssert shall display its version when invoked with --version.
             justification: |
-              DemaConsulting.FileAssert validates HTML and PDF documents produced during the
-              build, asserting that each document exists, has a non-trivial size, is structurally
-              valid, and contains expected content. It provides OTS evidence for Pandoc and
-              WeasyPrint and independently confirms file assertion is functioning. Self-validation
-              proves the tool itself is operational before ReqStream consumes the results.
+              Version display confirms the tool is correctly installed and the version
+              string is accessible. The self-validation test FileAssert_VersionDisplay
+              confirms this feature works in the installed environment.
             tags: [ots]
             tests:
               - FileAssert_VersionDisplay
+
+          - id: SarifMark-OTS-FileAssert-HelpDisplay
+            title: FileAssert shall display usage information when invoked with --help.
+            justification: |
+              Help display confirms the CLI interface is operational and the tool's
+              features are discoverable. The self-validation test FileAssert_HelpDisplay
+              confirms this feature works in the installed environment.
+            tags: [ots]
+            tests:
               - FileAssert_HelpDisplay
-              - FileAssert_HtmlDocumentAssertions
-              - FileAssert_PdfDocumentAssertions
+
+          - id: SarifMark-OTS-FileAssert-Results
+            title: FileAssert shall write test results to file with pass and fail
+              outcomes.
+            justification: |
+              Writing test results to TRX or JUnit XML format is required for CI pipeline
+              test reporting integration. The self-validation test FileAssert_Results
+              confirms result file generation works correctly.
+            tags: [ots]
+            tests:
+              - FileAssert_Results
+
+          - id: SarifMark-OTS-FileAssert-Exists
+            title: FileAssert shall verify file existence using glob patterns.
+            justification: |
+              File existence assertions via glob patterns are the core use case for
+              FileAssert in the SarifMark pipeline. The self-validation test
+              FileAssert_Exists confirms file existence assertion works correctly.
+            tags: [ots]
+            tests:
+              - FileAssert_Exists
+
+          - id: SarifMark-OTS-FileAssert-Contains
+            title: FileAssert shall verify file content with contains assertions.
+            justification: |
+              Content assertions confirm that generated documents contain expected text.
+              The self-validation test FileAssert_Contains confirms content assertion
+              works correctly in the installed environment.
+            tags: [ots]
+            tests:
+              - FileAssert_Contains

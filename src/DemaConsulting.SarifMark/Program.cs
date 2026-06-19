@@ -149,6 +149,12 @@ internal static class Program
     /// <summary>
     ///     Prints usage information.
     /// </summary>
+    /// <remarks>
+    ///     Deprecated aliases (<c>--report-depth</c> for <c>--depth</c> and <c>--result</c> for
+    ///     <c>--results</c>) are intentionally omitted from the help output to encourage use of the
+    ///     canonical flag names. Both aliases remain accepted by <see cref="Context.Create"/> for
+    ///     backwards compatibility with existing scripts.
+    /// </remarks>
     /// <param name="context">The context for output.</param>
     private static void PrintHelp(Context context)
     {

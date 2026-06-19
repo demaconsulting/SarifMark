@@ -140,10 +140,6 @@ This scenario is tested by `SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput
 headings at maximum depth.
 This scenario is tested by `SarifResults_ToMarkdown_Depth6_ProducesCorrectOutput`.
 
-**SarifResults_Read_NoArtifacts_ReturnsZeroFileCount**: Pass SARIF with no `artifacts` section; assert `FileCount`
-is 0.
-This scenario is tested by `SarifResults_Read_NoArtifacts_ReturnsZeroFileCount`.
-
 **SarifResults_Runs_SingleRun_ReturnsSingleRun**: Pass a single-run SARIF; assert exactly one `SarifRun` is
 returned.
 This scenario is tested by `SarifResults_Runs_SingleRun_ReturnsSingleRun`.

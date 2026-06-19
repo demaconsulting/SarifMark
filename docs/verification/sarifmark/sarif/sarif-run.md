@@ -78,3 +78,13 @@ This scenario is tested by `SarifRun_ToMarkdown_MultipleResults_UsesPluralForm`.
 both the tool heading and the Issues sub-heading, confirming that the Issues sub-heading depth is capped at 6
 (i.e. `Math.Min(depth + 1, 6)`) and no seven-hash heading is generated.
 This scenario is tested by `SarifRun_ToMarkdown_Depth6_IssuesHeadingCappedAtSix`.
+
+**SarifRun_ToMarkdown_CustomHeading_UsesProvidedHeading**: Call `ToMarkdown(1, "Custom Heading")`; assert the output
+uses the provided custom heading text instead of the default tool-name label, confirming that the heading parameter
+is correctly applied.
+This scenario is tested by `SarifRun_ToMarkdown_CustomHeading_UsesProvidedHeading`.
+
+**SarifRun_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly**: Call `ToMarkdown(1)` on a run containing a result with a
+URI but no start-line number; assert the output contains only the URI without a line number suffix, confirming that
+partial location information is gracefully rendered.
+This scenario is tested by `SarifRun_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly`.

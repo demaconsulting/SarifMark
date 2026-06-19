@@ -6,16 +6,42 @@ sections:
     sections:
       - title: SonarMark Requirements
         requirements:
-          - id: SarifMark-OTS-SonarMark
-            title: SonarMark shall generate a SonarCloud quality report.
+          - id: SarifMark-OTS-SonarMark-QualityGate
+            title: SonarMark shall retrieve quality-gate status from SonarCloud.
             justification: |
-              DemaConsulting.SonarMark retrieves quality-gate and metrics data from SonarCloud and
-              renders it as a markdown document included in the release artifacts. It runs in the
-              same CI pipeline that produces the TRX test results, so a successful pipeline run is
-              evidence that SonarMark executed without error.
+              SonarMark queries the SonarCloud API for the quality-gate status of the
+              configured project. The self-validation test SonarMark_QualityGateRetrieval
+              confirms quality-gate retrieval works correctly in the installed environment.
             tags: [ots]
             tests:
               - SonarMark_QualityGateRetrieval
+
+          - id: SarifMark-OTS-SonarMark-Issues
+            title: SonarMark shall retrieve the issues list from SonarCloud.
+            justification: |
+              SonarMark retrieves open issues by severity from the SonarCloud API and
+              renders them in the quality report. The self-validation test
+              SonarMark_IssuesRetrieval confirms issues retrieval works correctly.
+            tags: [ots]
+            tests:
               - SonarMark_IssuesRetrieval
+
+          - id: SarifMark-OTS-SonarMark-HotSpots
+            title: SonarMark shall retrieve hot spots from SonarCloud.
+            justification: |
+              SonarMark retrieves open security hot spots from the SonarCloud API and
+              renders them in the quality report. The self-validation test
+              SonarMark_HotSpotsRetrieval confirms hot spots retrieval works correctly.
+            tags: [ots]
+            tests:
               - SonarMark_HotSpotsRetrieval
+
+          - id: SarifMark-OTS-SonarMark-MarkdownReport
+            title: SonarMark shall generate a markdown quality report.
+            justification: |
+              SonarMark renders all retrieved SonarCloud data into a structured markdown
+              quality report. The self-validation test SonarMark_MarkdownReportGeneration
+              confirms markdown report generation works correctly using mock data.
+            tags: [ots]
+            tests:
               - SonarMark_MarkdownReportGeneration

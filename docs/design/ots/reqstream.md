@@ -38,5 +38,8 @@ completed and the TRX result files are available:
 4. A non-zero exit code blocks the pipeline and requires the developer to add tests or
    justifications before merging.
 5. The generated reports are published as release artifacts.
+6. The `--validate` flag runs ReqStream's built-in self-validation suite, confirming all
+   advertised features are operational. The CI pipeline invokes
+   `dotnet reqstream --validate --results {path}` to collect self-validation evidence.
 
 No application-level code in SarifMark references ReqStream directly.

@@ -50,8 +50,9 @@ provides path-safety helpers shared across the system.
 - *Role*: Provider (the tool accepts arguments from the shell)
 - *Contract*: Accepts flags and parameters (`--sarif`, `--report`, `--depth`, `--heading`,
   `--validate`, `--results`, `--enforce`, `--log`, `--silent`, `--version`, `--help`).
-  `--report-depth` is a backward-compatible alias for `--depth` and `--result` is a backward-compatible alias
-  for `--results`; both are accepted identically to their canonical forms.
+  `--report-depth` is a **deprecated** alias for `--depth` and `--result` is a **deprecated** alias
+  for `--results`; both are accepted identically to their canonical forms but are intentionally
+  omitted from the `--help` output.
   Exits with code 0 on success and 1 on any error or when `--enforce` detects issues.
 - *Constraints*: Unrecognized arguments cause an `ArgumentException`, producing exit code 1
   with an error message. Value-bearing flags require a following token.
@@ -104,7 +105,7 @@ provides path-safety helpers shared across the system.
   see *VersionMark Integration Design*
 - **WeasyPrint**: converts HTML documents to PDF —
   see *WeasyPrint Integration Design*
-- **DemaConsulting.TestResults**: the shared package used by the self-validation subsystem to collect, format, and
+- **DemaConsulting.TestResults**: the OTS package used by the self-validation subsystem to collect, format, and
   serialize test results — see *TestResults Integration Design*
 
 ## Risk Control Measures

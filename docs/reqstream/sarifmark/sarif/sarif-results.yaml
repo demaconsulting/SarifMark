@@ -127,15 +127,12 @@ sections:
               - id: SarifMark-SarifResults-ToMarkdown
                 title: >-
                   The SARIF results unit shall generate a complete markdown report
-                  for
-                  a single run or a combined report for multiple runs.
+                  for a single-run SARIF file.
                 justification: >-
                   For a single run, delegating directly to the run's report generation
-                  preserves the output format.
-                  For multiple runs, concatenating each run's output with indexed
-                  headings produces a
-                  complete combined report. In both cases the caller needs only one
-                  method call.
+                  preserves the output format and provides a simple, cohesive output
+                  document
+                  for a single tool run without additional indexing overhead.
                 tags: [internal]
                 tests:
                   - SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput
@@ -149,6 +146,19 @@ sections:
                   - SarifResults_ToMarkdown_OneResult_UsesSingularForm
                   - SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
                   - SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
+
+              - id: SarifMark-SarifResults-ToMarkdownMultiRun
+                title: >-
+                  The SARIF results unit shall render a multi-run SARIF file by
+                  concatenating individually indexed run sections.
+                justification: >-
+                  For multiple runs, concatenating each run's output with indexed
+                  headings produces a complete combined report. The caller needs only
+                  one method call regardless of whether the SARIF file contains one
+                  or many runs.
+                tags: [internal]
+                tests:
+                  - SarifResults_ToMarkdown_MultipleRuns_IncludesRunIndices
 
               - id: SarifMark-SarifResults-ValidateDepth
                 title: >-

@@ -61,6 +61,19 @@ sections:
                 tests:
                   - Validation_Run_ValidContext_PrintsValidationHeader
 
+              - id: SarifMark-Validation-Header-Fields
+                title: >-
+                  The Validation unit shall include the tool version, machine name,
+                  OS version, .NET runtime, and timestamp in the validation header.
+                justification: >-
+                  Including specific system identification fields in the header ensures
+                  that validation results can be precisely contextualized with the
+                  environment in which they were collected, supporting cross-environment
+                  comparison and reproducibility analysis.
+                tags: [internal]
+                tests:
+                  - Validation_Run_ValidContext_PrintsValidationHeader
+
               - id: SarifMark-Validation-SarifReadingTest
                 title: The Validation unit shall include a SARIF reading test in the
                   validation suite.

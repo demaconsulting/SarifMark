@@ -8,7 +8,7 @@ tests reside in `test/DemaConsulting.SarifMark.Tests/IntegrationTests.cs` and in
 `dotnet {dllPath} {args}` as a subprocess and captures exit codes and console output for assertion. No mocking is
 used at the system level; the full compiled binary is exercised against real SARIF test-data files
 (`sample.sarif`, `multi-result.sarif`, `multi-run.sarif`, `invalid.sarif`) stored in
-`test/DemaConsulting.SarifMark.Tests/TestData/`. The `DemaConsulting.TestResults` shared package is verified through
+`test/DemaConsulting.SarifMark.Tests/TestData/`. The `DemaConsulting.TestResults` OTS package is verified through
 integration tests in `ValidationTests.cs` that exercise the package within the self-validation pipeline. Unit tests exercise individual classes directly with console streams
 redirected via `StringWriter`. The test framework is xUnit v3, executed via `dotnet test`. Three additional named
 scenarios (`SarifMark_SarifReading`, `SarifMark_MarkdownReportGeneration`, `SarifMark_Enforcement`) are self-validation
@@ -162,3 +162,8 @@ This scenario is tested by `Sarif_GenerateReport_MultipleResults_FormatsWithLine
 `ToMarkdown(1)`; assert the output contains `"**Files:** 2"`, confirming that the
 file count from the SARIF `artifacts` array is included in the generated report.
 This scenario is tested by `Sarif_GenerateReport_FileCount_ContainsFileCount`.
+
+**SarifMark_ValidSarif_NoIssues_GeneratesReport**: Invoke the tool with `--sarif` pointing to a SARIF file with no
+results and `--report {path}`; assert exit code is 0, the report file is created, and the report contains the tool
+attribution line (`**Tool:**`), confirming the tool generates a valid report for a clean SARIF file with no findings.
+This scenario is tested by `SarifMark_ValidSarif_NoIssues_GeneratesReport`.

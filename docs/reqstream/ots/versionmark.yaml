@@ -6,14 +6,49 @@ sections:
     sections:
       - title: VersionMark Requirements
         requirements:
-          - id: SarifMark-OTS-VersionMark
-            title: VersionMark shall publish captured tool-version information.
+          - id: SarifMark-OTS-VersionMark-Capture
+            title: VersionMark shall capture tool version information from configured
+              commands.
             justification: |
-              DemaConsulting.VersionMark reads version metadata for each dotnet tool used in the
-              pipeline and writes a versions markdown document included in the release artifacts.
-              It runs in the same CI pipeline that produces the TRX test results, so a successful
-              pipeline run is evidence that VersionMark executed without error.
+              VersionMark reads version metadata for each tool defined in .versionmark.yaml
+              by executing the configured command and extracting the version via regex.
+              The self-validation test VersionMark_CapturesVersions confirms version
+              capture works correctly in the installed environment.
             tags: [ots]
             tests:
               - VersionMark_CapturesVersions
+
+          - id: SarifMark-OTS-VersionMark-Publish
+            title: VersionMark shall generate a markdown report from captured version
+              information.
+            justification: |
+              VersionMark reads captured version JSON files and renders a markdown
+              tool-versions document. The self-validation test
+              VersionMark_GeneratesMarkdownReport confirms markdown report generation
+              works correctly in the installed environment.
+            tags: [ots]
+            tests:
               - VersionMark_GeneratesMarkdownReport
+
+          - id: SarifMark-OTS-VersionMark-LintValid
+            title: VersionMark shall pass lint validation for a well-formed configuration
+              file.
+            justification: |
+              The --lint mode validates .versionmark.yaml configuration files and exits
+              with code 0 for valid files. The self-validation test
+              VersionMark_LintPassesForValidConfig confirms that valid configuration
+              files are accepted without errors.
+            tags: [ots]
+            tests:
+              - VersionMark_LintPassesForValidConfig
+
+          - id: SarifMark-OTS-VersionMark-LintInvalid
+            title: VersionMark shall report errors and exit non-zero for a malformed
+              configuration file.
+            justification: |
+              The --lint mode must reject configuration files that are missing required
+              fields. The self-validation test VersionMark_LintReportsErrorsForInvalidConfig
+              confirms that invalid configuration files are rejected with a non-zero exit code.
+            tags: [ots]
+            tests:
+              - VersionMark_LintReportsErrorsForInvalidConfig
