@@ -7,6 +7,7 @@ resource-path:
   - docs/design/sarifmark/self-test
   - docs/design/sarifmark/utilities
   - docs/design/ots
+  - docs/design/shared
   - docs/template
 input-files:
   - docs/design/title.txt
@@ -34,6 +35,8 @@ input-files:
   - docs/design/ots/versionmark.md
   - docs/design/ots/weasyprint.md
   - docs/design/ots/xunit-v3.md
+  - docs/design/shared.md
+  - docs/design/shared/test-results.md
 template: template.html
 table-of-contents: true
 number-sections: true

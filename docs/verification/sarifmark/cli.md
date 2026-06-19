@@ -77,3 +77,13 @@ This scenario is tested by `Cli_Create_ReportDepthParameter_SetsReportDepth`.
 **Cli_Create_ResultLegacyAlias_SetsResultsFilePath**: Pass `--result {path}` to `Context.Create`; assert the legacy
 alias is accepted and `ResultsFile` is set.
 This scenario is tested by `Cli_Create_ResultLegacyAlias_SetsResultsFilePath`.
+
+**Cli_Create_DepthInvalidValue_ThrowsArgumentException**: Pass `--depth abc` (a non-integer value) to
+`Context.Create`; assert `ArgumentException` is thrown with a message indicating `--depth requires a positive
+integer`, confirming that invalid depth values are rejected before reaching the report formatter.
+This scenario is tested by `Cli_Create_DepthInvalidValue_ThrowsArgumentException`.
+
+**Cli_Create_LogWithoutSilent_WritesToConsoleAndLogFile**: Pass `--log {path}` without `--silent` to `Context.Create`
+and write a message; assert the message appears both on the console and in the log file, confirming that log-file
+output is additive rather than replacing console output when silent mode is not active.
+This scenario is tested by `Cli_Create_LogWithoutSilent_WritesToConsoleAndLogFile`.

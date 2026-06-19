@@ -21,15 +21,29 @@ sections:
 
           - id: SarifMark-Program-Main
             title: >-
-              The Program unit shall parse arguments, execute the requested operation,
-              and return the result as an exit code.
+              The Program unit shall parse command-line arguments and dispatch
+              the corresponding operation handler.
             justification: >-
-              Keeping argument parsing, command dispatch, and exit code reporting
-              as separate
-              responsibilities ensures each can be independently tested and maintained.
+              Parsing arguments and routing to the correct handler are the two
+              responsibilities of the entry point; keeping them together in one
+              requirement lets callers verify that every recognized argument
+              reaches the right handler.
             tags: [internal]
             tests:
               - Program_Main_NoArguments_ReturnsError
+              - Program_Main_VersionFlag_DisplaysVersionOnly
+              - Program_Main_HelpFlag_DisplaysHelp
+
+          - id: SarifMark-Program-ExitCode
+            title: >-
+              The Program unit shall return the operation result as the process
+              exit code.
+            justification: >-
+              Propagating the operation result to the process exit code lets
+              callers and CI/CD pipelines observe success or failure without
+              parsing console output.
+            tags: [internal]
+            tests:
               - Program_Main_VersionFlag_DisplaysVersionOnly
               - Program_Main_HelpFlag_DisplaysHelp
 
@@ -110,13 +124,25 @@ sections:
 
           - id: SarifMark-Program-SarifReading
             title: >-
-              The Program unit shall read the specified SARIF file and report the
-              tool name,
-              version, and result count.
+              The Program unit shall read and parse the SARIF file specified
+              by the --sarif argument.
             justification: >-
-              Reporting tool identity and result count after reading confirms successful
-              processing and
-              gives users immediate feedback about what was analyzed.
+              Reading the specified SARIF file is the prerequisite for all
+              downstream analysis; verifying this step in isolation confirms
+              that file access and deserialization succeed before any reporting
+              or enforcement logic runs.
+            tags: [internal]
+            tests:
+              - Program_Main_ValidSarifFile_ProcessesSuccessfully
+
+          - id: SarifMark-Program-SarifSummary
+            title: >-
+              The Program unit shall report the tool name, version, and result
+              count after successfully reading the SARIF file.
+            justification: >-
+              Reporting tool identity and result count after reading confirms
+              successful processing and gives users immediate feedback about
+              what was analyzed and how many findings were found.
             tags: [internal]
             tests:
               - Program_Main_ValidSarifFile_ProcessesSuccessfully

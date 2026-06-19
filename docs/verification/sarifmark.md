@@ -109,3 +109,14 @@ This scenario is tested by `SarifMark_CustomHeading_AppearsInReport`.
 
 **SarifMark_MultiRunSarifFile_CreatesReport**: Invoke the tool with `--sarif multi-run.sarif --report {path}` and assert the report file is created and contains sections for both runs (Tool1 and Tool2), confirming that multi-run SARIF files produce a combined report.
 This scenario is tested by `SarifMark_MultiRunSarifFile_CreatesReport`.
+
+**Utilities_SafePathHandling_PathTraversal_ThrowsException**: Call `PathHelpers.SafePathCombine` with a relative path
+containing path-traversal segments (e.g. `../etc/passwd`); assert that `ArgumentException` is thrown, confirming
+that path-traversal attempts are rejected before any file-system access occurs, satisfying the safe-path-handling
+system requirement.
+This scenario is tested by `Utilities_SafePathHandling_PathTraversal_ThrowsException`.
+
+**Utilities_SafePathHandling_AbsolutePath_ThrowsException**: Call `PathHelpers.SafePathCombine` with an absolute path
+as the relative argument (e.g. `/etc/passwd`); assert that `ArgumentException` is thrown, confirming that
+absolute-path escape attempts are rejected by the centralized safe-path logic.
+This scenario is tested by `Utilities_SafePathHandling_AbsolutePath_ThrowsException`.

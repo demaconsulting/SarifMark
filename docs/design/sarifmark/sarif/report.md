@@ -17,10 +17,11 @@ custom heading text or the default `"[ToolName] Analysis"` label. For multi-run 
 with `" (#N)"` where `N` is the 1-based run index.
 
 **Tool attribution line**: A line identifying the tool name and tool version in the form
-`"Tool: ToolName (ToolVersion)"`.
+`"**Tool:** ToolName ToolVersion"` (bold label, tool name and version space-separated).
 
-**File count line**: A line recording the number of files analyzed in the form `"Files: N"`, where `N` is the
-integer count of entries in the SARIF `artifacts` array for the run. `N` is `0` when the array is absent.
+**File count line**: A line recording the number of files analyzed in the form `"**Files:** N"` (bold label),
+where `N` is the integer count of entries in the SARIF `artifacts` array for the run. `N` is `0` when the array
+is absent.
 
 **Issues sub-heading**: A markdown heading at `depth + 1` (capped at 6) titled `"Issues"`.
 

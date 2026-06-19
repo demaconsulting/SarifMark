@@ -77,7 +77,7 @@ sections:
           findings
           were found.
         children:
-          - SarifMark-Program-SarifReading
+          - SarifMark-Program-SarifSummary
         tests:
           - SarifMark_ValidSarifFile_ProcessesSuccessfully
 
@@ -211,14 +211,15 @@ sections:
 
       - id: SarifMark-System-SafePaths
         title: >-
-          The tool shall use safe path-handling functions to protect against
-          path-traversal vulnerabilities.
+          The tool shall reject any file path argument that contains
+          path-traversal sequences or specifies an absolute path where
+          a relative path is required.
         tags: [public]
         justification: >-
-          Centralizing path-safety logic prevents path-traversal vulnerabilities from
-          being
-          independently reimplemented and ensures consistent protection wherever external
-          inputs are combined with base paths.
+          Rejecting path-traversal sequences and absolute paths at all external
+          input boundaries prevents file operations from escaping designated
+          directories, ensuring the tool cannot be directed to read or write
+          outside permitted locations regardless of how arguments are constructed.
         children:
           - SarifMark-Utilities-SafePathHandling
         tests:

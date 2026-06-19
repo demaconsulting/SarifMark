@@ -10,18 +10,30 @@ sections:
             requirements:
               - id: SarifMark-Validation-Run
                 title: >-
-                  The Validation unit shall execute the validation header, all validation
-                  tests,
-                  a pass/fail summary, and results file output in sequence.
+                  The Validation unit shall execute all configured validation
+                  tests in the suite.
                 justification: >-
-                  Sequencing these four phases in a fixed order ensures that every
-                  validation run produces a
-                  consistent, complete report regardless of individual test outcomes,
-                  giving users a reliable
-                  picture of the tool's health in their environment.
+                  Executing every test in the configured suite in a fixed order
+                  ensures that every validation run produces a consistent,
+                  complete result regardless of individual test outcomes, giving
+                  users a reliable picture of the tool's health in their environment.
                 tags: [internal]
                 tests:
                   - Validation_Run_ValidContext_RunsAllTests
+
+              - id: SarifMark-Validation-ResultsOutput
+                title: >-
+                  The Validation unit shall write the validation results to a
+                  file when a results file path is configured.
+                justification: >-
+                  Writing results to a file only when a path is configured
+                  makes the output step explicit and optional, enabling integration
+                  with CI/CD test result infrastructure without imposing file I/O
+                  on callers that do not require it.
+                tags: [internal]
+                tests:
+                  - Validation_Run_WithTrxResultsFile_WritesResultsFile
+                  - Validation_Run_WithXmlResultsFile_WritesResultsFile
 
               - id: SarifMark-Validation-NullCheck
                 title: The Validation unit shall reject a null execution context with

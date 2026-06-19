@@ -97,6 +97,10 @@ token without a following value.
 - **.NET base class library** — `Console`, `StreamWriter`, `Path`, `ArgumentException`,
   `ArgumentNullException`, `IDisposable`.
 
+`Context` itself does not call `PathHelpers` directly. `PathHelpers.SafePathCombine` is used
+by `ContextTests` (in the test project) to construct safe file paths for test fixtures, but
+that usage is confined to the test boundary and is not part of the `Context` runtime contract.
+
 #### Callers
 
 - **Program** — constructs `Context.Create(args)` inside a `using` block and passes the

@@ -21,11 +21,14 @@ sections:
               - Context_Create_HelpFlag_SetsHelpTrue
 
           - id: SarifMark-OTS-XUnitV3-TrxOutput
-            title: xUnit v3 shall write TRX result files for traceability.
+            title: >-
+              The test execution pipeline shall produce TRX result files
+              containing passing test names for requirements traceability.
             justification: |
-              xunit.runner.visualstudio provides the VSTest adapter that writes TRX result files
-              when tests are executed via `dotnet test`. These TRX files are consumed by ReqStream
-              for requirements traceability enforcement, linking passing tests to requirement IDs.
+              The combination of xunit.v3, xunit.runner.visualstudio, and `dotnet test
+              --results-directory` produces TRX result files during test execution.
+              These TRX files are consumed by ReqStream for requirements traceability
+              enforcement, linking passing tests to requirement IDs.
             tags: [ots]
             tests:
               - SarifResults_Read_NoResults_ReturnsValidResults

@@ -58,6 +58,7 @@ reviews:
       - docs/design/introduction.md
       - docs/design/sarifmark.md
       - docs/design/sarifmark/**/*.md
+      - docs/design/shared.md
 
   - id: SarifMark-Verification
     title: Review that SarifMark Verification is Consistent and Complete
@@ -67,6 +68,7 @@ reviews:
       - docs/verification/sarifmark.md
       - docs/verification/sarifmark/**/*.md
       - docs/verification/ots.md
+      - docs/verification/shared.md
 
   - id: SarifMark-AllRequirements
     title: Review that All SarifMark Requirements are Complete
@@ -75,6 +77,7 @@ reviews:
       - docs/reqstream/sarifmark.yaml
       - docs/reqstream/sarifmark/**/*.yaml
       - docs/reqstream/ots/**/*.yaml
+      - docs/reqstream/shared/**/*.yaml
 
   # SarifMark - Program
   - id: SarifMark-Program
@@ -247,3 +250,11 @@ reviews:
       - docs/reqstream/ots/weasyprint.yaml
       - docs/design/ots/weasyprint.md
       - docs/verification/ots/weasyprint.md
+
+  # Shared Packages
+  - id: Shared-TestResults
+    title: Review that TestResults Provides Required Features
+    paths:
+      - docs/reqstream/shared/test-results.yaml
+      - docs/design/shared/test-results.md
+      - docs/verification/shared/test-results.md

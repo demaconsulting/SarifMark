@@ -30,6 +30,11 @@ This scenario is tested by `PathHelpers_SafePathCombine_ValidPaths_CombinesSucce
 `ArgumentNullException` is thrown.
 This scenario is tested by `PathHelpers_SafePathCombine_NullBasePath_ThrowsArgumentNullException`.
 
-**PathHelpers_SafePathCombine_AbsoluteChildPath_ThrowsException**: Pass a child segment that resolves outside the
-base path (e.g. an absolute path); assert an exception is thrown to prevent path traversal.
-This scenario is tested by `PathHelpers_SafePathCombine_AbsoluteChildPath_ThrowsException`.
+**PathHelpers_SafePathCombine_NullRelativePath_ThrowsArgumentNullException**: Pass `null` as the relative path;
+assert `ArgumentNullException` is thrown with `ParamName` equal to `relativePath`.
+This scenario is tested by `PathHelpers_SafePathCombine_NullRelativePath_ThrowsArgumentNullException`.
+
+**PathHelpers_SafePathCombine_AbsolutePath_ThrowsArgumentException**: Pass a child segment that is an absolute path
+(e.g. `/etc/passwd` on Unix or `C:\Windows\System32` on Windows); assert `ArgumentException` is thrown to prevent
+escape from the base directory, confirming that absolute-path inputs are rejected.
+This scenario is tested by `PathHelpers_SafePathCombine_AbsolutePath_ThrowsArgumentException`.

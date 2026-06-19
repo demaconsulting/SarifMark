@@ -1,4 +1,4 @@
-﻿### SarifFinding
+### SarifFinding
 
 #### Verification Approach
 

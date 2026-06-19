@@ -7,6 +7,11 @@ All dependencies are standard .NET BCL types (`Console`, `File`) — no mocking 
 are redirected via `StringWriter` for output assertions. Temporary files are used for log-file tests and are always
 cleaned up in `finally` blocks.
 
+Several log-file test methods construct temporary file paths using `PathHelpers.SafePathCombine` rather than
+`Path.Combine`, which means the tests indirectly exercise `PathHelpers` as a cross-unit dependency. `PathHelpers`
+is documented as an explicit dependency of `Context` in the design documentation; its own correctness is verified
+separately in the PathHelpers unit verification document.
+
 #### Test Environment
 
 Standard xUnit v3 test runner with `dotnet test`. Temporary files are created in the OS temporary directory

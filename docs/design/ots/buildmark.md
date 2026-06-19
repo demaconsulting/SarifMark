@@ -32,3 +32,10 @@ test steps have completed:
 4. The generated markdown file is published as a release artifact.
 
 No application-level code in SarifMark references BuildMark directly.
+
+### Error Handling
+
+BuildMark is invoked as a CI pipeline step; a nonzero exit code from any `dotnet buildmark`
+invocation causes the CI step to fail and stops the pipeline immediately. No special wrapper
+or retry logic is applied. Failures are surfaced directly through the GitHub Actions step
+status and must be investigated by inspecting the step log.

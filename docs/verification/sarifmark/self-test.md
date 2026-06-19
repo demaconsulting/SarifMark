@@ -2,16 +2,19 @@
 
 ### Verification Approach
 
-The `SelfTest` subsystem is verified through tests that invoke the subsystem via the `--validate` code path of the
-compiled DLL using the `Runner.Run` helper. Tests assert that self-validation runs, produces the expected output, writes
-result files in the requested format, and exercises the enforcement scenario. Tests are defined in
+The `SelfTest` subsystem is verified through unit-level tests that create a `Context` by calling
+`Context.Create(string[])` with the `--validate` flag and then invoke `Validation.Run(context)` directly in-process.
+No subprocess is spawned and no compiled DLL path is required; the subsystem is exercised within the xUnit test runner
+using the same process. Tests assert that self-validation runs with exit code 0, produces the expected log output
+(including `Total Tests:` and named scenario results), writes result files in the requested format (TRX and JUnit XML),
+and that the depth parameter influences the self-validation report. Tests are defined in
 `test/DemaConsulting.SarifMark.Tests/SelfTest/SelfTestTests.cs` using the xUnit v3 framework.
 
 ### Test Environment
 
-Standard xUnit v3 test runner with `dotnet test`. The compiled DLL must be available to the `Runner.Run` helper.
-Temporary result files (`.trx`, `.xml`) are created in the OS temporary directory and cleaned up after each test. No
-external services or network configuration are required.
+Standard xUnit v3 test runner with `dotnet test`. Temporary log files and result files (`.trx`, `.xml`) are created in
+the OS temporary directory and cleaned up after each test in `finally` blocks. No external services, compiled DLL
+paths, or network configuration are required.
 
 ### Acceptance Criteria
 
