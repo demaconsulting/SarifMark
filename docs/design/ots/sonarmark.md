@@ -36,6 +36,6 @@ analysis has completed:
 5. The `--validate` flag runs SonarMark's built-in self-validation suite using mock API
    data, confirming all advertised features are operational without requiring a live
    SonarCloud connection. The CI pipeline invokes
-   `dotnet sonarmark --validate --results {path}` to collect self-validation evidence.
+   `dotnet sonarmark --validate --results artifacts/sonarmark-self-validation.trx` to collect self-validation evidence.
 
 No application-level code in SarifMark references SonarMark directly.

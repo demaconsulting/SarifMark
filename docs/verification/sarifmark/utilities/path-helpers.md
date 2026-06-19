@@ -26,6 +26,27 @@ No `PathHelpers` unit requirement may remain without at least one named test sce
 path; assert the combined result equals the expected absolute path.
 This scenario is tested by `PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully`.
 
+**PathHelpers_SafePathCombine_SimpleFilename_CombinesSuccessfully**: Call with a valid base path and a simple filename
+(e.g. `file.txt`); assert the combined result equals the expected path, confirming that single-component relative
+paths are accepted.
+This scenario is tested by `PathHelpers_SafePathCombine_SimpleFilename_CombinesSuccessfully`.
+
+**PathHelpers_SafePathCombine_PathWithSubdirectories_CombinesSuccessfully**: Call with a valid base path and a
+multi-component relative path (e.g. `documents/work/report.pdf`); assert the combined result equals the expected path,
+confirming that relative paths with multiple directory components are accepted.
+This scenario is tested by `PathHelpers_SafePathCombine_PathWithSubdirectories_CombinesSuccessfully`.
+
+**PathHelpers_SafePathCombine_GuidBasedFilename_CombinesSuccessfully**: Call with a temp directory base path and a
+GUID-based relative filename (e.g. `test-{guid}.tmp`); assert the combined result equals the expected path,
+confirming that dynamically generated filenames are accepted.
+This scenario is tested by `PathHelpers_SafePathCombine_GuidBasedFilename_CombinesSuccessfully`.
+
+**PathHelpers_SafePathCombine_FilenameWithEmbeddedDots_CombinesSuccessfully**: Call with a valid base path and a
+relative path containing embedded `..` as a substring (e.g. `v1..0.sarif`); assert the combined result equals the
+expected path, confirming that filenames containing `..` as part of the name (not as a traversal segment) are
+accepted.
+This scenario is tested by `PathHelpers_SafePathCombine_FilenameWithEmbeddedDots_CombinesSuccessfully`.
+
 **PathHelpers_SafePathCombine_NullBasePath_ThrowsArgumentNullException**: Pass `null` as the base path; assert
 `ArgumentNullException` is thrown.
 This scenario is tested by `PathHelpers_SafePathCombine_NullBasePath_ThrowsArgumentNullException`.

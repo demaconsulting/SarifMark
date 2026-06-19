@@ -155,11 +155,27 @@ public class ProgramTests
     [Fact]
     public void Program_Main_ValidateFlag_RunsValidation()
     {
-        // Act - run in silent mode to suppress all console output
-        var result = Program.Main(["--validate", "--silent"]);
+        // Arrange
+        var resultsFile = Path.Combine(Path.GetTempPath(), $"validate-results-{Guid.NewGuid()}.trx");
 
-        // Assert
-        Assert.Equal(0, result);
+        try
+        {
+            // Act - run in silent mode with a results file to prove validation ran
+            var result = Program.Main(["--validate", "--silent", "--results", resultsFile]);
+
+            // Assert
+            Assert.Equal(0, result);
+            Assert.True(File.Exists(resultsFile), "Results file was not created — validation did not run");
+            var content = File.ReadAllText(resultsFile);
+            Assert.Contains("<TestRun", content);
+        }
+        finally
+        {
+            if (File.Exists(resultsFile))
+            {
+                File.Delete(resultsFile);
+            }
+        }
     }
 
     /// <summary>

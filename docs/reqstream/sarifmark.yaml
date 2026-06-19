@@ -65,10 +65,8 @@ sections:
           - SarifMark_NonExistentSarifFile_ShowsError
 
       - id: SarifMark-System-SarifSummary
-        title: >-
-          The tool shall report the tool name, version, and result count for each
-          run
-          after processing.
+        title: The tool shall generate a summary section for each SARIF analysis run
+          in the report.
         tags: [public]
         justification: >-
           Reporting tool identity and result count after reading confirms successful

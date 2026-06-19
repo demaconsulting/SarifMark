@@ -36,8 +36,9 @@ This scenario is tested by `Program_Main_HelpFlag_DisplaysHelp`.
 **Program_Main_UnknownArgument_ReturnsError**: Invoke with an unrecognized argument; assert exit code is 1.
 This scenario is tested by `Program_Main_UnknownArgument_ReturnsError`.
 
-**Program_Main_ValidateFlag_RunsValidation**: Invoke with `--validate`; assert self-validation runs and exit code
-is 0.
+**Program_Main_ValidateFlag_RunsValidation**: Invoke with `--validate`; assert self-validation runs and exits with
+code 0, and the TRX results file is created and contains a `<TestRun` element, confirming that the validation
+pipeline executed to completion.
 This scenario is tested by `Program_Main_ValidateFlag_RunsValidation`.
 
 **Program_Main_ValidSarifFile_ProcessesSuccessfully**: Invoke with `--sarif {valid path}`; assert analysis output

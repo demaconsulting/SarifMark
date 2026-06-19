@@ -8,22 +8,36 @@ sections:
         sections:
           - title: SarifFinding Requirements
             requirements:
-              - id: SarifMark-SarifFinding-Properties
-                title: >-
-                  The SarifFinding unit shall preserve the rule identifier, severity
-                  level, message,
-                  optional file location, and optional line number provided at creation.
+              - id: SarifMark-SarifFinding-RuleId
+                title: The SarifFinding unit shall preserve the rule identifier provided
+                  at creation.
                 justification: >-
-                  Capturing all five pieces of data on a single record provides a
-                  self-contained representation of
-                  one SARIF finding, making it straightforward to pass findings between
-                  parsing and formatting
-                  stages without repeated JSON traversal. The five properties form
-                  an indivisible record
-                  contract: a finding is only meaningful when all five slots (three
-                  required, two optional) are
-                  present together, so they are specified as a single requirement
-                  rather than five separate ones.
+                  The rule identifier links each finding to the analysis rule that
+                  raised
+                  it, enabling report consumers to look up rule documentation and
+                  understand the category of the issue.
+                tags: [internal]
+                tests:
+                  - SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties
+
+              - id: SarifMark-SarifFinding-Message
+                title: The SarifFinding unit shall preserve the message provided at
+                  creation.
+                justification: >-
+                  The message carries the human-readable description of the finding
+                  that appears in the generated report, making the issue understandable
+                  without referring back to the raw SARIF file.
+                tags: [internal]
+                tests:
+                  - SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties
+
+              - id: SarifMark-SarifFinding-Severity
+                title: The SarifFinding unit shall preserve the severity level provided
+                  at creation.
+                justification: >-
+                  The severity level classifies findings by impact (error, warning,
+                  note, etc.), allowing report consumers to prioritize remediation
+                  and apply enforcement rules based on severity thresholds.
                 tags: [internal]
                 tests:
                   - SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties

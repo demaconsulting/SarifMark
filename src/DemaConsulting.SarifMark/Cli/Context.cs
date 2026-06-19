@@ -252,7 +252,7 @@ internal sealed class Context : IDisposable
         /// <param name="args">All arguments.</param>
         /// <param name="index">Current index.</param>
         /// <returns>Updated index.</returns>
-        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is not a recognized argument, or a value-bearing argument is the last token without a following value, or a depth value is not a positive integer.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is not a recognized argument, or a value-bearing argument is the last token without a following value, or a depth value is not a depth value between 1 and 6 inclusive.</exception>
         private int ParseArgument(string arg, string[] args, int index)
         {
             switch (arg)
@@ -337,7 +337,7 @@ internal sealed class Context : IDisposable
         /// <param name="args">All arguments.</param>
         /// <param name="index">Current index.</param>
         /// <returns>The argument value.</returns>
-        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is the last token in the argument list, or its value is not a positive integer.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is the last token in the argument list, or its value is not a depth value between 1 and 6 inclusive.</exception>
         private static int GetRequiredIntArgument(string arg, string[] args, int index)
         {
             if (index >= args.Length)
@@ -345,9 +345,9 @@ internal sealed class Context : IDisposable
                 throw new ArgumentException($"{arg} requires a depth argument", nameof(args));
             }
 
-            if (!int.TryParse(args[index], out var value) || value < 1)
+            if (!int.TryParse(args[index], out var value) || value < 1 || value > 6)
             {
-                throw new ArgumentException($"{arg} requires a positive integer", nameof(args));
+                throw new ArgumentException($"{arg} requires an integer between 1 and 6", nameof(args));
             }
 
             return value;

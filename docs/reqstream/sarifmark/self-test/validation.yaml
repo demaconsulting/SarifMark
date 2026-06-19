@@ -61,15 +61,61 @@ sections:
                 tests:
                   - Validation_Run_ValidContext_PrintsValidationHeader
 
-              - id: SarifMark-Validation-Header-Fields
-                title: >-
-                  The Validation unit shall include the tool version, machine name,
-                  OS version, .NET runtime, and timestamp in the validation header.
+              - id: SarifMark-Validation-Header-ToolVersion
+                title: The Validation unit shall include the tool version in the validation
+                  header.
                 justification: >-
-                  Including specific system identification fields in the header ensures
-                  that validation results can be precisely contextualized with the
-                  environment in which they were collected, supporting cross-environment
+                  Including the tool version in the header allows validation results
+                  to
+                  be attributed to a specific release, enabling precise reproduction
+                  and
+                  comparison across versions.
+                tags: [internal]
+                tests:
+                  - Validation_Run_ValidContext_PrintsValidationHeader
+
+              - id: SarifMark-Validation-Header-MachineName
+                title: The Validation unit shall include the machine name in the validation
+                  header.
+                justification: >-
+                  Including the machine name allows validation results to be attributed
+                  to a specific host, enabling identification of environment-specific
+                  failures.
+                tags: [internal]
+                tests:
+                  - Validation_Run_ValidContext_PrintsValidationHeader
+
+              - id: SarifMark-Validation-Header-OsVersion
+                title: The Validation unit shall include the OS version in the validation
+                  header.
+                justification: >-
+                  Including the OS version contextualises validation results with
+                  the
+                  operating system in which they were collected, supporting cross-platform
                   comparison and reproducibility analysis.
+                tags: [internal]
+                tests:
+                  - Validation_Run_ValidContext_PrintsValidationHeader
+
+              - id: SarifMark-Validation-Header-Runtime
+                title: The Validation unit shall include the .NET runtime version
+                  in the validation header.
+                justification: >-
+                  Including the .NET runtime version contextualises validation results
+                  with the specific runtime in use, enabling identification of
+                  runtime-specific failures across supported .NET versions.
+                tags: [internal]
+                tests:
+                  - Validation_Run_ValidContext_PrintsValidationHeader
+
+              - id: SarifMark-Validation-Header-Timestamp
+                title: The Validation unit shall include the timestamp in the validation
+                  header.
+                justification: >-
+                  Including the timestamp establishes when validation was performed,
+                  enabling chronological ordering of validation records and detection
+                  of
+                  time-sensitive issues.
                 tags: [internal]
                 tests:
                   - Validation_Run_ValidContext_PrintsValidationHeader

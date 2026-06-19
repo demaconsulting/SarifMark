@@ -141,25 +141,65 @@ sections:
                   - Context_Create_ReportWithoutValue_ThrowsArgumentException
 
               - id: SarifMark-Context-ReportDepthParam
-                title: >-
-                  The Context unit shall accept --depth (and --report-depth for legacy
-                  compatibility) as a
-                  positive integer heading depth, defaulting to 1 when omitted.
+                title: The Context unit shall accept the --depth parameter as the
+                  heading depth for the generated report.
                 justification: >-
-                  Validating the depth value at parse time prevents invalid heading
-                  levels from propagating into
-                  markdown generation, and defaulting to 1 ensures sensible behavior
-                  when the parameter is omitted.
+                  Accepting a named depth parameter decouples heading-level selection
+                  from
+                  argument parsing, allowing downstream report generation to receive
+                  a
+                  validated integer depth without inspecting raw argument strings.
                 tags: [internal]
                 tests:
                   - Context_Create_DepthParameter_SetsDepth
                   - Context_Create_DepthWithoutValue_ThrowsArgumentException
-                  - Context_Create_DepthInvalidValue_ThrowsArgumentException
-                  - Context_Create_DepthZero_ThrowsArgumentException
+
+              - id: SarifMark-Context-ReportDepthAlias
+                title: The Context unit shall accept --report-depth as a legacy alias
+                  for --depth.
+                justification: >-
+                  Accepting the legacy --report-depth alias preserves backwards compatibility
+                  for existing scripts and workflows that used the earlier parameter
+                  name,
+                  preventing breaking changes when users upgrade.
+                tags: [internal]
+                tests:
                   - Context_Create_ReportDepthParameter_SetsReportDepth
                   - Context_Create_ReportDepthWithoutValue_ThrowsArgumentException
+
+              - id: SarifMark-Context-ReportDepthValidation
+                title: The Context unit shall reject depth values outside the range
+                  1 to 6 inclusive with an error.
+                justification: >-
+                  Restricting depth to the valid markdown heading range of 1 to 6
+                  at
+                  parse time prevents invalid heading levels from propagating into
+                  markdown
+                  generation, ensuring the output is always accepted by standard markdown
+                  renderers.
+                tags: [internal]
+                tests:
+                  - Context_Create_DepthInvalidValue_ThrowsArgumentException
+                  - Context_Create_DepthZero_ThrowsArgumentException
+                  - Context_Create_DepthNegative_ThrowsArgumentException
+                  - Context_Create_DepthAboveMax_ThrowsArgumentException
+                  - Context_Create_DepthAtMinimum_SetsDepth
+                  - Context_Create_DepthAtMaximum_SetsDepth
                   - Context_Create_ReportDepthInvalidValue_ThrowsArgumentException
                   - Context_Create_ReportDepthZero_ThrowsArgumentException
+
+              - id: SarifMark-Context-ReportDepthDefault
+                title: The Context unit shall use a heading depth of 1 when the --depth
+                  parameter is not provided.
+                justification: >-
+                  Defaulting to depth 1 ensures sensible report heading output when
+                  the
+                  caller omits the parameter, generating top-level headings that are
+                  valid
+                  in any markdown document.
+                tags: [internal]
+                tests:
+                  - Context_Create_NoArguments_ReturnsDefaultContext
 
               - id: SarifMark-Context-HeadingParam
                 title: The Context unit shall accept a --heading parameter value as
@@ -286,21 +326,6 @@ sections:
                 tests:
                   - Context_WriteLine_WithLogFile_WritesToLog
                   - Context_WriteLine_SilentModeWithLogFile_WritesToLog
-
-              - id: SarifMark-Context-WriteError
-                title: The WriteError method shall write errors to stderr and set
-                  a non-zero exit code.
-                justification: >-
-                  Writing errors to stderr and setting a non-zero exit code ensures
-                  that callers receive
-                  a failure signal without requiring explicit exit code management.
-                tags: [internal]
-                children:
-                  - SarifMark-Context-WriteError-Stderr
-                  - SarifMark-Context-WriteError-Log
-                  - SarifMark-Context-WriteError-ExitCode
-                tests:
-                  - Context_WriteError_WritesToErrorAndSetsExitCode
 
               - id: SarifMark-Context-WriteError-Stderr
                 title: >-

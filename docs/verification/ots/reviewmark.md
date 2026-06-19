@@ -3,11 +3,11 @@
 ### Verification Approach
 
 ReviewMark is verified through its built-in `--validate` self-validation mechanism. Running
-`reviewmark --validate` executes nine internal test scenarios that confirm the tool is
+`reviewmark --validate` executes ten internal test scenarios that confirm the tool is
 installed and all advertised features are functioning correctly in the current environment.
 Self-validation covers version display, help display, review plan generation, review report
-generation, index scanning, working directory override, enforcement mode, elaboration, and
-lint validation.
+generation, index scanning, working directory override, enforcement mode, elaboration,
+lint validation, and review depth configuration.
 
 ### Test Environment
 
@@ -18,7 +18,7 @@ Tests require:
 
 ### Acceptance Criteria
 
-All nine self-validation scenarios must pass with exit code 0 and zero failures, confirming
+All ten self-validation scenarios must pass with exit code 0 and zero failures, confirming
 that ReviewMark is correctly installed and all advertised features are operational.
 
 ### Test Scenarios
@@ -61,6 +61,11 @@ This scenario is tested by `ReviewMark_Enforce`.
 for the specified review set.
 This scenario is tested by `ReviewMark_Elaborate`.
 
-**ReviewMark_Lint**: The `ReviewMark_Lint` self-validation scenario invokes `--lint` against
-a valid definition file and confirms exit code 0 with no errors reported.
+**ReviewMark_Lint**: The `ReviewMark_Lint` self-validation scenario exercises `--lint` against both a valid definition
+file (confirming exit code 0) and an invalid definition file (confirming non-zero exit code and error reporting). The
+valid-config case is the primary scenario referenced here.
 This scenario is tested by `ReviewMark_Lint`.
+
+**ReviewMark_DepthFlag**: The `ReviewMark_DepthFlag` self-validation scenario invokes ReviewMark with `--depth`
+and confirms the flag is accepted and affects the heading depth in generated output.
+This scenario is tested by `ReviewMark_DepthFlag`.

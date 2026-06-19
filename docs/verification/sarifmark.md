@@ -167,3 +167,8 @@ This scenario is tested by `Sarif_GenerateReport_FileCount_ContainsFileCount`.
 results and `--report {path}`; assert exit code is 0, the report file is created, and the report contains the tool
 attribution line (`**Tool:**`), confirming the tool generates a valid report for a clean SARIF file with no findings.
 This scenario is tested by `SarifMark_ValidSarif_NoIssues_GeneratesReport`.
+
+**SarifMark_ValidateResultsParameter_WritesResultsFile**: Invoke the tool with `--validate --results {path.trx}`;
+assert exit code is 0 and the TRX results file is created and contains a `<TestRun` element, confirming that the
+`--results` parameter causes self-validation results to be written to the specified file.
+This scenario is tested by `SarifMark_ValidateResultsParameter_WritesResultsFile`.

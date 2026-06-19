@@ -39,5 +39,16 @@ file is created with a `<testsuite` element.
 This scenario is tested by `SelfTest_ResultsFile_XmlPath_WritesJUnitFile`.
 
 **SelfTest_EnforcementTest_RunsWithinValidation**: Invoke `--validate`; assert the enforcement scenario
-(`SarifMark_Enforcement`) runs within the self-validation suite and is reported in the output.
+(`SarifMark_Enforcement`) runs within the self-validation suite and is reported as passed, confirming that enforcement
+mode detects issues and returns a non-zero exit code when issues are present.
 This scenario is tested by `SelfTest_EnforcementTest_RunsWithinValidation`.
+
+**SelfTest_DepthParameter_AffectsSelfValidationReport**: Invoke `--validate --depth 2`; assert self-validation passes
+and the markdown report generation scenario (`SarifMark_MarkdownReportGeneration`) is reported as passed, confirming
+the depth parameter is accepted and propagated to the self-validation report generation test.
+This scenario is tested by `SelfTest_DepthParameter_AffectsSelfValidationReport`.
+
+**SelfTest_EnforceFlag_WithIssues_ReturnsNonZeroExitCode**: Invoke `Program.Main` with `--sarif sample.sarif --enforce`
+where `sample.sarif` contains findings; assert the exit code is 1, confirming that enforcement mode returns a non-zero
+exit code when issues are found.
+This scenario is tested by `SelfTest_EnforceFlag_WithIssues_ReturnsNonZeroExitCode`.

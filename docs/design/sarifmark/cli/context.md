@@ -31,7 +31,8 @@ not provided.
 `null` when not provided.
 
 **Depth**: `int` — Heading depth for the generated report supplied via `--depth` or the
-deprecated alias `--report-depth`; must be a positive integer; default `1`. The deprecated
+deprecated alias `--report-depth`; must be an integer between 1 and 6 inclusive; default `1`. The valid range is
+enforced at parse time. The deprecated
 alias is accepted for backwards compatibility but is intentionally omitted from `--help` output.
 
 **Heading**: `string?` — Custom heading text supplied via `--heading`; `null` when not provided.
@@ -85,7 +86,7 @@ and calls `OpenLogFile` when a log path was specified.
 #### Error Handling
 
 `Create` throws `ArgumentException` for unrecognized tokens and for malformed value-bearing
-flags (e.g., `--depth` not followed by a positive integer, or a string flag at end of args).
+flags (e.g., `--depth` not followed by an integer between 1 and 6 inclusive, or a string flag at end of args).
 It throws `InvalidOperationException` if the log file cannot be opened. `ArgumentNullException`
 is thrown immediately if `args` is null. These exceptions propagate to `Program.Main`, which
 translates them to exit code 1.

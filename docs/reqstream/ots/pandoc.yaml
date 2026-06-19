@@ -7,7 +7,7 @@ sections:
       - title: Pandoc Requirements
         requirements:
           - id: SarifMark-OTS-Pandoc
-            title: Pandoc shall convert Markdown documents to valid HTML.
+            title: Pandoc shall convert Markdown documents to HTML.
             justification: |
               DemaConsulting.PandocTool converts Markdown source documents to HTML as part of the
               documentation build pipeline. FileAssert validates that each generated HTML file

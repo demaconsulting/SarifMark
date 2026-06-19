@@ -100,3 +100,15 @@ sections:
             tags: [ots]
             tests:
               - ReviewMark_Lint
+
+          - id: SarifMark-OTS-ReviewMark-DepthFlag
+            title: ReviewMark shall support configuring review depth via the --depth
+              flag.
+            justification: |
+              The --depth flag controls how many heading levels are generated in review
+              plan and report output. The self-validation test ReviewMark_DepthFlag
+              confirms the flag is accepted and influences report output in the installed
+              environment.
+            tags: [ots]
+            tests:
+              - ReviewMark_DepthFlag

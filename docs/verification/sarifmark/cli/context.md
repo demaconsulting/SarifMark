@@ -64,6 +64,23 @@ This scenario is tested by `Context_Create_ReportWithoutValue_ThrowsArgumentExce
 the provided value.
 This scenario is tested by `Context_Create_DepthParameter_SetsDepth`.
 
+**Context_Create_DepthNegative_ThrowsArgumentException**: Pass `--depth -1`; assert `ArgumentException` is thrown
+with a message indicating the depth must be between 1 and 6.
+This scenario is tested by `Context_Create_DepthNegative_ThrowsArgumentException`.
+
+**Context_Create_DepthAboveMax_ThrowsArgumentException**: Pass `--depth 7`; assert `ArgumentException` is thrown
+with a message indicating the depth must be between 1 and 6, confirming that depth values exceeding the maximum
+heading level are rejected.
+This scenario is tested by `Context_Create_DepthAboveMax_ThrowsArgumentException`.
+
+**Context_Create_DepthAtMinimum_SetsDepth**: Pass `--depth 1`; assert `Depth` is 1, confirming the lower boundary
+value is accepted.
+This scenario is tested by `Context_Create_DepthAtMinimum_SetsDepth`.
+
+**Context_Create_DepthAtMaximum_SetsDepth**: Pass `--depth 6`; assert `Depth` is 6, confirming the upper boundary
+value is accepted.
+This scenario is tested by `Context_Create_DepthAtMaximum_SetsDepth`.
+
 **Context_Create_HeadingArgument_SetsHeading**: Pass `--heading {text}`; assert `Heading` is set.
 This scenario is tested by `Context_Create_HeadingArgument_SetsHeading`.
 

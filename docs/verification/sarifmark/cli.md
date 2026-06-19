@@ -79,11 +79,17 @@ alias is accepted and `ResultsFile` is set.
 This scenario is tested by `Cli_Create_ResultLegacyAlias_SetsResultsFilePath`.
 
 **Cli_Create_DepthInvalidValue_ThrowsArgumentException**: Pass `--depth abc` (a non-integer value) to
-`Context.Create`; assert `ArgumentException` is thrown with a message indicating `--depth requires a positive
-integer`, confirming that invalid depth values are rejected before reaching the report formatter.
+`Context.Create`; assert `ArgumentException` is thrown with a message indicating `--depth requires an integer
+between 1 and 6`, confirming that invalid depth values are rejected before reaching the report formatter.
 This scenario is tested by `Cli_Create_DepthInvalidValue_ThrowsArgumentException`.
 
 **Cli_Create_LogWithoutSilent_WritesToConsoleAndLogFile**: Pass `--log {path}` without `--silent` to `Context.Create`
 and write a message; assert the message appears both on the console and in the log file, confirming that log-file
 output is additive rather than replacing console output when silent mode is not active.
 This scenario is tested by `Cli_Create_LogWithoutSilent_WritesToConsoleAndLogFile`.
+
+**Cli_Create_DepthZero_ThrowsArgumentException**: Pass `--depth 0` to `Context.Create`; assert `ArgumentException` is thrown with a message indicating `--depth requires an integer between 1 and 6`, confirming that a depth of zero is rejected.
+This scenario is tested by `Cli_Create_DepthZero_ThrowsArgumentException`.
+
+**Cli_Create_DepthNegative_ThrowsArgumentException**: Pass `--depth -1` to `Context.Create`; assert `ArgumentException` is thrown with a message indicating `--depth requires an integer between 1 and 6`, confirming that negative depth values are rejected.
+This scenario is tested by `Cli_Create_DepthNegative_ThrowsArgumentException`.

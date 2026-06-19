@@ -83,3 +83,19 @@ sections:
               - SarifMark-Validation-EnforcementTest
             tests:
               - SelfTest_EnforcementTest_RunsWithinValidation
+              - SelfTest_EnforceFlag_WithIssues_ReturnsNonZeroExitCode
+
+          - id: SarifMark-SelfTest-DepthParam
+            title: The SelfTest subsystem shall accept the --depth parameter to configure
+              the heading depth used in self-validation report generation.
+            justification: >-
+              Passing the depth parameter through to self-validation ensures that
+              the
+              self-test produces reports at the same heading level as normal analysis
+              mode, confirming that depth-aware report generation is exercised end-to-end
+              during validation.
+            tags: [public]
+            children:
+              - SarifMark-Validation-ReportGenerationTest
+            tests:
+              - SelfTest_DepthParameter_AffectsSelfValidationReport

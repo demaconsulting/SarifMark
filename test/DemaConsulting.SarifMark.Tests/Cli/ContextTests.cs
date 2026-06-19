@@ -118,8 +118,13 @@ public class ContextTests
     [Fact]
     public void Context_Create_UnknownArgument_ThrowsArgumentException()
     {
-        // Act & Assert
+        // Arrange
+        // (no setup required)
+
+        // Act
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--unknown"]));
+
+        // Assert
         Assert.Contains("Unsupported argument", exception.Message);
     }
 
@@ -386,7 +391,10 @@ public class ContextTests
     [Fact]
     public void Context_Create_MultipleFlags_SetsAllPropertiesCorrectly()
     {
-        // Arrange & Act
+        // Arrange
+        // (no setup required)
+
+        // Act
         using var context = Context.Create(["--silent", "--enforce", "--sarif", "test.sarif"]);
 
         // Assert
@@ -455,7 +463,7 @@ public class ContextTests
     {
         // Act & Assert
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--depth", "invalid"]));
-        Assert.Contains("--depth requires a positive integer", exception.Message);
+        Assert.Contains("--depth requires an integer between 1 and 6", exception.Message);
     }
 
     /// <summary>
@@ -466,7 +474,7 @@ public class ContextTests
     {
         // Act & Assert
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--depth", "0"]));
-        Assert.Contains("--depth requires a positive integer", exception.Message);
+        Assert.Contains("--depth requires an integer between 1 and 6", exception.Message);
     }
 
     /// <summary>
@@ -501,7 +509,7 @@ public class ContextTests
     {
         // Act & Assert
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--report-depth", "invalid"]));
-        Assert.Contains("--report-depth requires a positive integer", exception.Message);
+        Assert.Contains("--report-depth requires an integer between 1 and 6", exception.Message);
     }
 
     /// <summary>
@@ -512,7 +520,7 @@ public class ContextTests
     {
         // Act & Assert
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--report-depth", "0"]));
-        Assert.Contains("--report-depth requires a positive integer", exception.Message);
+        Assert.Contains("--report-depth requires an integer between 1 and 6", exception.Message);
     }
 
     /// <summary>
@@ -709,5 +717,69 @@ public class ContextTests
         // Act & Assert
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--log"]));
         Assert.Contains("--log requires", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --depth and negative value throws exception.
+    /// </summary>
+    [Fact]
+    public void Context_Create_DepthNegative_ThrowsArgumentException()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--depth", "-1"]));
+
+        // Assert
+        Assert.Contains("--depth requires an integer between 1 and 6", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --depth and a value above the maximum throws exception.
+    /// </summary>
+    [Fact]
+    public void Context_Create_DepthAboveMax_ThrowsArgumentException()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--depth", "7"]));
+
+        // Assert
+        Assert.Contains("--depth requires an integer between 1 and 6", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --depth 1 (lower boundary) is accepted.
+    /// </summary>
+    [Fact]
+    public void Context_Create_DepthAtMinimum_SetsDepth()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        using var context = Context.Create(["--depth", "1"]);
+
+        // Assert
+        Assert.Equal(1, context.Depth);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --depth 6 (upper boundary) is accepted.
+    /// </summary>
+    [Fact]
+    public void Context_Create_DepthAtMaximum_SetsDepth()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        using var context = Context.Create(["--depth", "6"]);
+
+        // Assert
+        Assert.Equal(6, context.Depth);
     }
 }

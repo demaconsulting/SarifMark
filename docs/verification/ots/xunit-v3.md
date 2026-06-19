@@ -11,11 +11,14 @@ of the result files produced during `dotnet test --results-directory` invocation
 
 ### Test Scenarios
 
-**XUnitV3_TestDiscoveryAndExecution**: The test suite runs with `dotnet test` and discovers and executes tests across
-all test classes, including `SarifResultsTests`, `ContextTests`, and integration tests, producing passing results.
-This confirms xUnit v3 framework discovery and execution are operational.
-This scenario is tested by representative test methods across all test classes in
-`test/DemaConsulting.SarifMark.Tests/`.
+**XUnitV3_TestDiscovery**: xUnit v3 discovers all test methods marked with [Fact] or [Theory] across all test classes
+in `test/DemaConsulting.SarifMark.Tests/`, confirming the framework's test discovery mechanism is operational.
+This scenario is evidenced by the successful collection and reporting of all test method names in `dotnet test` output.
+
+**XUnitV3_TestExecution**: xUnit v3 executes all discovered test methods and produces pass/fail results, confirming
+that test execution and result reporting work correctly across all test categories (unit, subsystem, and integration
+tests).
+This scenario is evidenced by representative passing tests across all test classes.
 
 **XUnitV3_TrxOutputGeneration**: The `dotnet test --results-directory` invocation produces TRX result files in the
 specified directory, confirming that the `xunit.runner.visualstudio` adapter serializes test results in TRX format

@@ -32,7 +32,9 @@ at the subsystem boundary.
 This scenario is tested by `Utilities_SafePathHandling_PathTraversal_ThrowsException`.
 
 **Utilities_SafePathHandling_AbsolutePath_ThrowsException**: Call `PathHelpers.SafePathCombine` with an absolute child
-path (`/etc/passwd`); assert `ArgumentException` is thrown, confirming absolute path injection is rejected.
+path (`/etc/passwd`); assert `ArgumentException` is thrown, confirming absolute path injection is rejected. The
+Windows-specific case (`C:\Windows\System32`) is only exercised on Windows; the Unix-style absolute path
+(`/etc/passwd`) is exercised on all platforms.
 This scenario is tested by `Utilities_SafePathHandling_AbsolutePath_ThrowsException`.
 
 **Utilities_SafePathHandling_NullRelativePath_ThrowsException**: Call `PathHelpers.SafePathCombine` with a `null`
