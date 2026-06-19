@@ -1,4 +1,4 @@
-## Pandoc
+﻿## Pandoc
 
 ### Verification Approach
 
@@ -32,9 +32,3 @@ content. This scenario is verified by FileAssert assertions in the CI pipeline.
 **Pandoc_UserGuideHtml**: Pandoc converts the user-guide Markdown collection to an HTML file; FileAssert assertions
 confirm the output file exists, has non-trivial size, contains a valid `<title>` element, and includes expected
 user-guide content. This scenario is verified by FileAssert assertions in the CI pipeline.
-
-### Requirements Coverage
-
-- **`SarifMark-OTS-Pandoc`**: Pandoc converts each document collection to valid HTML — `Pandoc_BuildNotesHtml`,
-  `Pandoc_CodeQualityHtml`, `Pandoc_ReviewPlanHtml`, `Pandoc_ReviewReportHtml`, `Pandoc_DesignHtml`,
-  `Pandoc_UserGuideHtml`

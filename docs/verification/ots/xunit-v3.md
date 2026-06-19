@@ -1,4 +1,4 @@
-## xUnit v3
+﻿## xUnit v3
 
 ### Verification Approach
 
@@ -21,10 +21,3 @@ This scenario is tested by representative test methods across all test classes i
 specified directory, confirming that the `xunit.runner.visualstudio` adapter serializes test results in TRX format
 as required by ReqStream for traceability enforcement.
 This scenario is verified by the presence of TRX result files in the CI pipeline test-results artifacts.
-
-### Requirements Coverage
-
-- **`SarifMark-OTS-XUnitV3-Discovery`**: xUnit v3 discovers and executes tests across all test classes —
-  `XUnitV3_TestDiscoveryAndExecution`
-- **`SarifMark-OTS-XUnitV3-TrxOutput`**: xUnit v3 writes TRX result files —
-  `XUnitV3_TrxOutputGeneration`

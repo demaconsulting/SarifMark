@@ -1,4 +1,4 @@
-### SarifResults
+﻿### SarifResults
 
 #### Verification Approach
 
@@ -94,26 +94,3 @@ This scenario is tested by `SarifResults_ToMarkdown_MultipleResults_EnforcesLine
 **SarifResults_ToMarkdown_ShowsFileCount**: Pass SARIF with artifact entries; assert the file count appears in the
 report header.
 This scenario is tested by `SarifResults_ToMarkdown_ShowsFileCount`.
-
-#### Requirements Coverage
-
-- **`SarifMark-SarifResults-ValidatePathArgument`**: `SarifResults_Read_NullPath_ThrowsArgumentException`
-- **`SarifMark-SarifResults-ValidatePathExists`**: `SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException`
-- **`SarifMark-SarifResults-ValidateStructure`**: `SarifResults_Read_EmptyRuns_ThrowsInvalidOperationException`
-- **`SarifMark-SarifResults-ExtractTool`**: `SarifResults_Read_MissingToolName_UsesUnknown`
-- **`SarifMark-SarifResults-VersionPriority`**: `SarifResults_Read_AllVersionFields_PrioritizesVersion`
-- **`SarifMark-SarifResults-ParseResults`**: `SarifResults_Read_NoResults_ReturnsValidResults`
-- **`SarifMark-SarifResults-FilterSuppressions`**: `SarifResults_Read_EmptySuppressions_DoesNotExcludeResult`
-- **`SarifMark-SarifResults-ToMarkdown`**: `SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput`
-- **`SarifMark-SarifResults-ValidateDepth`**: `SarifResults_ToMarkdown_Depth6_ProducesCorrectOutput`
-- **`SarifMark-SarifResults-FileCount`**: `SarifResults_Read_NoArtifacts_ReturnsZeroFileCount`
-- **`SarifMark-SarifResults-Runs`**: `SarifResults_Runs_SingleRun_ReturnsSingleRun`
-- **`SarifMark-SarifResults-HasIssues`**: `SarifResults_HasIssues_NoIssues_ReturnsFalse`
-- **`SarifMark-SarifResults-MultiRunMarkdown`**: `SarifResults_ToMarkdown_MultipleRuns_IncludesRunIndices`
-- **`SarifMark-Report-Markdown`**: `SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput`
-- **`SarifMark-Report-Depth`**: `SarifResults_ToMarkdown_Depth3_UsesCorrectHeadingLevels`
-- **`SarifMark-Report-Counts`**: `SarifResults_ToMarkdown_OneResult_UsesSingularForm`
-- **`SarifMark-Report-Locations`**: `SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly`
-- **`SarifMark-Report-Headings`**: `SarifResults_ToMarkdown_CustomHeading_UsesProvidedHeading`
-- **`SarifMark-Report-LineBreaks`**: `SarifResults_ToMarkdown_MultipleResults_EnforcesLineBreaks`
-- **`SarifMark-Report-FileCount`**: `SarifResults_ToMarkdown_ShowsFileCount`

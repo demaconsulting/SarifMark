@@ -1,4 +1,4 @@
-## SonarMark
+﻿## SonarMark
 
 ### Verification Approach
 
@@ -26,9 +26,3 @@ report. This scenario is verified by successful completion of the SonarMark pipe
 markdown document, confirming SonarMark successfully generated a complete markdown report containing quality-gate,
 issues, and hot spots sections.
 This scenario is verified by successful completion of the SonarMark pipeline step in CI.
-
-### Requirements Coverage
-
-- **`SarifMark-OTS-SonarMark`**: Retrieves quality data and generates markdown report —
-  `SonarMark_QualityGateRetrieval`, `SonarMark_IssuesRetrieval`, `SonarMark_HotSpotsRetrieval`,
-  `SonarMark_MarkdownReportGeneration`

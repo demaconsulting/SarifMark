@@ -1,4 +1,4 @@
-## ReviewMark
+﻿## ReviewMark
 
 ### Verification Approach
 
@@ -18,8 +18,3 @@ This scenario is verified by successful completion of the ReviewMark plan pipeli
 completes without error and produces the review report markdown file, confirming ReviewMark processed the
 review-set configuration and generated the expected report output.
 This scenario is verified by successful completion of the ReviewMark report pipeline step in CI.
-
-### Requirements Coverage
-
-- **`SarifMark-OTS-ReviewMark`**: Generates review plan and report in CI — `ReviewMark_ReviewPlanGeneration`,
-  `ReviewMark_ReviewReportGeneration`

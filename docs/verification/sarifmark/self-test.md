@@ -1,4 +1,4 @@
-## SelfTest
+﻿## SelfTest
 
 ### Verification Approach
 
@@ -38,13 +38,3 @@ This scenario is tested by `SelfTest_ResultsFile_XmlPath_WritesJUnitFile`.
 **SelfTest_EnforcementTest_RunsWithinValidation**: Invoke `--validate`; assert the enforcement scenario
 (`SarifMark_Enforcement`) runs within the self-validation suite and is reported in the output.
 This scenario is tested by `SelfTest_EnforcementTest_RunsWithinValidation`.
-
-### Requirements Coverage
-
-- **`SarifMark-Validate-Mode`**: `SelfTest_ValidateFlag_RunsSelfValidation`
-- **`SarifMark-Validate-ResultFiles`**: `SelfTest_ResultsFile_TrxPath_WritesTrxFile`,
-  `SelfTest_ResultsFile_XmlPath_WritesJUnitFile`
-- **`SarifMark-Validate-TrxFormat`**: `SelfTest_ResultsFile_TrxPath_WritesTrxFile`
-- **`SarifMark-Validate-JUnitFormat`**: `SelfTest_ResultsFile_XmlPath_WritesJUnitFile`
-- **`SarifMark-Enforce-Mode`**: `SelfTest_EnforcementTest_RunsWithinValidation`
-- **`SarifMark-Enforce-ExitCode`**: `SelfTest_EnforcementTest_RunsWithinValidation`

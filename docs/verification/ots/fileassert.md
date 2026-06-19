@@ -1,4 +1,4 @@
-## FileAssert
+﻿## FileAssert
 
 ### Verification Approach
 
@@ -25,8 +25,3 @@ document content. This scenario is verified by the file-assertion CI pipeline st
 **FileAssert_PdfDocumentAssertions**: FileAssert validates generated PDF documents in the CI pipeline, asserting
 that each PDF output file exists, has non-trivial size, contains at least one page, and includes expected rendered
 text. This scenario is verified by the file-assertion CI pipeline steps that validate WeasyPrint PDF outputs.
-
-### Requirements Coverage
-
-- **`SarifMark-OTS-FileAssert`**: CI file assertions pass — `FileAssert_VersionDisplay`, `FileAssert_HelpDisplay`,
-  `FileAssert_HtmlDocumentAssertions`, `FileAssert_PdfDocumentAssertions`

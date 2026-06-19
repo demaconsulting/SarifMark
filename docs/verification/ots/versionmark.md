@@ -1,4 +1,4 @@
-## VersionMark
+﻿## VersionMark
 
 ### Verification Approach
 
@@ -16,8 +16,3 @@ This scenario is verified by successful completion of the VersionMark pipeline s
 **VersionMark_GeneratesMarkdownReport**: The VersionMark pipeline step produces the tool-versions markdown document,
 confirming that VersionMark generated the expected output file containing the captured version information.
 This scenario is verified by the presence of the versions markdown file in CI pipeline artifacts.
-
-### Requirements Coverage
-
-- **`SarifMark-OTS-VersionMark`**: Tool versions captured and markdown report generated —
-  `VersionMark_CapturesVersions`, `VersionMark_GeneratesMarkdownReport`

@@ -1,4 +1,4 @@
-## Sarif
+﻿## Sarif
 
 ### Verification Approach
 
@@ -65,25 +65,3 @@ This scenario is tested by `Sarif_GenerateReport_ResultCount_ContainsResultCount
 **Sarif_GenerateReport_CustomHeading_UsesCustomHeading**: Read `sample.sarif` and call `ToMarkdown(1, "Custom Analysis
 Heading")`; assert the custom heading string appears in the output instead of the default tool-name heading.
 This scenario is tested by `Sarif_GenerateReport_CustomHeading_UsesCustomHeading`.
-
-### Requirements Coverage
-
-- **`SarifMark-Sarif-Reading`**: `Sarif_Read_ValidSarifFile_ProcessesSuccessfully`
-- **`SarifMark-Sarif-Validation`**: `Sarif_Read_NonExistentFile_ThrowsFileNotFoundException`,
-  `Sarif_Read_InvalidSarifFile_ThrowsInvalidOperationException`
-- **`SarifMark-Sarif-ToolInfo`**: `Sarif_Read_ValidSarifFile_ProcessesSuccessfully`
-- **`SarifMark-Sarif-Results`**: `Sarif_Read_ValidSarifFile_ProcessesSuccessfully`,
-  `Sarif_GenerateReport_ResultCount_ContainsResultCount`
-- **`SarifMark-Sarif-Locations`**: `Sarif_GenerateReport_LocationInfo_ContainsLocationInfo`
-- **`SarifMark-Sarif-FilePaths`**: `Sarif_Read_NonExistentFile_ThrowsFileNotFoundException`
-- **`SarifMark-Sarif-Processing`**: `Sarif_Read_ValidSarifFile_ProcessesSuccessfully`,
-  `Sarif_GenerateReport_DefaultDepth_ProducesMarkdownContent`
-- **`SarifMark-Sarif-FileCount`**: `Sarif_GenerateReport_FileCount_ContainsFileCount`
-- **`SarifMark-Sarif-MultiRun`**: `Sarif_Read_MultiRunSarifFile_ProcessesAllRuns`
-- **`SarifMark-Report-Depth`**: `Sarif_GenerateReport_ReportDepth_IsConfigurable`
-- **`SarifMark-Report-LineBreaks`**: `Sarif_GenerateReport_MultipleResults_FormatsWithLineBreaks`
-- **`SarifMark-Report-Headings`**: `Sarif_GenerateReport_CustomHeading_UsesCustomHeading`
-- **`SarifMark-Report-Markdown`**: `Sarif_GenerateReport_DefaultDepth_ProducesMarkdownContent`
-- **`SarifMark-Report-Counts`**: `Sarif_GenerateReport_ResultCount_ContainsResultCount`
-- **`SarifMark-Report-Locations`**: `Sarif_GenerateReport_LocationInfo_ContainsLocationInfo`
-- **`SarifMark-Report-FileCount`**: `Sarif_GenerateReport_FileCount_ContainsFileCount`

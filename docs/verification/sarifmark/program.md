@@ -1,4 +1,4 @@
-## Program
+﻿## Program
 
 ### Verification Approach
 
@@ -50,21 +50,3 @@ This scenario is tested by `Program_Main_EnforceFlagWithIssues_ReturnsError`.
 **Program_Main_ReportFile_CreatesReport**: Invoke with `--sarif` and `--report {path}`; assert the report file is
 created on disk.
 This scenario is tested by `Program_Main_ReportFile_CreatesReport`.
-
-### Requirements Coverage
-
-- **`SarifMark-Program-Version`**: `Program_Main_VersionFlag_DisplaysVersionOnly`
-- **`SarifMark-Program-Main`**: `Program_Main_NoArguments_ReturnsError`,
-  `Program_Main_VersionFlag_DisplaysVersionOnly`,
-  `Program_Main_HelpFlag_DisplaysHelp`
-- **`SarifMark-Program-Main-Exceptions`**: `Program_Main_NoArguments_ReturnsError`,
-  `Program_Main_UnknownArgument_ReturnsError`
-- **`SarifMark-Program-Run`**: `Program_Main_VersionFlag_DisplaysVersionOnly`,
-  `Program_Main_HelpFlag_DisplaysHelp`
-- **`SarifMark-Program-Banner`**: `Program_Main_HelpFlag_DisplaysHelp`
-- **`SarifMark-Program-Help`**: `Program_Main_HelpFlag_DisplaysHelp`
-- **`SarifMark-Program-Validation`**: `Program_Main_ValidateFlag_RunsValidation`
-- **`SarifMark-Program-SarifArgument`**: `Program_Main_NoArguments_ReturnsError`
-- **`SarifMark-Program-SarifReading`**: `Program_Main_ValidSarifFile_ProcessesSuccessfully`
-- **`SarifMark-Program-EnforcementCheck`**: `Program_Main_EnforceFlagWithIssues_ReturnsError`
-- **`SarifMark-Program-ReportGeneration`**: `Program_Main_ReportFile_CreatesReport`

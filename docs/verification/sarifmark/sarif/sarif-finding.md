@@ -1,4 +1,4 @@
-### SarifFinding
+﻿### SarifFinding
 
 #### Verification Approach
 
@@ -29,10 +29,3 @@ This scenario is tested by `SarifFinding_Constructor_NullUri_UriPropertyIsNull`.
 **SarifFinding_Constructor_NullStartLine_StartLinePropertyIsNull**: Construct with `null` start line; assert
 `StartLine` property is `null`.
 This scenario is tested by `SarifFinding_Constructor_NullStartLine_StartLinePropertyIsNull`.
-
-### Requirements Coverage
-
-- **`SarifMark-SarifFinding-Properties`**: `SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties`
-- **`SarifMark-SarifFinding-Uri`**: `SarifFinding_Constructor_NullUri_UriPropertyIsNull`
-- **`SarifMark-SarifFinding-StartLine`**: `SarifFinding_Constructor_NullStartLine_StartLinePropertyIsNull`
-- **`SarifMark-SarifFinding-Internal`**: `SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties`

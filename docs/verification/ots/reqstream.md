@@ -1,4 +1,4 @@
-## ReqStream
+﻿## ReqStream
 
 ### Verification Approach
 
@@ -14,7 +14,3 @@ passing test results, and found no untested requirements.
 code 0, confirming that ReqStream parsed all requirements YAML files, matched every requirement to at least one passing
 test result in the TRX files, and found no untested requirements.
 This scenario is verified by successful completion of the ReqStream enforcement pipeline step in CI.
-
-### Requirements Coverage
-
-- **`SarifMark-OTS-ReqStream`**: Enforcement mode passes in CI — `ReqStream_EnforcementMode` (CI pipeline step)

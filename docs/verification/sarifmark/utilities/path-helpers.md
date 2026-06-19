@@ -1,4 +1,4 @@
-### PathHelpers
+﻿### PathHelpers
 
 #### Verification Approach
 
@@ -33,9 +33,3 @@ This scenario is tested by `PathHelpers_SafePathCombine_NullBasePath_ThrowsArgum
 **PathHelpers_SafePathCombine_AbsoluteChildPath_ThrowsException**: Pass a child segment that resolves outside the
 base path (e.g. an absolute path); assert an exception is thrown to prevent path traversal.
 This scenario is tested by `PathHelpers_SafePathCombine_AbsoluteChildPath_ThrowsException`.
-
-#### Requirements Coverage
-
-- **`SarifMark-PathHelpers-SafeCombine`**: `PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully`
-- **`SarifMark-PathHelpers-NullCheck`**: `PathHelpers_SafePathCombine_NullBasePath_ThrowsArgumentNullException`
-- **`SarifMark-PathHelpers-PostCombineCheck`**: `PathHelpers_SafePathCombine_AbsoluteChildPath_ThrowsException`

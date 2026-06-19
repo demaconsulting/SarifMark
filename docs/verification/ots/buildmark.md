@@ -1,4 +1,4 @@
-## BuildMark
+﻿## BuildMark
 
 ### Verification Approach
 
@@ -13,7 +13,3 @@ build-notes markdown file, which is subsequently converted to HTML and PDF by Pa
 produces the build-notes markdown document containing build metadata, tool versions, and pipeline artefact listings,
 confirming BuildMark executed successfully and generated the expected output.
 This scenario is verified by successful completion of the BuildMark pipeline step in CI.
-
-### Requirements Coverage
-
-- **`SarifMark-OTS-BuildMark`**: Build notes generated in CI — `BuildMark_MarkdownReportGeneration` (CI pipeline step)

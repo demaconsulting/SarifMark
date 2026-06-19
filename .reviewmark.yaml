@@ -27,7 +27,7 @@ evidence-source:
 # Each review-set focuses on a single compliance question with manageable file counts.
 reviews:
 
-  # Purpose Review (only one per repository)
+  # Purpose
   - id: Purpose
     title: Review that Advertised Features Match System Design
     paths:
@@ -37,7 +37,7 @@ reviews:
       - docs/design/introduction.md
       - docs/design/sarifmark.md
 
-  # SarifMark-Architecture Review
+  # SarifMark - Specials
   - id: SarifMark-Architecture
     title: Review that SarifMark Architecture Satisfies Requirements
     paths:
@@ -50,7 +50,6 @@ reviews:
       - test/**/Runner.cs
       - test/**/AssemblyInfo.cs
 
-  # SarifMark-Design Review
   - id: SarifMark-Design
     title: Review that SarifMark Design is Consistent and Complete
     paths:
@@ -60,7 +59,6 @@ reviews:
       - docs/design/sarifmark.md
       - docs/design/sarifmark/**/*.md
 
-  # SarifMark-Verification Review
   - id: SarifMark-Verification
     title: Review that SarifMark Verification is Consistent and Complete
     paths:
@@ -70,7 +68,6 @@ reviews:
       - docs/verification/sarifmark/**/*.md
       - docs/verification/ots.md
 
-  # SarifMark-AllRequirements Review
   - id: SarifMark-AllRequirements
     title: Review that All SarifMark Requirements are Complete
     paths:
@@ -79,7 +76,7 @@ reviews:
       - docs/reqstream/sarifmark/**/*.yaml
       - docs/reqstream/ots/**/*.yaml
 
-  # SarifMark-Program Review
+  # SarifMark - Program
   - id: SarifMark-Program
     title: Review that SarifMark Program Implementation is Correct
     paths:
@@ -89,7 +86,7 @@ reviews:
       - src/**/Program.cs
       - test/**/ProgramTests.cs
 
-  # SarifMark-Cli Review
+  # SarifMark - Cli
   - id: SarifMark-Cli
     title: Review that SarifMark Cli Satisfies Subsystem Requirements
     paths:
@@ -98,7 +95,6 @@ reviews:
       - docs/verification/sarifmark/cli.md
       - test/**/Cli/CliTests.cs
 
-  # SarifMark-Cli-Context Review
   - id: SarifMark-Cli-Context
     title: Review that SarifMark Cli Context Implementation is Correct
     paths:
@@ -108,7 +104,7 @@ reviews:
       - src/**/Cli/Context.cs
       - test/**/Cli/ContextTests.cs
 
-  # SarifMark-Sarif Review
+  # SarifMark - Sarif
   - id: SarifMark-Sarif
     title: Review that SarifMark Sarif Satisfies Subsystem Requirements
     paths:
@@ -118,7 +114,6 @@ reviews:
       - docs/verification/sarifmark/sarif.md
       - test/**/Sarif/SarifTests.cs
 
-  # SarifMark-Sarif-SarifFinding Review
   - id: SarifMark-Sarif-SarifFinding
     title: Review that SarifMark Sarif SarifFinding Implementation is Correct
     paths:
@@ -128,7 +123,6 @@ reviews:
       - src/**/Sarif/SarifFinding.cs
       - test/**/Sarif/SarifFindingTests.cs
 
-  # SarifMark-Sarif-SarifRun Review
   - id: SarifMark-Sarif-SarifRun
     title: Review that SarifMark Sarif SarifRun Implementation is Correct
     paths:
@@ -138,7 +132,6 @@ reviews:
       - src/**/Sarif/SarifRun.cs
       - test/**/Sarif/SarifRunTests.cs
 
-  # SarifMark-Sarif-SarifResults Review
   - id: SarifMark-Sarif-SarifResults
     title: Review that SarifMark Sarif SarifResults Implementation is Correct
     paths:
@@ -148,7 +141,14 @@ reviews:
       - src/**/Sarif/SarifResults.cs
       - test/**/Sarif/SarifResultsTests.cs
 
-  # SarifMark-SelfTest Review
+  - id: SarifMark-Sarif-Report
+    title: Review that SarifMark Sarif Report Requirements are Satisfied
+    paths:
+      - docs/reqstream/sarifmark/sarif/report.yaml
+      - docs/design/sarifmark/sarif/report.md
+      - docs/verification/sarifmark/sarif/report.md
+
+  # SarifMark - SelfTest
   - id: SarifMark-SelfTest
     title: Review that SarifMark SelfTest Satisfies Subsystem Requirements
     paths:
@@ -157,7 +157,6 @@ reviews:
       - docs/verification/sarifmark/self-test.md
       - test/**/SelfTest/SelfTestTests.cs
 
-  # SarifMark-SelfTest-Validation Review
   - id: SarifMark-SelfTest-Validation
     title: Review that SarifMark SelfTest Validation Implementation is Correct
     paths:
@@ -167,7 +166,7 @@ reviews:
       - src/**/SelfTest/Validation.cs
       - test/**/SelfTest/ValidationTests.cs
 
-  # SarifMark-Utilities Review
+  # SarifMark - Utilities
   - id: SarifMark-Utilities
     title: Review that SarifMark Utilities Satisfies Subsystem Requirements
     paths:
@@ -176,7 +175,6 @@ reviews:
       - docs/verification/sarifmark/utilities.md
       - test/**/Utilities/UtilitiesTests.cs
 
-  # SarifMark-Utilities-PathHelpers Review
   - id: SarifMark-Utilities-PathHelpers
     title: Review that SarifMark Utilities PathHelpers Implementation is Correct
     paths:
@@ -186,7 +184,7 @@ reviews:
       - src/**/Utilities/PathHelpers.cs
       - test/**/Utilities/PathHelpersTests.cs
 
-  # OTS Reviews
+  # OTS Items
   - id: OTS-BuildMark
     title: Review that BuildMark Provides Required Functionality
     paths:

@@ -1,4 +1,4 @@
-### SarifRun
+﻿### SarifRun
 
 #### Verification Approach
 
@@ -46,16 +46,3 @@ This scenario is tested by `SarifRun_ToMarkdown_ResultWithoutLocation_ShowsNoLoc
 **SarifRun_ToMarkdown_OneResult_UsesSingularForm**: Generate output for a run with one result; assert the result
 count uses the singular form.
 This scenario is tested by `SarifRun_ToMarkdown_OneResult_UsesSingularForm`.
-
-#### Requirements Coverage
-
-- **`SarifMark-SarifRun-ToolName`**: `SarifRun_InternalConstructor_CreatesValidInstance`
-- **`SarifMark-SarifRun-ToolVersion`**: `SarifRun_InternalConstructor_CreatesValidInstance`
-- **`SarifMark-SarifRun-Results`**: `SarifRun_InternalConstructor_CreatesValidInstance`
-- **`SarifMark-SarifRun-FileCount`**: `SarifRun_InternalConstructor_CreatesValidInstance`
-- **`SarifMark-SarifRun-HasIssues`**: `SarifRun_HasIssues_NoResults_ReturnsFalse`
-- **`SarifMark-SarifRun-ToMarkdown`**: `SarifRun_ToMarkdown_Depth1_ProducesCorrectOutput`
-- **`SarifMark-SarifRun-ValidateDepth`**: `SarifRun_ToMarkdown_DepthLessThan1_ThrowsArgumentOutOfRangeException`,
-  `SarifRun_ToMarkdown_DepthGreaterThan6_ThrowsArgumentOutOfRangeException`
-- **`SarifMark-SarifRun-FormatLocation`**: `SarifRun_ToMarkdown_ResultWithoutLocation_ShowsNoLocation`
-- **`SarifMark-SarifRun-FormatCount`**: `SarifRun_ToMarkdown_OneResult_UsesSingularForm`

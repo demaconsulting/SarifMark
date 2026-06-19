@@ -1,4 +1,4 @@
-## Utilities
+﻿## Utilities
 
 ### Verification Approach
 
@@ -39,10 +39,3 @@ This scenario is tested by `Utilities_SafePathHandling_AbsolutePath_ThrowsExcept
 relative path; assert `ArgumentNullException` is thrown, confirming null-argument validation works at the subsystem
 boundary.
 This scenario is tested by `Utilities_SafePathHandling_NullRelativePath_ThrowsException`.
-
-### Requirements Coverage
-
-- **`SarifMark-Utilities-SafePathHandling`**: `Utilities_SafePathHandling_ValidPaths_CombinesSuccessfully`,
-  `Utilities_SafePathHandling_PathTraversal_ThrowsException`,
-  `Utilities_SafePathHandling_AbsolutePath_ThrowsException`,
-  `Utilities_SafePathHandling_NullRelativePath_ThrowsException`

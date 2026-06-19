@@ -1,4 +1,4 @@
-## Cli
+﻿## Cli
 
 ### Verification Approach
 
@@ -77,22 +77,3 @@ This scenario is tested by `Cli_Create_ReportDepthParameter_SetsReportDepth`.
 **Cli_Create_ResultLegacyAlias_SetsResultsFilePath**: Pass `--result {path}` to `Context.Create`; assert the legacy
 alias is accepted and `ResultsFile` is set.
 This scenario is tested by `Cli_Create_ResultLegacyAlias_SetsResultsFilePath`.
-
-### Requirements Coverage
-
-- **`SarifMark-Cli-Interface`**: `Cli_Create_VersionFlag_SetsVersionFlag`, `Cli_Create_HelpFlag_SetsHelpFlag`
-- **`SarifMark-Cli-Version`**: `Cli_Create_VersionFlag_SetsVersionFlag`
-- **`SarifMark-Cli-Help`**: `Cli_Create_HelpFlag_SetsHelpFlag`
-- **`SarifMark-Cli-Silent`**: `Cli_Create_SilentFlag_SuppressesOutput`
-- **`SarifMark-Cli-Log`**: `Cli_Create_LogFile_WritesOutputToFile`
-- **`SarifMark-Cli-Enforce`**: `Cli_Create_EnforceFlag_SetsEnforceFlag`
-- **`SarifMark-Cli-WriteError`**: `Cli_WriteError_WithMessage_SetsExitCodeToOne`
-- **`SarifMark-Cli-InvalidArgs`**: `Cli_Create_UnknownArgument_ThrowsArgumentException`
-- **`SarifMark-Cli-Validate`**: `Cli_Create_ValidateFlag_SetsValidateFlag`
-- **`SarifMark-Cli-Sarif`**: `Cli_Create_SarifParameter_SetsSarifFilePath`
-- **`SarifMark-Cli-Report`**: `Cli_Create_ReportParameter_SetsReportFilePath`
-- **`SarifMark-Cli-ReportDepth`**: `Cli_Create_DepthParameter_SetsDepth`
-- **`SarifMark-Cli-Heading`**: `Cli_Create_HeadingParameter_SetsCustomHeading`
-- **`SarifMark-Cli-Results`**: `Cli_Create_ResultsParameter_SetsResultsFilePath`
-- **`SarifMark-Cli-ReportDepthLegacyAlias`**: `Cli_Create_ReportDepthParameter_SetsReportDepth`
-- **`SarifMark-Cli-ResultLegacyAlias`**: `Cli_Create_ResultLegacyAlias_SetsResultsFilePath`

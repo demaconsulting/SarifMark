@@ -34,69 +34,45 @@ end-user usage patterns, or the internal design of OTS items.
 
 ## Software Structure
 
-The following tree shows how the SarifMark software items are organized across the system, subsystem,
-and unit levels:
+- **SarifMark** (System) - .NET CLI tool that generates markdown reports from SARIF 2.1.0 files
+  - Program (Unit) - system-level entry point and execution dispatcher
+  - **Cli** (Subsystem) - command-line argument parsing and execution context
+    - Context (Unit) - argument parser, I/O owner, and exit-code manager
+  - **Sarif** (Subsystem) - SARIF file reading and markdown report generation
+    - SarifFinding (Unit) - immutable record for a single analysis finding
+    - SarifRun (Unit) - immutable record for a single tool run
+    - SarifResults (Unit) - SARIF file reader and markdown report generator
+  - **SelfTest** (Subsystem) - end-to-end self-validation of tool capabilities
+    - Validation (Unit) - self-validation test runner
+  - **Utilities** (Subsystem) - shared path-safety helpers
+    - PathHelpers (Unit) - safe path combination utilities
 
-```text
-SarifMark (System)
-├── Program (Unit)
-├── Cli (Subsystem)
-│   └── Context (Unit)
-├── Sarif (Subsystem)
-│   ├── SarifFinding (Unit)
-│   ├── SarifRun (Unit)
-│   └── SarifResults (Unit)
-├── SelfTest (Subsystem)
-│   └── Validation (Unit)
-└── Utilities (Subsystem)
-    └── PathHelpers (Unit)
+**OTS Dependencies:**
 
-OTS Dependencies:
-├── BuildMark (OTS)
-├── FileAssert (OTS)
-├── Pandoc (OTS)
-├── ReqStream (OTS)
-├── ReviewMark (OTS)
-├── SonarMark (OTS)
-├── VersionMark (OTS)
-├── WeasyPrint (OTS)
-└── xUnit v3 (OTS)
-```
+- BuildMark (OTS)
+- FileAssert (OTS)
+- Pandoc (OTS)
+- ReqStream (OTS)
+- ReviewMark (OTS)
+- SonarMark (OTS)
+- VersionMark (OTS)
+- WeasyPrint (OTS)
+- xUnit v3 (OTS)
 
 ## Folder Layout
 
-The source code folder structure mirrors the top-level subsystem breakdown, giving reviewers an
-explicit navigation aid from design to code. All source files use the root namespace
-`DemaConsulting.SarifMark` regardless of their subdirectory location. This is an intentional
-flat-namespace convention: subdirectory names reflect design structure only, not namespace
-hierarchy.
-
-```text
-src/DemaConsulting.SarifMark/
-├── Program.cs                   — entry point and execution orchestrator
-├── Cli/
-│   └── Context.cs               — command-line argument parser and I/O owner
-├── Sarif/
-│   ├── SarifFinding.cs          — immutable record for a single analysis finding
-│   ├── SarifRun.cs              — immutable record for a single tool run
-│   └── SarifResults.cs          — SARIF file reading and markdown report generation
-├── SelfTest/
-│   └── Validation.cs            — self-validation test runner
-└── Utilities/
-    └── PathHelpers.cs           — safe path combination utilities
-
-test/DemaConsulting.SarifMark.Tests/
-├── Cli/
-│   └── ContextTests.cs          — Context unit tests
-├── Sarif/
-│   ├── SarifFindingTests.cs     — SarifFinding unit tests
-│   ├── SarifRunTests.cs         — SarifRun unit tests
-│   └── SarifResultsTests.cs     — SarifResults unit tests
-├── SelfTest/
-│   └── ValidationTests.cs       — Validation unit tests
-└── Utilities/
-    └── PathHelpersTests.cs      — PathHelpers unit tests
-```
+- **src/** - source files and projects
+  - **DemaConsulting.SarifMark/** - main project source
+    - **Cli/** - command-line argument parsing
+    - **Sarif/** - SARIF reading and report generation
+    - **SelfTest/** - self-validation test runner
+    - **Utilities/** - path-safety helpers
+- **test/** - test projects
+  - **DemaConsulting.SarifMark.Tests/** - unit and integration tests
+    - **Cli/** - tests for the Cli subsystem
+    - **Sarif/** - tests for the Sarif subsystem
+    - **SelfTest/** - tests for the SelfTest subsystem
+    - **Utilities/** - tests for the Utilities subsystem
 
 ## Companion Artifact Structure
 
