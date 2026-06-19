@@ -8,7 +8,8 @@ tests reside in `test/DemaConsulting.SarifMark.Tests/IntegrationTests.cs` and in
 `dotnet {dllPath} {args}` as a subprocess and captures exit codes and console output for assertion. No mocking is
 used at the system level; the full compiled binary is exercised against real SARIF test-data files
 (`sample.sarif`, `multi-result.sarif`, `multi-run.sarif`, `invalid.sarif`) stored in
-`test/DemaConsulting.SarifMark.Tests/TestData/`. Unit tests exercise individual classes directly with console streams
+`test/DemaConsulting.SarifMark.Tests/TestData/`. The `DemaConsulting.TestResults` shared package is verified through
+integration tests in `ValidationTests.cs` that exercise the package within the self-validation pipeline. Unit tests exercise individual classes directly with console streams
 redirected via `StringWriter`. The test framework is xUnit v3, executed via `dotnet test`. Three additional named
 scenarios (`SarifMark_SarifReading`, `SarifMark_MarkdownReportGeneration`, `SarifMark_Enforcement`) are self-validation
 tests invoked through the tool's own `--validate` flag; they are not xUnit test methods but named scenarios reported
@@ -120,3 +121,44 @@ This scenario is tested by `Utilities_SafePathHandling_PathTraversal_ThrowsExcep
 as the relative argument (e.g. `/etc/passwd`); assert that `ArgumentException` is thrown, confirming that
 absolute-path escape attempts are rejected by the centralized safe-path logic.
 This scenario is tested by `Utilities_SafePathHandling_AbsolutePath_ThrowsException`.
+
+**Sarif_GenerateReport_DefaultDepth_ProducesMarkdownContent**: Read `sample.sarif` and
+call `ToMarkdown(1)`; assert the returned string is non-empty and contains
+`"# TestTool Analysis"`, confirming that the tool generates a markdown report from a
+valid SARIF file at the default heading depth.
+This scenario is tested by `Sarif_GenerateReport_DefaultDepth_ProducesMarkdownContent`.
+
+**Sarif_GenerateReport_ReportDepth_IsConfigurable**: Read `sample.sarif` and call
+`ToMarkdown(3)`; assert the output contains `"### TestTool Analysis"`, confirming
+that the heading depth parameter controls the depth of the generated report heading.
+This scenario is tested by `Sarif_GenerateReport_ReportDepth_IsConfigurable`.
+
+**Sarif_GenerateReport_ResultCount_ContainsResultCount**: Read `sample.sarif` and call
+`ToMarkdown(1)`; assert the output contains `"Found 1 issue"`, confirming that the
+result count is included in the generated report and that singular grammar is applied
+for a count of one.
+This scenario is tested by `Sarif_GenerateReport_ResultCount_ContainsResultCount`.
+
+**Sarif_GenerateReport_LocationInfo_ContainsLocationInfo**: Read `sample.sarif` and
+call `ToMarkdown(1)`; assert the output contains `"file:///path/to/file.cs"`,
+confirming that location information from SARIF results is included in the generated
+report.
+This scenario is tested by `Sarif_GenerateReport_LocationInfo_ContainsLocationInfo`.
+
+**Sarif_GenerateReport_CustomHeading_UsesCustomHeading**: Read `sample.sarif` and call
+`ToMarkdown(1, "Custom Analysis Heading")`; assert the output contains the custom
+heading text, confirming that the optional heading parameter replaces the default
+tool-name label.
+This scenario is tested by `Sarif_GenerateReport_CustomHeading_UsesCustomHeading`.
+
+**Sarif_GenerateReport_MultipleResults_FormatsWithLineBreaks**: Read
+`multi-result.sarif` and call `ToMarkdown(1)`; assert the output contains
+`"Found 2 issues"` and that result lines for `first.cs` and `second.cs` each end
+with two trailing spaces (markdown hard line break), confirming that multiple results
+are formatted with proper line breaks.
+This scenario is tested by `Sarif_GenerateReport_MultipleResults_FormatsWithLineBreaks`.
+
+**Sarif_GenerateReport_FileCount_ContainsFileCount**: Read `sample.sarif` and call
+`ToMarkdown(1)`; assert the output contains `"**Files:** 2"`, confirming that the
+file count from the SARIF `artifacts` array is included in the generated report.
+This scenario is tested by `Sarif_GenerateReport_FileCount_ContainsFileCount`.

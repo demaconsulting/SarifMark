@@ -92,6 +92,11 @@ The private `ArgumentParser` inner class throws `ArgumentException` on any unrec
 token. Value-bearing string flags throw `ArgumentException` when they appear as the last
 token without a following value.
 
+Value-bearing flags accept the immediately following token as their value without inspecting it further. A token
+that begins with `--` (such as `--help`) is treated as a valid value, not as a flag. This is intentional: such
+tokens are valid filenames on all supported platforms, and rejecting them would prevent users from writing output
+to files whose names happen to match flag names.
+
 #### Dependencies
 
 - **.NET base class library** — `Console`, `StreamWriter`, `Path`, `ArgumentException`,

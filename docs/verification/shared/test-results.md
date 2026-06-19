@@ -2,7 +2,7 @@
 
 ### Verification Approach
 
-`DemaConsulting.TestResults` is verified through unit tests in `ValidationTests.cs` that exercise
+`DemaConsulting.TestResults` is verified through integration tests in `ValidationTests.cs` that exercise
 the package's advertised features within the SarifMark self-validation pipeline. Tests run against
 the real `TestResults`, `TestResult`, `TrxSerializer`, and `JUnitSerializer` types without
 mocking, providing direct integration evidence that each advertised feature functions as required.

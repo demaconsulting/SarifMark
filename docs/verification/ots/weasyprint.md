@@ -31,3 +31,7 @@ This scenario is verified by FileAssert assertions in the CI pipeline.
 **WeasyPrint_UserGuidePdf**: WeasyPrint converts the user-guide HTML document to a PDF file; FileAssert assertions
 confirm the output file exists, has non-trivial size, contains at least one page, and includes expected rendered text.
 This scenario is verified by FileAssert assertions in the CI pipeline.
+
+**WeasyPrint_VerificationPdf**: WeasyPrint converts the verification document HTML to a PDF file; FileAssert
+assertions confirm the output file exists, has non-trivial size, contains at least one page, and includes expected
+rendered text. This scenario is verified by FileAssert assertions in the CI pipeline.

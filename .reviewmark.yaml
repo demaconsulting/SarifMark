@@ -112,7 +112,6 @@ reviews:
     title: Review that SarifMark Sarif Satisfies Subsystem Requirements
     paths:
       - docs/reqstream/sarifmark/sarif.yaml
-      - docs/reqstream/sarifmark/sarif/report.yaml
       - docs/design/sarifmark/sarif.md
       - docs/verification/sarifmark/sarif.md
       - test/**/Sarif/SarifTests.cs
@@ -143,13 +142,6 @@ reviews:
       - docs/verification/sarifmark/sarif/sarif-results.md
       - src/**/Sarif/SarifResults.cs
       - test/**/Sarif/SarifResultsTests.cs
-
-  - id: SarifMark-Sarif-Report
-    title: Review that SarifMark Sarif Report Requirements are Satisfied
-    paths:
-      - docs/reqstream/sarifmark/sarif/report.yaml
-      - docs/design/sarifmark/sarif/report.md
-      - docs/verification/sarifmark/sarif/report.md
 
   # SarifMark - SelfTest
   - id: SarifMark-SelfTest

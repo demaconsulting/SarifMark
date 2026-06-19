@@ -17,8 +17,8 @@ configuration are required.
 #### Acceptance Criteria
 
 All `PathHelpersTests` test methods pass, confirming that valid relative path combinations return the correct result
-and that boundary conditions (null base path, absolute path escape) throw the correct exceptions. No `PathHelpers`
-unit requirement may remain without at least one named test scenario (IEC 62304 §5.5.2).
+and that boundary conditions (null base path, absolute path escape, directory traversal) throw the correct exceptions.
+No `PathHelpers` unit requirement may remain without at least one named test scenario (IEC 62304 §5.5.2).
 
 #### Test Scenarios
 
@@ -38,3 +38,8 @@ This scenario is tested by `PathHelpers_SafePathCombine_NullRelativePath_ThrowsA
 (e.g. `/etc/passwd` on Unix or `C:\Windows\System32` on Windows); assert `ArgumentException` is thrown to prevent
 escape from the base directory, confirming that absolute-path inputs are rejected.
 This scenario is tested by `PathHelpers_SafePathCombine_AbsolutePath_ThrowsArgumentException`.
+
+**PathHelpers_SafePathCombine_TraversalRelativePath_ThrowsArgumentException**: Pass a relative child
+path that uses `..` segments to escape the base directory (e.g., `../etc/passwd`); assert
+`ArgumentException` is thrown to prevent directory traversal outside the base directory.
+This scenario is tested by `PathHelpers_SafePathCombine_TraversalRelativePath_ThrowsArgumentException`.

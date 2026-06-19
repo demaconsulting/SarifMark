@@ -98,13 +98,23 @@ sections:
               - Cli_Create_EnforceFlag_SetsEnforceFlag
 
           - id: SarifMark-Cli-WriteError
-            title: The CLI shall write errors to stderr and set a non-zero exit code.
+            title: The CLI shall write error messages to the standard error stream.
             justification: >-
-              Writing errors to stderr separates diagnostic output from the regular
-              output stream, and
-              automatically setting a non-zero exit code ensures that callers receive
-              a failure signal
-              without requiring explicit exit code management throughout the codebase.
+              Writing errors to stderr separates diagnostic output from
+              regular console output, enabling callers and pipelines to
+              distinguish between tool output and error information.
+            tags: [public]
+            children:
+              - SarifMark-Context-WriteError
+            tests:
+              - Cli_WriteError_WithMessage_SetsExitCodeToOne
+
+          - id: SarifMark-Cli-WriteError-ExitCode
+            title: The CLI shall set the process exit code to 1 when an error is written.
+            justification: >-
+              Automatically updating the exit code when an error is written
+              ensures that callers receive a failure signal without requiring
+              explicit exit-code management throughout the codebase.
             tags: [public]
             children:
               - SarifMark-Context-WriteError

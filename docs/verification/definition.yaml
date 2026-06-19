@@ -20,7 +20,7 @@ input-files:
   - docs/verification/sarifmark/sarif/sarif-finding.md
   - docs/verification/sarifmark/sarif/sarif-run.md
   - docs/verification/sarifmark/sarif/sarif-results.md
-  - docs/verification/sarifmark/sarif/report.md
+
   - docs/verification/sarifmark/self-test.md
   - docs/verification/sarifmark/self-test/validation.md
   - docs/verification/sarifmark/utilities.md

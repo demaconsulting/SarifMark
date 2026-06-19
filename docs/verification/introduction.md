@@ -11,8 +11,8 @@ without reading source code.
 ## Scope
 
 This document covers all in-house software items comprising the SarifMark system — including all subsystems and units —
-and all OTS software items used in the build pipeline and test infrastructure. It does not cover installation
-procedures, end-user guides, or CI/CD pipeline configuration.
+all OTS software items used in the build pipeline and test infrastructure, and all shared packages used by the system.
+It does not cover installation procedures, end-user guides, or CI/CD pipeline configuration.
 
 ## Companion Artifact Structure
 

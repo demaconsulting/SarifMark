@@ -28,8 +28,8 @@ xUnit v3 is consumed as a NuGet package referenced by the test project:
 
 1. `xunit.v3` is declared as a `PackageReference` in
    `test/DemaConsulting.SarifMark.Tests/DemaConsulting.SarifMark.Tests.csproj`.
-2. `xunit.runner.visualstudio` is declared as a `PackageReference` in the same project
-   to enable VSTest-compatible execution and TRX output.
+2. `xunit.runner.visualstudio` and `Microsoft.NET.Test.Sdk` are declared as `PackageReference` entries in the same
+   project to enable VSTest-compatible execution, test discovery, and TRX output.
 3. Tests are executed by `dotnet test` as part of the CI pipeline build step.
 4. The TRX output file is written to the configured results path and subsequently
    consumed by ReqStream for traceability enforcement.

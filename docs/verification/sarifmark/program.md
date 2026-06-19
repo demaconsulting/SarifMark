@@ -14,8 +14,9 @@ configuration are required.
 
 ### Acceptance Criteria
 
-All `ProgramTests` test methods pass, confirming that every execution path — version display, help display, SARIF
-processing, error handling, report generation, and enforcement — produces the expected exit code and console output.
+All `ProgramTests` test methods pass, confirming that every execution path — argument parsing, operation dispatch,
+version display, help display, SARIF processing, error handling, report generation, and enforcement — produces the
+expected exit code and console output.
 No `Program` unit requirement may remain without at least one named test scenario (IEC 62304 §5.5.2).
 
 ### Test Scenarios

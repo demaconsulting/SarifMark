@@ -60,3 +60,4 @@ sections:
                   - PathHelpers_SafePathCombine_PathWithDoubleDots_ThrowsArgumentException
                   - PathHelpers_SafePathCombine_AbsolutePath_ThrowsArgumentException
                   - PathHelpers_SafePathCombine_ValidPaths_CombinesSuccessfully
+                  - PathHelpers_SafePathCombine_TraversalRelativePath_ThrowsArgumentException

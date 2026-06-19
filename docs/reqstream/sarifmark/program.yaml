@@ -19,20 +19,35 @@ sections:
             tests:
               - Program_Main_VersionFlag_DisplaysVersionOnly
 
-          - id: SarifMark-Program-Main
+          - id: SarifMark-Program-ParseArgs
             title: >-
-              The Program unit shall parse command-line arguments and dispatch
-              the corresponding operation handler.
+              The Program unit shall parse command-line arguments into a
+              structured execution context.
             justification: >-
-              Parsing arguments and routing to the correct handler are the two
-              responsibilities of the entry point; keeping them together in one
-              requirement lets callers verify that every recognized argument
-              reaches the right handler.
+              Parsing arguments into a typed context object decouples the
+              entry point from both the CLI argument format and the
+              downstream handlers, allowing each to be tested and changed
+              independently.
             tags: [internal]
             tests:
               - Program_Main_NoArguments_ReturnsError
               - Program_Main_VersionFlag_DisplaysVersionOnly
               - Program_Main_HelpFlag_DisplaysHelp
+
+          - id: SarifMark-Program-Dispatch
+            title: >-
+              The Program unit shall dispatch to the appropriate operation
+              handler based on the parsed execution context.
+            justification: >-
+              Dispatching to handlers via a parsed context keeps the entry
+              point as a thin coordinator, so each handler can be invoked
+              and verified in isolation.
+            tags: [internal]
+            tests:
+              - Program_Main_VersionFlag_DisplaysVersionOnly
+              - Program_Main_HelpFlag_DisplaysHelp
+              - Program_Main_ValidateFlag_RunsValidation
+              - Program_Main_ValidSarifFile_ProcessesSuccessfully
 
           - id: SarifMark-Program-ExitCode
             title: >-

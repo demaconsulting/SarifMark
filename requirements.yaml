@@ -4,7 +4,6 @@ includes:
   - docs/reqstream/sarifmark/cli.yaml
   - docs/reqstream/sarifmark/cli/context.yaml
   - docs/reqstream/sarifmark/sarif.yaml
-  - docs/reqstream/sarifmark/sarif/report.yaml
   - docs/reqstream/sarifmark/sarif/sarif-run.yaml
   - docs/reqstream/sarifmark/sarif/sarif-finding.yaml
   - docs/reqstream/sarifmark/sarif/sarif-results.yaml

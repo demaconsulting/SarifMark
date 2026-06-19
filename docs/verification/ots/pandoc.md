@@ -3,8 +3,8 @@
 ### Verification Approach
 
 Pandoc is used in the SarifMark build pipeline to convert Markdown document collections to HTML using a custom HTML
-template. It processes the design document, user guide, build notes, code-quality report, review plan, and review
-report. Verification evidence is provided by FileAssert assertions confirming that each HTML output file exists, has
+template. It processes the design document, verification document, user guide, build notes, code-quality report, review plan,
+and review report. Verification evidence is provided by FileAssert assertions confirming that each HTML output file exists, has
 non-trivial size, contains a valid `<title>` element, and includes expected document content.
 
 ### Test Scenarios
@@ -32,3 +32,7 @@ content. This scenario is verified by FileAssert assertions in the CI pipeline.
 **Pandoc_UserGuideHtml**: Pandoc converts the user-guide Markdown collection to an HTML file; FileAssert assertions
 confirm the output file exists, has non-trivial size, contains a valid `<title>` element, and includes expected
 user-guide content. This scenario is verified by FileAssert assertions in the CI pipeline.
+
+**Pandoc_VerificationHtml**: Pandoc converts the verification document Markdown collection to an HTML file; FileAssert
+assertions confirm the output file exists, has non-trivial size, contains a valid `<title>` element, and includes
+expected verification content. This scenario is verified by FileAssert assertions in the CI pipeline.
