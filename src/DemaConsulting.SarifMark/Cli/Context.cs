@@ -106,7 +106,7 @@ internal sealed class Context : IDisposable
     ///     that can only be assigned during object-initializer syntax. The factory method
     ///     delegates the actual parsing to the private <see cref="ArgumentParser"/> helper,
     ///     validates and transforms the parsed values, and then constructs the immutable
-    ///     <see cref="Context"/> class instance in a single initializer block. This pattern keeps
+    ///     <see cref="Context"/> instance in a single initializer block. This pattern keeps
     ///     the public surface of <see cref="Context"/> read-only while still allowing
     ///     thorough validation before any property is set.
     /// </remarks>
