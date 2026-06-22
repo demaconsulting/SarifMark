@@ -1,4 +1,4 @@
-﻿# SarifMark
+# SarifMark
 
 ## Verification Approach
 

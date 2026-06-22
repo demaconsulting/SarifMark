@@ -1,4 +1,4 @@
-﻿### SarifResults
+### SarifResults
 
 #### Verification Approach
 

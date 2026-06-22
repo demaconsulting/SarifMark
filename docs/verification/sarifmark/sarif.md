@@ -1,4 +1,4 @@
-﻿## Sarif
+## Sarif
 
 ### Verification Approach
 

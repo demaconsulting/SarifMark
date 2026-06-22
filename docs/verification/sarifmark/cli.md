@@ -1,4 +1,4 @@
-﻿## Cli
+## Cli
 
 ### Verification Approach
 

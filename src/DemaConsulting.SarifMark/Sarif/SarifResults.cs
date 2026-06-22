@@ -89,6 +89,10 @@ public record SarifResults
         {
             throw new InvalidOperationException($"Could not read SARIF file: {ex.Message}", ex);
         }
+        catch (UnauthorizedAccessException ex)
+        {
+            throw new InvalidOperationException($"Could not read SARIF file: {ex.Message}", ex);
+        }
         catch (JsonException ex)
         {
             throw new InvalidOperationException($"Invalid JSON in SARIF file: {ex.Message}", ex);

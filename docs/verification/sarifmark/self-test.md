@@ -1,4 +1,4 @@
-﻿## SelfTest
+## SelfTest
 
 ### Verification Approach
 

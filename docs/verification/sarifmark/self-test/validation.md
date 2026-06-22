@@ -1,4 +1,4 @@
-﻿### Validation
+### Validation
 
 #### Verification Approach
 

@@ -11,11 +11,13 @@ without reading source code.
 ## Scope
 
 This document covers all in-house software items comprising the SarifMark system — including all subsystems and units —
-all OTS software items used in the build pipeline and test infrastructure, and all shared package dependencies
+all OTS software items used in the build pipeline, and all shared package dependencies
 (released version of SarifMark used in the CI pipeline to generate the CodeQL quality report).
+OTS packages used by the test infrastructure (xUnit v3, DemaConsulting.TestResults) are also covered because they are
+third-party items whose correct operation must be independently confirmed; the test project itself is out of scope.
 It does not cover installation procedures, end-user guides, or CI/CD pipeline configuration.
 
-Out of scope: test infrastructure, build pipeline scripts, and the test project itself (`test/DemaConsulting.SarifMark.Tests/`).
+Out of scope: build pipeline scripts and the test project itself (`test/DemaConsulting.SarifMark.Tests/`).
 
 ## Companion Artifact Structure
 

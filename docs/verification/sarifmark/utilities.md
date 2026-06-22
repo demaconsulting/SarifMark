@@ -1,4 +1,4 @@
-﻿## Utilities
+## Utilities
 
 ### Verification Approach
 

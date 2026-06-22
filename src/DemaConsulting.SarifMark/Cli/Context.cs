@@ -252,7 +252,7 @@ internal sealed class Context : IDisposable
         /// <param name="args">All arguments.</param>
         /// <param name="index">Current index.</param>
         /// <returns>Updated index.</returns>
-        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is not a recognized argument, or a value-bearing argument is the last token without a following value, or a depth value is not a depth value between 1 and 6 inclusive.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is not a recognized argument, or a value-bearing argument is the last token without a following value, or a depth value is not an integer between 1 and 6.</exception>
         private int ParseArgument(string arg, string[] args, int index)
         {
             switch (arg)
@@ -337,7 +337,7 @@ internal sealed class Context : IDisposable
         /// <param name="args">All arguments.</param>
         /// <param name="index">Current index.</param>
         /// <returns>The argument value.</returns>
-        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is the last token in the argument list, or its value is not a depth value between 1 and 6 inclusive.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is the last token in the argument list, or its value is not an integer between 1 and 6.</exception>
         private static int GetRequiredIntArgument(string arg, string[] args, int index)
         {
             if (index >= args.Length)

@@ -4,8 +4,8 @@
 
 After a **global** installation (`dotnet tool install --global`) the `sarifmark` command is
 available from any terminal without a path qualifier. After a **local** installation the tool
-must be invoked with `dotnet tool run sarifmark` (or via the `dotnet sarifmark` shorthand if
-your shell supports .NET local-tool discovery).
+must be invoked with `dotnet tool run sarifmark` (or the equivalent `dotnet sarifmark` shorthand,
+which is a standard .NET local-tool invocation available in any shell or terminal where the .NET SDK is installed).
 
 Generate a markdown report from a SARIF file:
 

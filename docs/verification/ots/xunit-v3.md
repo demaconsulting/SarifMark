@@ -1,4 +1,4 @@
-﻿## xUnit v3
+## xUnit v3
 
 ### Verification Approach
 
