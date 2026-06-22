@@ -38,7 +38,7 @@ sarifmark --help
 | `--log <file>` | Write console output to a log file |
 | `--sarif <file>` | SARIF file to process (required for analysis) |
 | `--report <file>` | Export analysis results to a markdown file |
-| `--depth <depth>` | Markdown header depth for the report (default: `1`) |
+| `--depth <depth>` | Markdown header depth for the report (default: `1`; accepted range: `1`–`6`, corresponding to Markdown heading levels `#` through `######`) |
 | `--heading <text>` | Custom heading for the report (default: `[ToolName] Analysis`) |
 | `--report-depth <depth>` | Deprecated alias for `--depth` (supported for backwards compatibility) |
 | `--result <file>` | Deprecated alias for `--results` (supported for backwards compatibility) |

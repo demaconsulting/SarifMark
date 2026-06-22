@@ -331,7 +331,8 @@ internal sealed class Context : IDisposable
         }
 
         /// <summary>
-        ///     Gets a required positive integer argument value.
+        ///     Gets a required integer argument value that must be between 1 and 6 inclusive,
+        ///     corresponding to the six Markdown heading levels.
         /// </summary>
         /// <param name="arg">Argument name.</param>
         /// <param name="args">All arguments.</param>

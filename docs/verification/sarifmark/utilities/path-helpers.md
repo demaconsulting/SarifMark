@@ -60,7 +60,8 @@ This scenario is tested by `PathHelpers_SafePathCombine_NullRelativePath_ThrowsA
 escape from the base directory, confirming that absolute-path inputs are rejected.
 This scenario is tested by `PathHelpers_SafePathCombine_AbsolutePath_ThrowsArgumentException`.
 
-**PathHelpers_SafePathCombine_TraversalRelativePath_ThrowsArgumentException**: Pass a relative child
+**PathHelpers_SafePathCombine_PathWithParentDirectory_ThrowsArgumentException**: Pass a relative child
 path that uses `..` segments to escape the base directory (e.g., `../etc/passwd`); assert
-`ArgumentException` is thrown to prevent directory traversal outside the base directory.
-This scenario is tested by `PathHelpers_SafePathCombine_TraversalRelativePath_ThrowsArgumentException`.
+`ArgumentException` is thrown with `ParamName` equal to `relativePath` and a message containing
+`"Invalid path component"`, confirming that directory traversal outside the base directory is rejected.
+This scenario is tested by `PathHelpers_SafePathCombine_PathWithParentDirectory_ThrowsArgumentException`.

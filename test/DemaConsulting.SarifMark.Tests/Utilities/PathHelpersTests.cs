@@ -203,20 +203,4 @@ public class PathHelpersTests
         Assert.Equal(Path.Combine(basePath, relativePath), result);
     }
 
-    /// <summary>
-    ///     Test that SafePathCombine throws ArgumentException for a relative path that uses
-    ///     directory-traversal segments to escape the base directory.
-    /// </summary>
-    [Fact]
-    public void PathHelpers_SafePathCombine_TraversalRelativePath_ThrowsArgumentException()
-    {
-        // Arrange
-        var basePath = "/home/user";
-        var relativePath = "../etc/passwd";
-
-        // Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() =>
-            PathHelpers.SafePathCombine(basePath, relativePath));
-        Assert.Equal("relativePath", exception.ParamName);
-    }
 }
