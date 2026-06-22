@@ -85,11 +85,11 @@ public record SarifResults
 
             return new SarifResults(runs);
         }
-        catch (IOException ex)
+        catch (FileNotFoundException)
         {
-            throw new InvalidOperationException($"Could not read SARIF file: {ex.Message}", ex);
+            throw;
         }
-        catch (UnauthorizedAccessException ex)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             throw new InvalidOperationException($"Could not read SARIF file: {ex.Message}", ex);
         }
