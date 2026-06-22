@@ -91,7 +91,7 @@ public record SarifResults
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            throw new InvalidOperationException($"Could not read SARIF file: {ex.Message}", ex);
+            throw new InvalidOperationException($"Could not read SARIF file '{filePath}': {ex.Message}", ex);
         }
         catch (JsonException ex)
         {
