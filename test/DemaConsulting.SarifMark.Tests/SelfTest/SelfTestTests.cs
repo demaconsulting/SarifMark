@@ -189,6 +189,7 @@ public class SelfTestTests
     {
         // Arrange
         var sarifFile = Path.Combine(AppContext.BaseDirectory, "TestData", "sample.sarif");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
         var originalOut = Console.Out;
         var originalError = Console.Error;
         try
