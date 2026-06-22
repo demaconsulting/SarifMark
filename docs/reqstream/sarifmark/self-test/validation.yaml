@@ -89,7 +89,7 @@ sections:
                 title: The Validation unit shall include the OS version in the validation
                   header.
                 justification: >-
-                  Including the OS version contextualises validation results with
+                  Including the OS version contextualizes validation results with
                   the
                   operating system in which they were collected, supporting cross-platform
                   comparison and reproducibility analysis.
@@ -101,7 +101,7 @@ sections:
                 title: The Validation unit shall include the .NET runtime version
                   in the validation header.
                 justification: >-
-                  Including the .NET runtime version contextualises validation results
+                  Including the .NET runtime version contextualizes validation results
                   with the specific runtime in use, enabling identification of
                   runtime-specific failures across supported .NET versions.
                 tags: [internal]

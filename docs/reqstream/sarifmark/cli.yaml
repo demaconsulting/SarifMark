@@ -105,7 +105,9 @@ sections:
               distinguish between tool output and error information.
             tags: [public]
             children:
-              - SarifMark-Context-WriteError
+              - SarifMark-Context-WriteError-Stderr
+              - SarifMark-Context-WriteError-Log
+              - SarifMark-Context-WriteError-ExitCode
             tests:
               - Cli_WriteError_WithMessage_SetsExitCodeToOne
 
@@ -117,7 +119,9 @@ sections:
               explicit exit-code management throughout the codebase.
             tags: [public]
             children:
-              - SarifMark-Context-WriteError
+              - SarifMark-Context-WriteError-Stderr
+              - SarifMark-Context-WriteError-Log
+              - SarifMark-Context-WriteError-ExitCode
             tests:
               - Cli_WriteError_WithMessage_SetsExitCodeToOne
 

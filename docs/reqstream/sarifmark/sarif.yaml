@@ -27,7 +27,9 @@ sections:
             children:
               - SarifMark-SarifResults-ValidatePathArgument
               - SarifMark-SarifResults-ValidatePathExists
-              - SarifMark-SarifResults-ValidateStructure
+              - SarifMark-SarifResults-ValidateJson
+              - SarifMark-SarifResults-ValidateVersion
+              - SarifMark-SarifResults-ValidateRuns
             tests:
               - Sarif_Read_NonExistentFile_ThrowsFileNotFoundException
               - Sarif_Read_InvalidSarifFile_ThrowsInvalidOperationException

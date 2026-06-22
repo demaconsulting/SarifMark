@@ -202,8 +202,13 @@ public class ContextTests
     [Fact]
     public void Context_Create_HeadingWithoutValue_ThrowsArgumentException()
     {
-        // Act & Assert
+        // Arrange
+        // (no setup required)
+
+        // Act
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--heading"]));
+
+        // Assert
         Assert.Contains("--heading requires", exception.Message);
     }
 
@@ -319,8 +324,10 @@ public class ContextTests
         // Arrange - Use an invalid path (directory that doesn't exist)
         var invalidPath = PathHelpers.SafePathCombine("/nonexistent/directory", "test.log");
 
-        // Act & Assert
+        // Act
         var exception = Assert.Throws<InvalidOperationException>(() => Context.Create(["--log", invalidPath]));
+
+        // Assert
         Assert.Contains("Failed to open log file", exception.Message);
     }
 
@@ -450,8 +457,13 @@ public class ContextTests
     [Fact]
     public void Context_Create_DepthWithoutValue_ThrowsArgumentException()
     {
-        // Act & Assert
+        // Arrange
+        // (no setup required)
+
+        // Act
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--depth"]));
+
+        // Assert
         Assert.Contains("--depth requires", exception.Message);
     }
 
@@ -461,8 +473,13 @@ public class ContextTests
     [Fact]
     public void Context_Create_DepthInvalidValue_ThrowsArgumentException()
     {
-        // Act & Assert
+        // Arrange
+        // (no setup required)
+
+        // Act
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--depth", "invalid"]));
+
+        // Assert
         Assert.Contains("--depth requires an integer between 1 and 6", exception.Message);
     }
 
@@ -472,8 +489,13 @@ public class ContextTests
     [Fact]
     public void Context_Create_DepthZero_ThrowsArgumentException()
     {
-        // Act & Assert
+        // Arrange
+        // (no setup required)
+
+        // Act
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--depth", "0"]));
+
+        // Assert
         Assert.Contains("--depth requires an integer between 1 and 6", exception.Message);
     }
 
@@ -496,8 +518,13 @@ public class ContextTests
     [Fact]
     public void Context_Create_ReportDepthWithoutValue_ThrowsArgumentException()
     {
-        // Act & Assert
+        // Arrange
+        // (no setup required)
+
+        // Act
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--report-depth"]));
+
+        // Assert
         Assert.Contains("--report-depth requires", exception.Message);
     }
 
@@ -507,8 +534,13 @@ public class ContextTests
     [Fact]
     public void Context_Create_ReportDepthInvalidValue_ThrowsArgumentException()
     {
-        // Act & Assert
+        // Arrange
+        // (no setup required)
+
+        // Act
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--report-depth", "invalid"]));
+
+        // Assert
         Assert.Contains("--report-depth requires an integer between 1 and 6", exception.Message);
     }
 
@@ -518,8 +550,13 @@ public class ContextTests
     [Fact]
     public void Context_Create_ReportDepthZero_ThrowsArgumentException()
     {
-        // Act & Assert
+        // Arrange
+        // (no setup required)
+
+        // Act
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--report-depth", "0"]));
+
+        // Assert
         Assert.Contains("--report-depth requires an integer between 1 and 6", exception.Message);
     }
 
@@ -681,8 +718,13 @@ public class ContextTests
     [Fact]
     public void Context_Create_SarifWithoutValue_ThrowsArgumentException()
     {
-        // Act & Assert
+        // Arrange
+        // (no setup required)
+
+        // Act
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--sarif"]));
+
+        // Assert
         Assert.Contains("--sarif requires", exception.Message);
     }
 
@@ -692,8 +734,13 @@ public class ContextTests
     [Fact]
     public void Context_Create_ReportWithoutValue_ThrowsArgumentException()
     {
-        // Act & Assert
+        // Arrange
+        // (no setup required)
+
+        // Act
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--report"]));
+
+        // Assert
         Assert.Contains("--report requires", exception.Message);
     }
 
@@ -703,8 +750,13 @@ public class ContextTests
     [Fact]
     public void Context_Create_ResultsWithoutValue_ThrowsArgumentException()
     {
-        // Act & Assert
+        // Arrange
+        // (no setup required)
+
+        // Act
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--results"]));
+
+        // Assert
         Assert.Contains("--results requires", exception.Message);
     }
 
@@ -714,8 +766,13 @@ public class ContextTests
     [Fact]
     public void Context_Create_LogWithoutValue_ThrowsArgumentException()
     {
-        // Act & Assert
+        // Arrange
+        // (no setup required)
+
+        // Act
         var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--log"]));
+
+        // Assert
         Assert.Contains("--log requires", exception.Message);
     }
 
