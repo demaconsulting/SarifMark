@@ -245,3 +245,11 @@ reviews:
       - docs/reqstream/ots/test-results.yaml
       - docs/design/ots/test-results.md
       - docs/verification/ots/test-results.md
+
+  # Shared Packages
+  - id: SarifMark-Shared-SarifMark
+    title: Review that Shared SarifMark Package Provides Required Functionality
+    paths:
+      - docs/reqstream/shared/sarifmark.yaml
+      - docs/design/shared/sarifmark.md
+      - docs/verification/shared/sarifmark.md

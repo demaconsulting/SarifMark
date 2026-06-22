@@ -11,7 +11,8 @@ without reading source code.
 ## Scope
 
 This document covers all in-house software items comprising the SarifMark system — including all subsystems and units —
-all OTS software items used in the build pipeline and test infrastructure.
+all OTS software items used in the build pipeline and test infrastructure, and all shared package dependencies
+(released version of SarifMark used in the CI pipeline to generate the CodeQL quality report).
 It does not cover installation procedures, end-user guides, or CI/CD pipeline configuration.
 
 Out of scope: test infrastructure, build pipeline scripts, and the test project itself (`test/DemaConsulting.SarifMark.Tests/`).
@@ -34,6 +35,12 @@ OTS items have integration/usage design documentation parallel to system folders
 - Requirements: `docs/reqstream/ots/{ots-name}.yaml`
 - Design: `docs/design/ots/{ots-name}.md`
 - Verification: `docs/verification/ots/{ots-name}.md`
+
+Shared package items have integration/usage design documentation parallel to system and OTS folders:
+
+- Requirements: `docs/reqstream/shared/{name}.yaml`
+- Design: `docs/design/shared/{name}.md`
+- Verification: `docs/verification/shared/{name}.md`
 
 Review-sets are defined in `.reviewmark.yaml`.
 

@@ -3,7 +3,8 @@
 SarifMark is a .NET command-line tool that generates markdown reports from SARIF (Static Analysis Results
 Interchange Format) 2.1.0 files. This document describes the design of the SarifMark software system,
 covering the architecture and detailed design of all local software items — system, subsystems, and
-units — and the integration and usage design for all OTS software items used in the project pipeline.
+units — the integration and usage design for all OTS software items used in the project pipeline, and
+the integration and usage design for all shared package dependencies.
 
 ## Purpose
 
@@ -28,6 +29,11 @@ OTS items:
 - **BuildMark**, **DemaConsulting.TestResults**, **FileAssert**, **Pandoc**, **ReqStream**, **ReviewMark**, **SonarMark**,
   **VersionMark**, **WeasyPrint**, **xUnit v3**: integration and usage design for each OTS software
   item used in the project pipeline.
+
+Shared packages:
+
+- **SarifMark (released version)**: integration and usage design for the released version of SarifMark
+  consumed in the CI pipeline to generate the CodeQL quality report.
 
 This document does not cover test projects, the CI/CD pipeline configuration, installation procedures,
 end-user usage patterns, or the internal design of OTS items.
@@ -60,6 +66,10 @@ end-user usage patterns, or the internal design of OTS items.
 - WeasyPrint (OTS)
 - xUnit v3 (OTS)
 
+**Shared Package Dependencies:**
+
+- SarifMark (Shared Package)
+
 ## Folder Layout
 
 - **src/** - source files and projects
@@ -74,6 +84,8 @@ end-user usage patterns, or the internal design of OTS items.
     - **Sarif/** - tests for the Sarif subsystem
     - **SelfTest/** - tests for the SelfTest subsystem
     - **Utilities/** - tests for the Utilities subsystem
+- **docs/design/ots/** - OTS item integration and usage design documents
+- **docs/design/shared/** - shared package integration and usage design documents
 
 ## Companion Artifact Structure
 
@@ -93,6 +105,12 @@ OTS items have integration and usage design documentation parallel to system fol
 - Requirements: `docs/reqstream/ots/{ots-name}.yaml`
 - Design: `docs/design/ots/{ots-name}.md`
 - Verification: `docs/verification/ots/{ots-name}.md`
+
+Shared package items have integration and usage design documentation parallel to system and OTS folders:
+
+- Requirements: `docs/reqstream/shared/{name}.yaml`
+- Design: `docs/design/shared/{name}.md`
+- Verification: `docs/verification/shared/{name}.md`
 
 Review-sets: defined in `.reviewmark.yaml`
 
