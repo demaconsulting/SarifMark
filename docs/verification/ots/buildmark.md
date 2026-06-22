@@ -23,8 +23,11 @@ Tests require:
 
 ### Acceptance Criteria
 
-All five self-validation scenarios must pass with exit code 0 and zero failures, confirming
-that BuildMark is correctly installed and all advertised features are operational.
+All five self-validation scenarios must pass with exit code 0 and zero failures in an environment
+that provides GitHub API access. In environments without API access, the four scenarios that do
+not require live network access (`BuildMark_MarkdownReportGeneration`, `BuildMark_GitIntegration`,
+`BuildMark_KnownIssuesReporting`, `BuildMark_RulesRouting`) must pass; `BuildMark_IssueTracking`
+may be skipped or excluded.
 
 ### Test Scenarios
 

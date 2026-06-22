@@ -87,6 +87,9 @@ public record SarifResults
         }
         catch (FileNotFoundException)
         {
+            // FileNotFoundException is a subclass of IOException; re-throw explicitly so the
+            // documented FileNotFoundException contract is preserved in the race-condition case
+            // where the file is deleted between the File.Exists check and File.ReadAllText.
             throw;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
