@@ -87,6 +87,8 @@ graceful cleanup in constrained environments.
   directory path itself from a GUID-based name.
 - **Context** — used both as the external output channel passed to `Run` and as internally
   constructed test contexts passed to `Program.Run` during each test.
+- **DemaConsulting.TestResults** — `TestResults`, `TestResult`, `TrxSerializer`, and `JUnitSerializer` types are used
+  to collect test results and serialize them in TRX or JUnit XML format.
 
 #### Callers
 

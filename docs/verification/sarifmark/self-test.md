@@ -2,16 +2,19 @@
 
 ### Verification Approach
 
-The `SelfTest` subsystem is verified through tests that invoke the subsystem via the `--validate` code path of the
-compiled DLL using the `Runner.Run` helper. Tests assert that self-validation runs, produces the expected output, writes
-result files in the requested format, and exercises the enforcement scenario. Tests are defined in
+The `SelfTest` subsystem is verified through unit-level tests that create a `Context` by calling
+`Context.Create(string[])` with the `--validate` flag and then invoke `Validation.Run(context)` directly in-process.
+No subprocess is spawned and no compiled DLL path is required; the subsystem is exercised within the xUnit test runner
+using the same process. Tests assert that self-validation runs with exit code 0, produces the expected log output
+(including `Total Tests:` and named scenario results), writes result files in the requested format (TRX and JUnit XML),
+and that the depth parameter influences the self-validation report. Tests are defined in
 `test/DemaConsulting.SarifMark.Tests/SelfTest/SelfTestTests.cs` using the xUnit v3 framework.
 
 ### Test Environment
 
-Standard xUnit v3 test runner with `dotnet test`. The compiled DLL must be available to the `Runner.Run` helper.
-Temporary result files (`.trx`, `.xml`) are created in the OS temporary directory and cleaned up after each test. No
-external services or network configuration are required.
+Standard xUnit v3 test runner with `dotnet test`. Temporary log files and result files (`.trx`, `.xml`) are created in
+the OS temporary directory and cleaned up after each test in `finally` blocks. No external services, compiled DLL
+paths, or network configuration are required.
 
 ### Acceptance Criteria
 
@@ -36,15 +39,16 @@ file is created with a `<testsuite` element.
 This scenario is tested by `SelfTest_ResultsFile_XmlPath_WritesJUnitFile`.
 
 **SelfTest_EnforcementTest_RunsWithinValidation**: Invoke `--validate`; assert the enforcement scenario
-(`SarifMark_Enforcement`) runs within the self-validation suite and is reported in the output.
+(`SarifMark_Enforcement`) runs within the self-validation suite and is reported as passed, confirming that enforcement
+mode detects issues and returns a non-zero exit code when issues are present.
 This scenario is tested by `SelfTest_EnforcementTest_RunsWithinValidation`.
 
-### Requirements Coverage
+**SelfTest_DepthParameter_AffectsSelfValidationReport**: Invoke `--validate --depth 2`; assert self-validation passes
+and the markdown report generation scenario (`SarifMark_MarkdownReportGeneration`) is reported as passed, confirming
+the depth parameter is accepted and propagated to the self-validation report generation test.
+This scenario is tested by `SelfTest_DepthParameter_AffectsSelfValidationReport`.
 
-- **`SarifMark-Validate-Mode`**: `SelfTest_ValidateFlag_RunsSelfValidation`
-- **`SarifMark-Validate-ResultFiles`**: `SelfTest_ResultsFile_TrxPath_WritesTrxFile`,
-  `SelfTest_ResultsFile_XmlPath_WritesJUnitFile`
-- **`SarifMark-Validate-TrxFormat`**: `SelfTest_ResultsFile_TrxPath_WritesTrxFile`
-- **`SarifMark-Validate-JUnitFormat`**: `SelfTest_ResultsFile_XmlPath_WritesJUnitFile`
-- **`SarifMark-Enforce-Mode`**: `SelfTest_EnforcementTest_RunsWithinValidation`
-- **`SarifMark-Enforce-ExitCode`**: `SelfTest_EnforcementTest_RunsWithinValidation`
+**SelfTest_EnforceFlag_WithIssues_ReturnsNonZeroExitCode**: Invoke `Program.Main` with `--sarif sample.sarif --enforce`
+where `sample.sarif` contains findings; assert the exit code is 1, confirming that enforcement mode returns a non-zero
+exit code when issues are found.
+This scenario is tested by `SelfTest_EnforceFlag_WithIssues_ReturnsNonZeroExitCode`.

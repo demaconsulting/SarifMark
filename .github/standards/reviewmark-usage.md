@@ -88,9 +88,6 @@ When constructing review-sets, follow these principles to maintain manageable sc
 
 # Review-Set Organization
 
-Organize review-sets using these standard patterns to ensure comprehensive coverage
-while keeping each review manageable in scope:
-
 **Naming conventions**: Placeholders in documentation, requirements, design, and
 verification file paths are kebab-case (e.g., `{system-name}`). Placeholders in
 source and test file paths may use the casing conventional for the project's
@@ -236,17 +233,6 @@ Before submitting ReviewMark configuration, verify:
 
 - [ ] `.reviewmark.yaml` exists at repository root with proper structure
 - [ ] Review-set organization follows the standard hierarchy patterns
-- [ ] Purpose review-set includes README.md, user guide, system requirements, design introduction, and system design files
-- [ ] System-level reviews follow hierarchical scope principle (exclude subsystem/unit details)
-- [ ] Subsystem reviews follow hierarchical scope principle (exclude unit source code)
-- [ ] Only unit reviews include actual source code files
-- [ ] Architecture review-sets include system verification design alongside system design
-- [ ] Design review-sets include all system design files
-- [ ] Verification review-sets include all system verification files
-- [ ] Subsystem review-sets include subsystem verification design
-- [ ] Unit review-sets include unit verification design
-- [ ] OTS review-sets include OTS requirements, integration design, and verification evidence
-- [ ] Shared Package review-sets include Shared Package requirements, integration design, and verification evidence
 - [ ] Each review-set focuses on a single compliance question (single focus principle)
 - [ ] File patterns use correct glob syntax and match intended files
 - [ ] Review-set file counts remain manageable (context management principle)

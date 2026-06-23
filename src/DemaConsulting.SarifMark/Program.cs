@@ -149,6 +149,12 @@ internal static class Program
     /// <summary>
     ///     Prints usage information.
     /// </summary>
+    /// <remarks>
+    ///     Deprecated aliases (<c>--report-depth</c> for <c>--depth</c> and <c>--result</c> for
+    ///     <c>--results</c>) are intentionally omitted from the help output to encourage use of the
+    ///     canonical flag names. Both aliases remain accepted by <see cref="Context.Create"/> for
+    ///     backwards compatibility with existing scripts.
+    /// </remarks>
     /// <param name="context">The context for output.</param>
     private static void PrintHelp(Context context)
     {
@@ -164,7 +170,7 @@ internal static class Program
         context.WriteLine("  --log <file>               Write output to log file");
         context.WriteLine("  --sarif <file>             SARIF file to process");
         context.WriteLine("  --report <file>            Export analysis results to markdown file");
-        context.WriteLine("  --depth <depth>            Markdown header depth for report (default: 1)");
+        context.WriteLine("  --depth <depth>            Markdown header depth for report (1-6, default: 1)");
         context.WriteLine("  --heading <text>           Custom heading for report (default: [ToolName] Analysis)");
     }
 
@@ -176,10 +182,11 @@ internal static class Program
     ///     <see cref="Context.SarifFile"/> and optionally writing a markdown report to
     ///     <see cref="Context.ReportFile"/>. The following exception types are absorbed and
     ///     routed through <see cref="Context.WriteError"/> rather than propagated:
-    ///     <see cref="FileNotFoundException"/>, <see cref="InvalidOperationException"/> (SARIF
-    ///     read failures), <see cref="IOException"/>, <see cref="UnauthorizedAccessException"/>,
-    ///     <see cref="ArgumentException"/>, and <see cref="NotSupportedException"/> (report
-    ///     write failures).
+    ///     <see cref="FileNotFoundException"/> and <see cref="InvalidOperationException"/> (SARIF
+    ///     read failures — I/O and access errors are wrapped as <see cref="InvalidOperationException"/>
+    ///     by <see cref="SarifResults.Read"/>), and <see cref="IOException"/>,
+    ///     <see cref="UnauthorizedAccessException"/>, <see cref="ArgumentException"/>, and
+    ///     <see cref="NotSupportedException"/> (report write failures).
     /// </remarks>
     /// <param name="context">The context containing command line arguments and program state.</param>
     private static void ProcessSarifAnalysis(Context context)
@@ -212,7 +219,7 @@ internal static class Program
         }
         catch (InvalidOperationException ex)
         {
-            context.WriteError($"Error: Failed to read SARIF file: {ex.Message}");
+            context.WriteError($"Error: {ex.Message}");
             return;
         }
 

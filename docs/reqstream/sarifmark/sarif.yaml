@@ -27,7 +27,9 @@ sections:
             children:
               - SarifMark-SarifResults-ValidatePathArgument
               - SarifMark-SarifResults-ValidatePathExists
-              - SarifMark-SarifResults-ValidateStructure
+              - SarifMark-SarifResults-ValidateJson
+              - SarifMark-SarifResults-ValidateVersion
+              - SarifMark-SarifResults-ValidateRuns
             tests:
               - Sarif_Read_NonExistentFile_ThrowsFileNotFoundException
               - Sarif_Read_InvalidSarifFile_ThrowsInvalidOperationException
@@ -129,21 +131,3 @@ sections:
               - SarifMark-SarifResults-MultiRunMarkdown
             tests:
               - Sarif_Read_MultiRunSarifFile_ProcessesAllRuns
-
-          - id: SarifMark-Sarif-Report
-            title: The tool shall generate markdown reports from SARIF files.
-            justification: >-
-              Report generation transforms machine-readable SARIF into human-readable
-              documentation, enabling better understanding and communication of
-              analysis results across development teams.
-            tags: [public]
-            children:
-              - SarifMark-Report-Markdown
-              - SarifMark-Report-Depth
-              - SarifMark-Report-Counts
-              - SarifMark-Report-Locations
-              - SarifMark-Report-Headings
-              - SarifMark-Report-LineBreaks
-              - SarifMark-Report-FileCount
-            tests:
-              - Sarif_GenerateReport_DefaultDepth_ProducesMarkdownContent

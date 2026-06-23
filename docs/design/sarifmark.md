@@ -50,6 +50,9 @@ provides path-safety helpers shared across the system.
 - *Role*: Provider (the tool accepts arguments from the shell)
 - *Contract*: Accepts flags and parameters (`--sarif`, `--report`, `--depth`, `--heading`,
   `--validate`, `--results`, `--enforce`, `--log`, `--silent`, `--version`, `--help`).
+  `--report-depth` is a **deprecated** alias for `--depth` and `--result` is a **deprecated** alias
+  for `--results`; both are accepted identically to their canonical forms but are intentionally
+  omitted from the `--help` output.
   Exits with code 0 on success and 1 on any error or when `--enforce` detects issues.
 - *Constraints*: Unrecognized arguments cause an `ArgumentException`, producing exit code 1
   with an error message. Value-bearing flags require a following token.
@@ -102,6 +105,8 @@ provides path-safety helpers shared across the system.
   see *VersionMark Integration Design*
 - **WeasyPrint**: converts HTML documents to PDF —
   see *WeasyPrint Integration Design*
+- **DemaConsulting.TestResults**: the OTS package used by the self-validation subsystem to collect, format, and
+  serialize test results — see *TestResults Integration Design*
 
 ## Risk Control Measures
 
@@ -159,3 +164,54 @@ conditions. All other exception types indicate programming errors or environment
 should not be silently swallowed. See the unit-level Error Handling sections in the
 *Program*, *Context*, *SarifResults*, and *Validation* unit design documents for
 per-subsystem error-handling detail.
+
+## Report Format
+
+The report format is the system's primary output contract. It defines the structure
+and content of the UTF-8 markdown file written when `--report` is specified.
+
+A generated report consists of one or more run sections. For a single-run SARIF file
+the output is the run section directly. For a multi-run SARIF file, run sections are
+concatenated in order without an extra blank line between them (each run section
+already ends with a trailing newline).
+
+Each run section contains the following elements in order:
+
+**Heading line**: A markdown heading at the configured depth (`#` × `depth`),
+followed by either the custom heading text (when `--heading` is supplied) or the
+default `"[ToolName] Analysis"` label. For multi-run SARIF files each heading is
+suffixed with `" (#N)"` where `N` is the 1-based run index.
+
+**Tool attribution line**: `"**Tool:** ToolName ToolVersion"` on its own line,
+where `ToolName` and `ToolVersion` are taken from the SARIF `tool.driver` object.
+
+**File count line**: `"**Files:** N"` where `N` is the count of entries in the SARIF
+`artifacts` array for that run. `N` is `0` when the array is absent.
+
+**Issues sub-heading**: A markdown heading at `depth + 1` (capped at `6`) titled
+`"Issues"`.
+
+**Issues count summary**: `"Found no issues"`, `"Found 1 issue"`, or
+`"Found N issues"` reflecting the number of non-suppressed results in that run.
+
+**Result lines**: One line per non-suppressed finding in the form
+`"location: severity [ruleId] message  "` (two trailing spaces as a markdown hard
+line break). The location prefix follows these rules:
+
+- `"(no location)"` — when the result URI is null, empty, or whitespace
+- `"uri"` — when the URI is set but no start line is present
+- `"uri(startLine)"` — when both URI and start line are present
+
+Suppressed results — those whose SARIF `suppressions` array is non-empty — are
+excluded from the count and do not appear as result lines.
+
+The heading depth parameter must be an integer in `[1, 6]`; values outside this
+range cause an `ArgumentOutOfRangeException` reported as an argument error with
+exit code 1. The optional custom heading replaces the default
+`"[ToolName] Analysis"` label when supplied.
+
+The report format contract is implemented by `SarifResults` (entry point; depth
+validation; single-run delegation; multi-run iteration with indexed headings) and
+`SarifRun` (per-run formatter; heading, tool attribution, file count, issues
+sub-heading, count summary, and one result line per non-suppressed finding) in the
+Sarif subsystem.

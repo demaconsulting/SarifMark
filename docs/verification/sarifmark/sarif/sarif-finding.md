@@ -13,9 +13,10 @@ test input is constructed inline within each test method.
 
 #### Acceptance Criteria
 
-All `SarifFindingTests` test methods pass, confirming that the internal constructor stores all properties correctly
-and that nullable properties correctly accept `null` values. No `SarifFinding` unit requirement may remain without
-at least one named test scenario (IEC 62304 §5.5.2).
+All `SarifFindingTests` test methods pass, confirming that the internal constructor stores all properties correctly,
+nullable properties correctly accept `null` values, and that access to the internal constructor requires the
+`InternalsVisibleTo` grant. No `SarifFinding` unit requirement may remain without at least one named test scenario
+(IEC 62304 §5.5.2).
 
 #### Test Scenarios
 
@@ -30,9 +31,10 @@ This scenario is tested by `SarifFinding_Constructor_NullUri_UriPropertyIsNull`.
 `StartLine` property is `null`.
 This scenario is tested by `SarifFinding_Constructor_NullStartLine_StartLinePropertyIsNull`.
 
-### Requirements Coverage
-
-- **`SarifMark-SarifFinding-Properties`**: `SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties`
-- **`SarifMark-SarifFinding-Uri`**: `SarifFinding_Constructor_NullUri_UriPropertyIsNull`
-- **`SarifMark-SarifFinding-StartLine`**: `SarifFinding_Constructor_NullStartLine_StartLinePropertyIsNull`
-- **`SarifMark-SarifFinding-Internal`**: `SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties`
+**SarifFinding_InternalConstructor_AccessRestriction**: The `SarifFinding` constructor has
+`internal` access, enforced at compile time. The `InternalsVisibleTo` attribute on the
+SarifMark assembly grants test-only access to the test project. This restriction is verified
+by the fact that the test project requires `InternalsVisibleTo` to compile — without it, the
+`SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties` test would fail to compile.
+The compiler enforcement is passive verification; no separate runtime test is required.
+This scenario is verified by compiler enforcement and the `InternalsVisibleTo` declaration.

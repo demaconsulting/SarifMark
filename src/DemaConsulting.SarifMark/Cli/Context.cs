@@ -106,7 +106,7 @@ internal sealed class Context : IDisposable
     ///     that can only be assigned during object-initializer syntax. The factory method
     ///     delegates the actual parsing to the private <see cref="ArgumentParser"/> helper,
     ///     validates and transforms the parsed values, and then constructs the immutable
-    ///     <see cref="Context"/> record in a single initializer block. This pattern keeps
+    ///     <see cref="Context"/> instance in a single initializer block. This pattern keeps
     ///     the public surface of <see cref="Context"/> read-only while still allowing
     ///     thorough validation before any property is set.
     /// </remarks>
@@ -252,7 +252,7 @@ internal sealed class Context : IDisposable
         /// <param name="args">All arguments.</param>
         /// <param name="index">Current index.</param>
         /// <returns>Updated index.</returns>
-        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is not a recognized argument, or a value-bearing argument is the last token without a following value, or a depth value is not a positive integer.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is not a recognized argument, or a value-bearing argument is the last token without a following value, or a depth value is not an integer between 1 and 6.</exception>
         private int ParseArgument(string arg, string[] args, int index)
         {
             switch (arg)
@@ -331,13 +331,14 @@ internal sealed class Context : IDisposable
         }
 
         /// <summary>
-        ///     Gets a required positive integer argument value.
+        ///     Gets a required integer argument value that must be between 1 and 6 inclusive,
+        ///     corresponding to the six Markdown heading levels.
         /// </summary>
         /// <param name="arg">Argument name.</param>
         /// <param name="args">All arguments.</param>
         /// <param name="index">Current index.</param>
         /// <returns>The argument value.</returns>
-        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is the last token in the argument list, or its value is not a positive integer.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is the last token in the argument list, or its value is not an integer between 1 and 6.</exception>
         private static int GetRequiredIntArgument(string arg, string[] args, int index)
         {
             if (index >= args.Length)
@@ -345,9 +346,9 @@ internal sealed class Context : IDisposable
                 throw new ArgumentException($"{arg} requires a depth argument", nameof(args));
             }
 
-            if (!int.TryParse(args[index], out var value) || value < 1)
+            if (!int.TryParse(args[index], out var value) || value < 1 || value > 6)
             {
-                throw new ArgumentException($"{arg} requires a positive integer", nameof(args));
+                throw new ArgumentException($"{arg} requires an integer between 1 and 6", nameof(args));
             }
 
             return value;

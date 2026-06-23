@@ -11,8 +11,13 @@ without reading source code.
 ## Scope
 
 This document covers all in-house software items comprising the SarifMark system — including all subsystems and units —
-and all OTS software items used in the build pipeline and test infrastructure. It does not cover installation
-procedures, end-user guides, or CI/CD pipeline configuration.
+all OTS software items used in the build pipeline, and all shared package dependencies
+(released version of SarifMark used in the CI pipeline to generate the CodeQL quality report).
+OTS packages used by the test infrastructure (xUnit v3, DemaConsulting.TestResults) are also covered because they are
+third-party items whose correct operation must be independently confirmed; the test project itself is out of scope.
+It does not cover installation procedures, end-user guides, or CI/CD pipeline configuration.
+
+Out of scope: build pipeline scripts and the test project itself (`test/DemaConsulting.SarifMark.Tests/`).
 
 ## Companion Artifact Structure
 
@@ -33,11 +38,11 @@ OTS items have integration/usage design documentation parallel to system folders
 - Design: `docs/design/ots/{ots-name}.md`
 - Verification: `docs/verification/ots/{ots-name}.md`
 
-Shared Packages have integration/usage design documentation parallel to system and OTS folders:
+Shared package items have integration/usage design documentation parallel to system and OTS folders:
 
-- Requirements: `docs/reqstream/shared/{package-name}.yaml`
-- Design: `docs/design/shared/{package-name}.md`
-- Verification: `docs/verification/shared/{package-name}.md`
+- Requirements: `docs/reqstream/shared/{name}.yaml`
+- Design: `docs/design/shared/{name}.md`
+- Verification: `docs/verification/shared/{name}.md`
 
 Review-sets are defined in `.reviewmark.yaml`.
 

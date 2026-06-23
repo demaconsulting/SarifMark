@@ -7,6 +7,7 @@ resource-path:
   - docs/verification/sarifmark/self-test
   - docs/verification/sarifmark/utilities
   - docs/verification/ots
+  - docs/verification/shared
   - docs/template
 input-files:
   - docs/verification/title.txt
@@ -19,6 +20,7 @@ input-files:
   - docs/verification/sarifmark/sarif/sarif-finding.md
   - docs/verification/sarifmark/sarif/sarif-run.md
   - docs/verification/sarifmark/sarif/sarif-results.md
+
   - docs/verification/sarifmark/self-test.md
   - docs/verification/sarifmark/self-test/validation.md
   - docs/verification/sarifmark/utilities.md
@@ -33,6 +35,9 @@ input-files:
   - docs/verification/ots/sonarmark.md
   - docs/verification/ots/versionmark.md
   - docs/verification/ots/weasyprint.md
+  - docs/verification/ots/test-results.md
+  - docs/verification/shared.md
+  - docs/verification/shared/sarifmark.md
 template: template.html
 table-of-contents: true
 number-sections: true

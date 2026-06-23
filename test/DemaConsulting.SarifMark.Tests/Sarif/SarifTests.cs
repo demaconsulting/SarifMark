@@ -63,8 +63,11 @@ public class SarifTests
         // Arrange
         var nonExistentPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.sarif");
 
-        // Act / Assert
-        Assert.Throws<FileNotFoundException>(() => SarifResults.Read(nonExistentPath));
+        // Act
+        var exception = Assert.Throws<FileNotFoundException>(() => SarifResults.Read(nonExistentPath));
+
+        // Assert
+        Assert.NotNull(exception);
     }
 
     /// <summary>
@@ -113,8 +116,11 @@ public class SarifTests
         var sarifFile = Path.Combine(_testDataPath, "invalid.sarif");
         Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
 
-        // Act / Assert
-        Assert.Throws<InvalidOperationException>(() => SarifResults.Read(sarifFile));
+        // Act
+        var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(sarifFile));
+
+        // Assert
+        Assert.NotNull(exception);
     }
 
     /// <summary>

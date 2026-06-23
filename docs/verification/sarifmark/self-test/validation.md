@@ -75,22 +75,3 @@ This scenario is tested by `Validation_TemporaryDirectory_Create_DirectoryExists
 **Validation_TemporaryDirectory_Dispose_DirectoryDeleted**: Dispose a `TemporaryDirectory` instance; assert the
 directory is deleted from disk.
 This scenario is tested by `Validation_TemporaryDirectory_Dispose_DirectoryDeleted`.
-
-#### Requirements Coverage
-
-- **`SarifMark-Validation-Run`**: `Validation_Run_ValidContext_RunsAllTests`
-- **`SarifMark-Validation-NullCheck`**: `Validation_Run_NullContext_ThrowsArgumentNullException`
-- **`SarifMark-Validation-Header`**: `Validation_Run_ValidContext_PrintsValidationHeader`
-- **`SarifMark-Validation-SarifReadingTest`**: `Validation_Run_ValidContext_RunsAllTests`,
-  `Validation_Run_ValidContext_VerifiesSarifReadingOutput`
-- **`SarifMark-Validation-ReportGenerationTest`**: `Validation_Run_ValidContext_RunsAllTests`,
-  `Validation_Run_ValidContext_VerifiesReportGenerationOutput`
-- **`SarifMark-Validation-EnforcementTest`**: `Validation_Run_ValidContext_RunsAllTests`,
-  `Validation_Run_ValidContext_VerifiesEnforcementOutput`
-- **`SarifMark-Validation-Summary`**: `Validation_Run_ValidContext_PrintsSummary`
-- **`SarifMark-Validation-TrxResultsFile`**: `Validation_Run_WithTrxResultsFile_WritesResultsFile`
-- **`SarifMark-Validation-XmlResultsFile`**: `Validation_Run_WithXmlResultsFile_WritesResultsFile`
-- **`SarifMark-Validation-UnsupportedResultsFile`**: `Validation_Run_WithUnsupportedResultsFileExtension_WritesError`
-- **`SarifMark-Validation-WriteResultsFile-IOFailure`**: `Validation_Run_WithNonExistentResultsDirectory_WritesError`
-- **`SarifMark-Validation-TempDir`**: `Validation_TemporaryDirectory_Create_DirectoryExists`,
-  `Validation_TemporaryDirectory_Dispose_DirectoryDeleted`

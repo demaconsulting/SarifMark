@@ -30,5 +30,8 @@ VersionMark is invoked as a .NET tool from a CI pipeline step:
 3. VersionMark interrogates each tool and writes the version report to the configured
    output path.
 4. The generated report is published as a release artifact.
+5. The `--validate` flag runs VersionMark's built-in self-validation suite, confirming all
+   advertised features are operational. The CI pipeline invokes
+   `dotnet versionmark --validate --results {path}` to collect self-validation evidence.
 
 No application-level code in SarifMark references VersionMark directly.

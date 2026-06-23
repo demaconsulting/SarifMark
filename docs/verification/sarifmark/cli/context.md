@@ -7,6 +7,11 @@ All dependencies are standard .NET BCL types (`Console`, `File`) — no mocking 
 are redirected via `StringWriter` for output assertions. Temporary files are used for log-file tests and are always
 cleaned up in `finally` blocks.
 
+Several log-file test methods construct temporary file paths using `PathHelpers.SafePathCombine` rather than
+`Path.Combine`, which means the tests indirectly exercise `PathHelpers` as a cross-unit dependency. `PathHelpers`
+is documented as an explicit dependency of `Context` in the design documentation; its own correctness is verified
+separately in the PathHelpers unit verification document.
+
 #### Test Environment
 
 Standard xUnit v3 test runner with `dotnet test`. Temporary files are created in the OS temporary directory
@@ -58,6 +63,23 @@ This scenario is tested by `Context_Create_ReportWithoutValue_ThrowsArgumentExce
 **Context_Create_DepthParameter_SetsDepth**: Pass `--depth {n}` or `--report-depth {n}`; assert `Depth` is set to
 the provided value.
 This scenario is tested by `Context_Create_DepthParameter_SetsDepth`.
+
+**Context_Create_DepthNegative_ThrowsArgumentException**: Pass `--depth -1`; assert `ArgumentException` is thrown
+with a message indicating the depth must be between 1 and 6.
+This scenario is tested by `Context_Create_DepthNegative_ThrowsArgumentException`.
+
+**Context_Create_DepthAboveMax_ThrowsArgumentException**: Pass `--depth 7`; assert `ArgumentException` is thrown
+with a message indicating the depth must be between 1 and 6, confirming that depth values exceeding the maximum
+heading level are rejected.
+This scenario is tested by `Context_Create_DepthAboveMax_ThrowsArgumentException`.
+
+**Context_Create_DepthAtMinimum_SetsDepth**: Pass `--depth 1`; assert `Depth` is 1, confirming the lower boundary
+value is accepted.
+This scenario is tested by `Context_Create_DepthAtMinimum_SetsDepth`.
+
+**Context_Create_DepthAtMaximum_SetsDepth**: Pass `--depth 6`; assert `Depth` is 6, confirming the upper boundary
+value is accepted.
+This scenario is tested by `Context_Create_DepthAtMaximum_SetsDepth`.
 
 **Context_Create_HeadingArgument_SetsHeading**: Pass `--heading {text}`; assert `Heading` is set.
 This scenario is tested by `Context_Create_HeadingArgument_SetsHeading`.
@@ -133,51 +155,3 @@ This scenario is tested by `Context_WriteError_SilentMode_DoesNotWriteToConsoleB
 **Context_WriteLine_SilentModeWithLogFile_WritesToLog**: Create context with `--silent` and `--log {path}`, call
 `WriteLine`; assert the message appears in the log file even though silent mode suppresses console output.
 This scenario is tested by `Context_WriteLine_SilentModeWithLogFile_WritesToLog`.
-
-### Requirements Coverage
-
-- **`SarifMark-Context-Create`**: `Context_Create_NoArguments_ReturnsDefaultContext`
-- **`SarifMark-Context-VersionFlag`**: `Context_Create_VersionFlag_SetsVersionTrue`,
-  `Context_Create_ShortVersionFlag_SetsVersionTrue`
-- **`SarifMark-Context-HelpFlag`**: `Context_Create_HelpFlag_SetsHelpTrue`,
-  `Context_Create_QuestionMarkHelpFlag_SetsHelpTrue`,
-  `Context_Create_ShortHelpFlag_SetsHelpTrue`
-- **`SarifMark-Context-SilentFlag`**: `Context_Create_SilentFlag_SetsSilentTrue`,
-  `Context_WriteLine_SilentMode_DoesNotWriteToConsole`,
-  `Context_WriteError_SilentMode_DoesNotWriteToConsoleButSetsExitCode`
-- **`SarifMark-Context-ValidateFlag`**: `Context_Create_ValidateFlag_SetsValidateTrue`
-- **`SarifMark-Context-EnforceFlag`**: `Context_Create_EnforceFlag_SetsEnforceTrue`
-- **`SarifMark-Context-SarifParam`**: `Context_Create_SarifParameter_SetsSarifFile`
-- **`SarifMark-Context-SarifParam-MissingValue`**: `Context_Create_SarifWithoutValue_ThrowsArgumentException`
-- **`SarifMark-Context-ReportParam`**: `Context_Create_ReportParameter_SetsReportFile`
-- **`SarifMark-Context-ReportParam-MissingValue`**: `Context_Create_ReportWithoutValue_ThrowsArgumentException`
-- **`SarifMark-Context-ReportDepthParam`**: `Context_Create_DepthParameter_SetsDepth`,
-  `Context_Create_DepthWithoutValue_ThrowsArgumentException`,
-  `Context_Create_DepthInvalidValue_ThrowsArgumentException`,
-  `Context_Create_DepthZero_ThrowsArgumentException`,
-  `Context_Create_ReportDepthParameter_SetsReportDepth`,
-  `Context_Create_ReportDepthWithoutValue_ThrowsArgumentException`,
-  `Context_Create_ReportDepthInvalidValue_ThrowsArgumentException`,
-  `Context_Create_ReportDepthZero_ThrowsArgumentException`
-- **`SarifMark-Context-HeadingParam`**: `Context_Create_HeadingArgument_SetsHeading`,
-  `Context_Create_HeadingWithoutValue_ThrowsArgumentException`
-- **`SarifMark-Context-ResultsParam`**: `Context_Create_ResultsParameter_SetsResultsFile`
-- **`SarifMark-Context-ResultLegacyAlias`**: `Context_Create_ResultLegacyAlias_SetsResultsFile`
-- **`SarifMark-Context-ResultsParam-MissingValue`**: `Context_Create_ResultsWithoutValue_ThrowsArgumentException`
-- **`SarifMark-Context-LogParam`**: `Context_Create_LogFile_OpensFileSuccessfully`,
-  `Context_Create_InvalidLogFilePath_ThrowsInvalidOperationException`
-- **`SarifMark-Context-LogParam-MissingValue`**: `Context_Create_LogWithoutValue_ThrowsArgumentException`
-- **`SarifMark-Context-UnknownArgs`**: `Context_Create_UnknownArgument_ThrowsArgumentException`
-- **`SarifMark-Context-WriteLine-Console`**: `Context_WriteLine_WritesToConsole`,
-  `Context_WriteLine_SilentMode_DoesNotWriteToConsole`
-- **`SarifMark-Context-WriteLine-Log`**: `Context_WriteLine_WithLogFile_WritesToLog`,
-  `Context_WriteLine_SilentModeWithLogFile_WritesToLog`
-- **`SarifMark-Context-WriteError`**: `Context_WriteError_WritesToErrorAndSetsExitCode`
-- **`SarifMark-Context-WriteError-Stderr`**: `Context_WriteError_WritesToErrorAndSetsExitCode`,
-  `Context_WriteError_SilentMode_DoesNotWriteToConsoleButSetsExitCode`
-- **`SarifMark-Context-WriteError-Log`**: `Context_WriteError_WritesToErrorAndSetsExitCode`,
-  `Context_WriteError_WithLogFile_WritesToLog`
-- **`SarifMark-Context-WriteError-ExitCode`**: `Context_WriteError_WritesToErrorAndSetsExitCode`,
-  `Context_WriteError_SilentMode_DoesNotWriteToConsoleButSetsExitCode`
-- **`SarifMark-Context-ExitCode`**: `Context_ExitCode_StartsAtZero_ChangesToOneAfterError`
-- **`SarifMark-Context-Dispose`**: `Context_Dispose_ProperlyClosesLogFile`

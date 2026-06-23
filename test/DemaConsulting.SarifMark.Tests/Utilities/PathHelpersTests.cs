@@ -202,4 +202,5 @@ public class PathHelpersTests
         // Assert
         Assert.Equal(Path.Combine(basePath, relativePath), result);
     }
+
 }

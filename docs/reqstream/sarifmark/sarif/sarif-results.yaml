@@ -37,21 +37,43 @@ sections:
                 tests:
                   - SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException
 
-              - id: SarifMark-SarifResults-ValidateStructure
-                title: >-
-                  The SARIF results unit shall reject SARIF documents that do not
-                  contain
-                  the required version and runs fields.
+              - id: SarifMark-SarifResults-ValidateJson
+                title: The SARIF results unit shall reject files that do not contain
+                  valid JSON.
                 justification: >-
-                  Structural validation at read time ensures that downstream processing
-                  always operates on
-                  well-formed data, preventing cryptic errors and producing informative
-                  messages that guide
-                  users to fix malformed input files.
+                  Rejecting malformed JSON at read time produces a clear diagnostic
+                  before
+                  any structural checks are attempted, making it immediately apparent
+                  that
+                  the input file is corrupted or incorrectly formatted.
                 tags: [internal]
                 tests:
                   - SarifResults_Read_InvalidJson_ThrowsInvalidOperationException
+
+              - id: SarifMark-SarifResults-ValidateVersion
+                title: The SARIF results unit shall reject SARIF documents that do
+                  not contain the required version field.
+                justification: >-
+                  Checking for the version field at read time ensures that downstream
+                  processing always operates on a recognizable SARIF document, producing
+                  an informative message that guides users to fix malformed input
+                  files.
+                tags: [internal]
+                tests:
                   - SarifResults_Read_MissingVersion_ThrowsInvalidOperationException
+
+              - id: SarifMark-SarifResults-ValidateRuns
+                title: The SARIF results unit shall reject SARIF documents that do
+                  not contain a non-empty runs array.
+                justification: >-
+                  Checking for a non-empty runs array at read time ensures that report
+                  generation always has at least one run to process, preventing empty
+                  or
+                  degenerate outputs and producing informative messages that guide
+                  users
+                  to fix malformed input files.
+                tags: [internal]
+                tests:
                   - SarifResults_Read_MissingRuns_ThrowsInvalidOperationException
                   - SarifResults_Read_EmptyRuns_ThrowsInvalidOperationException
 
@@ -127,15 +149,12 @@ sections:
               - id: SarifMark-SarifResults-ToMarkdown
                 title: >-
                   The SARIF results unit shall generate a complete markdown report
-                  for
-                  a single run or a combined report for multiple runs.
+                  for a single-run SARIF file.
                 justification: >-
                   For a single run, delegating directly to the run's report generation
-                  preserves the output format.
-                  For multiple runs, concatenating each run's output with indexed
-                  headings produces a
-                  complete combined report. In both cases the caller needs only one
-                  method call.
+                  preserves the output format and provides a simple, cohesive output
+                  document
+                  for a single tool run without additional indexing overhead.
                 tags: [internal]
                 tests:
                   - SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput
@@ -149,6 +168,19 @@ sections:
                   - SarifResults_ToMarkdown_OneResult_UsesSingularForm
                   - SarifResults_ToMarkdown_ResultWithoutLocation_ShowsNoLocation
                   - SarifResults_ToMarkdown_ResultWithUriNoLine_ShowsUriOnly
+
+              - id: SarifMark-SarifResults-ToMarkdownMultiRun
+                title: >-
+                  The SARIF results unit shall render a multi-run SARIF file by
+                  concatenating individually indexed run sections.
+                justification: >-
+                  For multiple runs, concatenating each run's output with indexed
+                  headings produces a complete combined report. The caller needs only
+                  one method call regardless of whether the SARIF file contains one
+                  or many runs.
+                tags: [internal]
+                tests:
+                  - SarifResults_ToMarkdown_MultipleRuns_IncludesRunIndices
 
               - id: SarifMark-SarifResults-ValidateDepth
                 title: >-

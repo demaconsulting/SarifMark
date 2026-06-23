@@ -2,31 +2,45 @@
 
 ### Verification Approach
 
-FileAssert is used in the SarifMark CI pipeline to assert that generated output files (HTML documents, PDF documents)
-exist, have non-trivial size, contain valid structural elements, and include expected content. FileAssert exposes a
-`--version` and `--help` flag. Self-validation tests confirm FileAssert is installed and operational before it is used
-to validate generated documents. Functional verification is provided by the successful execution of file assertion
-steps in the CI pipeline.
+FileAssert is verified through its built-in `--validate` self-validation mechanism. Running
+`fileassert --validate` executes five internal test scenarios that confirm the tool is
+installed and all advertised features are functioning correctly: version display, help display,
+result file generation, file existence assertion, and content assertion.
+
+### Test Environment
+
+Tests require:
+
+- No network access; all scenarios operate on temporary file fixtures.
+- A writable temporary directory for output files.
+
+### Acceptance Criteria
+
+All five self-validation scenarios must pass with exit code 0 and zero failures, confirming
+that FileAssert is correctly installed and all advertised features are operational.
 
 ### Test Scenarios
 
-**FileAssert_VersionDisplay**: The CI self-validation step invokes `fileassert --version`; the tool responds with its
-version string and exits with code 0, confirming FileAssert is installed and operational.
-This scenario is verified by the self-validation CI pipeline step.
+**FileAssert_VersionDisplay**: The `FileAssert_VersionDisplay` self-validation scenario
+invokes `--version` and confirms the tool outputs a valid version string and exits with
+code 0.
+This scenario is tested by `FileAssert_VersionDisplay`.
 
-**FileAssert_HelpDisplay**: The CI self-validation step invokes `fileassert --help`; the tool responds with its usage
-information and exits with code 0, confirming the CLI interface is functioning as expected.
-This scenario is verified by the self-validation CI pipeline step.
+**FileAssert_HelpDisplay**: The `FileAssert_HelpDisplay` self-validation scenario invokes
+`--help` and confirms usage information and available options are displayed.
+This scenario is tested by `FileAssert_HelpDisplay`.
 
-**FileAssert_HtmlDocumentAssertions**: FileAssert validates generated HTML documents in the CI pipeline, asserting
-that each HTML output file exists, has non-trivial size, contains a valid `<title>` element, and includes expected
-document content. This scenario is verified by the file-assertion CI pipeline steps that validate Pandoc HTML outputs.
+**FileAssert_Results**: The `FileAssert_Results` self-validation scenario runs test
+assertions that produce pass and fail outcomes and writes results to a TRX file, confirming
+result file generation with mixed outcomes works correctly.
+This scenario is tested by `FileAssert_Results`.
 
-**FileAssert_PdfDocumentAssertions**: FileAssert validates generated PDF documents in the CI pipeline, asserting
-that each PDF output file exists, has non-trivial size, contains at least one page, and includes expected rendered
-text. This scenario is verified by the file-assertion CI pipeline steps that validate WeasyPrint PDF outputs.
+**FileAssert_Exists**: The `FileAssert_Exists` self-validation scenario runs a file
+existence assertion via glob pattern and confirms the assertion passes when the expected
+file is present.
+This scenario is tested by `FileAssert_Exists`.
 
-### Requirements Coverage
-
-- **`SarifMark-OTS-FileAssert`**: CI file assertions pass — `FileAssert_VersionDisplay`, `FileAssert_HelpDisplay`,
-  `FileAssert_HtmlDocumentAssertions`, `FileAssert_PdfDocumentAssertions`
+**FileAssert_Contains**: The `FileAssert_Contains` self-validation scenario runs a content
+assertion that checks a file contains expected text and confirms the assertion passes when
+the content is present.
+This scenario is tested by `FileAssert_Contains`.

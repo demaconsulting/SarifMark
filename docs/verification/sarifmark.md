@@ -8,7 +8,8 @@ tests reside in `test/DemaConsulting.SarifMark.Tests/IntegrationTests.cs` and in
 `dotnet {dllPath} {args}` as a subprocess and captures exit codes and console output for assertion. No mocking is
 used at the system level; the full compiled binary is exercised against real SARIF test-data files
 (`sample.sarif`, `multi-result.sarif`, `multi-run.sarif`, `invalid.sarif`) stored in
-`test/DemaConsulting.SarifMark.Tests/TestData/`. Unit tests exercise individual classes directly with console streams
+`test/DemaConsulting.SarifMark.Tests/TestData/`. The `DemaConsulting.TestResults` OTS package is verified through
+integration tests in `ValidationTests.cs` that exercise the package within the self-validation pipeline. Unit tests exercise individual classes directly with console streams
 redirected via `StringWriter`. The test framework is xUnit v3, executed via `dotnet test`. Three additional named
 scenarios (`SarifMark_SarifReading`, `SarifMark_MarkdownReportGeneration`, `SarifMark_Enforcement`) are self-validation
 tests invoked through the tool's own `--validate` flag; they are not xUnit test methods but named scenarios reported
@@ -110,56 +111,64 @@ This scenario is tested by `SarifMark_CustomHeading_AppearsInReport`.
 **SarifMark_MultiRunSarifFile_CreatesReport**: Invoke the tool with `--sarif multi-run.sarif --report {path}` and assert the report file is created and contains sections for both runs (Tool1 and Tool2), confirming that multi-run SARIF files produce a combined report.
 This scenario is tested by `SarifMark_MultiRunSarifFile_CreatesReport`.
 
-## Requirements Coverage
+**Utilities_SafePathHandling_PathTraversal_ThrowsException**: Call `PathHelpers.SafePathCombine` with a relative path
+containing path-traversal segments (e.g. `../etc/passwd`); assert that `ArgumentException` is thrown, confirming
+that path-traversal attempts are rejected before any file-system access occurs, satisfying the safe-path-handling
+system requirement.
+This scenario is tested by `Utilities_SafePathHandling_PathTraversal_ThrowsException`.
 
-The following list maps each system-level requirement to the named test scenario(s) that provide verification
-evidence.
+**Utilities_SafePathHandling_AbsolutePath_ThrowsException**: Call `PathHelpers.SafePathCombine` with an absolute path
+as the relative argument (e.g. `/etc/passwd`); assert that `ArgumentException` is thrown, confirming that
+absolute-path escape attempts are rejected by the centralized safe-path logic.
+This scenario is tested by `Utilities_SafePathHandling_AbsolutePath_ThrowsException`.
 
-- **`SarifMark-System-Version`**: Tool displays version on `--version` —
-  `SarifMark_VersionFlag_OutputsVersion`
-- **`SarifMark-System-Help`**: Tool displays help on `--help` —
-  `SarifMark_HelpFlag_OutputsUsageInformation`
-- **`SarifMark-System-Validate`**: Tool supports `--validate` mode —
-  `SarifMark_ValidateFlag_RunsSelfValidation`
-- **`SarifMark-System-SarifRequired`**: Tool requires `--sarif` for analysis —
-  `SarifMark_MissingSarifParameter_ShowsError`
-- **`SarifMark-System-SarifAnalysis`**: Tool reads and analyses SARIF files —
-  `SarifMark_ValidSarifFile_ProcessesSuccessfully`,
-  `SarifMark_NonExistentSarifFile_ShowsError`
-- **`SarifMark-System-SarifSummary`**: Tool reports tool name, version, and result count —
-  `SarifMark_ValidSarifFile_ProcessesSuccessfully`
-- **`SarifMark-System-Report`**: Tool generates markdown reports —
-  `SarifMark_GenerateReport_CreatesReportFile`
-- **`SarifMark-System-Enforce`**: Non-zero exit code in enforcement mode —
-  `SarifMark_EnforceFlagWithIssues_ReturnsError`
-- **`SarifMark-System-Silent`**: `--silent` suppresses console output —
-  `SarifMark_SilentFlag_SuppressesOutput`
-- **`SarifMark-System-LogFile`**: `--log` writes output to file —
-  `SarifMark_LogFile_WritesOutputToFile`
-- **`SarifMark-System-InvalidArgs`**: Unknown arguments rejected with error —
-  `SarifMark_UnknownArgument_ShowsError`
-- **`SarifMark-System-ReportDepth`**: Configurable heading depth —
-  `SarifMark_ReportDepth_IsConfigurable`, `SarifMark_LegacyReportDepth_IsAccepted`
-- **`SarifMark-System-ReportHeading`**: Configurable custom heading for generated reports —
-  `SarifMark_CustomHeading_AppearsInReport`
-- **`SarifMark-System-ValidateResults`**: Write self-validation results to file —
-  `SelfTest_ResultsFile_TrxPath_WritesTrxFile`, `SelfTest_ResultsFile_XmlPath_WritesJUnitFile`
-- **`SarifMark-System-Platform`**: Runs on Windows, Linux, and macOS —
-  `windows@SarifMark_VersionFlag_OutputsVersion`, `ubuntu@SarifMark_VersionFlag_OutputsVersion`,
-  `macos@SarifMark_VersionFlag_OutputsVersion`
-- **`SarifMark-Plt-Windows`**: Runs on Windows —
-  `SarifMark_VersionFlag_OutputsVersion` (Windows runner)
-- **`SarifMark-Plt-Linux`**: Runs on Linux (Ubuntu) —
-  `SarifMark_VersionFlag_OutputsVersion` (Ubuntu runner)
-- **`SarifMark-Plt-MacOS`**: Runs on macOS —
-  `SarifMark_VersionFlag_OutputsVersion` (macOS runner)
-- **`SarifMark-Plt-Net8`**: Supports .NET 8 runtime —
-  `SarifMark_SarifReading`, `SarifMark_MarkdownReportGeneration` (.NET 8)
-- **`SarifMark-Plt-Net9`**: Supports .NET 9 runtime —
-  `SarifMark_SarifReading`, `SarifMark_MarkdownReportGeneration` (.NET 9)
-- **`SarifMark-Plt-Net10`**: Supports .NET 10 runtime —
-  `SarifMark_SarifReading`, `SarifMark_MarkdownReportGeneration` (.NET 10)
-- **`SarifMark-System-MultiRunSarif`**: Combined report from multi-run SARIF files —
-  `SarifMark_MultiRunSarifFile_CreatesReport`
-- **`SarifMark-System-SafePaths`**: Uses safe path-handling functions —
-  `SarifMark_ValidSarifFile_ProcessesSuccessfully`, `SarifMark_ValidateFlag_RunsSelfValidation`
+**Sarif_GenerateReport_DefaultDepth_ProducesMarkdownContent**: Read `sample.sarif` and
+call `ToMarkdown(1)`; assert the returned string is non-empty and contains
+`"# TestTool Analysis"`, confirming that the tool generates a markdown report from a
+valid SARIF file at the default heading depth.
+This scenario is tested by `Sarif_GenerateReport_DefaultDepth_ProducesMarkdownContent`.
+
+**Sarif_GenerateReport_ReportDepth_IsConfigurable**: Read `sample.sarif` and call
+`ToMarkdown(3)`; assert the output contains `"### TestTool Analysis"`, confirming
+that the heading depth parameter controls the depth of the generated report heading.
+This scenario is tested by `Sarif_GenerateReport_ReportDepth_IsConfigurable`.
+
+**Sarif_GenerateReport_ResultCount_ContainsResultCount**: Read `sample.sarif` and call
+`ToMarkdown(1)`; assert the output contains `"Found 1 issue"`, confirming that the
+result count is included in the generated report and that singular grammar is applied
+for a count of one.
+This scenario is tested by `Sarif_GenerateReport_ResultCount_ContainsResultCount`.
+
+**Sarif_GenerateReport_LocationInfo_ContainsLocationInfo**: Read `sample.sarif` and
+call `ToMarkdown(1)`; assert the output contains `"file:///path/to/file.cs"`,
+confirming that location information from SARIF results is included in the generated
+report.
+This scenario is tested by `Sarif_GenerateReport_LocationInfo_ContainsLocationInfo`.
+
+**Sarif_GenerateReport_CustomHeading_UsesCustomHeading**: Read `sample.sarif` and call
+`ToMarkdown(1, "Custom Analysis Heading")`; assert the output contains the custom
+heading text, confirming that the optional heading parameter replaces the default
+tool-name label.
+This scenario is tested by `Sarif_GenerateReport_CustomHeading_UsesCustomHeading`.
+
+**Sarif_GenerateReport_MultipleResults_FormatsWithLineBreaks**: Read
+`multi-result.sarif` and call `ToMarkdown(1)`; assert the output contains
+`"Found 2 issues"` and that result lines for `first.cs` and `second.cs` each end
+with two trailing spaces (markdown hard line break), confirming that multiple results
+are formatted with proper line breaks.
+This scenario is tested by `Sarif_GenerateReport_MultipleResults_FormatsWithLineBreaks`.
+
+**Sarif_GenerateReport_FileCount_ContainsFileCount**: Read `sample.sarif` and call
+`ToMarkdown(1)`; assert the output contains `"**Files:** 2"`, confirming that the
+file count from the SARIF `artifacts` array is included in the generated report.
+This scenario is tested by `Sarif_GenerateReport_FileCount_ContainsFileCount`.
+
+**SarifMark_ValidSarif_NoIssues_GeneratesReport**: Invoke the tool with `--sarif` pointing to a SARIF file with no
+results and `--report {path}`; assert exit code is 0, the report file is created, and the report contains the tool
+attribution line (`**Tool:**`), confirming the tool generates a valid report for a clean SARIF file with no findings.
+This scenario is tested by `SarifMark_ValidSarif_NoIssues_GeneratesReport`.
+
+**SarifMark_ValidateResultsParameter_WritesResultsFile**: Invoke the tool with `--validate --results {path.trx}`;
+assert exit code is 0 and the TRX results file is created and contains a `<TestRun` element, confirming that the
+`--results` parameter causes self-validation results to be written to the specified file.
+This scenario is tested by `SarifMark_ValidateResultsParameter_WritesResultsFile`.

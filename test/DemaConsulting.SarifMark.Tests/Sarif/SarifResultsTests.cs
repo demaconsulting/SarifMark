@@ -54,8 +54,14 @@ public sealed class SarifResultsTests : IDisposable
     [Fact]
     public void SarifResults_Read_NullPath_ThrowsArgumentException()
     {
-        // Act & Assert
-        Assert.Throws<ArgumentException>(() => SarifResults.Read(null!));
+        // Arrange
+        // (no setup required)
+
+        // Act
+        var exception = Assert.Throws<ArgumentException>(() => SarifResults.Read(null!));
+
+        // Assert
+        Assert.NotNull(exception);
     }
 
     /// <summary>
@@ -64,8 +70,14 @@ public sealed class SarifResultsTests : IDisposable
     [Fact]
     public void SarifResults_Read_EmptyPath_ThrowsArgumentException()
     {
-        // Act & Assert
-        Assert.Throws<ArgumentException>(() => SarifResults.Read(string.Empty));
+        // Arrange
+        // (no setup required)
+
+        // Act
+        var exception = Assert.Throws<ArgumentException>(() => SarifResults.Read(string.Empty));
+
+        // Assert
+        Assert.NotNull(exception);
     }
 
     /// <summary>
@@ -74,8 +86,14 @@ public sealed class SarifResultsTests : IDisposable
     [Fact]
     public void SarifResults_Read_WhitespacePath_ThrowsArgumentException()
     {
-        // Act & Assert
-        Assert.Throws<ArgumentException>(() => SarifResults.Read("   "));
+        // Arrange
+        // (no setup required)
+
+        // Act
+        var exception = Assert.Throws<ArgumentException>(() => SarifResults.Read("   "));
+
+        // Assert
+        Assert.NotNull(exception);
     }
 
     /// <summary>
@@ -87,8 +105,11 @@ public sealed class SarifResultsTests : IDisposable
         // Arrange
         var filePath = PathHelpers.SafePathCombine(_testDirectory, "nonexistent.sarif");
 
-        // Act & Assert
-        Assert.Throws<FileNotFoundException>(() => SarifResults.Read(filePath));
+        // Act
+        var exception = Assert.Throws<FileNotFoundException>(() => SarifResults.Read(filePath));
+
+        // Assert
+        Assert.NotNull(exception);
     }
 
     /// <summary>
@@ -101,8 +122,10 @@ public sealed class SarifResultsTests : IDisposable
         var filePath = PathHelpers.SafePathCombine(_testDirectory, "invalid.sarif");
         File.WriteAllText(filePath, "{ invalid json }");
 
-        // Act & Assert
+        // Act
         var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
+
+        // Assert
         Assert.Contains("Invalid JSON", exception.Message);
     }
 
@@ -120,8 +143,10 @@ public sealed class SarifResultsTests : IDisposable
             }
             """);
 
-        // Act & Assert
+        // Act
         var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
+
+        // Assert
         Assert.Contains("missing 'version'", exception.Message);
     }
 
@@ -139,8 +164,10 @@ public sealed class SarifResultsTests : IDisposable
             }
             """);
 
-        // Act & Assert
+        // Act
         var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
+
+        // Assert
         Assert.Contains("missing or invalid 'runs'", exception.Message);
     }
 
@@ -159,8 +186,10 @@ public sealed class SarifResultsTests : IDisposable
             }
             """);
 
-        // Act & Assert
+        // Act
         var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
+
+        // Assert
         Assert.Contains("'runs' array is empty", exception.Message);
     }
 
@@ -181,8 +210,10 @@ public sealed class SarifResultsTests : IDisposable
             }
             """);
 
-        // Act & Assert
+        // Act
         var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
+
+        // Assert
         Assert.Contains("missing 'tool'", exception.Message);
     }
 
@@ -205,8 +236,10 @@ public sealed class SarifResultsTests : IDisposable
             }
             """);
 
-        // Act & Assert
+        // Act
         var exception = Assert.Throws<InvalidOperationException>(() => SarifResults.Read(filePath));
+
+        // Assert
         Assert.Contains("missing 'driver'", exception.Message);
     }
 
@@ -773,8 +806,10 @@ public sealed class SarifResultsTests : IDisposable
         // Arrange
         var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
-        // Act & Assert
+        // Act
         var exception = Assert.Throws<ArgumentOutOfRangeException>(() => results.ToMarkdown(0));
+
+        // Assert
         Assert.Contains("Depth must be between 1 and 6", exception.Message);
     }
 
@@ -787,8 +822,10 @@ public sealed class SarifResultsTests : IDisposable
         // Arrange
         var results = new SarifResults([new SarifRun("TestTool", "1.0.0", [])]);
 
-        // Act & Assert
+        // Act
         var exception = Assert.Throws<ArgumentOutOfRangeException>(() => results.ToMarkdown(7));
+
+        // Assert
         Assert.Contains("Depth must be between 1 and 6", exception.Message);
     }
 
@@ -1337,5 +1374,6 @@ public sealed class SarifResultsTests : IDisposable
         Assert.Contains("(#1)", md);
         Assert.Contains("(#2)", md);
     }
+
 }
 

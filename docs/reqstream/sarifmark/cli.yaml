@@ -6,8 +6,9 @@ sections:
       - title: CLI Requirements
         requirements:
           - id: SarifMark-Cli-Interface
-            title: The CLI subsystem shall accept command-line arguments and route
-              output.
+            title: >-
+              The CLI subsystem shall parse command-line arguments into a
+              structured execution context.
             justification: >-
               A command-line interface enables automation, scripting, and integration
               into CI/CD pipelines,
@@ -18,6 +19,19 @@ sections:
             tests:
               - Cli_Create_VersionFlag_SetsVersionFlag
               - Cli_Create_HelpFlag_SetsHelpFlag
+
+          - id: SarifMark-Cli-Output
+            title: >-
+              The CLI subsystem shall route console output through the execution
+              context.
+            justification: >-
+              Routing all output through the execution context allows the silent
+              and log-file settings to uniformly suppress or redirect output
+              without requiring each operation to manage its own output destination.
+            tags: [public]
+            tests:
+              - Cli_Create_SilentFlag_SuppressesOutput
+              - Cli_Create_LogFile_WritesOutputToFile
 
           - id: SarifMark-Cli-Version
             title: The CLI shall recognize the --version flag.
@@ -84,16 +98,30 @@ sections:
               - Cli_Create_EnforceFlag_SetsEnforceFlag
 
           - id: SarifMark-Cli-WriteError
-            title: The CLI shall write errors to stderr and set a non-zero exit code.
+            title: The CLI shall write error messages to the standard error stream.
             justification: >-
-              Writing errors to stderr separates diagnostic output from the regular
-              output stream, and
-              automatically setting a non-zero exit code ensures that callers receive
-              a failure signal
-              without requiring explicit exit code management throughout the codebase.
+              Writing errors to stderr separates diagnostic output from
+              regular console output, enabling callers and pipelines to
+              distinguish between tool output and error information.
             tags: [public]
             children:
-              - SarifMark-Context-WriteError
+              - SarifMark-Context-WriteError-Stderr
+              - SarifMark-Context-WriteError-Log
+              - SarifMark-Context-WriteError-ExitCode
+            tests:
+              - Cli_WriteError_WithMessage_SetsExitCodeToOne
+
+          - id: SarifMark-Cli-WriteError-ExitCode
+            title: The CLI shall set the process exit code to 1 when an error is written.
+            justification: >-
+              Automatically updating the exit code when an error is written
+              ensures that callers receive a failure signal without requiring
+              explicit exit-code management throughout the codebase.
+            tags: [public]
+            children:
+              - SarifMark-Context-WriteError-Stderr
+              - SarifMark-Context-WriteError-Log
+              - SarifMark-Context-WriteError-ExitCode
             tests:
               - Cli_WriteError_WithMessage_SetsExitCodeToOne
 

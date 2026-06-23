@@ -321,7 +321,7 @@ public class CliTests
         var ex = Assert.Throws<ArgumentException>(() => Context.Create(["--depth", "abc"]));
 
         // Assert
-        Assert.Contains("--depth requires a positive integer", ex.Message);
+        Assert.Contains("--depth requires an integer between 1 and 6", ex.Message);
     }
 
     /// <summary>
@@ -359,5 +359,37 @@ public class CliTests
                 File.Delete(logFile);
             }
         }
+    }
+
+    /// <summary>
+    ///     Test that --depth 0 is rejected with an error.
+    /// </summary>
+    [Fact]
+    public void Cli_Create_DepthZero_ThrowsArgumentException()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        var ex = Assert.Throws<ArgumentException>(() => Context.Create(["--depth", "0"]));
+
+        // Assert
+        Assert.Contains("--depth requires an integer between 1 and 6", ex.Message);
+    }
+
+    /// <summary>
+    ///     Test that --depth -1 is rejected with an error.
+    /// </summary>
+    [Fact]
+    public void Cli_Create_DepthNegative_ThrowsArgumentException()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        var ex = Assert.Throws<ArgumentException>(() => Context.Create(["--depth", "-1"]));
+
+        // Assert
+        Assert.Contains("--depth requires an integer between 1 and 6", ex.Message);
     }
 }

@@ -31,13 +31,16 @@ not provided.
 `null` when not provided.
 
 **Depth**: `int` — Heading depth for the generated report supplied via `--depth` or the
-legacy alias `--report-depth`; must be a positive integer; default `1`.
+deprecated alias `--report-depth`; must be an integer between 1 and 6 inclusive; default `1`. The valid range is
+enforced at parse time. The deprecated
+alias is accepted for backwards compatibility but is intentionally omitted from `--help` output.
 
 **Heading**: `string?` — Custom heading text supplied via `--heading`; `null` when not provided.
 When null, the report heading defaults to `"[ToolName] Analysis"`.
 
 **ResultsFile**: `string?` — Path for self-validation results supplied via `--results` or the
-legacy alias `--result`; `null` when not provided.
+deprecated alias `--result`; `null` when not provided. The deprecated alias is accepted for
+backwards compatibility but is intentionally omitted from `--help` output.
 
 **ExitCode**: `int` — Returns `0` until `WriteError` is called; returns `1` thereafter.
 Derived from the internal `_hasErrors` flag.
@@ -83,7 +86,7 @@ and calls `OpenLogFile` when a log path was specified.
 #### Error Handling
 
 `Create` throws `ArgumentException` for unrecognized tokens and for malformed value-bearing
-flags (e.g., `--depth` not followed by a positive integer, or a string flag at end of args).
+flags (e.g., `--depth` not followed by an integer between 1 and 6 inclusive, or a string flag at end of args).
 It throws `InvalidOperationException` if the log file cannot be opened. `ArgumentNullException`
 is thrown immediately if `args` is null. These exceptions propagate to `Program.Main`, which
 translates them to exit code 1.
@@ -92,10 +95,19 @@ The private `ArgumentParser` inner class throws `ArgumentException` on any unrec
 token. Value-bearing string flags throw `ArgumentException` when they appear as the last
 token without a following value.
 
+Value-bearing flags accept the immediately following token as their value without inspecting it further. A token
+that begins with `--` (such as `--help`) is treated as a valid value, not as a flag. This is intentional: such
+tokens are valid filenames on all supported platforms, and rejecting them would prevent users from writing output
+to files whose names happen to match flag names.
+
 #### Dependencies
 
 - **.NET base class library** — `Console`, `StreamWriter`, `Path`, `ArgumentException`,
   `ArgumentNullException`, `IDisposable`.
+
+`Context` itself does not call `PathHelpers` directly. `PathHelpers.SafePathCombine` is used
+by `ContextTests` (in the test project) to construct safe file paths for test fixtures, but
+that usage is confined to the test boundary and is not part of the `Context` runtime contract.
 
 #### Callers
 

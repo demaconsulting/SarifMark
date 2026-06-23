@@ -4,11 +4,14 @@
 
 Each OTS item is verified using one of three evidence categories matched to its role in the pipeline:
 
-1. **Self-validation output**: Tools that expose a `--validate` or version/help flag (FileAssert) are exercised in
-   the CI pipeline self-validation step; passing output confirms the tool is installed and operational.
-2. **Successful CI pipeline completion**: Tools without a self-test mechanism (BuildMark, ReviewMark, SonarMark,
-   VersionMark, ReqStream, Pandoc, WeasyPrint) are verified by successful CI pipeline execution — each tool produces
-   an artefact (document, report, or exit-code assertion) that confirms functional operation.
+1. **Self-validation output**: Tools that expose a `--validate` flag (BuildMark, FileAssert, ReqStream, ReviewMark,
+   VersionMark — verified through SarifMark's self-validation tests) are exercised through the `--validate`
+   self-validation mechanism; passing output confirms the tool is installed and all advertised features are
+   operational. DemaConsulting.TestResults is a NuGet package (not a CLI tool) and does not expose `--validate`;
+   it is verified through SarifMark's integration and self-validation tests.
+2. **Successful CI pipeline completion**: Tools verified by successful CI pipeline execution — each tool produces
+   an artifact (document, report, or exit-code assertion) that confirms functional operation. Pandoc and
+   WeasyPrint are verified via FileAssert assertions on generated HTML and PDF files.
 3. **Framework operation**: xUnit v3 (the test framework) is verified implicitly — the test suite runs and produces
    passing results, confirming the framework discovers and executes tests correctly.
 

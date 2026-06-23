@@ -10,7 +10,7 @@ subsystem based on the parsed flags, and handles top-level exception translation
 
 **Version**: `string` — The assembly informational version string; derived at runtime from
 `AssemblyInformationalVersionAttribute`, falling back to `AssemblyVersion`, then to `"0.0.0"`.
-This property is read-only and is computed on first access.
+This property is read-only and is recomputed on every access (no caching).
 
 ### Key Methods
 

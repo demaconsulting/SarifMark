@@ -65,10 +65,8 @@ sections:
           - SarifMark_NonExistentSarifFile_ShowsError
 
       - id: SarifMark-System-SarifSummary
-        title: >-
-          The tool shall report the tool name, version, and result count for each
-          run
-          after processing.
+        title: The tool shall generate a summary section for each SARIF analysis run
+          in the report.
         tags: [public]
         justification: >-
           Reporting tool identity and result count after reading confirms successful
@@ -77,7 +75,7 @@ sections:
           findings
           were found.
         children:
-          - SarifMark-Program-SarifReading
+          - SarifMark-Program-SarifSummary
         tests:
           - SarifMark_ValidSarifFile_ProcessesSuccessfully
 
@@ -211,16 +209,123 @@ sections:
 
       - id: SarifMark-System-SafePaths
         title: >-
-          The tool shall use safe path-handling functions to protect against
-          path-traversal vulnerabilities.
+          The tool shall reject any file path argument that contains
+          path-traversal sequences or specifies an absolute path where
+          a relative path is required.
         tags: [public]
         justification: >-
-          Centralizing path-safety logic prevents path-traversal vulnerabilities from
-          being
-          independently reimplemented and ensures consistent protection wherever external
-          inputs are combined with base paths.
+          Rejecting path-traversal sequences and absolute paths at all external
+          input boundaries prevents file operations from escaping designated
+          directories, ensuring the tool cannot be directed to read or write
+          outside permitted locations regardless of how arguments are constructed.
         children:
           - SarifMark-Utilities-SafePathHandling
         tests:
           - Utilities_SafePathHandling_PathTraversal_ThrowsException
           - Utilities_SafePathHandling_AbsolutePath_ThrowsException
+
+      # Report format requirements — public-facing system-level contract
+      - id: SarifMark-Report-Markdown
+        title: The tool shall generate markdown reports from SARIF files.
+        justification: >-
+          Markdown report generation transforms machine-readable SARIF into
+          human-readable documentation,
+          enabling better understanding and communication of analysis results
+          across development teams.
+        tags: [public]
+        children:
+          - SarifMark-SarifResults-ToMarkdown
+        tests:
+          - Sarif_GenerateReport_DefaultDepth_ProducesMarkdownContent
+
+      - id: SarifMark-Report-Depth
+        title: The tool shall support configurable markdown heading depth.
+        justification: >-
+          Configurable heading depth allows reports to integrate seamlessly
+          into existing documentation
+          hierarchies, preventing heading level conflicts when reports are
+          embedded in larger documents.
+        tags: [public]
+        children:
+          - SarifMark-SarifResults-ValidateDepth
+        tests:
+          - Sarif_GenerateReport_ReportDepth_IsConfigurable
+
+      - id: SarifMark-Report-Counts
+        title: The tool shall display result counts in reports.
+        justification: >-
+          Result counts provide a quick summary of analysis findings, helping
+          users understand the scope of
+          issues at a glance and track improvements over time.
+        tags: [public]
+        children:
+          - SarifMark-SarifRun-FormatCount
+        tests:
+          - Sarif_GenerateReport_ResultCount_ContainsResultCount
+
+      - id: SarifMark-Report-Locations
+        title: The tool shall display location information for results.
+        justification: >-
+          Displaying location information enables developers to quickly navigate
+          to the source of issues,
+          making the reports actionable and reducing time spent searching
+          for problematic code.
+        tags: [public]
+        children:
+          - SarifMark-SarifRun-FormatLocation
+        tests:
+          - Sarif_GenerateReport_LocationInfo_ContainsLocationInfo
+
+      - id: SarifMark-Report-Headings
+        title: The tool shall support custom headings in reports.
+        justification: >-
+          Custom headings allow users to tailor reports to their documentation
+          standards and naming
+          conventions, improving consistency across project documentation.
+        tags: [public]
+        children:
+          - SarifMark-SarifResults-ToMarkdown
+        tests:
+          - Sarif_GenerateReport_CustomHeading_UsesCustomHeading
+
+      - id: SarifMark-Report-LineBreaks
+        title: The tool shall format multiple results with proper line breaks.
+        justification: >-
+          Proper line breaks between results ensure readability and visual
+          separation in generated markdown,
+          making it easier to distinguish between different findings in the
+          report.
+        tags: [public]
+        children:
+          - SarifMark-SarifResults-ToMarkdown
+        tests:
+          - Sarif_GenerateReport_MultipleResults_FormatsWithLineBreaks
+
+      - id: SarifMark-Report-FileCount
+        title: The tool shall include the file count in generated reports.
+        justification: >-
+          Including the file count in the report header provides evidence
+          that analysis was actually
+          performed on the expected files, which is particularly valuable
+          in regulated or audited
+          development environments.
+        tags: [public]
+        children:
+          - SarifMark-SarifResults-FileCount
+        tests:
+          - Sarif_GenerateReport_FileCount_ContainsFileCount
+
+      - id: SarifMark-Report-NoIssues
+        title: >-
+          The SarifMark system shall produce a valid markdown report when
+          the SARIF file contains no findings.
+        justification: >-
+          A clean SARIF file with zero findings is the expected output of a
+          passing analysis. The report must still be generated with the tool
+          attribution and file count, confirming the analysis completed
+          successfully even when no issues are found.
+        tags: [public]
+        children:
+          - SarifMark-SarifResults-ToMarkdown
+        tests:
+          - SarifMark_ValidSarif_NoIssues_GeneratesReport

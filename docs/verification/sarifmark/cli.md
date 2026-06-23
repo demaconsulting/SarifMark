@@ -78,21 +78,18 @@ This scenario is tested by `Cli_Create_ReportDepthParameter_SetsReportDepth`.
 alias is accepted and `ResultsFile` is set.
 This scenario is tested by `Cli_Create_ResultLegacyAlias_SetsResultsFilePath`.
 
-### Requirements Coverage
+**Cli_Create_DepthInvalidValue_ThrowsArgumentException**: Pass `--depth abc` (a non-integer value) to
+`Context.Create`; assert `ArgumentException` is thrown with a message indicating `--depth requires an integer
+between 1 and 6`, confirming that invalid depth values are rejected before reaching the report formatter.
+This scenario is tested by `Cli_Create_DepthInvalidValue_ThrowsArgumentException`.
 
-- **`SarifMark-Cli-Interface`**: `Cli_Create_VersionFlag_SetsVersionFlag`, `Cli_Create_HelpFlag_SetsHelpFlag`
-- **`SarifMark-Cli-Version`**: `Cli_Create_VersionFlag_SetsVersionFlag`
-- **`SarifMark-Cli-Help`**: `Cli_Create_HelpFlag_SetsHelpFlag`
-- **`SarifMark-Cli-Silent`**: `Cli_Create_SilentFlag_SuppressesOutput`
-- **`SarifMark-Cli-Log`**: `Cli_Create_LogFile_WritesOutputToFile`
-- **`SarifMark-Cli-Enforce`**: `Cli_Create_EnforceFlag_SetsEnforceFlag`
-- **`SarifMark-Cli-WriteError`**: `Cli_WriteError_WithMessage_SetsExitCodeToOne`
-- **`SarifMark-Cli-InvalidArgs`**: `Cli_Create_UnknownArgument_ThrowsArgumentException`
-- **`SarifMark-Cli-Validate`**: `Cli_Create_ValidateFlag_SetsValidateFlag`
-- **`SarifMark-Cli-Sarif`**: `Cli_Create_SarifParameter_SetsSarifFilePath`
-- **`SarifMark-Cli-Report`**: `Cli_Create_ReportParameter_SetsReportFilePath`
-- **`SarifMark-Cli-ReportDepth`**: `Cli_Create_DepthParameter_SetsDepth`
-- **`SarifMark-Cli-Heading`**: `Cli_Create_HeadingParameter_SetsCustomHeading`
-- **`SarifMark-Cli-Results`**: `Cli_Create_ResultsParameter_SetsResultsFilePath`
-- **`SarifMark-Cli-ReportDepthLegacyAlias`**: `Cli_Create_ReportDepthParameter_SetsReportDepth`
-- **`SarifMark-Cli-ResultLegacyAlias`**: `Cli_Create_ResultLegacyAlias_SetsResultsFilePath`
+**Cli_Create_LogWithoutSilent_WritesToConsoleAndLogFile**: Pass `--log {path}` without `--silent` to `Context.Create`
+and write a message; assert the message appears both on the console and in the log file, confirming that log-file
+output is additive rather than replacing console output when silent mode is not active.
+This scenario is tested by `Cli_Create_LogWithoutSilent_WritesToConsoleAndLogFile`.
+
+**Cli_Create_DepthZero_ThrowsArgumentException**: Pass `--depth 0` to `Context.Create`; assert `ArgumentException` is thrown with a message indicating `--depth requires an integer between 1 and 6`, confirming that a depth of zero is rejected.
+This scenario is tested by `Cli_Create_DepthZero_ThrowsArgumentException`.
+
+**Cli_Create_DepthNegative_ThrowsArgumentException**: Pass `--depth -1` to `Context.Create`; assert `ArgumentException` is thrown with a message indicating `--depth requires an integer between 1 and 6`, confirming that negative depth values are rejected.
+This scenario is tested by `Cli_Create_DepthNegative_ThrowsArgumentException`.

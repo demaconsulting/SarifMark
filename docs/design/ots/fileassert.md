@@ -38,5 +38,8 @@ generation steps:
    output file, checking existence, size, page count, and content strings.
 4. A non-zero exit code from FileAssert causes the CI step to fail, blocking the
    pipeline.
+5. The `--validate` flag runs FileAssert's built-in self-validation suite, confirming all
+   advertised features are operational. The CI pipeline invokes
+   `dotnet fileassert --validate --results {path}` to collect self-validation evidence.
 
 No application-level code in SarifMark references FileAssert directly.

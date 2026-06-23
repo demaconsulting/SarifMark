@@ -6,14 +6,58 @@ sections:
     sections:
       - title: BuildMark Requirements
         requirements:
-          - id: SarifMark-OTS-BuildMark
-            title: BuildMark shall generate build-notes documentation from GitHub
-              Actions metadata.
+          - id: SarifMark-OTS-BuildMark-MarkdownReport
+            title: BuildMark shall generate a markdown report from repository and
+              issue-tracking data.
             justification: |
-              DemaConsulting.BuildMark queries the GitHub API to capture workflow run details and
-              renders them as a markdown build-notes document included in the release artifacts.
-              It runs as part of the same CI pipeline that produces the TRX test results, so a
-              successful pipeline run is evidence that BuildMark executed without error.
+              DemaConsulting.BuildMark generates a build-notes markdown document that
+              aggregates Git history, GitHub issues, and pull request information for a
+              given build version. The self-validation test BuildMark_MarkdownReportGeneration
+              confirms the tool generates a correct report from mock data, proving the
+              feature works in the installed environment.
             tags: [ots]
             tests:
               - BuildMark_MarkdownReportGeneration
+
+          - id: SarifMark-OTS-BuildMark-GitIntegration
+            title: BuildMark shall read version tags and commits from the Git repository.
+            justification: |
+              BuildMark reads the local Git repository to identify the baseline version
+              tag and collects commits between versions. The self-validation test
+              BuildMark_GitIntegration confirms Git repository connector functionality
+              in the installed environment.
+            tags: [ots]
+            tests:
+              - BuildMark_GitIntegration
+
+          - id: SarifMark-OTS-BuildMark-IssueTracking
+            title: BuildMark shall retrieve issues and pull requests from GitHub.
+            justification: |
+              BuildMark connects to the GitHub API to retrieve issue and pull request
+              data for inclusion in the build notes. The self-validation test
+              BuildMark_IssueTracking confirms GitHub integration works correctly.
+            tags: [ots]
+            tests:
+              - BuildMark_IssueTracking
+
+          - id: SarifMark-OTS-BuildMark-KnownIssues
+            title: BuildMark shall include known issues in the report when requested.
+            justification: |
+              When invoked with --include-known-issues, BuildMark appends a Known Issues
+              section to the build notes. The self-validation test
+              BuildMark_KnownIssuesReporting confirms this optional feature is
+              functioning correctly.
+            tags: [ots]
+            tests:
+              - BuildMark_KnownIssuesReporting
+
+          - id: SarifMark-OTS-BuildMark-RulesRouting
+            title: BuildMark shall route items to report sections by configured rules.
+            justification: |
+              BuildMark supports label- and type-based routing rules that assign
+              issues and pull requests to named report sections. The self-validation
+              test BuildMark_RulesRouting confirms routing assigns items to the
+              correct sections.
+            tags: [ots]
+            tests:
+              - BuildMark_RulesRouting

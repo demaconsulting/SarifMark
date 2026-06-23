@@ -7,29 +7,41 @@ sections:
       - title: xUnit v3 Requirements
         requirements:
           - id: SarifMark-OTS-XUnitV3-Discovery
-            title: xUnit v3 shall discover and execute unit tests.
+            title: xUnit v3 shall discover test methods marked with [Fact] or [Theory]
+              attributes.
             justification: |
-              xunit.v3 is the unit-testing framework used by the project. It discovers and runs
-              all test methods marked with [Fact] or [Theory] attributes, confirming the framework
-              is functioning correctly and all tests pass.
+              xunit.v3 is the unit-testing framework used by the project. Test discovery
+              confirms the framework correctly identifies all test methods across the test
+              project, which is a prerequisite for test execution.
             tags: [ots]
             tests:
               - SarifResults_Read_NoResults_ReturnsValidResults
               - SarifResults_Read_WithResults_ReturnsValidResults
-              - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
               - Context_Create_VersionFlag_SetsVersionTrue
               - Context_Create_HelpFlag_SetsHelpTrue
 
-          - id: SarifMark-OTS-XUnitV3-TrxOutput
-            title: xUnit v3 shall write TRX result files for traceability.
+          - id: SarifMark-OTS-XUnitV3-Execution
+            title: xUnit v3 shall execute discovered tests and report pass/fail results.
             justification: |
-              xunit.runner.visualstudio provides the VSTest adapter that writes TRX result files
-              when tests are executed via `dotnet test`. These TRX files are consumed by ReqStream
-              for requirements traceability enforcement, linking passing tests to requirement IDs.
+              Execution of all discovered tests confirms xUnit v3 can run the test suite
+              to completion across all test classes, producing reliable pass/fail results
+              for requirements traceability.
+            tags: [ots]
+            tests:
+              - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
+              - Context_Create_HelpFlag_SetsHelpTrue
+              - Sarif_GenerateReport_DefaultDepth_ProducesMarkdownContent
+
+          - id: SarifMark-OTS-XUnitV3-TrxOutput
+            title: >-
+              The test execution pipeline shall produce TRX result files
+              containing passing test names.
+            justification: |
+              The combination of xunit.v3, xunit.runner.visualstudio, and `dotnet test
+              --results-directory` produces TRX result files during test execution.
+              These TRX files are consumed by ReqStream for requirements traceability
+              enforcement, linking passing tests to requirement IDs.
             tags: [ots]
             tests:
               - SarifResults_Read_NoResults_ReturnsValidResults
-              - SarifResults_Read_WithResults_ReturnsValidResults
-              - SarifResults_ToMarkdown_NoResults_ShowsFoundNoResults
               - Context_Create_VersionFlag_SetsVersionTrue
-              - Context_Create_HelpFlag_SetsHelpTrue

@@ -33,14 +33,20 @@ sections:
                   - SarifRun_InternalConstructor_CreatesValidInstance
 
               - id: SarifMark-SarifRun-Results
-                title: The SarifRun unit shall expose the collection of non-suppressed
-                  findings and their total count.
+                title: The SarifRun unit shall expose the collection of parsed findings.
                 justification: >-
-                  Providing the full results collection enables report formatters
-                  to iterate and render
-                  individual findings, while the derived result count avoids repeated
-                  collection traversal
-                  across callers.
+                  Exposing the full results collection enables report formatters
+                  to iterate and render individual findings for each tool run.
+                tags: [internal]
+                tests:
+                  - SarifRun_InternalConstructor_CreatesValidInstance
+
+              - id: SarifMark-SarifRun-ResultCount
+                title: The SarifRun unit shall expose the total count of parsed findings.
+                justification: >-
+                  Providing a derived result count avoids repeated collection traversal
+                  across callers and enables report formatters to render count summaries
+                  efficiently.
                 tags: [internal]
                 tests:
                   - SarifRun_InternalConstructor_CreatesValidInstance

@@ -30,5 +30,16 @@ test steps have completed:
    supplied as environment variables from the CI context.
 3. BuildMark writes the build-notes markdown file to the configured output path.
 4. The generated markdown file is published as a release artifact.
+5. The `--validate` flag runs BuildMark's built-in self-validation suite, producing a
+   self-test report that confirms all advertised features are operational in the installed
+   environment. The CI pipeline invokes `dotnet buildmark --validate --results {path}` to
+   collect self-validation evidence.
 
 No application-level code in SarifMark references BuildMark directly.
+
+### Error Handling
+
+BuildMark is invoked as a CI pipeline step; a nonzero exit code from any `dotnet buildmark`
+invocation causes the CI step to fail and stops the pipeline immediately. No special wrapper
+or retry logic is applied. Failures are surfaced directly through the GitHub Actions step
+status and must be investigated by inspecting the step log.

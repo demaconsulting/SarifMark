@@ -1,0 +1,61 @@
+---
+# SarifMark shared package requirements
+
+sections:
+  - title: Shared Package Requirements
+    sections:
+      - title: SarifMark Requirements
+        requirements:
+          - id: SarifMark-Shared-SarifMark-ReadSarif
+            title: SarifMark shall read a SARIF input file specified by the --sarif
+              parameter.
+            justification: |
+              The CI pipeline step invokes SarifMark with --sarif artifacts/csharp.sarif to
+              supply the CodeQL analysis output. SarifMark must accept the file path and
+              successfully parse the SARIF content. The self-validation test
+              SarifMark_ValidSarifFile_ProcessesSuccessfully confirms that SarifMark reads
+              a valid SARIF file and processes it without error, as this is a core feature
+              verified by the product's own test suite.
+            tags: [shared]
+            tests:
+              - SarifMark_ValidSarifFile_ProcessesSuccessfully
+
+          - id: SarifMark-Shared-SarifMark-GenerateReport
+            title: SarifMark shall generate a markdown report at the path specified
+              by the --report parameter.
+            justification: |
+              The CI pipeline step invokes SarifMark with --report docs/code_quality/generated/codeql-quality.md
+              to write the CodeQL quality report into the release artifacts. SarifMark must create
+              the markdown file at the specified path. The self-validation test
+              SarifMark_GenerateReport_CreatesReportFile confirms that SarifMark creates a
+              report file at the given output path, and SarifMark_ValidSarif_NoIssues_GeneratesReport
+              confirms report generation also succeeds when the SARIF file contains no issues.
+            tags: [shared]
+            tests:
+              - SarifMark_GenerateReport_CreatesReportFile
+              - SarifMark_ValidSarif_NoIssues_GeneratesReport
+
+          - id: SarifMark-Shared-SarifMark-ConfigureHeading
+            title: SarifMark shall use a custom heading in the generated report when
+              specified by the --heading parameter.
+            justification: |
+              The CI pipeline step supplies --heading "SarifMark CodeQL Analysis" so that the
+              generated report carries the correct section title in the release documentation bundle.
+              The self-validation test SarifMark_CustomHeading_AppearsInReport confirms that the
+              specified heading text appears as the top-level heading in the generated markdown report.
+            tags: [shared]
+            tests:
+              - SarifMark_CustomHeading_AppearsInReport
+
+          - id: SarifMark-Shared-SarifMark-ConfigureReportDepth
+            title: SarifMark shall apply the heading depth specified by the --report-depth
+              parameter.
+            justification: |
+              The CI pipeline step supplies --report-depth 1 so that the generated report uses
+              the correct heading level when embedded in the release documentation. The
+              self-validation test SarifMark_LegacyReportDepth_IsAccepted confirms that the
+              --report-depth parameter is accepted and applied correctly to the heading depth
+              of the generated markdown report.
+            tags: [shared]
+            tests:
+              - SarifMark_LegacyReportDepth_IsAccepted

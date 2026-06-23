@@ -3,12 +3,6 @@ name: Software Items
 description: Follow these standards when categorizing software components.
 ---
 
-# Software Items Definition Standards
-
-This document defines standards for categorizing software items within
-Continuous Compliance environments because proper categorization determines
-requirements management approach, testing strategy, and review scope.
-
 # Software Item Categories
 
 Categorize all software into six primary groups:
@@ -63,8 +57,6 @@ dash-separated IDs. Examples covering all three forms:
 
 # Categorization Guidelines
 
-Choose the appropriate category based on scope and testability:
-
 ## Software Package
 
 - Represents one distributable artifact
@@ -102,7 +94,7 @@ Choose the appropriate category based on scope and testability:
 - Examples: System.Text.Json, Entity Framework, third-party APIs
 - **Artifact locations** (OTS items have no internal design documentation):
   - Requirements: `docs/reqstream/ots/{ots-name}.yaml`
-  - Design: `docs/design/ots/{ots-name}.md` (integration/usage design - how the local system uses this item)
+  - Design: `docs/design/ots/{ots-name}.md` (integration/usage design)
   - Verification: `docs/verification/ots/{ots-name}.md`
   - These folders sit parallel to system folders (not inside any system folder)
 - System design documentation records which OTS items each system depends on
@@ -122,10 +114,9 @@ Choose the appropriate category based on scope and testability:
   downstream integration tests that transitively prove the advertised features are functional
 - **Artifact locations** (no internal design documentation in the consuming repository):
   - Requirements: `docs/reqstream/shared/{package-name}.yaml`
-  - Design: `docs/design/shared/{package-name}.md` (integration/usage design - which features are consumed and how)
+  - Design: `docs/design/shared/{package-name}.md` (integration/usage design)
   - Verification: `docs/verification/shared/{package-name}.md`
   - These folders sit parallel to system and OTS folders
-- System design documentation records which Shared Packages each system depends on
 
 # Software Item Artifact Model
 

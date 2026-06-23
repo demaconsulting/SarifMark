@@ -180,4 +180,35 @@ public class SelfTestTests
             }
         }
     }
+
+    /// <summary>
+    ///     Test that enforcement mode returns a non-zero exit code when issues are found.
+    /// </summary>
+    [Fact]
+    public void SelfTest_EnforceFlag_WithIssues_ReturnsNonZeroExitCode()
+    {
+        // Arrange
+        var sarifFile = Path.Combine(AppContext.BaseDirectory, "TestData", "sample.sarif");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+        var originalOut = Console.Out;
+        var originalError = Console.Error;
+        try
+        {
+            using var outWriter = new StringWriter();
+            using var errWriter = new StringWriter();
+            Console.SetOut(outWriter);
+            Console.SetError(errWriter);
+
+            // Act
+            var exitCode = Program.Main(["--sarif", sarifFile, "--enforce", "--silent"]);
+
+            // Assert
+            Assert.Equal(1, exitCode);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            Console.SetError(originalError);
+        }
+    }
 }

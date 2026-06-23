@@ -2,7 +2,10 @@
 
 ## Getting Started
 
-After installation the `sarifmark` command is available from any terminal.
+After a **global** installation (`dotnet tool install --global`) the `sarifmark` command is
+available from any terminal without a path qualifier. After a **local** installation the tool
+must be invoked with `dotnet tool run sarifmark` (or the equivalent `dotnet sarifmark` shorthand,
+which is a standard .NET local-tool invocation available in any shell or terminal where the .NET SDK is installed).
 
 Generate a markdown report from a SARIF file:
 
@@ -35,8 +38,10 @@ sarifmark --help
 | `--log <file>` | Write console output to a log file |
 | `--sarif <file>` | SARIF file to process (required for analysis) |
 | `--report <file>` | Export analysis results to a markdown file |
-| `--depth <depth>` | Markdown header depth for the report (default: `1`) |
+| `--depth <depth>` | Markdown header depth for the report (default: `1`; accepted range: `1`–`6`, corresponding to Markdown heading levels `#` through `######`) |
 | `--heading <text>` | Custom heading for the report (default: `[ToolName] Analysis`) |
+| `--report-depth <depth>` | Deprecated alias for `--depth` (supported for backwards compatibility) |
+| `--result <file>` | Deprecated alias for `--results` (supported for backwards compatibility) |
 
 ## Common Usage Patterns
 

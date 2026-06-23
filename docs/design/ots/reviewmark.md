@@ -22,6 +22,8 @@ compliance documents in the SarifMark release bundle.
   reviews with reviewer, date, and outcome information.
 - **Review coverage enforcement** — when run with enforcement flags, fails the pipeline
   if required files have not been reviewed.
+- **Review depth configuration** — the `--depth` flag controls heading depth in review
+  plan and report output.
 
 ### Integration Pattern
 
@@ -32,6 +34,9 @@ ReviewMark is invoked as a .NET tool from CI pipeline steps:
    the review evidence store.
 3. ReviewMark writes the review plan and review report to the configured output paths.
 4. The generated documents are published as release artifacts.
+5. The `--validate` flag runs ReviewMark's built-in self-validation suite, confirming all
+   advertised features are operational. The CI pipeline invokes
+   `dotnet reviewmark --validate --results artifacts/reviewmark-self-validation.trx` to collect self-validation evidence.
 
 The review configuration in `.reviewmark.yaml` defines the review sets and their member
 files. No application-level code in SarifMark references ReviewMark directly.
