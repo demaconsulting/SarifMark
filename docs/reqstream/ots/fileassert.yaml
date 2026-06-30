@@ -42,17 +42,17 @@ sections:
             justification: |
               File existence assertions via glob patterns are the core use case for
               FileAssert in the SarifMark pipeline. The self-validation test
-              FileAssert_Exists confirms file existence assertion works correctly.
+              FileAssert_File confirms file existence assertion works correctly.
             tags: [ots]
             tests:
-              - FileAssert_Exists
+              - FileAssert_File
 
           - id: SarifMark-OTS-FileAssert-Contains
             title: FileAssert shall verify file content with contains assertions.
             justification: |
               Content assertions confirm that generated documents contain expected text.
-              The self-validation test FileAssert_Contains confirms content assertion
+              The self-validation test FileAssert_Text confirms content assertion
               works correctly in the installed environment.
             tags: [ots]
             tests:
-              - FileAssert_Contains
+              - FileAssert_Text

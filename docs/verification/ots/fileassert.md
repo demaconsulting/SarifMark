@@ -35,12 +35,12 @@ assertions that produce pass and fail outcomes and writes results to a TRX file,
 result file generation with mixed outcomes works correctly.
 This scenario is tested by `FileAssert_Results`.
 
-**FileAssert_Exists**: The `FileAssert_Exists` self-validation scenario runs a file
+**FileAssert_File**: The `FileAssert_File` self-validation scenario runs a file
 existence assertion via glob pattern and confirms the assertion passes when the expected
 file is present.
-This scenario is tested by `FileAssert_Exists`.
+This scenario is tested by `FileAssert_File`.
 
-**FileAssert_Contains**: The `FileAssert_Contains` self-validation scenario runs a content
+**FileAssert_Text**: The `FileAssert_Text` self-validation scenario runs a content
 assertion that checks a file contains expected text and confirms the assertion passes when
 the content is present.
-This scenario is tested by `FileAssert_Contains`.
+This scenario is tested by `FileAssert_Text`.
