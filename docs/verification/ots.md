@@ -37,6 +37,11 @@ For each OTS item, the following evidence is collected during CI pipeline execut
   generation.
 - **ReviewMark**: Both the review plan and review report markdown files are present, confirming successful execution
   of both pipeline steps.
+- **SysML2Tools**: The `dotnet sysml2tools --validate` self-validation step produces a TRX file confirming the
+  tool's own lint and SVG-render self-tests pass; the build-docs job's `dotnet sysml2tools lint` and
+  `dotnet sysml2tools render` steps against the real SarifMark model confirm the architecture model is free of
+  syntax/reference errors and that every declared view is rendered to an SVG file consumed by the compiled
+  Design document.
 - **xUnit v3**: The test suite produces passing results across all test classes, and TRX result files are generated
   by `dotnet test --results-directory`, confirming test discovery, execution, and result serialization.
 

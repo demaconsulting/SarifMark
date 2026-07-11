@@ -27,8 +27,8 @@ Local items:
 OTS items:
 
 - **BuildMark**, **DemaConsulting.TestResults**, **FileAssert**, **Pandoc**, **ReqStream**, **ReviewMark**, **SonarMark**,
-  **VersionMark**, **WeasyPrint**, **xUnit v3**: integration and usage design for each OTS software
-  item used in the project pipeline.
+  **SysML2Tools**, **VersionMark**, **WeasyPrint**, **xUnit v3**: integration and usage design for each OTS
+  software item used in the project pipeline.
 
 Shared packages:
 
@@ -40,35 +40,12 @@ end-user usage patterns, or the internal design of OTS items.
 
 ## Software Structure
 
-- **SarifMark** (System) - .NET CLI tool that generates markdown reports from SARIF 2.1.0 files
-  - Program (Unit) - system-level entry point and execution dispatcher
-  - **Cli** (Subsystem) - command-line argument parsing and execution context
-    - Context (Unit) - argument parser, I/O owner, and exit-code manager
-  - **Sarif** (Subsystem) - SARIF file reading and markdown report generation
-    - SarifFinding (Unit) - immutable record for a single analysis finding
-    - SarifRun (Unit) - immutable record for a single tool run
-    - SarifResults (Unit) - SARIF file reader and markdown report generator
-  - **SelfTest** (Subsystem) - end-to-end self-validation of tool capabilities
-    - Validation (Unit) - self-validation test runner
-  - **Utilities** (Subsystem) - shared path-safety helpers
-    - PathHelpers (Unit) - safe path combination utilities
+The software structure is modeled in SysML2 under `docs/sysml2/` and rendered to the
+diagram below by SysML2Tools as part of the build pipeline. AI agents should query the
+SysML2 model directly (see the `sysml2tools-query` skill) rather than parsing this
+rendered diagram.
 
-**OTS Dependencies:**
-
-- BuildMark (OTS)
-- DemaConsulting.TestResults (OTS)
-- FileAssert (OTS)
-- Pandoc (OTS)
-- ReqStream (OTS)
-- ReviewMark (OTS)
-- SonarMark (OTS)
-- VersionMark (OTS)
-- WeasyPrint (OTS)
-- xUnit v3 (OTS)
-
-**Shared Package Dependencies:**
-
-- SarifMark (Shared Package)
+![Software Structure](SoftwareStructureView.svg)
 
 ## Folder Layout
 

@@ -1,5 +1,7 @@
 ### PathHelpers
 
+![Utilities Structure](UtilitiesView.svg)
+
 #### Purpose
 
 `PathHelpers` is a static internal utility class that provides a single method,

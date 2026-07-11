@@ -1,11 +1,11 @@
-## OTS Dependencies
+# OTS Dependencies
 
-SarifMark uses ten OTS software items: nine DEMA Consulting pipeline tools and the
-xUnit v3 testing framework. All ten items are consumed as .NET tools or NuGet packages
+SarifMark uses eleven OTS software items: ten DEMA Consulting pipeline tools and the
+xUnit v3 testing framework. All eleven items are consumed as .NET tools or NuGet packages
 and are managed through the local tool manifest and the project dependency lock files.
 Per-item integration designs are documented in the `ots/` sub-folder.
 
-### Selection Criteria
+## Selection Criteria
 
 OTS items are selected according to the following criteria:
 
@@ -14,7 +14,7 @@ the MIT License under which SarifMark is distributed. Each package must demonstr
 active maintenance through regular releases and publicly available source code.
 
 DEMA Consulting pipeline tools (BuildMark, DemaConsulting.TestResults, FileAssert, Pandoc, ReqStream, ReviewMark,
-SonarMark, VersionMark, WeasyPrint) are preferred because they are designed specifically
+SonarMark, SysML2Tools, VersionMark, WeasyPrint) are preferred because they are designed specifically
 for the Continuous Compliance workflow and provide documented compliance evidence that
 integrates directly with the project's traceability pipeline.
 
@@ -22,7 +22,7 @@ Testing framework selection (xUnit v3) is based on native TRX output support, co
 with the VSTest adapter required by ReqStream, and the established ecosystem around xUnit
 in the .NET community.
 
-### Version Management Policy
+## Version Management Policy
 
 OTS package versions are managed through Dependabot pull requests for NuGet and Node.js
 packages. The local tool manifest (`.config/dotnet-tools.json`) pins all .NET tool
@@ -35,10 +35,12 @@ review to assess whether the integration pattern documented in `ots/{item}.md` r
 accurate. Node.js tool versions are pinned directly in `package.json`, and .NET tool
 versions are pinned in the local tool manifest.
 
-### General Integration Approach
+## General Integration Approach
 
-All OTS items are consumed as CLI tools invoked from CI/CD pipeline scripts or as NuGet
-packages referenced by the test project. No wrapper classes are introduced at the
+All OTS items are consumed as CLI tools invoked from CI/CD pipeline scripts, as a NuGet
+package referenced directly by the main project (DemaConsulting.TestResults, used by the
+SelfTest subsystem to collect and serialize self-validation results), or as a NuGet package
+referenced by the test project (xUnit v3). No wrapper classes are introduced at the
 application level; tools are invoked directly via `dotnet tool run` or their shell
 command, and packages are referenced through standard NuGet project references.
 
@@ -47,7 +49,7 @@ ReviewMark, `requirements.yaml` for ReqStream) or receives all parameters from t
 pipeline script. Errors are propagated through non-zero exit codes and surfaced as
 CI pipeline step failures.
 
-### Qualification Strategy
+## Qualification Strategy
 
 OTS items are qualified through two mechanisms. First, each item's own published CI
 pipeline or test results serve as vendor-provided evidence that the item functions

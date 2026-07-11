@@ -2,8 +2,9 @@
 
 ### Verification Approach
 
-The `Cli` subsystem is verified through tests that operate at the subsystem boundary by calling `Context.Create(string[])`
-directly and asserting the resulting property values and output behavior. Tests are defined in
+The `Cli` subsystem is verified through tests that operate at the subsystem boundary by calling
+`Context.Create(string[])` directly and asserting the resulting property values and output behavior. Tests are
+defined in
 `test/DemaConsulting.SarifMark.Tests/Cli/CliTests.cs` using the xUnit v3 framework. Console streams are redirected via
 `StringWriter` for output assertions. The `Cli` subsystem has no dependencies on other tool subsystems, so no mocking of
 external boundaries is required.
@@ -88,8 +89,12 @@ and write a message; assert the message appears both on the console and in the l
 output is additive rather than replacing console output when silent mode is not active.
 This scenario is tested by `Cli_Create_LogWithoutSilent_WritesToConsoleAndLogFile`.
 
-**Cli_Create_DepthZero_ThrowsArgumentException**: Pass `--depth 0` to `Context.Create`; assert `ArgumentException` is thrown with a message indicating `--depth requires an integer between 1 and 6`, confirming that a depth of zero is rejected.
+**Cli_Create_DepthZero_ThrowsArgumentException**: Pass `--depth 0` to `Context.Create`; assert `ArgumentException`
+is thrown with a message indicating `--depth requires an integer between 1 and 6`, confirming that a depth of
+zero is rejected.
 This scenario is tested by `Cli_Create_DepthZero_ThrowsArgumentException`.
 
-**Cli_Create_DepthNegative_ThrowsArgumentException**: Pass `--depth -1` to `Context.Create`; assert `ArgumentException` is thrown with a message indicating `--depth requires an integer between 1 and 6`, confirming that negative depth values are rejected.
+**Cli_Create_DepthNegative_ThrowsArgumentException**: Pass `--depth -1` to `Context.Create`; assert
+`ArgumentException` is thrown with a message indicating `--depth requires an integer between 1 and 6`, confirming
+that negative depth values are rejected.
 This scenario is tested by `Cli_Create_DepthNegative_ThrowsArgumentException`.

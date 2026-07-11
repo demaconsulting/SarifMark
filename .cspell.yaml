@@ -15,6 +15,7 @@ words:
   - callees
   - Checkmarx
   - Dema
+  - demaconsulting
   - fileassert
   - hotspots
   - Pandoc
@@ -29,6 +30,8 @@ words:
   - sonar
   - SonarQube
   - sonarmark
+  - sysml
+  - sysml2tools
   - Unwritable
   - unopenable
   - versionmark

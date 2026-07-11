@@ -1,5 +1,7 @@
 ### SarifRun
 
+![Sarif Structure](SarifView.svg)
+
 #### Purpose
 
 `SarifRun` is an immutable record that represents all results extracted from a single run

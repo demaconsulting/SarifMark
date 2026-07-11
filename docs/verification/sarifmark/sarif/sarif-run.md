@@ -27,6 +27,11 @@ This scenario is tested by `SarifRun_InternalConstructor_CreatesValidInstance`.
 `false`.
 This scenario is tested by `SarifRun_HasIssues_NoResults_ReturnsFalse`.
 
+**SarifRun_ToMarkdown_NoResults_ShowsFoundNoResults**: Construct a `SarifRun` with an empty results collection and
+call `ToMarkdown(1)`; assert the output contains `Found no issues`, confirming that the zero-result count phrasing
+is used when a run has no findings.
+This scenario is tested by `SarifRun_ToMarkdown_NoResults_ShowsFoundNoResults`.
+
 **SarifRun_ToMarkdown_Depth1_ProducesCorrectOutput**: Call `ToMarkdown(1)`; assert the output uses `#` headings and
 contains the expected tool name and result summary.
 This scenario is tested by `SarifRun_ToMarkdown_Depth1_ProducesCorrectOutput`.

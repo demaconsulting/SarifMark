@@ -9,7 +9,8 @@ tests reside in `test/DemaConsulting.SarifMark.Tests/IntegrationTests.cs` and in
 used at the system level; the full compiled binary is exercised against real SARIF test-data files
 (`sample.sarif`, `multi-result.sarif`, `multi-run.sarif`, `invalid.sarif`) stored in
 `test/DemaConsulting.SarifMark.Tests/TestData/`. The `DemaConsulting.TestResults` OTS package is verified through
-integration tests in `ValidationTests.cs` that exercise the package within the self-validation pipeline. Unit tests exercise individual classes directly with console streams
+integration tests in `ValidationTests.cs` that exercise the package within the self-validation pipeline. Unit
+tests exercise individual classes directly with console streams
 redirected via `StringWriter`. The test framework is xUnit v3, executed via `dotnet test`. Three additional named
 scenarios (`SarifMark_SarifReading`, `SarifMark_MarkdownReportGeneration`, `SarifMark_Enforcement`) are self-validation
 tests invoked through the tool's own `--validate` flag; they are not xUnit test methods but named scenarios reported
@@ -105,10 +106,14 @@ enforcement mode against a SARIF file containing findings and asserts that a non
 confirming that the enforcement logic is correctly exercised from within the self-validation framework.
 This scenario is tested by `SarifMark_Enforcement`.
 
-**SarifMark_CustomHeading_AppearsInReport**: Invoke the tool with `--sarif sample.sarif --report {path} --heading "Custom Analysis"` and assert that the generated report contains `# Custom Analysis`, confirming that the custom heading parameter controls the report section title.
+**SarifMark_CustomHeading_AppearsInReport**: Invoke the tool with
+`--sarif sample.sarif --report {path} --heading "Custom Analysis"` and assert that the generated report contains
+`# Custom Analysis`, confirming that the custom heading parameter controls the report section title.
 This scenario is tested by `SarifMark_CustomHeading_AppearsInReport`.
 
-**SarifMark_MultiRunSarifFile_CreatesReport**: Invoke the tool with `--sarif multi-run.sarif --report {path}` and assert the report file is created and contains sections for both runs (Tool1 and Tool2), confirming that multi-run SARIF files produce a combined report.
+**SarifMark_MultiRunSarifFile_CreatesReport**: Invoke the tool with `--sarif multi-run.sarif --report {path}` and
+assert the report file is created and contains sections for both runs (Tool1 and Tool2), confirming that
+multi-run SARIF files produce a combined report.
 This scenario is tested by `SarifMark_MultiRunSarifFile_CreatesReport`.
 
 **Utilities_SafePathHandling_PathTraversal_ThrowsException**: Call `PathHelpers.SafePathCombine` with a relative path

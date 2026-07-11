@@ -36,6 +36,7 @@ input-files:
   - docs/verification/ots/versionmark.md
   - docs/verification/ots/weasyprint.md
   - docs/verification/ots/test-results.md
+  - docs/verification/ots/sysml2tools.md
   - docs/verification/shared.md
   - docs/verification/shared/sarifmark.md
 template: template.html

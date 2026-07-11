@@ -1,5 +1,7 @@
 ## Cli
 
+![Cli Structure](CliView.svg)
+
 The `Cli` subsystem provides the command-line interface layer for SarifMark. It is
 responsible for accepting user input from the command line and routing all tool output
 to the console and an optional log file.

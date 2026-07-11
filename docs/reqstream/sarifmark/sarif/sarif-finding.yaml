@@ -70,18 +70,3 @@ sections:
                 tags: [internal]
                 tests:
                   - SarifFinding_Constructor_NullStartLine_StartLinePropertyIsNull
-
-              - id: SarifMark-SarifFinding-Internal
-                title: >-
-                  The SarifFinding unit shall not be directly instantiable by consumers
-                  outside
-                  the SarifMark assembly.
-                justification: >-
-                  Restricting construction to the SARIF parsing subsystem enforces
-                  that finding instances are
-                  always produced through the validated parsing pipeline, preventing
-                  external consumers from
-                  creating invalid or inconsistent finding objects.
-                tags: [internal]
-                tests:
-                  - SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties

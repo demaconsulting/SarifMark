@@ -1,5 +1,7 @@
 ### SarifResults
 
+![Sarif Structure](SarifView.svg)
+
 #### Purpose
 
 `SarifResults` is the primary record for working with SARIF file content. It holds the

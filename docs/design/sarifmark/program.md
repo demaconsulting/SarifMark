@@ -1,5 +1,7 @@
 ## Program
 
+![SarifMark Structure](SarifMarkView.svg)
+
 ### Purpose
 
 `Program` is the top-level entry point for the SarifMark tool. It is a static internal

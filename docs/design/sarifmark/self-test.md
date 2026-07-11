@@ -1,5 +1,7 @@
 ## SelfTest
 
+![SelfTest Structure](SelfTestView.svg)
+
 The `SelfTest` subsystem provides the self-validation framework for SarifMark.
 It runs a built-in suite of tests to demonstrate the tool is functioning correctly in the
 deployment environment, without requiring any external static analysis tooling.

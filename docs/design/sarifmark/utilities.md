@@ -1,5 +1,7 @@
 ## Utilities
 
+![Utilities Structure](UtilitiesView.svg)
+
 The `Utilities` subsystem provides shared utility functions for SarifMark. It supplies
 reusable, independently testable helpers that do not belong to any specific feature
 subsystem.
