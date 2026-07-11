@@ -47,7 +47,7 @@ Each of the three self-validation test methods (`RunSarifReadingTest`, `RunMarkd
 `RunMarkdownReportGenerationTest` extracts `context.Depth` and constructs
 `depthArgs = new[] { "--depth", context.Depth.ToString() }`, passing them as `extraArgs` to
 `RunValidationTest`. This ensures report heading depth is consistent between normal analysis
-mode and self-validation mode — the same `--depth` value the caller supplied is honoured
+mode and self-validation mode — the same `--depth` value the caller supplied is honored
 inside the self-validation subprocess. Before comparing the generated report against the
 expected heading, it also writes the actual first line of the generated report to `context`
 as a `"Report heading: ..."` diagnostic line, so the effect of `--depth` on the generated
