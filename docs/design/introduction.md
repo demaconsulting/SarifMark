@@ -47,24 +47,6 @@ diagram or the prose below.
 
 ![Software Structure](SoftwareStructureView.svg)
 
-**OTS Dependencies:**
-
-- BuildMark (OTS)
-- DemaConsulting.TestResults (OTS)
-- FileAssert (OTS)
-- Pandoc (OTS)
-- ReqStream (OTS)
-- ReviewMark (OTS)
-- SonarMark (OTS)
-- SysML2Tools (OTS)
-- VersionMark (OTS)
-- WeasyPrint (OTS)
-- xUnit v3 (OTS)
-
-**Shared Package Dependencies:**
-
-- SarifMark (Shared Package)
-
 ## Folder Layout
 
 - **src/** - source files and projects
