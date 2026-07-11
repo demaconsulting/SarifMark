@@ -43,7 +43,7 @@ end-user usage patterns, or the internal design of OTS items.
 The software structure is modeled in SysML2 under `docs/sysml2/` and rendered to the
 diagram below by SysML2Tools as part of the build pipeline. AI agents should query the
 SysML2 model directly (see the `sysml2tools-query` skill) rather than parsing this
-diagram or the prose below.
+rendered diagram.
 
 ![Software Structure](SoftwareStructureView.svg)
 
