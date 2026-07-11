@@ -23,6 +23,7 @@ package SarifMark {
         part utilities : UtilitiesSubsystem;
 
         part testResults : TestResultsPackage;
+        part sysml2tools : SysML2ToolsTool;
 
         part sarifMarkSharedPackage : SarifMarkSharedPackage;
     }
