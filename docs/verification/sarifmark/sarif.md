@@ -21,6 +21,10 @@ services or network configuration are required.
 - Generated markdown reports contain the expected structure and content.
 - No `Sarif` subsystem requirement may remain without at least one named test scenario (IEC 62304 §5.5.2).
 
+Structural-invalid SARIF boundary cases — a missing `version` property and an empty `runs` array — are verified at
+the unit level by `SarifResults_Read_MissingVersion_ThrowsInvalidOperationException` and
+`SarifResults_Read_EmptyRuns_ThrowsInvalidOperationException`; see *SarifResults Verification Design*.
+
 ### Test Scenarios
 
 **Sarif_Read_ValidSarifFile_ProcessesSuccessfully**: Read `sample.sarif`; assert tool name, version, result count, and

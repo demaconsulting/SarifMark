@@ -1,5 +1,7 @@
 ### SarifFinding
 
+![Sarif Structure](SarifView.svg)
+
 #### Purpose
 
 `SarifFinding` is an immutable record that represents a single static analysis finding

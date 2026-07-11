@@ -1,5 +1,7 @@
 ## Sarif
 
+![Sarif Structure](SarifView.svg)
+
 The `Sarif` subsystem is responsible for reading SARIF 2.1.0 files and generating
 markdown reports from the extracted results. It provides the core analysis capability
 of SarifMark through a three-record immutable pipeline.

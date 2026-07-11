@@ -1,5 +1,7 @@
 # SarifMark
 
+![SarifMark Structure](SarifMarkView.svg)
+
 ## Architecture
 
 SarifMark is organized into four subsystems plus a system-level entry point:
@@ -85,6 +87,19 @@ provides path-safety helpers shared across the system.
 - *Constraints*: File extension must be `.trx` or `.xml`; other extensions produce an
   error message. I/O errors are caught and reported through the CLI output channel.
 
+**Log File Output**: The optional log file written when `--log` is specified.
+
+- *Type*: File
+- *Role*: Provider (the tool writes the file to disk)
+- *Contract*: When `--log <file>` is supplied, every message normally written to the
+  console (including error messages) is additionally written as a line to the log file.
+  Console output is still written unless `--silent` is also specified, but log file
+  output is unaffected by `--silent`.
+- *Constraints*: The log file is opened for writing (truncating any existing content)
+  before any other processing begins. If the file cannot be opened, an
+  `InvalidOperationException` is thrown, reported as an error with exit code 1. The log
+  file is flushed after every write and closed when the tool exits.
+
 ## Dependencies
 
 - **xUnit v3**: the testing framework used for all automated unit and integration tests —
@@ -107,6 +122,8 @@ provides path-safety helpers shared across the system.
   see *WeasyPrint Integration Design*
 - **DemaConsulting.TestResults**: the OTS package used by the self-validation subsystem to collect, format, and
   serialize test results — see *TestResults Integration Design*
+- **SarifMark**: a released version of SarifMark itself, invoked as a shared package in the
+  CI pipeline to generate the CodeQL quality report — see *SarifMark Shared Package Integration Design*
 
 ## Risk Control Measures
 

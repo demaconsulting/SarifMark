@@ -13,6 +13,7 @@ needs-review:
   - docs/design/**/*.md
   - docs/verification/**/*.md
   - docs/user_guide/**/*.md
+  - docs/sysml2/**/*.sysml
   - '!**/obj/**'
   - '!**/bin/**'
   - '!**/generated/**'
@@ -23,23 +24,38 @@ evidence-source:
   type: url
   location: https://raw.githubusercontent.com/demaconsulting/SarifMark/reviews/index.json
 
+# Global context shown to every reviewer for orientation but not fingerprinted.
+context:
+  - docs/design/introduction.md
+
 # Review sets following hierarchical scope principles.
 # Each review-set focuses on a single compliance question with manageable file counts.
 reviews:
 
   # Purpose
   - id: Purpose
-    title: Review that Advertised Features Match System Design
+    title: Review that README and User Guide are Coherent and Complete
     paths:
       - README.md
       - docs/user_guide/**/*.md
-      - docs/reqstream/sarifmark.yaml
+
+  # Decomposition
+  - id: Decomposition
+    title: Review that SarifMark Decomposition Addresses the Stated Purpose
+    context:
+      - README.md
+      - docs/user_guide/**/*.md
+    paths:
+      - requirements.yaml
       - docs/design/introduction.md
-      - docs/design/sarifmark.md
+      - docs/sysml2/**/*.sysml
 
   # SarifMark - Specials
   - id: SarifMark-Architecture
     title: Review that SarifMark Architecture Satisfies Requirements
+    context:
+      - README.md
+      - docs/user_guide/**/*.md
     paths:
       - docs/reqstream/sarifmark.yaml
       - docs/design/introduction.md
@@ -54,17 +70,21 @@ reviews:
 
   - id: SarifMark-Design
     title: Review that SarifMark Design is Consistent and Complete
-    paths:
+    context:
       - docs/reqstream/sarifmark.yaml
+    paths:
       - docs/reqstream/sarifmark/platform-requirements.yaml
       - docs/design/introduction.md
       - docs/design/sarifmark.md
       - docs/design/sarifmark/**/*.md
+      - docs/design/ots.md
+      - docs/design/shared.md
 
   - id: SarifMark-Verification
     title: Review that SarifMark Verification is Consistent and Complete
-    paths:
+    context:
       - docs/reqstream/sarifmark.yaml
+    paths:
       - docs/verification/introduction.md
       - docs/verification/sarifmark.md
       - docs/verification/sarifmark/**/*.md
@@ -73,6 +93,9 @@ reviews:
 
   - id: SarifMark-AllRequirements
     title: Review that All SarifMark Requirements are Complete
+    context:
+      - docs/design/sarifmark.md
+      - docs/reqstream/sarifmark.yaml
     paths:
       - requirements.yaml
       - docs/reqstream/sarifmark.yaml
@@ -82,6 +105,9 @@ reviews:
   # SarifMark - Program
   - id: SarifMark-Program
     title: Review that SarifMark Program Implementation is Correct
+    context:
+      - docs/design/sarifmark.md
+      - docs/reqstream/sarifmark.yaml
     paths:
       - docs/reqstream/sarifmark/program.yaml
       - docs/design/sarifmark/program.md
@@ -92,6 +118,9 @@ reviews:
   # SarifMark - Cli
   - id: SarifMark-Cli
     title: Review that SarifMark Cli Satisfies Subsystem Requirements
+    context:
+      - docs/design/sarifmark.md
+      - docs/reqstream/sarifmark.yaml
     paths:
       - docs/reqstream/sarifmark/cli.yaml
       - docs/design/sarifmark/cli.md
@@ -100,6 +129,11 @@ reviews:
 
   - id: SarifMark-Cli-Context
     title: Review that SarifMark Cli Context Implementation is Correct
+    context:
+      - docs/design/sarifmark.md
+      - docs/reqstream/sarifmark.yaml
+      - docs/design/sarifmark/cli.md
+      - docs/reqstream/sarifmark/cli.yaml
     paths:
       - docs/reqstream/sarifmark/cli/context.yaml
       - docs/design/sarifmark/cli/context.md
@@ -110,6 +144,9 @@ reviews:
   # SarifMark - Sarif
   - id: SarifMark-Sarif
     title: Review that SarifMark Sarif Satisfies Subsystem Requirements
+    context:
+      - docs/design/sarifmark.md
+      - docs/reqstream/sarifmark.yaml
     paths:
       - docs/reqstream/sarifmark/sarif.yaml
       - docs/design/sarifmark/sarif.md
@@ -118,6 +155,11 @@ reviews:
 
   - id: SarifMark-Sarif-SarifFinding
     title: Review that SarifMark Sarif SarifFinding Implementation is Correct
+    context:
+      - docs/design/sarifmark.md
+      - docs/reqstream/sarifmark.yaml
+      - docs/design/sarifmark/sarif.md
+      - docs/reqstream/sarifmark/sarif.yaml
     paths:
       - docs/reqstream/sarifmark/sarif/sarif-finding.yaml
       - docs/design/sarifmark/sarif/sarif-finding.md
@@ -127,6 +169,11 @@ reviews:
 
   - id: SarifMark-Sarif-SarifRun
     title: Review that SarifMark Sarif SarifRun Implementation is Correct
+    context:
+      - docs/design/sarifmark.md
+      - docs/reqstream/sarifmark.yaml
+      - docs/design/sarifmark/sarif.md
+      - docs/reqstream/sarifmark/sarif.yaml
     paths:
       - docs/reqstream/sarifmark/sarif/sarif-run.yaml
       - docs/design/sarifmark/sarif/sarif-run.md
@@ -136,6 +183,11 @@ reviews:
 
   - id: SarifMark-Sarif-SarifResults
     title: Review that SarifMark Sarif SarifResults Implementation is Correct
+    context:
+      - docs/design/sarifmark.md
+      - docs/reqstream/sarifmark.yaml
+      - docs/design/sarifmark/sarif.md
+      - docs/reqstream/sarifmark/sarif.yaml
     paths:
       - docs/reqstream/sarifmark/sarif/sarif-results.yaml
       - docs/design/sarifmark/sarif/sarif-results.md
@@ -146,6 +198,9 @@ reviews:
   # SarifMark - SelfTest
   - id: SarifMark-SelfTest
     title: Review that SarifMark SelfTest Satisfies Subsystem Requirements
+    context:
+      - docs/design/sarifmark.md
+      - docs/reqstream/sarifmark.yaml
     paths:
       - docs/reqstream/sarifmark/self-test.yaml
       - docs/design/sarifmark/self-test.md
@@ -154,6 +209,11 @@ reviews:
 
   - id: SarifMark-SelfTest-Validation
     title: Review that SarifMark SelfTest Validation Implementation is Correct
+    context:
+      - docs/design/sarifmark.md
+      - docs/reqstream/sarifmark.yaml
+      - docs/design/sarifmark/self-test.md
+      - docs/reqstream/sarifmark/self-test.yaml
     paths:
       - docs/reqstream/sarifmark/self-test/validation.yaml
       - docs/design/sarifmark/self-test/validation.md
@@ -164,6 +224,9 @@ reviews:
   # SarifMark - Utilities
   - id: SarifMark-Utilities
     title: Review that SarifMark Utilities Satisfies Subsystem Requirements
+    context:
+      - docs/design/sarifmark.md
+      - docs/reqstream/sarifmark.yaml
     paths:
       - docs/reqstream/sarifmark/utilities.yaml
       - docs/design/sarifmark/utilities.md
@@ -172,6 +235,11 @@ reviews:
 
   - id: SarifMark-Utilities-PathHelpers
     title: Review that SarifMark Utilities PathHelpers Implementation is Correct
+    context:
+      - docs/design/sarifmark.md
+      - docs/reqstream/sarifmark.yaml
+      - docs/design/sarifmark/utilities.md
+      - docs/reqstream/sarifmark/utilities.yaml
     paths:
       - docs/reqstream/sarifmark/utilities/path-helpers.yaml
       - docs/design/sarifmark/utilities/path-helpers.md
@@ -229,6 +297,13 @@ reviews:
       - docs/design/ots/sonarmark.md
       - docs/verification/ots/sonarmark.md
 
+  - id: OTS-SysML2Tools
+    title: Review that SysML2Tools Provides Required Functionality
+    paths:
+      - docs/reqstream/ots/sysml2tools.yaml
+      - docs/design/ots/sysml2tools.md
+      - docs/verification/ots/sysml2tools.md
+
   - id: OTS-VersionMark
     title: Review that VersionMark Provides Required Functionality
     paths:
@@ -243,7 +318,7 @@ reviews:
       - docs/design/ots/weasyprint.md
       - docs/verification/ots/weasyprint.md
 
-  - id: SarifMark-OTS-TestResults
+  - id: OTS-TestResults
     title: Review that TestResults Provides Required Functionality
     paths:
       - docs/reqstream/ots/test-results.yaml
@@ -251,7 +326,7 @@ reviews:
       - docs/verification/ots/test-results.md
 
   # Shared Packages
-  - id: SarifMark-Shared-SarifMark
+  - id: Shared-SarifMark
     title: Review that Shared SarifMark Package Provides Required Functionality
     paths:
       - docs/reqstream/shared/sarifmark.yaml

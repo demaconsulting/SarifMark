@@ -52,10 +52,10 @@ public class SarifRunTests
     [Fact]
     public void SarifRun_HasIssues_NoResults_ReturnsFalse()
     {
-        // Arrange
+        // Arrange: create a SarifRun with an empty results collection
         var run = new SarifRun("Tool", "1.0", [], 0);
 
-        // Act & Assert
+        // Act & Assert: HasIssues reports false when the run has no findings
         Assert.False(run.HasIssues);
     }
 
@@ -65,13 +65,13 @@ public class SarifRunTests
     [Fact]
     public void SarifRun_HasIssues_WithResults_ReturnsTrue()
     {
-        // Arrange
+        // Arrange: create a single finding to populate the run's results collection
         var results = new List<SarifFinding> { new SarifFinding("R1", "warning", "msg", null, null) };
 
-        // Act
+        // Act: construct a SarifRun containing that finding
         var run = new SarifRun("Tool", "1.0", results, 0);
 
-        // Assert
+        // Assert: HasIssues reports true when the run contains at least one finding
         Assert.True(run.HasIssues);
     }
 
@@ -81,13 +81,13 @@ public class SarifRunTests
     [Fact]
     public void SarifRun_ToMarkdown_NoResults_ShowsFoundNoResults()
     {
-        // Arrange
+        // Arrange: create a SarifRun with an empty results collection
         var run = new SarifRun("Tool", "1.0", [], 0);
 
-        // Act
+        // Act: generate the markdown report at heading depth 1
         var md = run.ToMarkdown(1);
 
-        // Assert
+        // Assert: the report uses the zero-result phrasing "Found no issues"
         Assert.Contains("Found no issues", md);
     }
 

@@ -43,9 +43,11 @@ This scenario is tested by `SelfTest_ResultsFile_XmlPath_WritesJUnitFile`.
 mode detects issues and returns a non-zero exit code when issues are present.
 This scenario is tested by `SelfTest_EnforcementTest_RunsWithinValidation`.
 
-**SelfTest_DepthParameter_AffectsSelfValidationReport**: Invoke `--validate --depth 2`; assert self-validation passes
-and the markdown report generation scenario (`SarifMark_MarkdownReportGeneration`) is reported as passed, confirming
-the depth parameter is accepted and propagated to the self-validation report generation test.
+**SelfTest_DepthParameter_AffectsSelfValidationReport**: Invoke `--validate --depth 2`; assert self-validation passes,
+the markdown report generation scenario (`SarifMark_MarkdownReportGeneration`) is reported as passed, and the logged
+report heading independently shows the level-2 (`##`) heading rather than the level-1 (`#`) default, confirming that
+the depth parameter has an observable effect on the generated self-validation report rather than merely being
+accepted and echoed back.
 This scenario is tested by `SelfTest_DepthParameter_AffectsSelfValidationReport`.
 
 **SelfTest_EnforceFlag_WithIssues_ReturnsNonZeroExitCode**: Invoke `Program.Main` with `--sarif sample.sarif --enforce`

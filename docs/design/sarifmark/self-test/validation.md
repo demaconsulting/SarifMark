@@ -1,5 +1,7 @@
 ### Validation
 
+![SelfTest Structure](SelfTestView.svg)
+
 #### Purpose
 
 `Validation` is a static class that provides the self-validation framework for SarifMark.
@@ -46,7 +48,12 @@ Each of the three self-validation test methods (`RunSarifReadingTest`, `RunMarkd
 `depthArgs = new[] { "--depth", context.Depth.ToString() }`, passing them as `extraArgs` to
 `RunValidationTest`. This ensures report heading depth is consistent between normal analysis
 mode and self-validation mode — the same `--depth` value the caller supplied is honoured
-inside the self-validation subprocess.
+inside the self-validation subprocess. Before comparing the generated report against the
+expected heading, it also writes the actual first line of the generated report to `context`
+as a `"Report heading: ..."` diagnostic line, so the effect of `--depth` on the generated
+report is independently observable in the self-validation log rather than only visible
+through an internal comparison against the same `context.Depth` value used to build the
+expectation.
 
 **WriteResultsFile** (private): Serializes the `TestResults` collection.
 

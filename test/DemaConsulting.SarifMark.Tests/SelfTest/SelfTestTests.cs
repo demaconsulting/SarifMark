@@ -137,9 +137,15 @@ public class SelfTestTests
                 Assert.Equal(0, context.ExitCode);
             }
 
-            // Assert - the depth-sensitive report generation test passes
+            // Assert - the depth-sensitive report generation test passes, and the logged report
+            // heading independently shows a level-2 ("##") heading. The expected prefix is a
+            // literal hard-coded string (not derived from context.Depth), so a regression that
+            // causes --depth to be silently ignored - and the report to fall back to the level-1
+            // ("#") default - would be caught even though the depth argument still parses to "2".
             var output = File.ReadAllText(logFile);
             Assert.Contains("SarifMark_MarkdownReportGeneration - Passed", output);
+            Assert.Contains("Report heading: ## MockTool Analysis", output);
+            Assert.DoesNotContain("Report heading: # MockTool Analysis", output);
         }
         finally
         {
