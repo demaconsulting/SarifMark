@@ -18,7 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using Xunit.Sdk;
+using Xunit.v3;
+
 // Disable parallel test execution to prevent Console.Out/Console.Error redirection conflicts
 // in ProgramTests, which captures console output for assertion purposes.
-// CollectionBehavior controls xUnit's test parallelization.
-[assembly: CollectionBehavior(DisableTestParallelization = true)]
+[assembly: Parallelization(Mode = ParallelMode.None)]
