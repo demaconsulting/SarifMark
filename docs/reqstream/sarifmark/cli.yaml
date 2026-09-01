@@ -29,12 +29,12 @@ sections:
               and log-file settings to uniformly suppress or redirect output
               without requiring each operation to manage its own output destination.
             tags: [public]
-            tests:
-              - Cli_Create_SilentFlag_SuppressesOutput
-              - Cli_Create_LogFile_WritesOutputToFile
             children:
               - SarifMark-Context-WriteLine-Console
               - SarifMark-Context-WriteLine-Log
+            tests:
+              - Cli_Create_SilentFlag_SuppressesOutput
+              - Cli_Create_LogFile_WritesOutputToFile
 
           - id: SarifMark-Cli-Version
             title: The CLI shall recognize the --version flag.
