@@ -18,6 +18,8 @@ sections:
                   complete result regardless of individual test outcomes, giving
                   users a reliable picture of the tool's health in their environment.
                 tags: [internal]
+                children:
+                  - SarifMark-OTS-TestResults-Collect
                 tests:
                   - Validation_Run_ValidContext_RunsAllTests
 
@@ -183,6 +185,8 @@ sections:
                   Azure DevOps CI/CD
                   platforms, providing structured test result reporting.
                 tags: [internal]
+                children:
+                  - SarifMark-OTS-TestResults-WriteTrx
                 tests:
                   - Validation_Run_WithTrxResultsFile_WritesResultsFile
 
@@ -196,6 +200,8 @@ sections:
                   GitHub Actions, and other
                   CI/CD platforms that consume standard JUnit test result files.
                 tags: [internal]
+                children:
+                  - SarifMark-OTS-TestResults-WriteJUnit
                 tests:
                   - Validation_Run_WithXmlResultsFile_WritesResultsFile
 

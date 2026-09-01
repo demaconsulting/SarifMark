@@ -89,6 +89,9 @@ sections:
                   "Unknown" when
                   optional fields are absent.
                 tags: [internal]
+                children:
+                  - SarifMark-SarifRun-ToolName
+                  - SarifMark-SarifRun-ToolVersion
                 tests:
                   - SarifResults_Read_MissingTool_ThrowsInvalidOperationException
                   - SarifResults_Read_MissingDriver_ThrowsInvalidOperationException
@@ -126,6 +129,12 @@ sections:
                   and that no findings
                   are silently dropped during parsing.
                 tags: [internal]
+                children:
+                  - SarifMark-SarifRun-Results
+                  - SarifMark-SarifRun-ResultCount
+                  - SarifMark-SarifFinding-RuleId
+                  - SarifMark-SarifFinding-Message
+                  - SarifMark-SarifFinding-Severity
                 tests:
                   - SarifResults_Read_NoResults_ReturnsValidResults
                   - SarifResults_Read_EmptyResults_ReturnsValidResults
@@ -156,6 +165,11 @@ sections:
                   document
                   for a single tool run without additional indexing overhead.
                 tags: [internal]
+                children:
+                  - SarifMark-SarifRun-ToMarkdown
+                  - SarifMark-SarifRun-ValidateDepth
+                  - SarifMark-SarifRun-FormatLocation
+                  - SarifMark-SarifRun-FormatCount
                 tests:
                   - SarifResults_ToMarkdown_Depth1_ProducesCorrectOutput
                   - SarifResults_ToMarkdown_CustomHeading_UsesProvidedHeading
@@ -213,6 +227,8 @@ sections:
                   for that run
                   without reading the raw SARIF file.
                 tags: [internal]
+                children:
+                  - SarifMark-SarifRun-FileCount
                 tests:
                   - SarifResults_Read_NoArtifacts_ReturnsZeroFileCount
                   - SarifResults_Read_WithArtifacts_ReturnsFileCount
@@ -239,6 +255,8 @@ sections:
                   logic by not requiring
                   callers to iterate all runs manually.
                 tags: [internal]
+                children:
+                  - SarifMark-SarifRun-HasIssues
                 tests:
                   - SarifResults_HasIssues_NoIssues_ReturnsFalse
                   - SarifResults_HasIssues_WithIssues_ReturnsTrue
