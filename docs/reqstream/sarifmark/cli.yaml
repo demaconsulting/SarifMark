@@ -32,6 +32,9 @@ sections:
             tests:
               - Cli_Create_SilentFlag_SuppressesOutput
               - Cli_Create_LogFile_WritesOutputToFile
+            children:
+              - SarifMark-Context-WriteLine-Console
+              - SarifMark-Context-WriteLine-Log
 
           - id: SarifMark-Cli-Version
             title: The CLI shall recognize the --version flag.
@@ -81,6 +84,8 @@ sections:
             tags: [public]
             children:
               - SarifMark-Context-LogParam
+              - SarifMark-Context-LogParam-MissingValue
+              - SarifMark-Context-Dispose
             tests:
               - Cli_Create_LogFile_WritesOutputToFile
 
@@ -122,6 +127,7 @@ sections:
               - SarifMark-Context-WriteError-Stderr
               - SarifMark-Context-WriteError-Log
               - SarifMark-Context-WriteError-ExitCode
+              - SarifMark-Context-ExitCode
             tests:
               - Cli_WriteError_WithMessage_SetsExitCodeToOne
 
@@ -159,6 +165,7 @@ sections:
             tags: [public]
             children:
               - SarifMark-Context-SarifParam
+              - SarifMark-Context-SarifParam-MissingValue
             tests:
               - Cli_Create_SarifParameter_SetsSarifFilePath
 
@@ -171,6 +178,7 @@ sections:
             tags: [public]
             children:
               - SarifMark-Context-ReportParam
+              - SarifMark-Context-ReportParam-MissingValue
             tests:
               - Cli_Create_ReportParameter_SetsReportFilePath
 
@@ -184,6 +192,8 @@ sections:
             tags: [public]
             children:
               - SarifMark-Context-ReportDepthParam
+              - SarifMark-Context-ReportDepthValidation
+              - SarifMark-Context-ReportDepthDefault
             tests:
               - Cli_Create_DepthParameter_SetsDepth
               - Cli_Create_DepthInvalidValue_ThrowsArgumentException
@@ -211,6 +221,7 @@ sections:
             tags: [public]
             children:
               - SarifMark-Context-ResultsParam
+              - SarifMark-Context-ResultsParam-MissingValue
             tests:
               - Cli_Create_ResultsParameter_SetsResultsFilePath
 
@@ -224,6 +235,7 @@ sections:
             tags: [public]
             children:
               - SarifMark-Context-ReportDepthParam
+              - SarifMark-Context-ReportDepthAlias
             tests:
               - Cli_Create_ReportDepthParameter_SetsReportDepth
 

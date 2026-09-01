@@ -13,6 +13,11 @@ sections:
           troubleshooting and compatibility verification.
         children:
           - SarifMark-Program-Version
+          - SarifMark-Program-ParseArgs
+          - SarifMark-Program-Dispatch
+          - SarifMark-Program-ExitCode
+          - SarifMark-Program-Run
+          - SarifMark-Program-Banner
         tests:
           - SarifMark_VersionFlag_OutputsVersion
 
@@ -49,6 +54,7 @@ sections:
           accidental execution without proper input, improving tool safety and predictability.
         children:
           - SarifMark-Sarif-FilePaths
+          - SarifMark-Program-SarifArgument
         tests:
           - SarifMark_MissingSarifParameter_ShowsError
 
@@ -128,6 +134,7 @@ sections:
           Rejecting unknown arguments prevents silent failures from typos.
         children:
           - SarifMark-Cli-InvalidArgs
+          - SarifMark-Program-Main-Exceptions
         tests:
           - SarifMark_UnknownArgument_ShowsError
 

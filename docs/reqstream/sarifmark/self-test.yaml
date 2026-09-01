@@ -15,6 +15,16 @@ sections:
             tags: [public]
             children:
               - SarifMark-Validation-Run
+              - SarifMark-Validation-NullCheck
+              - SarifMark-Validation-Header
+              - SarifMark-Validation-Header-ToolVersion
+              - SarifMark-Validation-Header-MachineName
+              - SarifMark-Validation-Header-OsVersion
+              - SarifMark-Validation-Header-Runtime
+              - SarifMark-Validation-Header-Timestamp
+              - SarifMark-Validation-SarifReadingTest
+              - SarifMark-Validation-Summary
+              - SarifMark-Validation-TempDir
             tests:
               - SelfTest_ValidateFlag_RunsSelfValidation
 
@@ -28,6 +38,9 @@ sections:
             children:
               - SarifMark-Validation-TrxResultsFile
               - SarifMark-Validation-XmlResultsFile
+              - SarifMark-Validation-ResultsOutput
+              - SarifMark-Validation-UnsupportedResultsFile
+              - SarifMark-Validation-WriteResultsFile-IOFailure
             tests:
               - SelfTest_ResultsFile_TrxPath_WritesTrxFile
               - SelfTest_ResultsFile_XmlPath_WritesJUnitFile

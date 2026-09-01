@@ -58,6 +58,7 @@ sections:
             children:
               - SarifMark-SarifResults-ParseResults
               - SarifMark-SarifResults-FilterSuppressions
+              - SarifMark-SarifResults-HasIssues
             tests:
               - Sarif_Read_ValidSarifFile_ProcessesSuccessfully
 
@@ -129,5 +130,6 @@ sections:
             children:
               - SarifMark-SarifResults-Runs
               - SarifMark-SarifResults-MultiRunMarkdown
+              - SarifMark-SarifResults-ToMarkdownMultiRun
             tests:
               - Sarif_Read_MultiRunSarifFile_ProcessesAllRuns
