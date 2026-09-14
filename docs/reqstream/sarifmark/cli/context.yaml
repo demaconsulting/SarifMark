@@ -114,6 +114,7 @@ sections:
                 tags: [internal]
                 tests:
                   - Context_Create_SarifWithoutValue_ThrowsArgumentException
+                  - Context_Create_SarifFollowedByOption_ThrowsArgumentException
 
               - id: SarifMark-Context-ReportParam
                 title: The Context unit shall capture the --report parameter value
@@ -153,6 +154,7 @@ sections:
                 tests:
                   - Context_Create_DepthParameter_SetsDepth
                   - Context_Create_DepthWithoutValue_ThrowsArgumentException
+                  - Context_Create_DepthFollowedByOption_ThrowsArgumentException
 
               - id: SarifMark-Context-ReportDepthAlias
                 title: The Context unit shall accept --report-depth as a legacy alias
@@ -254,6 +256,33 @@ sections:
                 tags: [internal]
                 tests:
                   - Context_Create_ResultsWithoutValue_ThrowsArgumentException
+
+              - id: SarifMark-Context-ExcludeParam
+                title: >-
+                  The Context unit shall accumulate one --exclude glob pattern per
+                  occurrence of the parameter into an ordered, repeatable collection.
+                justification: >-
+                  Accumulating one entry per occurrence, rather than overwriting a
+                  single value, lets users supply multiple independent exclusion
+                  patterns (for example one per generated-code directory) in a single
+                  invocation.
+                tags: [internal]
+                tests:
+                  - Context_Create_ExcludeParameter_AddsGlobToExcludeGlobs
+                  - Context_Create_ExcludeParameter_RepeatedFlag_AccumulatesAllGlobs
+                  - Context_Create_NoExcludeParameter_ReturnsEmptyExcludeGlobs
+
+              - id: SarifMark-Context-ExcludeParam-MissingValue
+                title: The Context unit shall throw ArgumentException when --exclude
+                  is provided without a value.
+                justification: >-
+                  Detecting a missing value immediately prevents downstream filtering
+                  from receiving a null or empty glob pattern, producing a clear diagnostic
+                  message that identifies the exact flag that is missing its argument.
+                tags: [internal]
+                tests:
+                  - Context_Create_ExcludeWithoutValue_ThrowsArgumentException
+                  - Context_Create_ExcludeFollowedByOption_ThrowsArgumentException
 
               - id: SarifMark-Context-LogParam
                 title: >-

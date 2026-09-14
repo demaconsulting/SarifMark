@@ -51,7 +51,9 @@ provides path-safety helpers shared across the system.
 - *Type*: CLI
 - *Role*: Provider (the tool accepts arguments from the shell)
 - *Contract*: Accepts flags and parameters (`--sarif`, `--report`, `--depth`, `--heading`,
-  `--validate`, `--results`, `--enforce`, `--log`, `--silent`, `--version`, `--help`).
+  `--exclude`, `--validate`, `--results`, `--enforce`, `--log`, `--silent`, `--version`, `--help`).
+  `--exclude <glob>` is repeatable and removes findings whose `Uri` matches the supplied
+  glob pattern before enforcement and report generation.
   `--report-depth` is a **deprecated** alias for `--depth` and `--result` is a **deprecated** alias
   for `--results`; both are accepted identically to their canonical forms but are intentionally
   omitted from the `--help` output.
@@ -122,6 +124,8 @@ provides path-safety helpers shared across the system.
   see *WeasyPrint Integration Design*
 - **DemaConsulting.TestResults**: the OTS package used by the self-validation subsystem to collect, format, and
   serialize test results — see *TestResults Integration Design*
+- **Microsoft.Extensions.FileSystemGlobbing**: the OTS package used by `SarifResults.Exclude` to match finding
+  `Uri` values against user-supplied `--exclude` glob patterns — see *FileSystemGlobbing Integration Design*
 - **SarifMark**: a released version of SarifMark itself, invoked as a shared package in the
   CI pipeline to generate the CodeQL quality report — see *SarifMark Shared Package Integration Design*
 
@@ -139,11 +143,13 @@ The primary analysis data flow from SARIF input to markdown output:
 4. In analysis mode, `SarifResults.Read` validates the file path, parses the JSON, validates
    the SARIF structure, and constructs an immutable graph of `SarifRun` and `SarifFinding`
    records.
-5. `SarifResults.ToMarkdown` traverses the record graph and produces a UTF-8 markdown string.
-6. If `--report` was supplied, the markdown string is written to the specified file with
+5. If `--exclude` glob patterns were supplied, `SarifResults.Exclude` removes findings whose
+   `Uri` matches any of the patterns before enforcement or report generation.
+6. `SarifResults.ToMarkdown` traverses the record graph and produces a UTF-8 markdown string.
+7. If `--report` was supplied, the markdown string is written to the specified file with
    `File.WriteAllText`.
-7. If `--enforce` is set and issues were found, `Context.WriteError` sets the exit code to 1.
-8. `Program.Main` returns `Context.ExitCode` to the shell.
+8. If `--enforce` is set and issues were found, `Context.WriteError` sets the exit code to 1.
+9. `Program.Main` returns `Context.ExitCode` to the shell.
 
 The self-validation flow is a separate path in step 3 where `Validation.Run` exercises the
 analysis flow end-to-end using a mock SARIF file and verifies the output.

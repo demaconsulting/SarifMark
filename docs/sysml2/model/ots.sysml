@@ -16,4 +16,12 @@ package OtsDependencies {
         comment verificationRef /* Verification: docs/verification/ots/sysml2tools.md */
         comment reqRef /* Requirements: docs/reqstream/ots/sysml2tools.yaml */
     }
+
+    part def FileSystemGlobbingPackage {
+        doc /* OTS: Microsoft.Extensions.FileSystemGlobbing. */
+
+        comment designRef /* Design: docs/design/ots/filesystem-globbing.md */
+        comment verificationRef /* Verification: docs/verification/ots/filesystem-globbing.md */
+        comment reqRef /* Requirements: docs/reqstream/ots/filesystem-globbing.yaml */
+    }
 }

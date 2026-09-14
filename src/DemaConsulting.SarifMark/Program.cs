@@ -169,6 +169,7 @@ internal static class Program
         context.WriteLine("  --enforce                  Return non-zero exit code if issues found");
         context.WriteLine("  --log <file>               Write output to log file");
         context.WriteLine("  --sarif <file>             SARIF file to process");
+        context.WriteLine("  --exclude <glob>           Exclude findings whose location matches glob (repeatable)");
         context.WriteLine("  --report <file>            Export analysis results to markdown file");
         context.WriteLine("  --depth <depth>            Markdown header depth for report (1-6, default: 1)");
         context.WriteLine("  --heading <text>           Custom heading for report (default: [ToolName] Analysis)");
@@ -180,7 +181,10 @@ internal static class Program
     /// <remarks>
     ///     This method performs file I/O by reading the SARIF file specified in
     ///     <see cref="Context.SarifFile"/> and optionally writing a markdown report to
-    ///     <see cref="Context.ReportFile"/>. The following exception types are absorbed and
+    ///     <see cref="Context.ReportFile"/>. When <see cref="Context.ExcludeGlobs"/> is
+    ///     non-empty, <see cref="SarifResults.Exclude"/> is applied immediately after reading
+    ///     and before the enforcement check or report generation, so excluded findings never
+    ///     influence either downstream step. The following exception types are absorbed and
     ///     routed through <see cref="Context.WriteError"/> rather than propagated:
     ///     <see cref="FileNotFoundException"/> and <see cref="InvalidOperationException"/> (SARIF
     ///     read failures — I/O and access errors are wrapped as <see cref="InvalidOperationException"/>
@@ -221,6 +225,16 @@ internal static class Program
         {
             context.WriteError($"Error: {ex.Message}");
             return;
+        }
+
+        // Apply --exclude glob filtering, if requested, before enforcement or report
+        // generation so that excluded findings never influence either downstream step
+        if (context.ExcludeGlobs.Count > 0)
+        {
+            var beforeCount = sarifResults.Runs.Sum(run => run.ResultCount);
+            sarifResults = sarifResults.Exclude(context.ExcludeGlobs);
+            var afterCount = sarifResults.Runs.Sum(run => run.ResultCount);
+            context.WriteLine($"Excluded {beforeCount - afterCount} finding(s) matching --exclude patterns.");
         }
 
         // Check enforcement if requested

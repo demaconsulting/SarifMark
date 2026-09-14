@@ -214,3 +214,41 @@ This scenario is tested by `SarifResults_HasIssues_WithIssues_ReturnsTrue`.
 **SarifResults_HasIssues_AnyRunHasIssues_ReturnsTrue**: Pass a multi-run SARIF where at least one run has findings;
 assert `HasIssues` is `true`.
 This scenario is tested by `SarifResults_HasIssues_AnyRunHasIssues_ReturnsTrue`.
+
+**SarifResults_Exclude_SinglePatternMatch_RemovesMatchingFinding**: Construct a `SarifResults` with one finding
+whose `Uri` matches a single supplied glob pattern; call `Exclude`; assert the finding is removed.
+This scenario is tested by `SarifResults_Exclude_SinglePatternMatch_RemovesMatchingFinding`.
+
+**SarifResults_Exclude_MultiplePatterns_RemovesAnyMatchingFinding**: Construct a `SarifResults` with findings
+matching different glob patterns among several supplied patterns; call `Exclude`; assert any matching finding is
+removed.
+This scenario is tested by `SarifResults_Exclude_MultiplePatterns_RemovesAnyMatchingFinding`.
+
+**SarifResults_Exclude_NoMatch_RetainsAllFindings**: Construct a `SarifResults` with findings whose `Uri` values do
+not match the supplied glob pattern; call `Exclude`; assert all findings are retained.
+This scenario is tested by `SarifResults_Exclude_NoMatch_RetainsAllFindings`.
+
+**SarifResults_Exclude_NullUri_RetainsFinding**: Construct a `SarifResults` with a finding whose `Uri` is `null`;
+call `Exclude` with a matching pattern; assert the finding is retained regardless.
+This scenario is tested by `SarifResults_Exclude_NullUri_RetainsFinding`.
+
+**SarifResults_Exclude_RecursiveDoubleStarGlob_MatchesNestedPaths**: Construct a `SarifResults` with a finding at
+a deeply nested path; call `Exclude` with a `**`-prefixed glob pattern; assert the finding is removed.
+This scenario is tested by `SarifResults_Exclude_RecursiveDoubleStarGlob_MatchesNestedPaths`.
+
+**SarifResults_Exclude_EmptyGlobList_ReturnsAllFindings**: Call `Exclude` with an empty pattern list; assert the
+same `SarifResults` instance is returned and all findings are unchanged.
+This scenario is tested by `SarifResults_Exclude_EmptyGlobList_ReturnsAllFindings`.
+
+**SarifResults_Exclude_MultiRun_FiltersEachRunIndependently**: Construct a `SarifResults` with multiple `SarifRun`
+instances; call `Exclude`; assert filtering is applied independently to each run.
+This scenario is tested by `SarifResults_Exclude_MultiRun_FiltersEachRunIndependently`.
+
+**SarifResults_Exclude_PreservesRunMetadata**: Call `Exclude` on a `SarifResults` with known `ToolName`,
+`ToolVersion`, and `FileCount` values; assert those values are unchanged on each resulting `SarifRun`.
+This scenario is tested by `SarifResults_Exclude_PreservesRunMetadata`.
+
+**SarifResults_Exclude_DifferentCase_StillMatches**: Call `Exclude` with a glob pattern that differs from a
+finding's `Uri` only in character case; assert the finding is removed, documenting the observed case-insensitive
+default `Matcher` behavior.
+This scenario is tested by `SarifResults_Exclude_DifferentCase_StillMatches`.

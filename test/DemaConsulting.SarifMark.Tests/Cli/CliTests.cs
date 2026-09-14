@@ -392,4 +392,37 @@ public class CliTests
         // Assert
         Assert.Contains("--depth requires an integer between 1 and 6", ex.Message);
     }
+
+    /// <summary>
+    ///     Test that a single --exclude parameter sets the ExcludeGlobs collection.
+    /// </summary>
+    [Fact]
+    public void Cli_Create_ExcludeParameter_SetsExcludeGlobs()
+    {
+        // Arrange - No special setup needed
+
+        // Act
+        using var context = Context.Create(["--exclude", "**/bin/**"]);
+
+        // Assert
+        Assert.Single(context.ExcludeGlobs);
+        Assert.Equal("**/bin/**", context.ExcludeGlobs[0]);
+        Assert.Equal(0, context.ExitCode);
+    }
+
+    /// <summary>
+    ///     Test that repeating --exclude accumulates every supplied glob pattern.
+    /// </summary>
+    [Fact]
+    public void Cli_Create_ExcludeParameter_Repeated_AccumulatesExcludeGlobs()
+    {
+        // Arrange - No special setup needed
+
+        // Act
+        using var context = Context.Create(["--exclude", "**/bin/**", "--exclude", "**/obj/**"]);
+
+        // Assert
+        Assert.Equal(["**/bin/**", "**/obj/**"], context.ExcludeGlobs);
+        Assert.Equal(0, context.ExitCode);
+    }
 }

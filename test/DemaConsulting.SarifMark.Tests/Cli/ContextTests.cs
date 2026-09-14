@@ -839,4 +839,122 @@ public class ContextTests
         // Assert
         Assert.Equal(6, context.Depth);
     }
+
+    /// <summary>
+    ///     Test that creating a context with no --exclude parameter returns an empty ExcludeGlobs collection.
+    /// </summary>
+    [Fact]
+    public void Context_Create_NoExcludeParameter_ReturnsEmptyExcludeGlobs()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        using var context = Context.Create([]);
+
+        // Assert
+        Assert.Empty(context.ExcludeGlobs);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with a single --exclude parameter adds the glob to ExcludeGlobs.
+    /// </summary>
+    [Fact]
+    public void Context_Create_ExcludeParameter_AddsGlobToExcludeGlobs()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        using var context = Context.Create(["--exclude", "**/bin/**"]);
+
+        // Assert
+        Assert.Single(context.ExcludeGlobs);
+        Assert.Equal("**/bin/**", context.ExcludeGlobs[0]);
+    }
+
+    /// <summary>
+    ///     Test that repeating the --exclude flag accumulates every glob pattern in order.
+    /// </summary>
+    [Fact]
+    public void Context_Create_ExcludeParameter_RepeatedFlag_AccumulatesAllGlobs()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        using var context = Context.Create(["--exclude", "**/bin/**", "--exclude", "**/obj/**"]);
+
+        // Assert
+        Assert.Equal(["**/bin/**", "**/obj/**"], context.ExcludeGlobs);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --exclude but no value throws exception.
+    /// </summary>
+    [Fact]
+    public void Context_Create_ExcludeWithoutValue_ThrowsArgumentException()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--exclude"]));
+
+        // Assert
+        Assert.Contains("--exclude requires", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that --exclude immediately followed by another recognized option throws an exception
+    ///     rather than silently consuming the following option token as the glob pattern.
+    /// </summary>
+    [Fact]
+    public void Context_Create_ExcludeFollowedByOption_ThrowsArgumentException()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--exclude", "--enforce"]));
+
+        // Assert
+        Assert.Contains("--exclude requires", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that --sarif immediately followed by another recognized option throws an exception
+    ///     rather than silently consuming the following option token as the filename, confirming the
+    ///     fix applies to every value-bearing option that shares GetRequiredStringArgument, not just --exclude.
+    /// </summary>
+    [Fact]
+    public void Context_Create_SarifFollowedByOption_ThrowsArgumentException()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--sarif", "--enforce"]));
+
+        // Assert
+        Assert.Contains("--sarif requires", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that --depth immediately followed by another recognized option throws an exception
+    ///     rather than silently attempting to parse the following option token as the depth value,
+    ///     confirming the fix also applies to GetRequiredIntArgument, not just GetRequiredStringArgument.
+    /// </summary>
+    [Fact]
+    public void Context_Create_DepthFollowedByOption_ThrowsArgumentException()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--depth", "--enforce"]));
+
+        // Assert
+        Assert.Contains("--depth requires a depth argument", exception.Message);
+    }
 }

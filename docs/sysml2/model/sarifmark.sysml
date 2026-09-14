@@ -24,6 +24,7 @@ package SarifMark {
 
         part testResults : TestResultsPackage;
         part sysml2tools : SysML2ToolsTool;
+        part filesystemGlobbing : FileSystemGlobbingPackage;
 
         part sarifMarkSharedPackage : SarifMarkSharedPackage;
     }

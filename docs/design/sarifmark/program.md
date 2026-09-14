@@ -46,13 +46,18 @@ then always print the banner; help flag → print help and return; validate flag
 - *Returns*: `void`
 - *Preconditions*: `context.Version`, `context.Help`, and `context.Validate` are all false.
 - *Postconditions*: If `context.SarifFile` is a valid path to an existing SARIF file, the
-  results have been reported to the context output; if `context.ReportFile` is set, the
-  markdown report has been written to disk.
+  results have been reported to the context output; if `context.ExcludeGlobs` is non-empty,
+  matching findings have been removed and an excluded-count summary line has been reported
+  to the context output; if `context.ReportFile` is set, the markdown report has been
+  written to disk.
 
 The method validates that `context.SarifFile` is non-null and non-whitespace; calls
-`SarifResults.Read`; checks `context.Enforce` against `sarifResults.HasIssues`; and
-conditionally writes the markdown report using `sarifResults.ToMarkdown` and
-`File.WriteAllText`.
+`SarifResults.Read`; reports the tool name, version, and result count; if
+`context.ExcludeGlobs` is non-empty, calls `sarifResults.Exclude(context.ExcludeGlobs)` and
+writes an `"Excluded {N} finding(s) matching --exclude patterns."` summary line where `N` is
+the number of findings removed across all runs; checks `context.Enforce` against
+`sarifResults.HasIssues`; and conditionally writes the markdown report using
+`sarifResults.ToMarkdown` and `File.WriteAllText`.
 
 ### Error Handling
 

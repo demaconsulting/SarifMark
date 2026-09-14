@@ -50,6 +50,15 @@ contains three units:
 - *Contract*: Returns `true` if any run contains at least one result.
 - *Constraints*: None.
 
+**SarifResults.Exclude**: Removes findings whose `Uri` matches a user-supplied glob pattern.
+
+- *Type*: In-process .NET instance method
+- *Role*: Provider
+- *Contract*: Accepts `IReadOnlyList<string>? globPatterns`; returns a new `SarifResults`
+  with matching findings removed from every run. Findings with a `null` `Uri` are always
+  retained. Returns the same instance unchanged when `globPatterns` is null or empty.
+- *Constraints*: None; malformed patterns simply match nothing.
+
 ### Design
 
 The SARIF reading and reporting pipeline flows through the three units in sequence:
@@ -64,5 +73,7 @@ The SARIF reading and reporting pipeline flows through the three units in sequen
    produce a `SarifRun` record. `ParseResults` uses `IsSuppressed` to filter suppressed
    results before constructing `SarifFinding` records.
 5. The completed `SarifResults` record is returned to `Program`.
-6. `Program` calls `SarifResults.ToMarkdown` when `--report` is specified; the markdown
+6. If `--exclude` glob patterns were supplied, `Program` calls `SarifResults.Exclude` to
+   remove matching findings from every run before enforcement or report generation.
+7. `Program` calls `SarifResults.ToMarkdown` when `--report` is specified; the markdown
    string is written to disk with `File.WriteAllText`.

@@ -1,9 +1,10 @@
 # OTS Dependencies
 
-SarifMark uses eleven OTS software items: ten DEMA Consulting pipeline tools and the
-xUnit v3 testing framework. All eleven items are consumed as .NET tools or NuGet packages
-and are managed through the local tool manifest and the project dependency lock files.
-Per-item integration designs are documented in the `ots/` sub-folder.
+SarifMark uses twelve OTS software items: ten DEMA Consulting pipeline tools, the
+xUnit v3 testing framework, and Microsoft.Extensions.FileSystemGlobbing. All twelve items
+are consumed as .NET tools or NuGet packages and are managed through the local tool
+manifest and the project dependency lock files. Per-item integration designs are
+documented in the `ots/` sub-folder.
 
 ## Selection Criteria
 
@@ -22,6 +23,11 @@ Testing framework selection (xUnit v3) is based on native TRX output support, co
 with the VSTest adapter required by ReqStream, and the established ecosystem around xUnit
 in the .NET community.
 
+Microsoft.Extensions.FileSystemGlobbing is selected because it is the Microsoft-owned
+globbing engine already used throughout the .NET ecosystem, giving users glob semantics
+they are already familiar with and avoiding hand-rolled glob parsing logic within
+SarifMark.
+
 ## Version Management Policy
 
 OTS package versions are managed through Dependabot pull requests for NuGet and Node.js
@@ -39,7 +45,8 @@ versions are pinned in the local tool manifest.
 
 All OTS items are consumed as CLI tools invoked from CI/CD pipeline scripts, as a NuGet
 package referenced directly by the main project (DemaConsulting.TestResults, used by the
-SelfTest subsystem to collect and serialize self-validation results), or as a NuGet package
+SelfTest subsystem to collect and serialize self-validation results; Microsoft.Extensions.FileSystemGlobbing,
+used by `SarifResults.Exclude` to filter findings by glob pattern), or as a NuGet package
 referenced by the test project (xUnit v3). No wrapper classes are introduced at the
 application level; tools are invoked directly via `dotnet tool run` or their shell
 command, and packages are referenced through standard NuGet project references.

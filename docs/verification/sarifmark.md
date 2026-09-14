@@ -14,7 +14,11 @@ tests exercise individual classes directly with console streams
 redirected via `StringWriter`. The test framework is xUnit v3, executed via `dotnet test`. Three additional named
 scenarios (`SarifMark_SarifReading`, `SarifMark_MarkdownReportGeneration`, `SarifMark_Enforcement`) are self-validation
 tests invoked through the tool's own `--validate` flag; they are not xUnit test methods but named scenarios reported
-in the self-validation output.
+in the self-validation output. The `--exclude` glob-filtering behavior is verified at both the system level, via the
+named integration scenario `SarifMark_ExcludeFlag_FiltersMatchingFindings`, and at the unit level, via the existing
+`Program_Main_ExcludeFlag_*` and `SarifResults_Exclude_*` tests (see *Program Verification Design* and *SarifResults
+Verification Design*); the `Microsoft.Extensions.FileSystemGlobbing` OTS dependency it relies on is verified
+separately in *FileSystemGlobbing Verification Design*.
 
 ## Test Environment
 
@@ -177,3 +181,10 @@ This scenario is tested by `SarifMark_ValidSarif_NoIssues_GeneratesReport`.
 assert exit code is 0 and the TRX results file is created and contains a `<TestRun` element, confirming that the
 `--results` parameter causes self-validation results to be written to the specified file.
 This scenario is tested by `SarifMark_ValidateResultsParameter_WritesResultsFile`.
+
+**SarifMark_ExcludeFlag_FiltersMatchingFindings**: Invoke the tool with `--sarif multi-result.sarif --exclude
+"**/first.cs" --report {path}`; assert exit code is 0 and the generated report no longer contains the excluded
+`first.cs` finding while still containing the non-excluded `second.cs` finding and a result count of one,
+confirming that `--exclude` glob-filtering is exercised end-to-end through the compiled binary as a named
+system-level scenario.
+This scenario is tested by `SarifMark_ExcludeFlag_FiltersMatchingFindings`.

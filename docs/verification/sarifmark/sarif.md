@@ -69,3 +69,7 @@ This scenario is tested by `Sarif_GenerateReport_ResultCount_ContainsResultCount
 **Sarif_GenerateReport_CustomHeading_UsesCustomHeading**: Read `sample.sarif` and call `ToMarkdown(1, "Custom Analysis
 Heading")`; assert the custom heading string appears in the output instead of the default tool-name heading.
 This scenario is tested by `Sarif_GenerateReport_CustomHeading_UsesCustomHeading`.
+
+`--exclude` glob-filtering behavior is verified at the `SarifResults` unit level (see *SarifResults Verification
+Design*) and end-to-end at the `Program` unit level (see *Program Verification Design*), rather than as an
+additional `SarifTests.cs` scenario here.

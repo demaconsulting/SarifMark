@@ -20,6 +20,7 @@
 
 using System.Text;
 using System.Text.Json;
+using Microsoft.Extensions.FileSystemGlobbing;
 
 namespace DemaConsulting.SarifMark;
 
@@ -351,6 +352,89 @@ public record SarifResults
         }
 
         return null;
+    }
+
+    /// <summary>
+    ///     Filters out findings whose <see cref="SarifFinding.Uri"/> matches any of the supplied
+    ///     glob patterns.
+    /// </summary>
+    /// <remarks>
+    ///     This method exists so callers can drop findings from generated code or vendored
+    ///     dependencies (e.g. `bin`/`obj` output) after a SARIF file has been parsed, without
+    ///     needing to re-run the originating analysis tool with a narrower scope — several
+    ///     analysis tools (notably CodeQL) do not offer a post-hoc way to exclude paths from an
+    ///     already-produced SARIF file. Matching is performed with
+    ///     <see cref="Microsoft.Extensions.FileSystemGlobbing.Matcher"/> against an in-memory file
+    ///     list, so no path referenced by a finding needs to exist on disk. Findings with a
+    ///     <see langword="null"/> <see cref="SarifFinding.Uri"/> are always retained because there
+    ///     is no path to test against the supplied patterns.
+    /// </remarks>
+    /// <param name="globPatterns">
+    ///     The collection of glob patterns to match against each finding's <see cref="SarifFinding.Uri"/>.
+    ///     A finding is excluded when its <c>Uri</c> matches at least one pattern in this collection.
+    /// </param>
+    /// <returns>
+    ///     A new <see cref="SarifResults"/> instance with matching findings removed from every run,
+    ///     preserving each run's <see cref="SarifRun.ToolName"/>, <see cref="SarifRun.ToolVersion"/>,
+    ///     and <see cref="SarifRun.FileCount"/>. Returns this same instance unchanged when
+    ///     <paramref name="globPatterns"/> is <see langword="null"/> or empty.
+    /// </returns>
+    public SarifResults Exclude(IReadOnlyList<string>? globPatterns)
+    {
+        // No patterns means nothing to filter - return the same instance to avoid an
+        // unnecessary allocation when --exclude was not supplied
+        if (globPatterns is not { Count: > 0 })
+        {
+            return this;
+        }
+
+        // Build a single Matcher covering every supplied pattern; each pattern is added as an
+        // independent "include" rule so a finding is excluded if it matches any one of them
+        var matcher = new Matcher();
+        foreach (var pattern in globPatterns)
+        {
+            matcher.AddInclude(pattern);
+        }
+
+        var filteredRuns = new List<SarifRun>(Runs.Count);
+        foreach (var run in Runs)
+        {
+            var filteredResults = run.Results
+                .Where(finding => !IsExcluded(matcher, finding.Uri))
+                .ToList();
+
+            filteredRuns.Add(new SarifRun(run.ToolName, run.ToolVersion, filteredResults, run.FileCount));
+        }
+
+        return new SarifResults(filteredRuns);
+    }
+
+    /// <summary>
+    ///     Determines whether a finding's URI matches any pattern in the supplied matcher.
+    /// </summary>
+    /// <param name="matcher">The matcher configured with one or more exclusion glob patterns.</param>
+    /// <param name="uri">The finding's file URI, or null when no physical location is associated.</param>
+    /// <returns>
+    ///     <see langword="false"/> when <paramref name="uri"/> is <see langword="null"/> (null-URI
+    ///     findings are always retained); otherwise <see langword="true"/> when <paramref name="uri"/>
+    ///     matches at least one pattern in <paramref name="matcher"/>.
+    /// </returns>
+    private static bool IsExcluded(Matcher matcher, string? uri)
+    {
+        // Findings with no location can never match a path-based glob pattern, so they are
+        // always retained rather than passed to the matcher
+        if (uri == null)
+        {
+            return false;
+        }
+
+        // A fixed root of "/" is used (rather than the current working directory, which is the
+        // Matcher's implicit default) so that both relative URIs (e.g. "src/File.cs") and
+        // absolute URIs (Unix-style "/repo/..." or Windows-style "C:/repo/...") are matched
+        // consistently against the supplied patterns regardless of the process's actual working
+        // directory; this was confirmed empirically because the Matcher's default relative-path
+        // resolution silently drops absolute paths that fall outside the current directory.
+        return matcher.Match("/", [uri]).HasMatches;
     }
 
     /// <summary>

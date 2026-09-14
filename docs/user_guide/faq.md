@@ -30,6 +30,17 @@ The `--enforce` flag processes the SARIF file normally and generates the report,
 non-zero exit code if any issues are found. This allows pipelines to fail automatically when
 analysis detects problems.
 
+### Why do I see findings for generated code (bin/obj) even though CodeQL has `paths-ignore` configured?
+
+CodeQL's `paths-ignore` configuration controls which files are *extracted and analyzed* during the
+build, not which findings are later reported in the SARIF output. If your analysis (or a tool
+upstream of SarifMark) still analyzes generated or vendored code — for example a `bin` or `obj`
+directory produced by a previous build step — those findings will appear in the SARIF file
+regardless of `paths-ignore`. Use one or more `--exclude` parameters to drop findings whose file
+location matches a glob pattern (such as `**/bin/**` or `**/obj/**`) before they reach `--enforce`
+or the generated report, without needing an extra build step or reconfiguring the upstream
+analysis tool. See *Filtering Out Generated Code* in the Usage section for an example.
+
 ### Can I customize the report output?
 
 Yes. Use `--heading` to specify a custom top-level heading and `--depth` to set the markdown header

@@ -44,6 +44,11 @@ When null, the report heading defaults to `"[ToolName] Analysis"`.
 deprecated alias `--result`; `null` when not provided. The deprecated alias is accepted for
 backwards compatibility but is intentionally omitted from `--help` output.
 
+**ExcludeGlobs**: `IReadOnlyList<string>` — File-glob exclusion patterns supplied via one or
+more `--exclude` parameters; default empty list. One entry is appended per occurrence of the
+flag. Consumed by `SarifResults.Exclude` to remove matching findings before enforcement and
+report generation.
+
 **ExitCode**: `int` — Returns `0` until `WriteError` is called; returns `1` thereafter.
 Derived from the internal `_hasErrors` flag.
 
@@ -55,7 +60,8 @@ Derived from the internal `_hasErrors` flag.
 - *Returns*: `Context` — fully initialized instance
 - *Preconditions*: `args` is not null.
 - *Postconditions*: All properties are set from `args`; if `--log` was specified the
-  log `StreamWriter` is open and `AutoFlush` is `true`.
+  log `StreamWriter` is open and `AutoFlush` is `true`; `ExcludeGlobs` contains one entry
+  per `--exclude` occurrence, in the order supplied.
 
 `Create` validates that `args` is non-null, constructs an `ArgumentParser`, calls
 `ParseArguments`, copies parsed values into the new `Context` via `init`-only setters,
@@ -89,6 +95,8 @@ and calls `OpenLogFile` when a log path was specified.
 
 `Create` throws `ArgumentException` for unrecognized tokens and for malformed value-bearing
 flags (e.g., `--depth` not followed by an integer between 1 and 6 inclusive, or a string flag at end of args).
+This includes `--exclude`, which throws `ArgumentException` when supplied without a value,
+identically to the other value-bearing string flags.
 It throws `InvalidOperationException` if the log file cannot be opened. `ArgumentNullException`
 is thrown immediately if `args` is null. These exceptions propagate to `Program.Main`, which
 translates them to exit code 1.

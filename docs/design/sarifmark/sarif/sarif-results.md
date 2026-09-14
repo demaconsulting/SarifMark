@@ -70,6 +70,27 @@ are skipped.
 **ExtractFileCount**: Returns the length of the `artifacts` array in the run element; `0`
 when the array is absent or not an array.
 
+**Exclude**: Removes findings whose `Uri` matches a user-supplied glob pattern.
+
+- *Parameters*: `IReadOnlyList<string>? globPatterns` — glob patterns to match against each
+  finding's `Uri`
+- *Returns*: `SarifResults` — a new instance with matching findings removed from every run
+- *Preconditions*: None.
+- *Postconditions*: Returns `this` unchanged when `globPatterns` is null or empty. Otherwise
+  returns a new `SarifResults` in which each `SarifRun` retains only findings whose `Uri` is
+  `null`, or whose `Uri` does not match any supplied pattern. Each new `SarifRun` preserves
+  the original `ToolName`, `ToolVersion`, and `FileCount`.
+
+`Exclude` builds a single `Microsoft.Extensions.FileSystemGlobbing.Matcher`, registering one
+`AddInclude` call per supplied pattern. For each run, it filters `Results` by testing each
+non-null `Uri` individually against the matcher using a fixed search root of `"/"` (chosen
+because it was found to consistently match relative paths, `file://` URIs, and both Unix and
+Windows absolute paths — the no-root overload instead resolves relative to the current
+working directory and silently fails to match absolute paths outside it). Findings with a
+`null` `Uri` are always retained and never passed to the matcher. Each filtered run is
+reconstructed via the internal `SarifRun` constructor, preserving `ToolName`, `ToolVersion`,
+and `FileCount` from the original run.
+
 #### Error Handling
 
 `Read` throws `ArgumentException` when `filePath` is null, empty, or whitespace.
@@ -79,6 +100,9 @@ violations (missing `version`, missing or empty `runs`, missing `tool` or `drive
 
 `ToMarkdown` throws `ArgumentOutOfRangeException` when `depth` is outside `[1, 6]`.
 
+`Exclude` does not throw for malformed glob patterns; `Matcher.AddInclude` does not validate
+pattern syntax and a pattern that matches nothing simply excludes no findings.
+
 The project file includes `<InternalsVisibleTo Include="DemaConsulting.SarifMark.Tests" />`
 to allow the test assembly to construct instances directly for unit testing.
 
@@ -87,10 +111,13 @@ to allow the test assembly to construct instances directly for unit testing.
 - **SarifRun** — each element of `Runs` is a `SarifRun` instance produced during `Read`.
 - **SarifFinding** — each run's results contain `SarifFinding` instances.
 - **System.Text.Json** — `JsonDocument.Parse` is used for all JSON parsing.
+- **Microsoft.Extensions.FileSystemGlobbing** — `Matcher` is used by `Exclude` to match
+  finding `Uri` values against glob patterns — see *FileSystemGlobbing Integration Design*.
 
 #### Callers
 
-- **Program** — calls `SarifResults.Read(context.SarifFile)` and
+- **Program** — calls `SarifResults.Read(context.SarifFile)`,
+  `sarifResults.Exclude(context.ExcludeGlobs)` (when `ExcludeGlobs` is non-empty), and
   `sarifResults.ToMarkdown(depth, heading)` from `ProcessSarifAnalysis`.
 - **Validation** — calls `SarifResults.Read` indirectly via `Program.Run` during
   self-validation tests.

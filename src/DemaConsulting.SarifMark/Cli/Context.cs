@@ -86,6 +86,13 @@ internal sealed class Context : IDisposable
     public string? ResultsFile { get; private init; }
 
     /// <summary>
+    ///     Gets the collection of glob patterns supplied via one or more --exclude
+    ///     parameters, used to filter out SARIF findings whose Uri matches any pattern
+    ///     before enforcement and report generation.
+    /// </summary>
+    public IReadOnlyList<string> ExcludeGlobs { get; private init; } = [];
+
+    /// <summary>
     ///     Gets the proposed exit code for the application (0 for success, 1 for errors).
     /// </summary>
     public int ExitCode => _hasErrors ? 1 : 0;
@@ -133,7 +140,8 @@ internal sealed class Context : IDisposable
             ReportFile = parser.ReportFile,
             Depth = parser.Depth,
             Heading = parser.Heading,
-            ResultsFile = parser.ResultsFile
+            ResultsFile = parser.ResultsFile,
+            ExcludeGlobs = parser.ExcludeGlobs
         };
 
         // Open log file if specified
@@ -228,6 +236,43 @@ internal sealed class Context : IDisposable
         public string? ResultsFile { get; private set; }
 
         /// <summary>
+        ///     Gets the accumulated collection of glob patterns supplied via one or more
+        ///     --exclude parameters, in the order they were encountered.
+        /// </summary>
+        public IReadOnlyList<string> ExcludeGlobs => _excludeGlobs;
+
+        /// <summary>
+        ///     Backing accumulator for <see cref="ExcludeGlobs"/>. A separate mutable field is used
+        ///     because --exclude is repeatable: each occurrence appends to this list rather than
+        ///     overwriting a single value, unlike the other value-bearing flags in this parser.
+        /// </summary>
+        private readonly List<string> _excludeGlobs = [];
+
+        /// <summary>
+        ///     Recognized option tokens handled by <see cref="ParseArgument"/>. Shared with
+        ///     <see cref="GetRequiredStringArgument"/> and <see cref="GetRequiredIntArgument"/> so that a
+        ///     value-bearing option (for example <c>--exclude</c>) followed by another option token (for
+        ///     example <c>--enforce</c>) is rejected as a missing value rather than silently consuming the
+        ///     next option as its value. Kept as a single source of truth to avoid maintaining the option
+        ///     list twice.
+        /// </summary>
+        private static readonly HashSet<string> KnownOptionTokens =
+        [
+            "-v", "--version",
+            "-?", "-h", "--help",
+            "--silent",
+            "--validate",
+            "--enforce",
+            "--log",
+            "--sarif",
+            "--report",
+            "--depth", "--report-depth",
+            "--heading",
+            "--result", "--results",
+            "--exclude"
+        ];
+
+        /// <summary>
         ///     Parses command-line arguments.
         /// </summary>
         /// <param name="args">Command-line arguments.</param>
@@ -306,6 +351,10 @@ internal sealed class Context : IDisposable
                     ResultsFile = GetRequiredStringArgument(arg, args, index, "a results filename argument");
                     return index + 1;
 
+                case "--exclude":
+                    _excludeGlobs.Add(GetRequiredStringArgument(arg, args, index, "a glob pattern argument"));
+                    return index + 1;
+
                 default:
                     throw new ArgumentException($"Unsupported argument '{arg}'", nameof(args));
             }
@@ -319,10 +368,14 @@ internal sealed class Context : IDisposable
         /// <param name="index">Current index.</param>
         /// <param name="description">Description of what's required.</param>
         /// <returns>The argument value.</returns>
-        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is the last token in the argument list and has no following value.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is the last token in the argument list and has no following value, or the following token is itself a recognized option (for example <c>--exclude --enforce</c>), which would otherwise be silently consumed as the value instead of reporting the missing argument.</exception>
         private static string GetRequiredStringArgument(string arg, string[] args, int index, string description)
         {
-            if (index >= args.Length)
+            // A missing value and a value that is actually the next recognized option are both
+            // treated as "no value supplied" - otherwise an option like --enforce following
+            // --exclude would be silently consumed as the glob pattern rather than being
+            // recognized as its own flag, letting a misconfigured invocation succeed silently.
+            if (index >= args.Length || KnownOptionTokens.Contains(args[index]))
             {
                 throw new ArgumentException($"{arg} requires {description}", nameof(args));
             }
@@ -341,7 +394,7 @@ internal sealed class Context : IDisposable
         /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is the last token in the argument list, or its value is not an integer between 1 and 6.</exception>
         private static int GetRequiredIntArgument(string arg, string[] args, int index)
         {
-            if (index >= args.Length)
+            if (index >= args.Length || KnownOptionTokens.Contains(args[index]))
             {
                 throw new ArgumentException($"{arg} requires a depth argument", nameof(args));
             }

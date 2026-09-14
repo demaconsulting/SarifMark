@@ -251,3 +251,19 @@ sections:
               - SarifMark-Context-ResultLegacyAlias
             tests:
               - Cli_Create_ResultLegacyAlias_SetsResultsFilePath
+
+          - id: SarifMark-Cli-Exclude
+            title: The CLI shall accept one or more file-glob exclusion patterns via
+              the repeatable --exclude parameter.
+            justification: >-
+              A repeatable exclusion parameter lets users drop findings from generated
+              or vendored code (such as build output directories) without post-processing
+              the report, making the tool easier to integrate into CI/CD pipelines
+              that also run against generated code.
+            tags: [public]
+            children:
+              - SarifMark-Context-ExcludeParam
+              - SarifMark-Context-ExcludeParam-MissingValue
+            tests:
+              - Cli_Create_ExcludeParameter_SetsExcludeGlobs
+              - Cli_Create_ExcludeParameter_Repeated_AccumulatesExcludeGlobs
