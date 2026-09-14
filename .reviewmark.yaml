@@ -325,6 +325,13 @@ reviews:
       - docs/design/ots/test-results.md
       - docs/verification/ots/test-results.md
 
+  - id: OTS-FileSystemGlobbing
+    title: Review that FileSystemGlobbing Provides Required Functionality
+    paths:
+      - docs/reqstream/ots/filesystem-globbing.yaml
+      - docs/design/ots/filesystem-globbing.md
+      - docs/verification/ots/filesystem-globbing.md
+
   # Shared Packages
   - id: Shared-SarifMark
     title: Review that Shared SarifMark Package Provides Required Functionality

@@ -52,3 +52,17 @@ This scenario is tested by `Program_Main_EnforceFlagWithIssues_ReturnsError`.
 **Program_Main_ReportFile_CreatesReport**: Invoke with `--sarif` and `--report {path}`; assert the report file is
 created on disk.
 This scenario is tested by `Program_Main_ReportFile_CreatesReport`.
+
+**Program_Main_ExcludeFlag_FiltersMatchingFindingsFromReport**: Invoke with `--sarif`, `--report {path}`, and
+`--exclude {glob}` matching the sample finding's `Uri`; assert the generated report does not contain the excluded
+finding.
+This scenario is tested by `Program_Main_ExcludeFlag_FiltersMatchingFindingsFromReport`.
+
+**Program_Main_ExcludeAndEnforce_ExcludedFindingsDoNotTriggerEnforcement**: Invoke with `--enforce` and
+`--exclude {glob}` that matches every finding in the SARIF file; assert exit code is 0, confirming excluded
+findings do not trigger enforcement failure.
+This scenario is tested by `Program_Main_ExcludeAndEnforce_ExcludedFindingsDoNotTriggerEnforcement`.
+
+**Program_Main_ExcludeFlag_PrintsExcludedCountSummary**: Invoke with `--sarif` and `--exclude {glob}` matching one
+or more findings; assert the console output contains the excluded-count summary line.
+This scenario is tested by `Program_Main_ExcludeFlag_PrintsExcludedCountSummary`.

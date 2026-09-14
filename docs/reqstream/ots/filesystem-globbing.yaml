@@ -1,0 +1,68 @@
+---
+# Microsoft.Extensions.FileSystemGlobbing OTS requirements
+sections:
+  - title: OTS Software Requirements
+    sections:
+      - title: Microsoft.Extensions.FileSystemGlobbing Requirements
+        requirements:
+          - id: SarifMark-OTS-FileSystemGlobbing-MatchInclude
+            title: Microsoft.Extensions.FileSystemGlobbing shall match a candidate
+              Uri against one or more registered include glob patterns.
+            justification: |
+              SarifMark's --exclude option needs a reliable way to determine whether a finding's
+              Uri matches a user-supplied glob pattern. The Matcher type's AddInclude/Match
+              mechanism provides this without requiring SarifMark to implement its own glob
+              parsing and matching logic.
+            tags: [ots]
+            tests:
+              - SarifResults_Exclude_SinglePatternMatch_RemovesMatchingFinding
+              - SarifResults_Exclude_MultiplePatterns_RemovesAnyMatchingFinding
+
+          - id: SarifMark-OTS-FileSystemGlobbing-RetainNonMatching
+            title: Microsoft.Extensions.FileSystemGlobbing shall report no match for
+              a candidate Uri that does not satisfy any registered include pattern.
+            justification: |
+              Findings whose Uri does not match any --exclude pattern must remain in the
+              report and be eligible for --enforce. The Matcher must reliably distinguish
+              non-matching candidates from matching ones so SarifMark can retain them.
+            tags: [ots]
+            tests:
+              - SarifResults_Exclude_NoMatch_RetainsAllFindings
+
+          - id: SarifMark-OTS-FileSystemGlobbing-RecursiveWildcard
+            title: Microsoft.Extensions.FileSystemGlobbing shall match nested paths
+              at any depth using a recursive double-asterisk (**) wildcard pattern.
+            justification: |
+              Users need to exclude entire generated-code directory trees (for example
+              **/bin/** or **/obj/**) without enumerating every nested path individually.
+              The Matcher's recursive wildcard support satisfies this without SarifMark
+              implementing directory-tree traversal itself.
+            tags: [ots]
+            tests:
+              - SarifResults_Exclude_RecursiveDoubleStarGlob_MatchesNestedPaths
+
+          - id: SarifMark-OTS-FileSystemGlobbing-InMemoryMatching
+            title: Microsoft.Extensions.FileSystemGlobbing shall match candidate paths
+              without requiring the corresponding files to exist on disk.
+            justification: |
+              SARIF Uri values reference source files that may not be present in the
+              environment performing --exclude filtering (for example, a CI pipeline that
+              only has the SARIF log, not the analyzed source tree). The Matcher's in-memory
+              matching overload evaluates supplied strings directly, so filtering does not
+              depend on filesystem access.
+            tags: [ots]
+            tests:
+              - SarifResults_Exclude_NullUri_RetainsFinding
+              - SarifResults_Exclude_MultiRun_FiltersEachRunIndependently
+
+          - id: SarifMark-OTS-FileSystemGlobbing-CaseInsensitive
+            title: Microsoft.Extensions.FileSystemGlobbing shall match candidate Uri
+              values case-insensitively by default.
+            justification: |
+              SARIF Uri values and user-supplied glob patterns may differ in character case
+              across platforms (for example Windows paths). Case-insensitive matching by
+              default avoids surprising users with missed exclusions caused solely by case
+              differences.
+            tags: [ots]
+            tests:
+              - SarifResults_Exclude_DifferentCase_StillMatches

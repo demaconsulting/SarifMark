@@ -173,6 +173,23 @@ sections:
             tests:
               - Program_Main_EnforceFlagWithIssues_ReturnsError
 
+          - id: SarifMark-Program-ExcludeFiltering
+            title: The Program unit shall apply --exclude glob filtering to the parsed
+              SARIF results after reading and before the enforcement check and report
+              generation.
+            justification: >-
+              Filtering before enforcement and report generation ensures excluded
+              findings never trigger --enforce failures and never appear in the generated
+              report, and printing the excluded-count summary line gives users visibility
+              into how many findings were removed.
+            tags: [internal]
+            children:
+              - SarifMark-SarifResults-Exclude
+            tests:
+              - Program_Main_ExcludeFlag_FiltersMatchingFindingsFromReport
+              - Program_Main_ExcludeAndEnforce_ExcludedFindingsDoNotTriggerEnforcement
+              - Program_Main_ExcludeFlag_PrintsExcludedCountSummary
+
           - id: SarifMark-Program-ReportGeneration
             title: The Program unit shall write the markdown analysis report to the
               specified output file.

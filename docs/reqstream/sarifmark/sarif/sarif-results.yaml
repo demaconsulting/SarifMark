@@ -278,3 +278,33 @@ sections:
                 tags: [internal]
                 tests:
                   - SarifResults_ToMarkdown_MultipleRuns_IncludesRunIndices
+
+              - id: SarifMark-SarifResults-Exclude
+                title: >-
+                  The SarifResults unit shall return a new SarifResults with findings
+                  removed whose non-null Uri matches any of the supplied glob patterns,
+                  retaining findings with a null Uri and preserving run metadata
+                  (ToolName, ToolVersion, FileCount).
+                justification: >-
+                  Filtering findings by Uri glob pattern lets callers drop generated
+                  or vendored code from enforcement and reports while leaving findings
+                  without a location (which cannot be matched against a file-path
+                  glob)
+                  and each run's identifying metadata untouched.
+                tags: [internal]
+                children:
+                  - SarifMark-OTS-FileSystemGlobbing-MatchInclude
+                  - SarifMark-OTS-FileSystemGlobbing-RetainNonMatching
+                  - SarifMark-OTS-FileSystemGlobbing-RecursiveWildcard
+                  - SarifMark-OTS-FileSystemGlobbing-InMemoryMatching
+                  - SarifMark-OTS-FileSystemGlobbing-CaseInsensitive
+                tests:
+                  - SarifResults_Exclude_SinglePatternMatch_RemovesMatchingFinding
+                  - SarifResults_Exclude_MultiplePatterns_RemovesAnyMatchingFinding
+                  - SarifResults_Exclude_NoMatch_RetainsAllFindings
+                  - SarifResults_Exclude_NullUri_RetainsFinding
+                  - SarifResults_Exclude_RecursiveDoubleStarGlob_MatchesNestedPaths
+                  - SarifResults_Exclude_EmptyGlobList_ReturnsAllFindings
+                  - SarifResults_Exclude_MultiRun_FiltersEachRunIndependently
+                  - SarifResults_Exclude_PreservesRunMetadata
+                  - SarifResults_Exclude_DifferentCase_StillMatches

@@ -37,6 +37,7 @@ sarifmark --help
 | `--enforce` | Return a non-zero exit code if issues are found in the SARIF file |
 | `--log <file>` | Write console output to a log file |
 | `--sarif <file>` | SARIF file to process (required for analysis) |
+| `--exclude <glob>` | Exclude findings whose file location matches the given glob pattern; may be repeated |
 | `--report <file>` | Export analysis results to a markdown file |
 | `--depth <depth>` | Markdown header depth for the report (default: `1`; accepted range: `1`–`6`, corresponding to Markdown heading levels `#` through `######`) |
 | `--heading <text>` | Custom heading for the report (default: `[ToolName] Analysis`) |
@@ -72,6 +73,21 @@ Return a non-zero exit code when the SARIF file contains issues, causing the CI 
 ```shell
 sarifmark --sarif analysis.sarif --report report.md --enforce
 ```
+
+### Filtering Out Generated Code
+
+Static analysis tools such as CodeQL often analyze generated or compiled output alongside
+hand-written source (for example `bin`/`obj` directories produced by a build). Use one or more
+`--exclude` parameters to drop findings whose file location matches a glob pattern, before the
+findings reach `--enforce` or the generated report:
+
+```shell
+sarifmark --sarif codeql-results.sarif --report quality-report.md --exclude "**/bin/**" --exclude "**/obj/**"
+```
+
+Each `--exclude` parameter accepts one glob pattern and may be repeated to supply multiple
+patterns. A finding is excluded when its file location matches any of the supplied patterns.
+Findings with no file location are never excluded, since they cannot be matched against a glob.
 
 ### Self-Validation
 

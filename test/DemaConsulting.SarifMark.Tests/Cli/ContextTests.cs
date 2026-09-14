@@ -839,4 +839,69 @@ public class ContextTests
         // Assert
         Assert.Equal(6, context.Depth);
     }
+
+    /// <summary>
+    ///     Test that creating a context with no --exclude parameter returns an empty ExcludeGlobs collection.
+    /// </summary>
+    [Fact]
+    public void Context_Create_NoExcludeParameter_ReturnsEmptyExcludeGlobs()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        using var context = Context.Create([]);
+
+        // Assert
+        Assert.Empty(context.ExcludeGlobs);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with a single --exclude parameter adds the glob to ExcludeGlobs.
+    /// </summary>
+    [Fact]
+    public void Context_Create_ExcludeParameter_AddsGlobToExcludeGlobs()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        using var context = Context.Create(["--exclude", "**/bin/**"]);
+
+        // Assert
+        Assert.Single(context.ExcludeGlobs);
+        Assert.Equal("**/bin/**", context.ExcludeGlobs[0]);
+    }
+
+    /// <summary>
+    ///     Test that repeating the --exclude flag accumulates every glob pattern in order.
+    /// </summary>
+    [Fact]
+    public void Context_Create_ExcludeParameter_RepeatedFlag_AccumulatesAllGlobs()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        using var context = Context.Create(["--exclude", "**/bin/**", "--exclude", "**/obj/**"]);
+
+        // Assert
+        Assert.Equal(["**/bin/**", "**/obj/**"], context.ExcludeGlobs);
+    }
+
+    /// <summary>
+    ///     Test that creating a context with --exclude but no value throws exception.
+    /// </summary>
+    [Fact]
+    public void Context_Create_ExcludeWithoutValue_ThrowsArgumentException()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--exclude"]));
+
+        // Assert
+        Assert.Contains("--exclude requires", exception.Message);
+    }
 }

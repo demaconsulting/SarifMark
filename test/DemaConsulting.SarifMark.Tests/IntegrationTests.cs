@@ -560,5 +560,49 @@ public class IntegrationTests
             }
         }
     }
+
+    /// <summary>
+    ///     Test that the --exclude flag filters matching findings from the generated report while
+    ///     retaining non-matching findings, end-to-end through the compiled binary.
+    /// </summary>
+    [Fact]
+    public void SarifMark_ExcludeFlag_FiltersMatchingFindings()
+    {
+        // Arrange
+        var sarifFile = PathHelpers.SafePathCombine(_testDataPath, "multi-result.sarif");
+        Assert.True(File.Exists(sarifFile), $"Test SARIF file not found at {sarifFile}");
+
+        var reportFile = PathHelpers.SafePathCombine(Path.GetTempPath(), $"test-exclude-report-{Guid.NewGuid()}.md");
+
+        try
+        {
+            // Act - multi-result.sarif's two findings are located at file:///path/to/first.cs
+            // and file:///path/to/second.cs; exclude only the first.
+            var exitCode = Runner.Run(
+                out _,
+                "dotnet",
+                _dllPath,
+                "--sarif", sarifFile,
+                "--exclude", "**/first.cs",
+                "--report", reportFile);
+
+            // Assert
+            Assert.Equal(0, exitCode);
+            Assert.True(File.Exists(reportFile), "Report file was not created");
+
+            var reportContent = File.ReadAllText(reportFile);
+            Assert.DoesNotContain("first.cs", reportContent);
+            Assert.Contains("second.cs", reportContent);
+            Assert.Contains("Found 1 issue", reportContent);
+        }
+        finally
+        {
+            // Clean up the temporary report file
+            if (File.Exists(reportFile))
+            {
+                File.Delete(reportFile);
+            }
+        }
+    }
 }
 

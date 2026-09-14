@@ -5,10 +5,11 @@
 Each OTS item is verified using one of three evidence categories matched to its role in the pipeline:
 
 1. **Self-validation output**: Tools that expose a `--validate` flag (BuildMark, FileAssert, ReqStream, ReviewMark,
-   VersionMark — verified through SarifMark's self-validation tests) are exercised through the `--validate`
-   self-validation mechanism; passing output confirms the tool is installed and all advertised features are
-   operational. DemaConsulting.TestResults is a NuGet package (not a CLI tool) and does not expose `--validate`;
-   it is verified through SarifMark's integration and self-validation tests.
+   VersionMark) are exercised through their own `--validate` self-validation mechanism as separate CI pipeline
+   steps; passing output confirms the tool is installed and all advertised features are operational.
+   DemaConsulting.TestResults and Microsoft.Extensions.FileSystemGlobbing are NuGet packages
+   (not CLI tools) and do not expose `--validate`; they are verified through SarifMark's integration and
+   unit tests.
 2. **Successful CI pipeline completion**: Tools verified by successful CI pipeline execution — each tool produces
    an artifact (document, report, or exit-code assertion) that confirms functional operation. Pandoc and
    WeasyPrint are verified via FileAssert assertions on generated HTML and PDF files.
@@ -44,6 +45,9 @@ For each OTS item, the following evidence is collected during CI pipeline execut
   Design document.
 - **xUnit v3**: The test suite produces passing results across all test classes, and TRX result files are generated
   by `dotnet test --results-directory`, confirming test discovery, execution, and result serialization.
+- **Microsoft.Extensions.FileSystemGlobbing**: Unit tests exercising `SarifResults.Exclude` construct real `Matcher`
+  instances with real glob patterns and real candidate `Uri` values; passing results confirm the package matches,
+  retains, and case-insensitively compares findings as documented in `docs/design/ots/filesystem-globbing.md`.
 
 ## Regression Approach
 

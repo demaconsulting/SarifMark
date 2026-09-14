@@ -49,7 +49,8 @@ command-line arguments.
 - *Type*: In-process .NET instance properties
 - *Role*: Provider
 - *Contract*: Exposes `Version`, `Help`, `Silent`, `Validate`, `Enforce` (bool);
-  `SarifFile`, `ReportFile`, `Heading`, `ResultsFile` (string?); `Depth` (int); `ExitCode` (int).
+  `SarifFile`, `ReportFile`, `Heading`, `ResultsFile` (string?); `Depth` (int);
+  `ExcludeGlobs` (`IReadOnlyList<string>`, default empty); `ExitCode` (int).
   All values are set during `Create` and are immutable after construction.
 - *Constraints*: Properties are read-only after construction; `Depth` must be a positive
   integer supplied after `--depth` (or legacy `--report-depth`).

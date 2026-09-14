@@ -155,3 +155,19 @@ This scenario is tested by `Context_WriteError_SilentMode_DoesNotWriteToConsoleB
 **Context_WriteLine_SilentModeWithLogFile_WritesToLog**: Create context with `--silent` and `--log {path}`, call
 `WriteLine`; assert the message appears in the log file even though silent mode suppresses console output.
 This scenario is tested by `Context_WriteLine_SilentModeWithLogFile_WritesToLog`.
+
+**Context_Create_ExcludeParameter_AddsGlobToExcludeGlobs**: Pass `--exclude {glob}`; assert `ExcludeGlobs`
+contains the supplied pattern.
+This scenario is tested by `Context_Create_ExcludeParameter_AddsGlobToExcludeGlobs`.
+
+**Context_Create_ExcludeParameter_RepeatedFlag_AccumulatesAllGlobs**: Pass `--exclude` more than once with
+different glob patterns; assert `ExcludeGlobs` contains every supplied pattern in order.
+This scenario is tested by `Context_Create_ExcludeParameter_RepeatedFlag_AccumulatesAllGlobs`.
+
+**Context_Create_NoExcludeParameter_ReturnsEmptyExcludeGlobs**: Create context with no `--exclude` arguments;
+assert `ExcludeGlobs` is an empty collection.
+This scenario is tested by `Context_Create_NoExcludeParameter_ReturnsEmptyExcludeGlobs`.
+
+**Context_Create_ExcludeWithoutValue_ThrowsArgumentException**: Pass `--exclude` with no following value; assert
+`ArgumentException` is thrown.
+This scenario is tested by `Context_Create_ExcludeWithoutValue_ThrowsArgumentException`.

@@ -86,6 +86,13 @@ internal sealed class Context : IDisposable
     public string? ResultsFile { get; private init; }
 
     /// <summary>
+    ///     Gets the collection of glob patterns supplied via one or more --exclude
+    ///     parameters, used to filter out SARIF findings whose Uri matches any pattern
+    ///     before enforcement and report generation.
+    /// </summary>
+    public IReadOnlyList<string> ExcludeGlobs { get; private init; } = [];
+
+    /// <summary>
     ///     Gets the proposed exit code for the application (0 for success, 1 for errors).
     /// </summary>
     public int ExitCode => _hasErrors ? 1 : 0;
@@ -133,7 +140,8 @@ internal sealed class Context : IDisposable
             ReportFile = parser.ReportFile,
             Depth = parser.Depth,
             Heading = parser.Heading,
-            ResultsFile = parser.ResultsFile
+            ResultsFile = parser.ResultsFile,
+            ExcludeGlobs = parser.ExcludeGlobs
         };
 
         // Open log file if specified
@@ -228,6 +236,19 @@ internal sealed class Context : IDisposable
         public string? ResultsFile { get; private set; }
 
         /// <summary>
+        ///     Gets the accumulated collection of glob patterns supplied via one or more
+        ///     --exclude parameters, in the order they were encountered.
+        /// </summary>
+        public IReadOnlyList<string> ExcludeGlobs => _excludeGlobs;
+
+        /// <summary>
+        ///     Backing accumulator for <see cref="ExcludeGlobs"/>. A separate mutable field is used
+        ///     because --exclude is repeatable: each occurrence appends to this list rather than
+        ///     overwriting a single value, unlike the other value-bearing flags in this parser.
+        /// </summary>
+        private readonly List<string> _excludeGlobs = [];
+
+        /// <summary>
         ///     Parses command-line arguments.
         /// </summary>
         /// <param name="args">Command-line arguments.</param>
@@ -304,6 +325,10 @@ internal sealed class Context : IDisposable
                 case "--result":     // Legacy alias for --results to preserve backwards compatibility
                 case "--results":
                     ResultsFile = GetRequiredStringArgument(arg, args, index, "a results filename argument");
+                    return index + 1;
+
+                case "--exclude":
+                    _excludeGlobs.Add(GetRequiredStringArgument(arg, args, index, "a glob pattern argument"));
                     return index + 1;
 
                 default:

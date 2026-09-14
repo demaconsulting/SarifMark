@@ -114,8 +114,9 @@ Options:
   --enforce                  Return non-zero exit code if issues found
   --log <file>               Write output to log file
   --sarif <file>             SARIF file to process
+  --exclude <glob>           Exclude findings whose location matches glob (repeatable)
   --report <file>            Export analysis results to markdown file
-  --depth <depth>            Markdown header depth for report (default: 1)
+  --depth <depth>            Markdown header depth for report (1-6, default: 1)
   --heading <text>           Custom heading for report (default: [ToolName] Analysis)
 ```
 
@@ -131,6 +132,12 @@ sarifmark --sarif analysis.sarif --report report.md
 
 ```bash
 sarifmark --sarif analysis.sarif --report report.md --heading "Code Quality Analysis"
+```
+
+**Exclude generated code from a report:**
+
+```bash
+sarifmark --sarif analysis.sarif --report report.md --exclude "**/bin/**" --exclude "**/obj/**"
 ```
 
 **Enforce quality gate in CI/CD:**
@@ -273,3 +280,4 @@ SarifMark is built with the following open-source projects:
 - [.NET](https://dotnet.microsoft.com/) - Cross-platform framework for building applications
 - [SARIF](https://sarifweb.azurewebsites.net/) - Static Analysis Results Interchange Format specification
 - [DemaConsulting.TestResults](https://github.com/demaconsulting/TestResults) - Test results parsing library
+- [Microsoft.Extensions.FileSystemGlobbing](https://www.nuget.org/packages/Microsoft.Extensions.FileSystemGlobbing) - Glob pattern matching used by `--exclude`

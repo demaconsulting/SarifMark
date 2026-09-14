@@ -107,6 +107,24 @@ sections:
         tests:
           - SarifMark_EnforceFlagWithIssues_ReturnsError
 
+      - id: SarifMark-System-ExcludeFiltering
+        title: The tool shall exclude findings whose file location matches a user-supplied
+          glob pattern before enforcement and report generation.
+        tags: [public]
+        justification: >-
+          Letting users drop findings from generated or vendored code (such as build
+          output directories) without post-processing the report makes the tool easier
+          to integrate into CI/CD pipelines that also analyze generated code.
+        children:
+          - SarifMark-Cli-Exclude
+          - SarifMark-Sarif-ExcludeFiltering
+          - SarifMark-Program-ExcludeFiltering
+        tests:
+          - SarifMark_ExcludeFlag_FiltersMatchingFindings
+          - Program_Main_ExcludeFlag_FiltersMatchingFindingsFromReport
+          - Program_Main_ExcludeAndEnforce_ExcludedFindingsDoNotTriggerEnforcement
+          - Program_Main_ExcludeFlag_PrintsExcludedCountSummary
+
       - id: SarifMark-System-Silent
         title: The tool shall support silent mode to suppress console output.
         tags: [public]

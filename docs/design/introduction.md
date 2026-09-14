@@ -26,9 +26,9 @@ Local items:
 
 OTS items:
 
-- **BuildMark**, **DemaConsulting.TestResults**, **FileAssert**, **Pandoc**, **ReqStream**, **ReviewMark**, **SonarMark**,
-  **SysML2Tools**, **VersionMark**, **WeasyPrint**, **xUnit v3**: integration and usage design for each OTS
-  software item used in the project pipeline.
+- **BuildMark**, **DemaConsulting.TestResults**, **FileAssert**, **Microsoft.Extensions.FileSystemGlobbing**,
+  **Pandoc**, **ReqStream**, **ReviewMark**, **SonarMark**, **SysML2Tools**, **VersionMark**, **WeasyPrint**,
+  **xUnit v3**: integration and usage design for each OTS software item used in the project pipeline.
 
 Shared packages:
 

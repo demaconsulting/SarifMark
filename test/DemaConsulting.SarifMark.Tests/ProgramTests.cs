@@ -298,4 +298,99 @@ public class ProgramTests
             }
         }
     }
+
+    /// <summary>
+    ///     Test that a finding matching an --exclude glob pattern is absent from the generated
+    ///     markdown report.
+    /// </summary>
+    [Fact]
+    public void Program_Main_ExcludeFlag_FiltersMatchingFindingsFromReport()
+    {
+        // Arrange
+        var sarifFile = Path.Combine(AppContext.BaseDirectory, "TestData", "sample.sarif");
+        var reportFile = Path.Combine(Path.GetTempPath(), $"test-report-{Guid.NewGuid()}.md");
+        var originalOut = Console.Out;
+        try
+        {
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
+
+            // Act - sample.sarif's one finding is located at file:///path/to/file.cs
+            var result = Program.Main(["--sarif", sarifFile, "--report", reportFile, "--exclude", "**/file.cs"]);
+
+            // Assert
+            Assert.Equal(0, result);
+            var reportContent = File.ReadAllText(reportFile);
+            Assert.Contains("Found no issues", reportContent);
+            Assert.DoesNotContain("TEST001", reportContent);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            if (File.Exists(reportFile))
+            {
+                File.Delete(reportFile);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Test that when --exclude removes every finding, --enforce no longer signals a
+    ///     non-zero exit code even though the un-filtered SARIF file contained findings.
+    /// </summary>
+    [Fact]
+    public void Program_Main_ExcludeAndEnforce_ExcludedFindingsDoNotTriggerEnforcement()
+    {
+        // Arrange
+        var sarifFile = Path.Combine(AppContext.BaseDirectory, "TestData", "sample.sarif");
+        var originalOut = Console.Out;
+        var originalError = Console.Error;
+        try
+        {
+            using var outWriter = new StringWriter();
+            using var errWriter = new StringWriter();
+            Console.SetOut(outWriter);
+            Console.SetError(errWriter);
+
+            // Act
+            var result = Program.Main(["--sarif", sarifFile, "--enforce", "--exclude", "**/file.cs"]);
+
+            // Assert
+            Assert.Equal(0, result);
+            Assert.Equal(string.Empty, errWriter.ToString());
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            Console.SetError(originalError);
+        }
+    }
+
+    /// <summary>
+    ///     Test that supplying --exclude prints a summary line reporting how many findings were
+    ///     excluded.
+    /// </summary>
+    [Fact]
+    public void Program_Main_ExcludeFlag_PrintsExcludedCountSummary()
+    {
+        // Arrange
+        var sarifFile = Path.Combine(AppContext.BaseDirectory, "TestData", "sample.sarif");
+        var originalOut = Console.Out;
+        try
+        {
+            using var outWriter = new StringWriter();
+            Console.SetOut(outWriter);
+
+            // Act
+            var result = Program.Main(["--sarif", sarifFile, "--exclude", "**/file.cs"]);
+
+            // Assert
+            Assert.Equal(0, result);
+            Assert.Contains("Excluded 1 finding(s) matching --exclude patterns.", outWriter.ToString());
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+        }
+    }
 }

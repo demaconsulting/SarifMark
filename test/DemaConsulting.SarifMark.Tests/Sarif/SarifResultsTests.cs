@@ -1375,5 +1375,212 @@ public sealed class SarifResultsTests : IDisposable
         Assert.Contains("(#2)", md);
     }
 
+    /// <summary>
+    ///     Test that Exclude removes a finding whose Uri matches a single supplied glob pattern.
+    /// </summary>
+    [Fact]
+    public void SarifResults_Exclude_SinglePatternMatch_RemovesMatchingFinding()
+    {
+        // Arrange
+        var findings = new List<SarifFinding>
+        {
+            new("R1", "warning", "msg", "bin/Debug/File.cs", null),
+            new("R2", "warning", "msg", "src/File.cs", null)
+        };
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", findings)]);
+
+        // Act
+        var filtered = results.Exclude(["**/bin/**"]);
+
+        // Assert
+        var remaining = Assert.Single(filtered.Runs[0].Results);
+        Assert.Equal("src/File.cs", remaining.Uri);
+    }
+
+    /// <summary>
+    ///     Test that Exclude removes a finding matching any one of several supplied glob patterns.
+    /// </summary>
+    [Fact]
+    public void SarifResults_Exclude_MultiplePatterns_RemovesAnyMatchingFinding()
+    {
+        // Arrange
+        var findings = new List<SarifFinding>
+        {
+            new("R1", "warning", "msg", "bin/Debug/File.cs", null),
+            new("R2", "warning", "msg", "obj/Debug/File.cs", null),
+            new("R3", "warning", "msg", "src/File.cs", null)
+        };
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", findings)]);
+
+        // Act
+        var filtered = results.Exclude(["**/bin/**", "**/obj/**"]);
+
+        // Assert
+        var remaining = Assert.Single(filtered.Runs[0].Results);
+        Assert.Equal("src/File.cs", remaining.Uri);
+    }
+
+    /// <summary>
+    ///     Test that Exclude retains all findings when no glob pattern matches any Uri.
+    /// </summary>
+    [Fact]
+    public void SarifResults_Exclude_NoMatch_RetainsAllFindings()
+    {
+        // Arrange
+        var findings = new List<SarifFinding>
+        {
+            new("R1", "warning", "msg", "src/File.cs", null),
+            new("R2", "warning", "msg", "src/Other.cs", null)
+        };
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", findings)]);
+
+        // Act
+        var filtered = results.Exclude(["**/bin/**"]);
+
+        // Assert
+        Assert.Equal(2, filtered.Runs[0].Results.Count);
+    }
+
+    /// <summary>
+    ///     Test that Exclude always retains findings whose Uri is null, since there is no path to
+    ///     test against the supplied glob patterns.
+    /// </summary>
+    [Fact]
+    public void SarifResults_Exclude_NullUri_RetainsFinding()
+    {
+        // Arrange
+        var findings = new List<SarifFinding>
+        {
+            new("R1", "warning", "msg", null, null)
+        };
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", findings)]);
+
+        // Act
+        var filtered = results.Exclude(["**/bin/**"]);
+
+        // Assert
+        var remaining = Assert.Single(filtered.Runs[0].Results);
+        Assert.Null(remaining.Uri);
+    }
+
+    /// <summary>
+    ///     Test that a recursive double-star glob pattern matches deeply nested paths.
+    /// </summary>
+    [Fact]
+    public void SarifResults_Exclude_RecursiveDoubleStarGlob_MatchesNestedPaths()
+    {
+        // Arrange
+        var findings = new List<SarifFinding>
+        {
+            new("R1", "warning", "msg", "a/b/c/d/File.generated.cs", null),
+            new("R2", "warning", "msg", "src/File.cs", null)
+        };
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", findings)]);
+
+        // Act
+        var filtered = results.Exclude(["**/*.generated.cs"]);
+
+        // Assert
+        var remaining = Assert.Single(filtered.Runs[0].Results);
+        Assert.Equal("src/File.cs", remaining.Uri);
+    }
+
+    /// <summary>
+    ///     Test that Exclude returns all findings unchanged when the glob pattern list is empty.
+    /// </summary>
+    [Fact]
+    public void SarifResults_Exclude_EmptyGlobList_ReturnsAllFindings()
+    {
+        // Arrange
+        var findings = new List<SarifFinding>
+        {
+            new("R1", "warning", "msg", "bin/Debug/File.cs", null)
+        };
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", findings)]);
+
+        // Act
+        var filtered = results.Exclude([]);
+
+        // Assert
+        Assert.Same(results, filtered);
+        Assert.Single(filtered.Runs[0].Results);
+    }
+
+    /// <summary>
+    ///     Test that Exclude filters each run independently in a multi-run SarifResults.
+    /// </summary>
+    [Fact]
+    public void SarifResults_Exclude_MultiRun_FiltersEachRunIndependently()
+    {
+        // Arrange
+        var run1Findings = new List<SarifFinding>
+        {
+            new("R1", "warning", "msg", "bin/Debug/File.cs", null),
+            new("R2", "warning", "msg", "src/File1.cs", null)
+        };
+        var run2Findings = new List<SarifFinding>
+        {
+            new("R3", "warning", "msg", "src/File2.cs", null)
+        };
+        var run1 = new SarifRun("Tool1", "1.0", run1Findings);
+        var run2 = new SarifRun("Tool2", "2.0", run2Findings);
+        var results = new SarifResults(new List<SarifRun> { run1, run2 });
+
+        // Act
+        var filtered = results.Exclude(["**/bin/**"]);
+
+        // Assert
+        var run1Remaining = Assert.Single(filtered.Runs[0].Results);
+        Assert.Equal("src/File1.cs", run1Remaining.Uri);
+        var run2Remaining = Assert.Single(filtered.Runs[1].Results);
+        Assert.Equal("src/File2.cs", run2Remaining.Uri);
+    }
+
+    /// <summary>
+    ///     Test that Exclude preserves each run's ToolName, ToolVersion, and FileCount metadata
+    ///     unchanged after filtering.
+    /// </summary>
+    [Fact]
+    public void SarifResults_Exclude_PreservesRunMetadata()
+    {
+        // Arrange
+        var findings = new List<SarifFinding>
+        {
+            new("R1", "warning", "msg", "bin/Debug/File.cs", null)
+        };
+        var results = new SarifResults([new SarifRun("TestTool", "1.2.3", findings, 5)]);
+
+        // Act
+        var filtered = results.Exclude(["**/bin/**"]);
+
+        // Assert
+        Assert.Equal("TestTool", filtered.Runs[0].ToolName);
+        Assert.Equal("1.2.3", filtered.Runs[0].ToolVersion);
+        Assert.Equal(5, filtered.Runs[0].FileCount);
+    }
+
+    /// <summary>
+    ///     Test that the default Matcher behavior observed in this environment matches glob
+    ///     patterns case-insensitively (an uppercase Uri still matches a lowercase pattern),
+    ///     documenting the actual <see cref="Microsoft.Extensions.FileSystemGlobbing.Matcher"/>
+    ///     default rather than an assumed one.
+    /// </summary>
+    [Fact]
+    public void SarifResults_Exclude_DifferentCase_StillMatches()
+    {
+        // Arrange
+        var findings = new List<SarifFinding>
+        {
+            new("R1", "warning", "msg", "BIN/DEBUG/FILE.CS", null)
+        };
+        var results = new SarifResults([new SarifRun("TestTool", "1.0.0", findings)]);
+
+        // Act
+        var filtered = results.Exclude(["**/bin/**"]);
+
+        // Assert
+        Assert.Empty(filtered.Runs[0].Results);
+    }
+
 }
 

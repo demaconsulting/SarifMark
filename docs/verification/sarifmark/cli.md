@@ -98,3 +98,11 @@ This scenario is tested by `Cli_Create_DepthZero_ThrowsArgumentException`.
 `ArgumentException` is thrown with a message indicating `--depth requires an integer between 1 and 6`, confirming
 that negative depth values are rejected.
 This scenario is tested by `Cli_Create_DepthNegative_ThrowsArgumentException`.
+
+**Cli_Create_ExcludeParameter_SetsExcludeGlobs**: Pass `--exclude {glob}` to `Context.Create`; assert
+`ExcludeGlobs` contains the supplied pattern.
+This scenario is tested by `Cli_Create_ExcludeParameter_SetsExcludeGlobs`.
+
+**Cli_Create_ExcludeParameter_Repeated_AccumulatesExcludeGlobs**: Pass `--exclude` more than once with different
+glob patterns to `Context.Create`; assert `ExcludeGlobs` contains every supplied pattern in order.
+This scenario is tested by `Cli_Create_ExcludeParameter_Repeated_AccumulatesExcludeGlobs`.

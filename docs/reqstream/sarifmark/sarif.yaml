@@ -133,3 +133,18 @@ sections:
               - SarifMark-SarifResults-ToMarkdownMultiRun
             tests:
               - Sarif_Read_MultiRunSarifFile_ProcessesAllRuns
+
+          - id: SarifMark-Sarif-ExcludeFiltering
+            title: The tool shall exclude findings whose file location matches a user-supplied
+              glob pattern before enforcement and report generation.
+            justification: >-
+              Excluding findings by file-location glob lets users drop generated or
+              vendored code (such as build output directories) from enforcement and
+              reports without post-processing the SARIF file or reconfiguring the
+              upstream analysis tool.
+            tags: [public]
+            children:
+              - SarifMark-SarifResults-Exclude
+            tests:
+              - Program_Main_ExcludeFlag_FiltersMatchingFindingsFromReport
+              - Program_Main_ExcludeAndEnforce_ExcludedFindingsDoNotTriggerEnforcement
