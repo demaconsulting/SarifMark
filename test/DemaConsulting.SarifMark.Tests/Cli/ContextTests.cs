@@ -904,4 +904,57 @@ public class ContextTests
         // Assert
         Assert.Contains("--exclude requires", exception.Message);
     }
+
+    /// <summary>
+    ///     Test that --exclude immediately followed by another recognized option throws an exception
+    ///     rather than silently consuming the following option token as the glob pattern.
+    /// </summary>
+    [Fact]
+    public void Context_Create_ExcludeFollowedByOption_ThrowsArgumentException()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--exclude", "--enforce"]));
+
+        // Assert
+        Assert.Contains("--exclude requires", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that --sarif immediately followed by another recognized option throws an exception
+    ///     rather than silently consuming the following option token as the filename, confirming the
+    ///     fix applies to every value-bearing option that shares GetRequiredStringArgument, not just --exclude.
+    /// </summary>
+    [Fact]
+    public void Context_Create_SarifFollowedByOption_ThrowsArgumentException()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--sarif", "--enforce"]));
+
+        // Assert
+        Assert.Contains("--sarif requires", exception.Message);
+    }
+
+    /// <summary>
+    ///     Test that --depth immediately followed by another recognized option throws an exception
+    ///     rather than silently attempting to parse the following option token as the depth value,
+    ///     confirming the fix also applies to GetRequiredIntArgument, not just GetRequiredStringArgument.
+    /// </summary>
+    [Fact]
+    public void Context_Create_DepthFollowedByOption_ThrowsArgumentException()
+    {
+        // Arrange
+        // (no setup required)
+
+        // Act
+        var exception = Assert.Throws<ArgumentException>(() => Context.Create(["--depth", "--enforce"]));
+
+        // Assert
+        Assert.Contains("--depth requires a depth argument", exception.Message);
+    }
 }

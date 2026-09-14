@@ -249,6 +249,30 @@ internal sealed class Context : IDisposable
         private readonly List<string> _excludeGlobs = [];
 
         /// <summary>
+        ///     Recognized option tokens handled by <see cref="ParseArgument"/>. Shared with
+        ///     <see cref="GetRequiredStringArgument"/> and <see cref="GetRequiredIntArgument"/> so that a
+        ///     value-bearing option (for example <c>--exclude</c>) followed by another option token (for
+        ///     example <c>--enforce</c>) is rejected as a missing value rather than silently consuming the
+        ///     next option as its value. Kept as a single source of truth to avoid maintaining the option
+        ///     list twice.
+        /// </summary>
+        private static readonly HashSet<string> KnownOptionTokens =
+        [
+            "-v", "--version",
+            "-?", "-h", "--help",
+            "--silent",
+            "--validate",
+            "--enforce",
+            "--log",
+            "--sarif",
+            "--report",
+            "--depth", "--report-depth",
+            "--heading",
+            "--result", "--results",
+            "--exclude"
+        ];
+
+        /// <summary>
         ///     Parses command-line arguments.
         /// </summary>
         /// <param name="args">Command-line arguments.</param>
@@ -344,10 +368,14 @@ internal sealed class Context : IDisposable
         /// <param name="index">Current index.</param>
         /// <param name="description">Description of what's required.</param>
         /// <returns>The argument value.</returns>
-        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is the last token in the argument list and has no following value.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is the last token in the argument list and has no following value, or the following token is itself a recognized option (for example <c>--exclude --enforce</c>), which would otherwise be silently consumed as the value instead of reporting the missing argument.</exception>
         private static string GetRequiredStringArgument(string arg, string[] args, int index, string description)
         {
-            if (index >= args.Length)
+            // A missing value and a value that is actually the next recognized option are both
+            // treated as "no value supplied" - otherwise an option like --enforce following
+            // --exclude would be silently consumed as the glob pattern rather than being
+            // recognized as its own flag, letting a misconfigured invocation succeed silently.
+            if (index >= args.Length || KnownOptionTokens.Contains(args[index]))
             {
                 throw new ArgumentException($"{arg} requires {description}", nameof(args));
             }
@@ -366,7 +394,7 @@ internal sealed class Context : IDisposable
         /// <exception cref="ArgumentException">Thrown when <paramref name="arg"/> is the last token in the argument list, or its value is not an integer between 1 and 6.</exception>
         private static int GetRequiredIntArgument(string arg, string[] args, int index)
         {
-            if (index >= args.Length)
+            if (index >= args.Length || KnownOptionTokens.Contains(args[index]))
             {
                 throw new ArgumentException($"{arg} requires a depth argument", nameof(args));
             }

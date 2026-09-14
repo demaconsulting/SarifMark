@@ -116,6 +116,7 @@ public class ProgramTests
             Assert.Matches(@"--report(?!-)", output);
             Assert.Contains("--depth", output);
             Assert.Contains("--heading", output);
+            Assert.Contains("--exclude <glob>", output);
         }
         finally
         {

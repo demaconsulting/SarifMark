@@ -114,6 +114,7 @@ sections:
                 tags: [internal]
                 tests:
                   - Context_Create_SarifWithoutValue_ThrowsArgumentException
+                  - Context_Create_SarifFollowedByOption_ThrowsArgumentException
 
               - id: SarifMark-Context-ReportParam
                 title: The Context unit shall capture the --report parameter value
@@ -153,6 +154,7 @@ sections:
                 tests:
                   - Context_Create_DepthParameter_SetsDepth
                   - Context_Create_DepthWithoutValue_ThrowsArgumentException
+                  - Context_Create_DepthFollowedByOption_ThrowsArgumentException
 
               - id: SarifMark-Context-ReportDepthAlias
                 title: The Context unit shall accept --report-depth as a legacy alias
@@ -280,6 +282,7 @@ sections:
                 tags: [internal]
                 tests:
                   - Context_Create_ExcludeWithoutValue_ThrowsArgumentException
+                  - Context_Create_ExcludeFollowedByOption_ThrowsArgumentException
 
               - id: SarifMark-Context-LogParam
                 title: >-
