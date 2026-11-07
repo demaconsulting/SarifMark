@@ -21,6 +21,8 @@ Results Interchange Format) files. It processes SARIF files produced by various 
 them into human-readable markdown reports, making it easy to integrate code quality reporting into your CI/CD
 pipelines and documentation workflows.
 
+![SarifMark architecture: the Program entry point reads a SARIF file through the Sarif subsystem and writes a markdown report](https://raw.githubusercontent.com/demaconsulting/SarifMark/main/docs/images/architecture.png)
+
 ## Features
 
 - 📄 **SARIF Processing** - Read and parse SARIF 2.1.0 format files, including multi-run files

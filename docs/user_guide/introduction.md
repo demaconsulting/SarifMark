@@ -10,6 +10,11 @@ comprehensive markdown reports. It is designed to integrate seamlessly into CI/C
 pipelines for automated quality reporting, making analysis results accessible and
 actionable for development teams.
 
+The following diagram shows how SarifMark turns a SARIF file into a report:
+
+![SarifMark architecture: the Program entry point uses Cli, Utilities, SelfTest and Sarif to turn a SARIF
+file into a markdown report and an exit code.](architecture.svg)
+
 ## Scope
 
 This guide covers:
