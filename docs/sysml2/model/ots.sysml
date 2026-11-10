@@ -1,27 +1,38 @@
 package OtsDependencies {
+    private import SoftwareItemMetadata::*;
+
     doc /* Off-the-shelf (OTS) production dependencies used by SarifMark. */
 
     part def TestResultsPackage {
         doc /* OTS: DemaConsulting.TestResults. */
 
-        comment designRef /* Design: docs/design/ots/test-results.md */
-        comment verificationRef /* Verification: docs/verification/ots/test-results.md */
-        comment reqRef /* Requirements: docs/reqstream/ots/test-results.yaml */
+        metadata info : SoftwareInfo {
+            description = "OTS: DemaConsulting.TestResults.";
+            designFiles = ("docs/design/ots/test-results.md");
+            verificationFiles = ("docs/verification/ots/test-results.md");
+            requirementFiles = ("docs/reqstream/ots/test-results.yaml");
+        }
     }
 
     part def SysML2ToolsTool {
         doc /* OTS: DemaConsulting.SysML2Tools. */
 
-        comment designRef /* Design: docs/design/ots/sysml2tools.md */
-        comment verificationRef /* Verification: docs/verification/ots/sysml2tools.md */
-        comment reqRef /* Requirements: docs/reqstream/ots/sysml2tools.yaml */
+        metadata info : SoftwareInfo {
+            description = "OTS: DemaConsulting.SysML2Tools.";
+            designFiles = ("docs/design/ots/sysml2tools.md");
+            verificationFiles = ("docs/verification/ots/sysml2tools.md");
+            requirementFiles = ("docs/reqstream/ots/sysml2tools.yaml");
+        }
     }
 
     part def FileSystemGlobbingPackage {
         doc /* OTS: Microsoft.Extensions.FileSystemGlobbing. */
 
-        comment designRef /* Design: docs/design/ots/filesystem-globbing.md */
-        comment verificationRef /* Verification: docs/verification/ots/filesystem-globbing.md */
-        comment reqRef /* Requirements: docs/reqstream/ots/filesystem-globbing.yaml */
+        metadata info : SoftwareInfo {
+            description = "OTS: Microsoft.Extensions.FileSystemGlobbing.";
+            designFiles = ("docs/design/ots/filesystem-globbing.md");
+            verificationFiles = ("docs/verification/ots/filesystem-globbing.md");
+            requirementFiles = ("docs/reqstream/ots/filesystem-globbing.yaml");
+        }
     }
 }

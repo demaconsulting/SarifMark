@@ -42,7 +42,7 @@ contains the expected report structure.
 This scenario is tested by `ReviewMark_ReviewReportGeneration`.
 
 **ReviewMark_IndexScan**: The `ReviewMark_IndexScan` self-validation scenario scans a
-directory of PDF evidence files with `--index` and confirms the index.json catalogue is
+directory of PDF evidence files with `--index` and confirms the index.json catalog is
 written with the correct content.
 This scenario is tested by `ReviewMark_IndexScan`.
 

@@ -12,7 +12,7 @@ This document defines the design for each software item in SarifMark. It provide
 and detailed design for local items (system, subsystems, and units), and integration and usage design
 for OTS software items. A reviewer should be able to understand how each item satisfies its
 requirements without reading source code. This document also establishes traceability between
-requirements and the components that fulfil them, and provides a reference for developers
+requirements and the components that fulfill them, and provides a reference for developers
 contributing to or reviewing the tool.
 
 ## Scope

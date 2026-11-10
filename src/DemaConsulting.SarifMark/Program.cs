@@ -55,7 +55,7 @@ internal static class Program
     ///     caught and converted to exit code 1. These are the expected user-facing error types:
     ///     <see cref="ArgumentException"/> represents invalid command-line input, and
     ///     <see cref="InvalidOperationException"/> represents a recoverable runtime failure such
-    ///     as a malformed SARIF file or an unopenable log file. All other exception types indicate
+    ///     as a malformed SARIF file or an unreadable log file. All other exception types indicate
     ///     unexpected conditions (bugs or environmental failures) that should surface as unhandled
     ///     exceptions to aid debugging and generate event-log entries — they are intentionally
     ///     not swallowed here.

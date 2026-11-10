@@ -199,7 +199,7 @@ By contributing to this project, you agree that your contributions will be licen
 
 ## Project Development Practices
 
-- 🔍 **Linting Enforcement** - markdownlint, cspell, and yamllint enforced on every CI run
+- 🔍 **Linting Enforcement** - markdownlint, TextLint, and yamllint enforced on every CI run
 - 📋 **Continuous Compliance** - Compliance evidence generated automatically on every CI run,
   following the [Continuous Compliance](https://github.com/demaconsulting/ContinuousCompliance) methodology
 - ☁️ **SonarCloud Integration** - Quality gate and security analysis on every build
@@ -275,7 +275,7 @@ Each test in the report proves:
 
 On validation failure the tool will exit with a non-zero exit code.
 
-## Acknowledgements
+## Acknowledgments
 
 SarifMark is built with the following open-source projects:
 

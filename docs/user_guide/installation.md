@@ -7,7 +7,7 @@ traceable. The following practices are applied on every build:
 
 - **Requirements Traceability**: Every requirement is linked to passing tests; a trace matrix is
   auto-generated on each release.
-- **Linting Enforcement**: markdownlint, cspell, and yamllint are enforced before any build.
+- **Linting Enforcement**: markdownlint, TextLint, and yamllint are enforced before any build.
 - **Automated Audit Documentation**: Each release ships with generated requirements, justifications,
   a trace matrix, and quality reports.
 - **CodeQL and SonarCloud**: Security and quality analysis runs on every build.

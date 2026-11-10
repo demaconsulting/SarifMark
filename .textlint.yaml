@@ -1,5 +1,5 @@
 ---
-# Spell-Checking
+# Spell-Checking with TextLint
 #
 # PURPOSE:
 # - Maintain professional documentation and code quality
@@ -10,35 +10,26 @@
 # - PROPOSE only genuine technical terms/names as needed
 version: '0.2'
 language: en
+files:
+  - "**/*.{md,yaml,yml,json,cs,cpp,hpp,h,txt}"
+enableGlobDot: true
 words:
-  - buildmark
-  - canvasnet
   - callees
   - Checkmarx
-  - Dema
+  - DEMA
   - demaconsulting
-  - fileassert
-  - hotspots
-  - Pandoc
-  - postconditions
-  - Pylint
-  - reqstream
-  - reviewmark
-  - sarif
-  - sarifmark
-  - Semgrep
+  - DEMACONSULTINGNUGETKEY
+  - ncipollo
+  - nestings
+  - netstandard
+  - SARIF
+  - shopt
   - slnx
-  - sonar
-  - SonarQube
-  - sonarmark
-  - sysml
-  - sysml2tools
-  - Unwritable
-  - unopenable
-  - versionmark
-  - Weasyprint
-  - xunit
-  - Xunit
+  - snupkg
+  - sonarscanner
+  - thirdparty
+  - unidirectionality
+  - venv
   - yamlfix
 ignorePaths:
   - '**/.git/**'
@@ -47,9 +38,9 @@ ignorePaths:
   - '**/thirdparty/**'
   - '**/third-party/**'
   - '**/3rd-party/**'
+  - '**/generated/**'
   - '**/.agent-logs/**'
   - '**/AGENT_REPORT_*.md'
   - '**/bin/**'
   - '**/obj/**'
-  - '**/generated/**'
   - package-lock.json
