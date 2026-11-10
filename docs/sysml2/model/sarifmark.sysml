@@ -1,6 +1,7 @@
 package SarifMark {
     import OtsDependencies::*;
     import SharedDependencies::*;
+    private import SoftwareItemMetadata::*;
 
     doc
     /*
@@ -11,10 +12,13 @@ package SarifMark {
     part def SarifMarkSystem {
         doc /* The SarifMark system as a whole. */
 
-        comment testRef /* Test: test/DemaConsulting.SarifMark.Tests/IntegrationTests.cs */
-        comment designRef /* Design: docs/design/sarifmark.md */
-        comment verificationRef /* Verification: docs/verification/sarifmark.md */
-        comment reqRef /* Requirements: docs/reqstream/sarifmark.yaml */
+        metadata info : SoftwareInfo {
+            description = "The SarifMark system as a whole.";
+            testFiles = ("test/DemaConsulting.SarifMark.Tests/IntegrationTests.cs");
+            designFiles = ("docs/design/sarifmark.md");
+            verificationFiles = ("docs/verification/sarifmark.md");
+            requirementFiles = ("docs/reqstream/sarifmark.yaml");
+        }
 
         part program : Program;
         part cli : CliSubsystem;

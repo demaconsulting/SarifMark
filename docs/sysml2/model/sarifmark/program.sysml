@@ -1,11 +1,16 @@
 package SarifMark {
+    private import SoftwareItemMetadata::*;
+
     part def Program {
         doc /* Entry point and execution orchestrator. */
 
-        comment sourceRef /* Source: src/DemaConsulting.SarifMark/Program.cs */
-        comment testRef /* Test: test/DemaConsulting.SarifMark.Tests/ProgramTests.cs */
-        comment designRef /* Design: docs/design/sarifmark/program.md */
-        comment verificationRef /* Verification: docs/verification/sarifmark/program.md */
-        comment reqRef /* Requirements: docs/reqstream/sarifmark/program.yaml */
+        metadata info : SoftwareInfo {
+            description = "Entry point and execution orchestrator.";
+            sourceFiles = ("src/DemaConsulting.SarifMark/Program.cs");
+            testFiles = ("test/DemaConsulting.SarifMark.Tests/ProgramTests.cs");
+            designFiles = ("docs/design/sarifmark/program.md");
+            verificationFiles = ("docs/verification/sarifmark/program.md");
+            requirementFiles = ("docs/reqstream/sarifmark/program.yaml");
+        }
     }
 }

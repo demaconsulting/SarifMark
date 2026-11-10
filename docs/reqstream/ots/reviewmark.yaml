@@ -52,7 +52,7 @@ sections:
             title: ReviewMark shall scan PDF evidence files and write an index.
             justification: |
               The --index mode scans a directory of PDF evidence files and writes an
-              up-to-date index.json catalogue. The self-validation test
+              up-to-date index.json catalog. The self-validation test
               ReviewMark_IndexScan confirms index scanning works correctly.
             tags: [ots]
             tests:
