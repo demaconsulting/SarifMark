@@ -5,7 +5,8 @@
 // 'render' - is what scopes the rendered diagram content.
 package SarifMark {
     view SoftwareStructureView {
-        expose SarifMark;
+        expose SarifMark::**;
+        render asInterconnectionDiagram;
     }
 
     view SarifMarkView {
