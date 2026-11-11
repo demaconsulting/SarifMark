@@ -27,4 +27,4 @@ includes:
   - docs/reqstream/ots/filesystem-globbing.yaml
   - docs/reqstream/ots/sysml2tools.yaml
   - docs/reqstream/shared/sarifmark.yaml
-root-tags: [public, quality]
+root-tags: [system, quality]

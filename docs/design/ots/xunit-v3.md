@@ -10,7 +10,7 @@ requirements traceability.
 xUnit v3 was chosen for its first-class support for .NET, its clean attribute-based test
 declaration model, and its compatibility with the VSTest adapter required by ReqStream for
 TRX output. The v3 release provides improved performance and native support for modern
-.NET target frameworks, including .NET 8, 9, and 10, which are all targeted by SarifMark.
+.NET target frameworks, including .NET 10 and 11, which are both targeted by SarifMark.
 
 ### Features Used
 

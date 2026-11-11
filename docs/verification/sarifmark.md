@@ -23,15 +23,15 @@ separately in *FileSystemGlobbing Verification Design*.
 ## Test Environment
 
 Integration tests execute on Windows, Ubuntu (Linux), and macOS CI runners. Each runner tests against all supported
-.NET runtime versions (8, 9, and 10), producing a three-platform by three-runtime matrix. This matrix provides
+.NET runtime versions (10 and 11), producing a three-platform by two-runtime matrix. This matrix provides
 coverage for requirements `SarifMark-Plt-Windows`, `SarifMark-Plt-Linux`, `SarifMark-Plt-MacOS`,
-`SarifMark-Plt-Net8`, `SarifMark-Plt-Net9`, and `SarifMark-Plt-Net10`. No external services or network access are
+`SarifMark-Plt-Net10`, and `SarifMark-Plt-Net11`. No external services or network access are
 required to run the test suite.
 
 ## Acceptance Criteria
 
 - All integration tests produce the expected exit code (0 for success, 1 for expected error conditions) on all three
-  CI runner platforms (Windows, Ubuntu, macOS) against all three supported .NET runtime versions (8, 9, and 10).
+  CI runner platforms (Windows, Ubuntu, macOS) against both supported .NET runtime versions (10 and 11).
 - All integration tests produce the expected console output and any expected output files.
 - The built-in `--validate` self-test exits with code 0 on all supported platforms and runtimes.
 - Every system-level requirement maps to at least one named test scenario (IEC 62304 §5.7.2).

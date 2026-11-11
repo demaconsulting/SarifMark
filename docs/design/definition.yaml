@@ -8,6 +8,7 @@ resource-path:
   - docs/design/sarifmark/utilities
   - docs/design/ots
   - docs/design/shared
+  - docs/images
   - docs/template
 input-files:
   - docs/design/title.txt
