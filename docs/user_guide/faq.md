@@ -48,7 +48,7 @@ depth, which is useful when embedding the report inside a larger document.
 
 ### Which .NET versions are supported?
 
-SarifMark supports .NET SDK 8.0, 9.0, and 10.0.
+SarifMark supports .NET SDK 10.0 and 11.0.
 
 ### How do I update SarifMark?
 

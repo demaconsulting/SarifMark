@@ -47,6 +47,13 @@ rendered diagram.
 
 ![Software Structure](SoftwareStructureView.svg)
 
+The diagram below complements the structure view by showing how data flows at run time: the
+`sarifmark` command-line options pass through the Cli subsystem, a SARIF file is read by the Sarif
+subsystem into immutable records, and the tool produces a markdown report and an exit code.
+
+![SarifMark architecture: the Program entry point uses Cli, Utilities, SelfTest and Sarif to turn a SARIF
+file into a markdown report and an exit code](architecture.svg)
+
 ## Folder Layout
 
 - **src/** - source files and projects

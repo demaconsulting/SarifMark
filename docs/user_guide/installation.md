@@ -16,9 +16,8 @@ traceable. The following practices are applied on every build:
 
 SarifMark requires one of the following .NET SDK versions:
 
-- .NET SDK 8.0
-- .NET SDK 9.0
 - .NET SDK 10.0
+- .NET SDK 11.0
 
 No other runtime dependencies are needed.
 

@@ -21,7 +21,10 @@ Results Interchange Format) files. It processes SARIF files produced by various 
 them into human-readable markdown reports, making it easy to integrate code quality reporting into your CI/CD
 pipelines and documentation workflows.
 
-![SarifMark architecture: the Program entry point reads a SARIF file through the Sarif subsystem and writes a markdown report](https://raw.githubusercontent.com/demaconsulting/SarifMark/main/docs/images/architecture.png)
+The workflow below shows how to use it: run a code analysis tool such as CodeQL, run SarifMark from the
+command line or a CI pipeline, and use the resulting markdown report and pass/fail result.
+
+![SarifMark workflow: a code analysis tool such as CodeQL produces a SARIF file, SarifMark runs from the command line or a CI pipeline, produces a markdown report and a pass/fail result, which are used in code quality documents, as a CI quality gate, or as compliance evidence](https://raw.githubusercontent.com/demaconsulting/SarifMark/main/docs/images/workflow.png)
 
 ## Features
 
@@ -29,7 +32,7 @@ pipelines and documentation workflows.
 - 📝 **Markdown Reports** - Generate human-readable reports from SARIF data
 - 🎯 **Customizable Output** - Configure report depth and custom headings
 - 🚀 **CI/CD Integration** - Enforce quality gates and fail builds on issues
-- 🌐 **Multi-Platform** - Builds and runs on Windows, Linux, and macOS with .NET 8, 9, and 10
+- 🌐 **Multi-Platform** - Builds and runs on Windows, Linux, and macOS with .NET 10 and 11
 - ✅ **Self-Validation** - Built-in tests without requiring external tools
 - 📊 **Detailed Reporting** - Extract tool information, results, and locations
 
@@ -37,7 +40,7 @@ pipelines and documentation workflows.
 
 ### Prerequisites
 
-- [.NET SDK](https://dotnet.microsoft.com/download) 8.0, 9.0, or 10.0
+- [.NET SDK](https://dotnet.microsoft.com/download) 10.0 or 11.0
 
 ### Global Installation
 
@@ -84,9 +87,8 @@ dotnet tool update DemaConsulting.SarifMark
 
 | Component | Version | Status |
 | :-------- | :------ | :----- |
-| .NET SDK | 8.0 | ✅ Supported |
-| .NET SDK | 9.0 | ✅ Supported |
 | .NET SDK | 10.0 | ✅ Supported |
+| .NET SDK | 11.0 | ✅ Supported |
 | SARIF Format | 2.1.0 | ✅ Supported |
 | OS | Windows | ✅ Supported |
 | OS | Linux | ✅ Supported |

@@ -10,10 +10,14 @@ comprehensive markdown reports. It is designed to integrate seamlessly into CI/C
 pipelines for automated quality reporting, making analysis results accessible and
 actionable for development teams.
 
-The following diagram shows how SarifMark turns a SARIF file into a report:
+The workflow below shows how SarifMark is used: run a code analysis tool such as CodeQL to produce
+a SARIF file, run the `sarifmark` command locally or in a CI pipeline, and use the resulting
+markdown report and pass/fail result in code quality documents, as a CI quality gate, or as
+compliance evidence.
 
-![SarifMark architecture: the Program entry point uses Cli, Utilities, SelfTest and Sarif to turn a SARIF
-file into a markdown report and an exit code.](architecture.svg)
+![SarifMark workflow: a code analysis tool such as CodeQL produces a SARIF file, SarifMark runs from
+the command line or a CI pipeline, produces a markdown report and a pass/fail result, which are used
+in code quality documents, as a CI quality gate, or as compliance evidence](workflow.svg)
 
 ## Scope
 
@@ -25,7 +29,7 @@ This guide covers:
 - Report format and customization options
 - Troubleshooting common issues
 
-SarifMark requires .NET SDK 8.0, 9.0, or 10.0. No other runtime dependencies are needed.
+SarifMark requires .NET SDK 10.0 or 11.0. No other runtime dependencies are needed.
 
 ## References
 

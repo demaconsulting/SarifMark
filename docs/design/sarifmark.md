@@ -156,7 +156,7 @@ analysis flow end-to-end using a mock SARIF file and verifies the output.
 
 ## Design Constraints
 
-- Platform: targets .NET 8, 9, and 10 on Windows, Linux, and macOS.
+- Platform: targets .NET 10 and 11 on Windows, Linux, and macOS.
 - Input format: SARIF 2.1.0 JSON only.
 - Output format: UTF-8 Markdown for reports; TRX or JUnit XML for validation results.
 - No external process invocations at runtime.

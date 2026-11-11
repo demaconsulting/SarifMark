@@ -8,12 +8,10 @@
 #   windows@TestName    - proves the test passed on a Windows platform
 #   ubuntu@TestName     - proves the test passed on a Linux (Ubuntu) platform
 #   macos@TestName      - proves the test passed on a macOS platform
-#   net8.0@TestName     - proves the test passed under the .NET 8 target framework
-#   net9.0@TestName     - proves the test passed under the .NET 9 target framework
 #   net10.0@TestName    - proves the test passed under the .NET 10 target framework
-#   dotnet8.x@TestName  - proves the self-validation test ran with .NET 8.x runtime
-#   dotnet9.x@TestName  - proves the self-validation test ran with .NET 9.x runtime
+#   net11.0@TestName    - proves the test passed under the .NET 11 target framework
 #   dotnet10.x@TestName - proves the self-validation test ran with .NET 10.x runtime
+#   dotnet11.x@TestName - proves the self-validation test ran with .NET 11.x runtime
 #
 # Removing these filters invalidates the evidence-based proof for the requirements.
 sections:
@@ -57,38 +55,26 @@ sections:
               - macos@SarifMark_HelpFlag_OutputsUsageInformation
               - macos@SarifMark_ValidateFlag_RunsSelfValidation
 
-          - id: SarifMark-Plt-Net8
-            title: The tool shall support .NET 8.0 runtime.
-            justification: >-
-              .NET 8.0 support ensures compatibility with the current Long-Term Support
-              release, providing
-              stability and widespread adoption for enterprise users.
-            tags: [public]
-            tests:
-              - dotnet8.x@SarifMark_SarifReading
-              - dotnet8.x@SarifMark_MarkdownReportGeneration
-              - dotnet8.x@SarifMark_Enforcement
-
-          - id: SarifMark-Plt-Net9
-            title: The tool shall support .NET 9.0 runtime.
-            justification: >-
-              .NET 9.0 support enables users to leverage the latest .NET features
-              and performance improvements,
-              ensuring the tool remains current with the .NET ecosystem.
-            tags: [public]
-            tests:
-              - dotnet9.x@SarifMark_SarifReading
-              - dotnet9.x@SarifMark_MarkdownReportGeneration
-              - dotnet9.x@SarifMark_Enforcement
-
           - id: SarifMark-Plt-Net10
             title: The tool shall support .NET 10.0 runtime.
             justification: >-
-              .NET 10.0 support provides forward compatibility and ensures the tool
-              remains viable as
-              adoption grows, extending the tool's lifespan and relevance.
+              .NET 10.0 is a Long-Term Support (LTS) release and the oldest supported .NET
+              runtime. Supporting this version ensures the tool remains usable for organizations
+              following Microsoft's LTS support lifecycle and requiring stability guarantees.
             tags: [public]
             tests:
               - dotnet10.x@SarifMark_SarifReading
               - dotnet10.x@SarifMark_MarkdownReportGeneration
               - dotnet10.x@SarifMark_Enforcement
+
+          - id: SarifMark-Plt-Net11
+            title: The tool shall support .NET 11.0 runtime.
+            justification: >-
+              .NET 11.0 is the latest .NET release. Supporting this version provides users access
+              to the latest .NET features and performance improvements for teams who adopt newer
+              releases.
+            tags: [public]
+            tests:
+              - dotnet11.x@SarifMark_SarifReading
+              - dotnet11.x@SarifMark_MarkdownReportGeneration
+              - dotnet11.x@SarifMark_Enforcement
