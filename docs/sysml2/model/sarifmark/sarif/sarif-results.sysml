@@ -5,7 +5,6 @@ package SarifMark {
         doc /* Loads and aggregates SARIF log results for assertion. */
 
         metadata info : SoftwareInfo {
-            description = "Loads and aggregates SARIF log results for assertion.";
             sourceFiles = ("src/DemaConsulting.SarifMark/Sarif/SarifResults.cs");
             testFiles = ("test/DemaConsulting.SarifMark.Tests/Sarif/SarifResultsTests.cs");
             designFiles = ("docs/design/sarifmark/sarif/sarif-results.md");

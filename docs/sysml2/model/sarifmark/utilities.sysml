@@ -5,7 +5,6 @@ package SarifMark {
         doc /* File-path resolution and filesystem helper utilities. */
 
         metadata info : SoftwareInfo {
-            description = "File-path resolution and filesystem helper utilities.";
             testFiles = ("test/DemaConsulting.SarifMark.Tests/Utilities/UtilitiesTests.cs");
             designFiles = ("docs/design/sarifmark/utilities.md");
             verificationFiles = ("docs/verification/sarifmark/utilities.md");

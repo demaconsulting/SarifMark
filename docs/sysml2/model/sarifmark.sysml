@@ -13,7 +13,6 @@ package SarifMark {
         doc /* The SarifMark system as a whole. */
 
         metadata info : SoftwareInfo {
-            description = "The SarifMark system as a whole.";
             testFiles = ("test/DemaConsulting.SarifMark.Tests/IntegrationTests.cs");
             designFiles = ("docs/design/sarifmark.md");
             verificationFiles = ("docs/verification/sarifmark.md");

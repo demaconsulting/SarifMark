@@ -5,7 +5,6 @@ package SarifMark {
         doc /* Self-validation test runner. */
 
         metadata info : SoftwareInfo {
-            description = "Self-validation test runner.";
             sourceFiles = ("src/DemaConsulting.SarifMark/SelfTest/Validation.cs");
             testFiles = ("test/DemaConsulting.SarifMark.Tests/SelfTest/ValidationTests.cs");
             designFiles = ("docs/design/sarifmark/self-test/validation.md");

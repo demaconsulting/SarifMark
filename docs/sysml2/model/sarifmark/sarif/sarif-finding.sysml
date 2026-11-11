@@ -5,7 +5,6 @@ package SarifMark {
         doc /* Represents a single SARIF result/finding record. */
 
         metadata info : SoftwareInfo {
-            description = "Represents a single SARIF result/finding record.";
             sourceFiles = ("src/DemaConsulting.SarifMark/Sarif/SarifFinding.cs");
             testFiles = ("test/DemaConsulting.SarifMark.Tests/Sarif/SarifFindingTests.cs");
             designFiles = ("docs/design/sarifmark/sarif/sarif-finding.md");

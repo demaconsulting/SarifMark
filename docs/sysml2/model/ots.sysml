@@ -7,7 +7,6 @@ package OtsDependencies {
         doc /* OTS: DemaConsulting.TestResults. */
 
         metadata info : SoftwareInfo {
-            description = "OTS: DemaConsulting.TestResults.";
             designFiles = ("docs/design/ots/test-results.md");
             verificationFiles = ("docs/verification/ots/test-results.md");
             requirementFiles = ("docs/reqstream/ots/test-results.yaml");
@@ -18,7 +17,6 @@ package OtsDependencies {
         doc /* OTS: DemaConsulting.SysML2Tools. */
 
         metadata info : SoftwareInfo {
-            description = "OTS: DemaConsulting.SysML2Tools.";
             designFiles = ("docs/design/ots/sysml2tools.md");
             verificationFiles = ("docs/verification/ots/sysml2tools.md");
             requirementFiles = ("docs/reqstream/ots/sysml2tools.yaml");
@@ -29,7 +27,6 @@ package OtsDependencies {
         doc /* OTS: Microsoft.Extensions.FileSystemGlobbing. */
 
         metadata info : SoftwareInfo {
-            description = "OTS: Microsoft.Extensions.FileSystemGlobbing.";
             designFiles = ("docs/design/ots/filesystem-globbing.md");
             verificationFiles = ("docs/verification/ots/filesystem-globbing.md");
             requirementFiles = ("docs/reqstream/ots/filesystem-globbing.yaml");
