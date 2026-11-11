@@ -25,7 +25,7 @@ sections:
               Windows support ensures the tool is accessible to developers using Microsoft
               platforms, which are
               prevalent in enterprise environments and .NET development ecosystems.
-            tags: [public]
+            tags: [system]
             tests:
               - windows@SarifMark_VersionFlag_OutputsVersion
               - windows@SarifMark_HelpFlag_OutputsUsageInformation
@@ -37,7 +37,7 @@ sections:
               Linux support is essential for cloud-native development and CI/CD pipelines,
               as most modern build
               systems and container environments run on Linux.
-            tags: [public]
+            tags: [system]
             tests:
               - ubuntu@SarifMark_VersionFlag_OutputsVersion
               - ubuntu@SarifMark_HelpFlag_OutputsUsageInformation
@@ -49,7 +49,7 @@ sections:
               macOS support ensures the tool is accessible to developers using Apple
               platforms, which are widely
               used in software development environments.
-            tags: [public]
+            tags: [system]
             tests:
               - macos@SarifMark_VersionFlag_OutputsVersion
               - macos@SarifMark_HelpFlag_OutputsUsageInformation
@@ -61,7 +61,7 @@ sections:
               .NET 10.0 is a Long-Term Support (LTS) release and the oldest supported .NET
               runtime. Supporting this version ensures the tool remains usable for organizations
               following Microsoft's LTS support lifecycle and requiring stability guarantees.
-            tags: [public]
+            tags: [system]
             tests:
               - dotnet10.x@SarifMark_SarifReading
               - dotnet10.x@SarifMark_MarkdownReportGeneration
@@ -73,7 +73,7 @@ sections:
               .NET 11.0 is the latest .NET release. Supporting this version provides users access
               to the latest .NET features and performance improvements for teams who adopt newer
               releases.
-            tags: [public]
+            tags: [system]
             tests:
               - dotnet11.x@SarifMark_SarifReading
               - dotnet11.x@SarifMark_MarkdownReportGeneration

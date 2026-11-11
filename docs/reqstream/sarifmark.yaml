@@ -7,7 +7,7 @@ sections:
       - id: SarifMark-System-Version
         title: The tool shall display version information when the version flag is
           provided.
-        tags: [public]
+        tags: [system]
         justification: >-
           Users need to quickly identify the version of the tool they are using for
           troubleshooting and compatibility verification.
@@ -18,36 +18,44 @@ sections:
           - SarifMark-Program-ExitCode
           - SarifMark-Program-Run
           - SarifMark-Program-Banner
+          - SarifMark-Cli-Interface
+          - SarifMark-Cli-Version
         tests:
           - SarifMark_VersionFlag_OutputsVersion
 
       - id: SarifMark-System-Help
         title: The tool shall display help information when the help flag is provided.
-        tags: [public]
+        tags: [system]
         justification: >-
           Help information improves discoverability and usability by providing users
           with guidance
           on available options and parameters.
         children:
           - SarifMark-Program-Help
+          - SarifMark-Cli-Help
         tests:
           - SarifMark_HelpFlag_OutputsUsageInformation
 
       - id: SarifMark-System-Validate
         title: The tool shall support self-validation mode.
-        tags: [public]
+        tags: [system]
         justification: >-
           Self-validation mode enables verification that the tool operates correctly
           in
           the deployment environment.
         children:
           - SarifMark-Program-Validation
+          - SarifMark-Cli-Validate
+          - SarifMark-Validate-Mode
+          - SarifMark-Enforce-Mode
+          - SarifMark-Enforce-ExitCode
+          - SarifMark-SelfTest-DepthParam
         tests:
           - SarifMark_ValidateFlag_RunsSelfValidation
 
       - id: SarifMark-System-SarifRequired
         title: The tool shall require the --sarif parameter for SARIF analysis.
-        tags: [public]
+        tags: [system]
         justification: >-
           Requiring explicit SARIF file specification ensures intentional operation
           and prevents
@@ -55,17 +63,22 @@ sections:
         children:
           - SarifMark-Sarif-FilePaths
           - SarifMark-Program-SarifArgument
+          - SarifMark-Cli-Sarif
         tests:
           - SarifMark_MissingSarifParameter_ShowsError
 
       - id: SarifMark-System-SarifAnalysis
         title: The tool shall read and analyze SARIF files.
-        tags: [public]
+        tags: [system]
         justification: >-
           Reading and analyzing SARIF files is the core purpose of the tool, enabling
           integration with static analysis workflows.
         children:
           - SarifMark-Program-SarifReading
+          - SarifMark-Sarif-Reading
+          - SarifMark-Sarif-Validation
+          - SarifMark-Sarif-Results
+          - SarifMark-Sarif-Processing
         tests:
           - SarifMark_ValidSarifFile_ProcessesSuccessfully
           - SarifMark_NonExistentSarifFile_ShowsError
@@ -73,7 +86,7 @@ sections:
       - id: SarifMark-System-SarifSummary
         title: The tool shall generate a summary section for each SARIF analysis run
           in the report.
-        tags: [public]
+        tags: [system]
         justification: >-
           Reporting tool identity and result count after reading confirms successful
           processing
@@ -82,35 +95,40 @@ sections:
           were found.
         children:
           - SarifMark-Program-SarifSummary
+          - SarifMark-Sarif-ToolInfo
         tests:
           - SarifMark_ValidSarifFile_ProcessesSuccessfully
 
       - id: SarifMark-System-Report
         title: The tool shall generate markdown reports from SARIF files.
-        tags: [public]
+        tags: [system]
         justification: >-
           Markdown report generation makes SARIF analysis results accessible to
           stakeholders in a readable format.
         children:
           - SarifMark-Program-ReportGeneration
+          - SarifMark-Cli-Report
         tests:
           - SarifMark_GenerateReport_CreatesReportFile
 
       - id: SarifMark-System-Enforce
         title: The tool shall return non-zero exit code when enforcement mode detects
           issues.
-        tags: [public]
+        tags: [system]
         justification: >-
           Non-zero exit codes enable CI/CD pipeline integration for quality gates.
         children:
           - SarifMark-Program-EnforcementCheck
+          - SarifMark-Cli-Enforce
+          - SarifMark-Cli-WriteError-ExitCode
+          - SarifMark-Sarif-Results
         tests:
           - SarifMark_EnforceFlagWithIssues_ReturnsError
 
       - id: SarifMark-System-ExcludeFiltering
         title: The tool shall exclude findings whose file location matches a user-supplied
           glob pattern before enforcement and report generation.
-        tags: [public]
+        tags: [system]
         justification: >-
           Letting users drop findings from generated or vendored code (such as build
           output directories) without post-processing the report makes the tool easier
@@ -127,39 +145,42 @@ sections:
 
       - id: SarifMark-System-Silent
         title: The tool shall support silent mode to suppress console output.
-        tags: [public]
+        tags: [system]
         justification: >-
           Silent mode enables cleaner integration into automated workflows.
         children:
           - SarifMark-Cli-Silent
+          - SarifMark-Cli-Output
         tests:
           - SarifMark_SilentFlag_SuppressesOutput
 
       - id: SarifMark-System-LogFile
         title: The tool shall support writing output to a log file.
-        tags: [public]
+        tags: [system]
         justification: >-
           Log file support enables persistent record-keeping and audit trails.
         children:
           - SarifMark-Cli-Log
+          - SarifMark-Cli-Output
         tests:
           - SarifMark_LogFile_WritesOutputToFile
 
       - id: SarifMark-System-InvalidArgs
         title: The tool shall reject unknown command-line arguments with an error.
-        tags: [public]
+        tags: [system]
         justification: >-
           Rejecting unknown arguments prevents silent failures from typos.
         children:
           - SarifMark-Cli-InvalidArgs
           - SarifMark-Program-Main-Exceptions
+          - SarifMark-Cli-WriteError
         tests:
           - SarifMark_UnknownArgument_ShowsError
 
       - id: SarifMark-System-ReportDepth
         title: The tool shall accept a configurable heading depth for generated markdown
           reports.
-        tags: [public]
+        tags: [system]
         justification: >-
           Configurable report depth allows the generated report to be embedded at
           any heading
@@ -175,7 +196,7 @@ sections:
       - id: SarifMark-System-ReportHeading
         title: The tool shall accept a configurable custom heading for generated markdown
           reports.
-        tags: [public]
+        tags: [system]
         justification: >-
           Configurable report heading allows users to customize the section title
           in generated
@@ -189,19 +210,23 @@ sections:
         title: >-
           The tool shall support writing self-validation results to a file
           when the --results parameter is provided.
-        tags: [public]
+        tags: [system]
         justification: >-
           Writing validation results to a file enables integration with CI/CD test
           result
           reporting infrastructure such as TRX and JUnit XML consumers.
         children:
           - SarifMark-Validate-ResultFiles
+          - SarifMark-Cli-Results
+          - SarifMark-Cli-ResultLegacyAlias
+          - SarifMark-Validate-TrxFormat
+          - SarifMark-Validate-JUnitFormat
         tests:
           - SarifMark_ValidateResultsParameter_WritesResultsFile
 
       - id: SarifMark-System-Platform
         title: The tool shall run on Windows, Linux, and macOS.
-        tags: [public]
+        tags: [system]
         justification: >-
           Cross-platform support ensures the tool can be used in any CI/CD environment
           regardless of the underlying operating system.
@@ -219,7 +244,7 @@ sections:
           The tool shall generate a combined report from SARIF files containing multiple
           runs,
           with each run represented as a separate section.
-        tags: [public]
+        tags: [system]
         justification: >-
           Multi-run SARIF files may be produced by tools that analyze different targets
           or
@@ -237,7 +262,7 @@ sections:
           The tool shall reject any file path argument that contains
           path-traversal sequences or specifies an absolute path where
           a relative path is required.
-        tags: [public]
+        tags: [system]
         justification: >-
           Rejecting path-traversal sequences and absolute paths at all external
           input boundaries prevents file operations from escaping designated
@@ -257,7 +282,7 @@ sections:
           human-readable documentation,
           enabling better understanding and communication of analysis results
           across development teams.
-        tags: [public]
+        tags: [system]
         children:
           - SarifMark-SarifResults-ToMarkdown
         tests:
@@ -270,7 +295,7 @@ sections:
           into existing documentation
           hierarchies, preventing heading level conflicts when reports are
           embedded in larger documents.
-        tags: [public]
+        tags: [system]
         children:
           - SarifMark-SarifResults-ValidateDepth
         tests:
@@ -282,7 +307,7 @@ sections:
           Result counts provide a quick summary of analysis findings, helping
           users understand the scope of
           issues at a glance and track improvements over time.
-        tags: [public]
+        tags: [system]
         children:
           - SarifMark-SarifRun-FormatCount
         tests:
@@ -295,9 +320,10 @@ sections:
           to the source of issues,
           making the reports actionable and reducing time spent searching
           for problematic code.
-        tags: [public]
+        tags: [system]
         children:
           - SarifMark-SarifRun-FormatLocation
+          - SarifMark-Sarif-Locations
         tests:
           - Sarif_GenerateReport_LocationInfo_ContainsLocationInfo
 
@@ -307,7 +333,7 @@ sections:
           Custom headings allow users to tailor reports to their documentation
           standards and naming
           conventions, improving consistency across project documentation.
-        tags: [public]
+        tags: [system]
         children:
           - SarifMark-SarifResults-ToMarkdown
         tests:
@@ -320,7 +346,7 @@ sections:
           separation in generated markdown,
           making it easier to distinguish between different findings in the
           report.
-        tags: [public]
+        tags: [system]
         children:
           - SarifMark-SarifResults-ToMarkdown
         tests:
@@ -334,9 +360,10 @@ sections:
           performed on the expected files, which is particularly valuable
           in regulated or audited
           development environments.
-        tags: [public]
+        tags: [system]
         children:
           - SarifMark-SarifResults-FileCount
+          - SarifMark-Sarif-FileCount
         tests:
           - Sarif_GenerateReport_FileCount_ContainsFileCount
 
@@ -349,7 +376,7 @@ sections:
           passing analysis. The report must still be generated with the tool
           attribution and file count, confirming the analysis completed
           successfully even when no issues are found.
-        tags: [public]
+        tags: [system]
         children:
           - SarifMark-SarifResults-ToMarkdown
         tests:
