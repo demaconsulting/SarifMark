@@ -5,7 +5,6 @@ package SarifMark {
         doc /* Entry point and execution orchestrator. */
 
         metadata info : SoftwareInfo {
-            description = "Entry point and execution orchestrator.";
             sourceFiles = ("src/DemaConsulting.SarifMark/Program.cs");
             testFiles = ("test/DemaConsulting.SarifMark.Tests/ProgramTests.cs");
             designFiles = ("docs/design/sarifmark/program.md");
