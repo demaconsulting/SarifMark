@@ -1,6 +1,7 @@
 ---
 resource-path:
   - docs/design
+  - docs/design/generated
   - docs/design/sarifmark
   - docs/design/sarifmark/cli
   - docs/design/sarifmark/sarif
@@ -10,6 +11,7 @@ resource-path:
   - docs/design/shared
   - docs/images
   - docs/template
+embed-resources: true
 input-files:
   - docs/design/title.txt
   - docs/design/introduction.md
