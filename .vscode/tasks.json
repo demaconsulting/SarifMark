@@ -92,10 +92,9 @@
     },
     {
       "label": "lint yaml",
-      "command": "npx",
+      "command": "yamllint",
       "type": "shell",
       "args": [
-        "yamllint",
         "."
       ],
       "problemMatcher": [],
