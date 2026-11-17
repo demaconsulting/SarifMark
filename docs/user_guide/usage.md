@@ -39,7 +39,7 @@ sarifmark --help
 | `--sarif <file>` | SARIF file to process (required for analysis) |
 | `--exclude <glob>` | Exclude findings whose file location matches the given glob pattern; may be repeated |
 | `--report <file>` | Export analysis results to a markdown file |
-| `--depth <depth>` | Markdown header depth for the report (default: `1`; accepted range: `1`–`6`, corresponding to Markdown heading levels `#` through `######`) |
+| `--depth <depth>` | Markdown header depth for the report (default: `1`; range: `1`–`6`, i.e. `#` to `######`) |
 | `--heading <text>` | Custom heading for the report (default: `[ToolName] Analysis`) |
 | `--report-depth <depth>` | Deprecated alias for `--depth` (supported for backwards compatibility) |
 | `--result <file>` | Deprecated alias for `--results` (supported for backwards compatibility) |

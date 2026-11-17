@@ -8,7 +8,8 @@ generated reports — into a single structured HTML document using a custom HTML
 ### Purpose
 
 Pandoc was chosen for its mature support for combining multiple Markdown inputs, YAML
-front matter, Mermaid diagrams, and custom HTML templates into cohesive documents. It is
+front matter, Lua filters (the CanvasNet filter renders the Mermaid diagrams), and custom
+HTML templates into cohesive documents. It is
 the industry-standard tool for this workflow and is widely supported in CI environments.
 The `DemaConsulting.PandocTool` wrapper ensures a consistent installation and invocation
 pattern aligned with the Continuous Compliance toolchain.
