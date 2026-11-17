@@ -30,7 +30,7 @@ SarifMark.
 
 ## Version Management Policy
 
-OTS package versions are managed through Dependabot pull requests for NuGet and Node.js
+OTS package versions are managed through Dependabot pull requests for NuGet
 packages. The local tool manifest (`.config/dotnet-tools.json`) pins all .NET tool
 versions; upgrades are applied by updating the manifest entry and re-running
 `dotnet tool restore`.
@@ -38,8 +38,7 @@ versions; upgrades are applied by updating the manifest entry and re-running
 Version numbers are not recorded in design documentation; version information is captured
 in the project SBOM produced by the CI pipeline. Major version upgrades trigger a design
 review to assess whether the integration pattern documented in `ots/{item}.md` remains
-accurate. Node.js tool versions are pinned directly in `package.json`, and .NET tool
-versions are pinned in the local tool manifest.
+accurate. .NET tool versions are pinned in the local tool manifest.
 
 ## General Integration Approach
 

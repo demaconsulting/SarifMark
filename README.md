@@ -86,7 +86,7 @@ dotnet tool update DemaConsulting.SarifMark
 ### Compatibility
 
 | Component | Version | Status |
-| :-------- | :------ | :----- |
+| :--- | :--- | :--- |
 | .NET SDK | 10.0 | ✅ Supported |
 | .NET SDK | 11.0 | ✅ Supported |
 | SARIF Format | 2.1.0 | ✅ Supported |
@@ -201,7 +201,7 @@ By contributing to this project, you agree that your contributions will be licen
 
 ## Project Development Practices
 
-- 🔍 **Linting Enforcement** - markdownlint, TextLint, and yamllint enforced on every CI run
+- 🔍 **Linting Enforcement** - LintMark, TextLint, and yamllint enforced on every CI run
 - 📋 **Continuous Compliance** - Compliance evidence generated automatically on every CI run,
   following the [Continuous Compliance](https://github.com/demaconsulting/ContinuousCompliance) methodology
 - ☁️ **SonarCloud Integration** - Quality gate and security analysis on every build
@@ -242,7 +242,7 @@ in TRX or JUnit format.
 The self-validation suite includes the following tests:
 
 | Test Name | Description |
-| :-------- | :---------- |
+| :--- | :--- |
 | `SarifMark_SarifReading` | Verifies reading and parsing SARIF 2.1.0 format files |
 | `SarifMark_MarkdownReportGeneration` | Verifies generating markdown reports from SARIF data |
 | `SarifMark_Enforcement` | Verifies enforcement mode returns non-zero exit code when issues are found |
@@ -284,4 +284,5 @@ SarifMark is built with the following open-source projects:
 - [.NET](https://dotnet.microsoft.com/) - Cross-platform framework for building applications
 - [SARIF](https://sarifweb.azurewebsites.net/) - Static Analysis Results Interchange Format specification
 - [DemaConsulting.TestResults](https://github.com/demaconsulting/TestResults) - Test results parsing library
-- [Microsoft.Extensions.FileSystemGlobbing](https://www.nuget.org/packages/Microsoft.Extensions.FileSystemGlobbing) - Glob pattern matching used by `--exclude`
+- [Microsoft.Extensions.FileSystemGlobbing](https://www.nuget.org/packages/Microsoft.Extensions.FileSystemGlobbing) -
+  Glob pattern matching used by `--exclude`
