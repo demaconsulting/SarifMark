@@ -12,6 +12,12 @@
 [![Security](https://sonarcloud.io/api/project_badges/measure?project=demaconsulting_SarifMark&metric=security_rating)](https://sonarcloud.io/dashboard?id=demaconsulting_SarifMark)
 [![NuGet](https://img.shields.io/nuget/v/DemaConsulting.SarifMark?style=plastic)](https://www.nuget.org/packages/DemaConsulting.SarifMark)
 
+![SarifMark banner: the SarifMark name with the tagline 'Every finding, reported. Every gate, enforced.' and the
+command 'sarifmark --sarif app.sarif --report code.md --enforce'. CodeQL scans, a multi-run SARIF file, --exclude
+globs, and the report heading and depth flow on curved arrows into the sarifmark .NET tool, and arrows lead out to a
+Markdown report with a CodeQL Analysis heading, an Issues section and a finding line, a console run summary, an
+--enforce quality gate that exits 0 when clean and 1 on issues, and self-validation results in a TRX file][hero]
+
 SARIF Report Generation Tool
 
 ## Overview
@@ -286,3 +292,5 @@ SarifMark is built with the following open-source projects:
 - [DemaConsulting.TestResults](https://github.com/demaconsulting/TestResults) - Test results parsing library
 - [Microsoft.Extensions.FileSystemGlobbing](https://www.nuget.org/packages/Microsoft.Extensions.FileSystemGlobbing) -
   Glob pattern matching used by `--exclude`
+
+[hero]: https://raw.githubusercontent.com/demaconsulting/SarifMark/main/docs/images/hero.png
