@@ -26,8 +26,7 @@ sections:
                   - SarifResults_Read_WhitespacePath_ThrowsArgumentException
 
               - id: SarifMark-SarifResults-ValidatePathExists
-                title: The SARIF results unit shall report a clear error when the
-                  specified SARIF file does not exist.
+                title: The SARIF results unit shall report a clear error when the specified SARIF file does not exist.
                 justification: >-
                   Checking file existence before attempting to read produces a clear
                   error rather than a
@@ -38,8 +37,7 @@ sections:
                   - SarifResults_Read_NonExistentFile_ThrowsFileNotFoundException
 
               - id: SarifMark-SarifResults-ValidateJson
-                title: The SARIF results unit shall reject files that do not contain
-                  valid JSON.
+                title: The SARIF results unit shall reject files that do not contain valid JSON.
                 justification: >-
                   Rejecting malformed JSON at read time produces a clear diagnostic
                   before
@@ -51,8 +49,7 @@ sections:
                   - SarifResults_Read_InvalidJson_ThrowsInvalidOperationException
 
               - id: SarifMark-SarifResults-ValidateVersion
-                title: The SARIF results unit shall reject SARIF documents that do
-                  not contain the required version field.
+                title: The SARIF results unit shall reject SARIF documents that do not contain the required version field.
                 justification: >-
                   Checking for the version field at read time ensures that downstream
                   processing always operates on a recognizable SARIF document, producing
@@ -63,8 +60,7 @@ sections:
                   - SarifResults_Read_MissingVersion_ThrowsInvalidOperationException
 
               - id: SarifMark-SarifResults-ValidateRuns
-                title: The SARIF results unit shall reject SARIF documents that do
-                  not contain a non-empty runs array.
+                title: The SARIF results unit shall reject SARIF documents that do not contain a non-empty runs array.
                 justification: >-
                   Checking for a non-empty runs array at read time ensures that report
                   generation always has at least one run to process, preventing empty
@@ -120,8 +116,7 @@ sections:
                   - SarifResults_Read_EmptyVersionField_FallsBackToSemanticVersion
 
               - id: SarifMark-SarifResults-ParseResults
-                title: The SARIF results unit shall collect all result entries from
-                  each run.
+                title: The SARIF results unit shall collect all result entries from each run.
                 justification: >-
                   Iterating every entry in the results array, including empty arrays
                   and missing results nodes,
@@ -142,8 +137,7 @@ sections:
                   - SarifResults_Read_WithLocations_ReturnsResultsWithLocationData
 
               - id: SarifMark-SarifResults-FilterSuppressions
-                title: The SARIF results unit shall exclude suppressed results from
-                  the collected findings.
+                title: The SARIF results unit shall exclude suppressed results from the collected findings.
                 justification: >-
                   Filtering suppressed results mirrors standard SARIF tooling behavior
                   and ensures that
@@ -235,8 +229,7 @@ sections:
                   - SarifResults_Read_MultipleRuns_EachRunHasOwnFileCount
 
               - id: SarifMark-SarifResults-Runs
-                title: The SARIF results unit shall expose all parsed runs from the
-                  SARIF file.
+                title: The SARIF results unit shall expose all parsed runs from the SARIF file.
                 justification: >-
                   Exposing all runs provides consumers with full access to multi-run
                   SARIF files,
@@ -248,8 +241,7 @@ sections:
                   - SarifResults_InternalConstructor_ExposesRunsAndHasIssues
 
               - id: SarifMark-SarifResults-HasIssues
-                title: The SARIF results unit shall indicate whether any run contains
-                  findings.
+                title: The SARIF results unit shall indicate whether any run contains findings.
                 justification: >-
                   An aggregate issue indicator across all runs simplifies enforcement
                   logic by not requiring

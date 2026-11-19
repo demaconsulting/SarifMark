@@ -103,8 +103,7 @@ sections:
               - Sarif_Read_ValidSarifFile_ProcessesSuccessfully
 
           - id: SarifMark-Sarif-FileCount
-            title: The tool shall extract the total number of analyzed files from
-              SARIF artifacts.
+            title: The tool shall extract the total number of analyzed files from SARIF artifacts.
             justification: >-
               Extracting the file count from SARIF artifacts provides evidence of
               analysis scope, allowing
@@ -117,8 +116,7 @@ sections:
               - Sarif_GenerateReport_FileCount_ContainsFileCount
 
           - id: SarifMark-Sarif-MultiRun
-            title: The tool shall process SARIF files containing multiple runs and
-              return all runs.
+            title: The tool shall process SARIF files containing multiple runs and return all runs.
             justification: >-
               Multi-run SARIF files are produced when more than one analysis tool
               writes results into a single
@@ -135,8 +133,7 @@ sections:
               - Sarif_Read_MultiRunSarifFile_ProcessesAllRuns
 
           - id: SarifMark-Sarif-ExcludeFiltering
-            title: The tool shall exclude findings whose file location matches a user-supplied
-              glob pattern before enforcement and report generation.
+            title: The tool shall exclude findings whose file location matches a user-supplied glob pattern before enforcement and report generation.
             justification: >-
               Excluding findings by file-location glob lets users drop generated or
               vendored code (such as build output directories) from enforcement and

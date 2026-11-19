@@ -9,8 +9,7 @@ sections:
           - title: SarifFinding Requirements
             requirements:
               - id: SarifMark-SarifFinding-RuleId
-                title: The SarifFinding unit shall preserve the rule identifier provided
-                  at creation.
+                title: The SarifFinding unit shall preserve the rule identifier provided at creation.
                 justification: >-
                   The rule identifier links each finding to the analysis rule that
                   raised
@@ -21,8 +20,7 @@ sections:
                   - SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties
 
               - id: SarifMark-SarifFinding-Message
-                title: The SarifFinding unit shall preserve the message provided at
-                  creation.
+                title: The SarifFinding unit shall preserve the message provided at creation.
                 justification: >-
                   The message carries the human-readable description of the finding
                   that appears in the generated report, making the issue understandable
@@ -32,8 +30,7 @@ sections:
                   - SarifFinding_Constructor_AllPropertiesProvided_StoresAllProperties
 
               - id: SarifMark-SarifFinding-Severity
-                title: The SarifFinding unit shall preserve the severity level provided
-                  at creation.
+                title: The SarifFinding unit shall preserve the severity level provided at creation.
                 justification: >-
                   The severity level classifies findings by impact (error, warning,
                   note, etc.), allowing report consumers to prioritize remediation

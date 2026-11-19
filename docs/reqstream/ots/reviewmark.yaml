@@ -59,8 +59,7 @@ sections:
               - ReviewMark_IndexScan
 
           - id: SarifMark-OTS-ReviewMark-WorkingDirectory
-            title: ReviewMark shall support overriding the working directory for file
-              operations.
+            title: ReviewMark shall support overriding the working directory for file operations.
             justification: |
               The --dir flag overrides the working directory used for default paths
               and glob resolution. The self-validation test
@@ -91,8 +90,7 @@ sections:
               - ReviewMark_Elaborate
 
           - id: SarifMark-OTS-ReviewMark-Lint
-            title: ReviewMark shall validate the review configuration file and report
-              issues.
+            title: ReviewMark shall validate the review configuration file and report issues.
             justification: |
               The --lint mode validates the .reviewmark.yaml definition file for
               structural and semantic issues. The self-validation test ReviewMark_Lint
@@ -102,8 +100,7 @@ sections:
               - ReviewMark_Lint
 
           - id: SarifMark-OTS-ReviewMark-DepthFlag
-            title: ReviewMark shall support configuring review depth via the --depth
-              flag.
+            title: ReviewMark shall support configuring review depth via the --depth flag.
             justification: |
               The --depth flag controls how many heading levels are generated in review
               plan and report output. The self-validation test ReviewMark_DepthFlag

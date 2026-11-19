@@ -9,8 +9,7 @@ sections:
           - title: SarifRun Requirements
             requirements:
               - id: SarifMark-SarifRun-ToolName
-                title: The SarifRun unit shall expose the name of the analysis tool
-                  that produced the run.
+                title: The SarifRun unit shall expose the name of the analysis tool that produced the run.
                 justification: >-
                   Exposing the tool name enables report generation to identify the
                   producing tool by name,
@@ -21,8 +20,7 @@ sections:
                   - SarifRun_InternalConstructor_CreatesValidInstance
 
               - id: SarifMark-SarifRun-ToolVersion
-                title: The SarifRun unit shall expose the version of the analysis
-                  tool that produced the run.
+                title: The SarifRun unit shall expose the version of the analysis tool that produced the run.
                 justification: >-
                   Exposing the tool version allows generated reports to show which
                   version of a tool produced
@@ -52,8 +50,7 @@ sections:
                   - SarifRun_InternalConstructor_CreatesValidInstance
 
               - id: SarifMark-SarifRun-FileCount
-                title: The SarifRun unit shall expose the number of files analyzed
-                  in the run.
+                title: The SarifRun unit shall expose the number of files analyzed in the run.
                 justification: >-
                   Exposing the file count provides consumers with scope information
                   about the analysis,
@@ -75,8 +72,7 @@ sections:
                   - SarifRun_HasIssues_WithResults_ReturnsTrue
 
               - id: SarifMark-SarifRun-ToMarkdown
-                title: The SarifRun unit shall generate a complete markdown report
-                  for the run.
+                title: The SarifRun unit shall generate a complete markdown report for the run.
                 justification: >-
                   Generating the full report from a single operation provides a cohesive
                   output
