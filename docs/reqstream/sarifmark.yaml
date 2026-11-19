@@ -5,8 +5,7 @@ sections:
   - title: 'SarifMark Requirements'
     requirements:
       - id: SarifMark-System-Version
-        title: The tool shall display version information when the version flag is
-          provided.
+        title: The tool shall display version information when the version flag is provided.
         tags: [system]
         justification: >-
           Users need to quickly identify the version of the tool they are using for
@@ -84,8 +83,7 @@ sections:
           - SarifMark_NonExistentSarifFile_ShowsError
 
       - id: SarifMark-System-SarifSummary
-        title: The tool shall generate a summary section for each SARIF analysis run
-          in the report.
+        title: The tool shall generate a summary section for each SARIF analysis run in the report.
         tags: [system]
         justification: >-
           Reporting tool identity and result count after reading confirms successful
@@ -112,8 +110,7 @@ sections:
           - SarifMark_GenerateReport_CreatesReportFile
 
       - id: SarifMark-System-Enforce
-        title: The tool shall return non-zero exit code when enforcement mode detects
-          issues.
+        title: The tool shall return non-zero exit code when enforcement mode detects issues.
         tags: [system]
         justification: >-
           Non-zero exit codes enable CI/CD pipeline integration for quality gates.
@@ -126,8 +123,7 @@ sections:
           - SarifMark_EnforceFlagWithIssues_ReturnsError
 
       - id: SarifMark-System-ExcludeFiltering
-        title: The tool shall exclude findings whose file location matches a user-supplied
-          glob pattern before enforcement and report generation.
+        title: The tool shall exclude findings whose file location matches a user-supplied glob pattern before enforcement and report generation.
         tags: [system]
         justification: >-
           Letting users drop findings from generated or vendored code (such as build
@@ -178,8 +174,7 @@ sections:
           - SarifMark_UnknownArgument_ShowsError
 
       - id: SarifMark-System-ReportDepth
-        title: The tool shall accept a configurable heading depth for generated markdown
-          reports.
+        title: The tool shall accept a configurable heading depth for generated markdown reports.
         tags: [system]
         justification: >-
           Configurable report depth allows the generated report to be embedded at
@@ -194,8 +189,7 @@ sections:
           - SarifMark_LegacyReportDepth_IsAccepted
 
       - id: SarifMark-System-ReportHeading
-        title: The tool shall accept a configurable custom heading for generated markdown
-          reports.
+        title: The tool shall accept a configurable custom heading for generated markdown reports.
         tags: [system]
         justification: >-
           Configurable report heading allows users to customize the section title

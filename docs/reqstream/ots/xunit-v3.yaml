@@ -7,8 +7,7 @@ sections:
       - title: xUnit v3 Requirements
         requirements:
           - id: SarifMark-OTS-XUnitV3-Discovery
-            title: xUnit v3 shall discover test methods marked with [Fact] or [Theory]
-              attributes.
+            title: xUnit v3 shall discover test methods marked with [Fact] or [Theory] attributes.
             justification: |
               xunit.v3 is the unit-testing framework used by the project. Test discovery
               confirms the framework correctly identifies all test methods across the test

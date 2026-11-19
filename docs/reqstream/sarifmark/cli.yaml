@@ -75,8 +75,7 @@ sections:
               - Cli_Create_SilentFlag_SuppressesOutput
 
           - id: SarifMark-Cli-Log
-            title: The CLI shall write output to a log file when the log parameter
-              is set.
+            title: The CLI shall write output to a log file when the log parameter is set.
             justification: >-
               Log file support enables persistent record-keeping, debugging, and audit
               trails, especially valuable
@@ -253,8 +252,7 @@ sections:
               - Cli_Create_ResultLegacyAlias_SetsResultsFilePath
 
           - id: SarifMark-Cli-Exclude
-            title: The CLI shall accept one or more file-glob exclusion patterns via
-              the repeatable --exclude parameter.
+            title: The CLI shall accept one or more file-glob exclusion patterns via the repeatable --exclude parameter.
             justification: >-
               A repeatable exclusion parameter lets users drop findings from generated
               or vendored code (such as build output directories) without post-processing

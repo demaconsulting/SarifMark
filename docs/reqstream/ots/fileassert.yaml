@@ -27,8 +27,7 @@ sections:
               - FileAssert_HelpDisplay
 
           - id: SarifMark-OTS-FileAssert-Results
-            title: FileAssert shall write test results to file with pass and fail
-              outcomes.
+            title: FileAssert shall write test results to file with pass and fail outcomes.
             justification: |
               Writing test results to TRX or JUnit XML format is required for CI pipeline
               test reporting integration. The self-validation test FileAssert_Results

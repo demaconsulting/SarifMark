@@ -70,8 +70,7 @@ sections:
               - SelfTest_ResultsFile_XmlPath_WritesJUnitFile
 
           - id: SarifMark-Enforce-Mode
-            title: The SelfTest subsystem shall support enforcement mode to fail on
-              issues found.
+            title: The SelfTest subsystem shall support enforcement mode to fail on issues found.
             justification: >-
               Enforcement mode enables the tool to act as a quality gate in CI/CD
               pipelines, preventing code
@@ -84,8 +83,7 @@ sections:
               - SelfTest_EnforcementTest_RunsWithinValidation
 
           - id: SarifMark-Enforce-ExitCode
-            title: The SelfTest subsystem shall return non-zero exit code when issues
-              found in enforcement mode.
+            title: The SelfTest subsystem shall return non-zero exit code when issues found in enforcement mode.
             justification: >-
               Non-zero exit codes signal failure to CI/CD systems and scripts, enabling
               automated build failures
@@ -99,8 +97,7 @@ sections:
               - SelfTest_EnforceFlag_WithIssues_ReturnsNonZeroExitCode
 
           - id: SarifMark-SelfTest-DepthParam
-            title: The SelfTest subsystem shall accept the --depth parameter to configure
-              the heading depth used in self-validation report generation.
+            title: The SelfTest subsystem shall accept the --depth parameter to configure the heading depth used in self-validation report generation.
             justification: >-
               Passing the depth parameter through to self-validation ensures that
               the

@@ -7,8 +7,7 @@ sections:
       - title: VersionMark Requirements
         requirements:
           - id: SarifMark-OTS-VersionMark-Capture
-            title: VersionMark shall capture tool version information from configured
-              commands.
+            title: VersionMark shall capture tool version information from configured commands.
             justification: |
               VersionMark reads version metadata for each tool defined in .versionmark.yaml
               by executing the configured command and extracting the version via regex.
@@ -19,8 +18,7 @@ sections:
               - VersionMark_CapturesVersions
 
           - id: SarifMark-OTS-VersionMark-Publish
-            title: VersionMark shall generate a markdown report from captured version
-              information.
+            title: VersionMark shall generate a markdown report from captured version information.
             justification: |
               VersionMark reads captured version JSON files and renders a markdown
               tool-versions document. The self-validation test
@@ -31,8 +29,7 @@ sections:
               - VersionMark_GeneratesMarkdownReport
 
           - id: SarifMark-OTS-VersionMark-LintValid
-            title: VersionMark shall pass lint validation for a well-formed configuration
-              file.
+            title: VersionMark shall pass lint validation for a well-formed configuration file.
             justification: |
               The --lint mode validates .versionmark.yaml configuration files and exits
               with code 0 for valid files. The self-validation test
@@ -43,8 +40,7 @@ sections:
               - VersionMark_LintPassesForValidConfig
 
           - id: SarifMark-OTS-VersionMark-LintInvalid
-            title: VersionMark shall report errors and exit non-zero for a malformed
-              configuration file.
+            title: VersionMark shall report errors and exit non-zero for a malformed configuration file.
             justification: |
               The --lint mode must reject configuration files that are missing required
               fields. The self-validation test VersionMark_LintReportsErrorsForInvalidConfig

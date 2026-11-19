@@ -28,8 +28,7 @@ sections:
                   - PathHelpers_SafePathCombine_FilenameWithEmbeddedDots_CombinesSuccessfully
 
               - id: SarifMark-PathHelpers-NullCheck
-                title: The PathHelpers unit shall reject null base or relative path
-                  arguments with a clear error.
+                title: The PathHelpers unit shall reject null base or relative path arguments with a clear error.
                 justification: >-
                   Explicit null checks produce clear errors at the earliest possible
                   point, preventing
@@ -42,8 +41,7 @@ sections:
                   - PathHelpers_SafePathCombine_NullRelativePath_ThrowsArgumentNullException
 
               - id: SarifMark-PathHelpers-PostCombineCheck
-                title: The PathHelpers unit shall reject combined paths that resolve
-                  outside the base directory.
+                title: The PathHelpers unit shall reject combined paths that resolve outside the base directory.
                 justification: >-
                   A post-combination containment check handles all traversal patterns
                   — directory traversal

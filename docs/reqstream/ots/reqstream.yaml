@@ -7,8 +7,7 @@ sections:
       - title: ReqStream Requirements
         requirements:
           - id: SarifMark-OTS-ReqStream-Processing
-            title: ReqStream shall process all included requirements files and build
-              a complete requirements model.
+            title: ReqStream shall process all included requirements files and build a complete requirements model.
             justification: |
               ReqStream reads requirements.yaml and all included YAML files to build
               the complete requirements model used for enforcement and report generation.
@@ -19,8 +18,7 @@ sections:
               - ReqStream_RequirementsProcessing
 
           - id: SarifMark-OTS-ReqStream-TraceMatrix
-            title: ReqStream shall generate a traceability matrix linking requirements
-              to tests.
+            title: ReqStream shall generate a traceability matrix linking requirements to tests.
             justification: |
               ReqStream generates a traceability matrix document that links every
               requirement to its linked test evidence. The self-validation test
@@ -50,8 +48,7 @@ sections:
               - ReqStream_TagsFiltering
 
           - id: SarifMark-OTS-ReqStream-Enforcement
-            title: ReqStream shall enforce that every requirement is linked to passing
-              test evidence.
+            title: ReqStream shall enforce that every requirement is linked to passing test evidence.
             justification: |
               When run with --enforce, ReqStream exits with a non-zero code if any
               requirement lacks test evidence, making unproven requirements a
@@ -62,8 +59,7 @@ sections:
               - ReqStream_EnforcementMode
 
           - id: SarifMark-OTS-ReqStream-Lint
-            title: ReqStream shall validate requirements files and report structural
-              issues.
+            title: ReqStream shall validate requirements files and report structural issues.
             justification: |
               The --lint mode validates requirements YAML files for structural and
               semantic issues without processing test results. The self-validation

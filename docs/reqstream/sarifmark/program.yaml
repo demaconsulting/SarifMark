@@ -7,8 +7,7 @@ sections:
       - title: Program Requirements
         requirements:
           - id: SarifMark-Program-Version
-            title: The Program unit shall report the tool version derived from the
-              package build metadata.
+            title: The Program unit shall report the tool version derived from the package build metadata.
             justification: >-
               Deriving the version from package build metadata ensures the reported
               version string
@@ -63,8 +62,7 @@ sections:
               - Program_Main_HelpFlag_DisplaysHelp
 
           - id: SarifMark-Program-Main-Exceptions
-            title: The Program unit shall return exit code 1 when argument or processing
-              errors occur.
+            title: The Program unit shall return exit code 1 when argument or processing errors occur.
             justification: >-
               Converting structured error signals into a clean non-zero exit code
               prevents unhandled
@@ -76,8 +74,7 @@ sections:
               - Program_Main_UnknownArgument_ReturnsError
 
           - id: SarifMark-Program-Run
-            title: The Program unit shall process informational requests before attempting
-              SARIF operations.
+            title: The Program unit shall process informational requests before attempting SARIF operations.
             justification: >-
               Processing informational requests such as version and help before expensive
               operations
@@ -89,8 +86,7 @@ sections:
               - Program_Main_HelpFlag_DisplaysHelp
 
           - id: SarifMark-Program-Banner
-            title: The Program unit shall emit the tool version and copyright notice
-              on non-silent invocations.
+            title: The Program unit shall emit the tool version and copyright notice on non-silent invocations.
             justification: >-
               Emitting version and copyright on every non-silent invocation gives
               users immediate context about
@@ -101,8 +97,7 @@ sections:
               - Program_Main_HelpFlag_DisplaysHelp
 
           - id: SarifMark-Program-Help
-            title: The Program unit shall emit usage information listing all supported
-              command-line arguments.
+            title: The Program unit shall emit usage information listing all supported command-line arguments.
             justification: >-
               Comprehensive inline help reduces dependence on external documentation
               and lets users discover
@@ -114,8 +109,7 @@ sections:
               - Program_Main_HelpFlag_DisplaysHelp
 
           - id: SarifMark-Program-Validation
-            title: The Program unit shall execute self-validation when the --validate
-              flag is set.
+            title: The Program unit shall execute self-validation when the --validate flag is set.
             justification: >-
               Routing the validate flag to the SelfTest subsystem keeps self-validation
               logic encapsulated
@@ -126,8 +120,7 @@ sections:
               - Program_Main_ValidateFlag_RunsValidation
 
           - id: SarifMark-Program-SarifArgument
-            title: The Program unit shall require the --sarif argument before beginning
-              SARIF analysis.
+            title: The Program unit shall require the --sarif argument before beginning SARIF analysis.
             justification: >-
               Validating the SARIF argument before any file I/O prevents confusing
               downstream errors
@@ -163,8 +156,7 @@ sections:
               - Program_Main_ValidSarifFile_ProcessesSuccessfully
 
           - id: SarifMark-Program-EnforcementCheck
-            title: The Program unit shall signal failure when enforcement mode is
-              active and issues are found.
+            title: The Program unit shall signal failure when enforcement mode is active and issues are found.
             justification: >-
               Translating the presence of SARIF issues into a non-zero exit code enables
               CI/CD pipelines
@@ -174,9 +166,7 @@ sections:
               - Program_Main_EnforceFlagWithIssues_ReturnsError
 
           - id: SarifMark-Program-ExcludeFiltering
-            title: The Program unit shall apply --exclude glob filtering to the parsed
-              SARIF results after reading and before the enforcement check and report
-              generation.
+            title: The Program unit shall apply --exclude glob filtering to the parsed SARIF results after reading and before the enforcement check and report generation.
             justification: >-
               Filtering before enforcement and report generation ensures excluded
               findings never trigger --enforce failures and never appear in the generated
@@ -191,8 +181,7 @@ sections:
               - Program_Main_ExcludeFlag_PrintsExcludedCountSummary
 
           - id: SarifMark-Program-ReportGeneration
-            title: The Program unit shall write the markdown analysis report to the
-              specified output file.
+            title: The Program unit shall write the markdown analysis report to the specified output file.
             justification: >-
               Writing the report to a named output file makes analysis results available
               for downstream

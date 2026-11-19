@@ -38,8 +38,7 @@ sections:
                   - Validation_Run_WithXmlResultsFile_WritesResultsFile
 
               - id: SarifMark-Validation-NullCheck
-                title: The Validation unit shall reject a null execution context with
-                  a clear error.
+                title: The Validation unit shall reject a null execution context with a clear error.
                 justification: >-
                   Explicitly rejecting null at the entry boundary produces a clear
                   and immediate diagnostic
@@ -51,8 +50,7 @@ sections:
                   - Validation_Run_NullContext_ThrowsArgumentNullException
 
               - id: SarifMark-Validation-Header
-                title: The Validation unit shall output a system information table
-                  before executing tests.
+                title: The Validation unit shall output a system information table before executing tests.
                 justification: >-
                   Printing platform and runtime details before any tests execute ensures
                   that validation
@@ -64,8 +62,7 @@ sections:
                   - Validation_Run_ValidContext_PrintsValidationHeader
 
               - id: SarifMark-Validation-Header-ToolVersion
-                title: The Validation unit shall include the tool version in the validation
-                  header.
+                title: The Validation unit shall include the tool version in the validation header.
                 justification: >-
                   Including the tool version in the header allows validation results
                   to
@@ -77,8 +74,7 @@ sections:
                   - Validation_Run_ValidContext_PrintsValidationHeader
 
               - id: SarifMark-Validation-Header-MachineName
-                title: The Validation unit shall include the machine name in the validation
-                  header.
+                title: The Validation unit shall include the machine name in the validation header.
                 justification: >-
                   Including the machine name allows validation results to be attributed
                   to a specific host, enabling identification of environment-specific
@@ -88,8 +84,7 @@ sections:
                   - Validation_Run_ValidContext_PrintsValidationHeader
 
               - id: SarifMark-Validation-Header-OsVersion
-                title: The Validation unit shall include the OS version in the validation
-                  header.
+                title: The Validation unit shall include the OS version in the validation header.
                 justification: >-
                   Including the OS version contextualizes validation results with
                   the
@@ -100,8 +95,7 @@ sections:
                   - Validation_Run_ValidContext_PrintsValidationHeader
 
               - id: SarifMark-Validation-Header-Runtime
-                title: The Validation unit shall include the .NET runtime version
-                  in the validation header.
+                title: The Validation unit shall include the .NET runtime version in the validation header.
                 justification: >-
                   Including the .NET runtime version contextualizes validation results
                   with the specific runtime in use, enabling identification of
@@ -111,8 +105,7 @@ sections:
                   - Validation_Run_ValidContext_PrintsValidationHeader
 
               - id: SarifMark-Validation-Header-Timestamp
-                title: The Validation unit shall include the timestamp in the validation
-                  header.
+                title: The Validation unit shall include the timestamp in the validation header.
                 justification: >-
                   Including the timestamp establishes when validation was performed,
                   enabling chronological ordering of validation records and detection
@@ -123,8 +116,7 @@ sections:
                   - Validation_Run_ValidContext_PrintsValidationHeader
 
               - id: SarifMark-Validation-SarifReadingTest
-                title: The Validation unit shall include a SARIF reading test in the
-                  validation suite.
+                title: The Validation unit shall include a SARIF reading test in the validation suite.
                 justification: >-
                   Including a SARIF reading test in self-validation confirms that
                   the installed tool can parse
@@ -137,8 +129,7 @@ sections:
                   - Validation_Run_ValidContext_VerifiesSarifReadingOutput
 
               - id: SarifMark-Validation-ReportGenerationTest
-                title: The Validation unit shall include a markdown report generation
-                  test in the validation suite.
+                title: The Validation unit shall include a markdown report generation test in the validation suite.
                 justification: >-
                   Validating report generation as a self-contained test confirms that
                   the full pipeline from
@@ -151,8 +142,7 @@ sections:
                   - Validation_Run_ValidContext_VerifiesReportGenerationOutput
 
               - id: SarifMark-Validation-EnforcementTest
-                title: The Validation unit shall include an enforcement mode test
-                  in the validation suite.
+                title: The Validation unit shall include an enforcement mode test in the validation suite.
                 justification: >-
                   Testing enforcement mode during self-validation ensures that the
                   quality gate capability
@@ -165,8 +155,7 @@ sections:
                   - Validation_Run_ValidContext_VerifiesEnforcementOutput
 
               - id: SarifMark-Validation-Summary
-                title: The Validation unit shall output a pass/fail summary after
-                  all tests have run.
+                title: The Validation unit shall output a pass/fail summary after all tests have run.
                 justification: >-
                   A printed summary provides an at-a-glance verdict of the overall
                   validation result without
@@ -178,8 +167,7 @@ sections:
                   - Validation_Run_ValidContext_PrintsSummary
 
               - id: SarifMark-Validation-TrxResultsFile
-                title: The Validation unit shall write TRX format results when the
-                  results file has a .trx extension.
+                title: The Validation unit shall write TRX format results when the results file has a .trx extension.
                 justification: >-
                   Supporting TRX format enables compatibility with Visual Studio and
                   Azure DevOps CI/CD
@@ -206,8 +194,7 @@ sections:
                   - Validation_Run_WithXmlResultsFile_WritesResultsFile
 
               - id: SarifMark-Validation-UnsupportedResultsFile
-                title: The Validation unit shall report an error for unsupported results
-                  file extensions.
+                title: The Validation unit shall report an error for unsupported results file extensions.
                 justification: >-
                   Reporting an error for unrecognized extensions prevents silent data
                   loss when callers specify

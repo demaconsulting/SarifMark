@@ -7,8 +7,7 @@ sections:
       - title: Utilities Requirements
         requirements:
           - id: SarifMark-Utilities-SafePathHandling
-            title: The Utilities subsystem shall provide safe path-handling functions
-              for use by other subsystems.
+            title: The Utilities subsystem shall provide safe path-handling functions for use by other subsystems.
             justification: >-
               Centralizing path-safety logic in a dedicated subsystem prevents path-traversal
               vulnerabilities

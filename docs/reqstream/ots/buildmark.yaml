@@ -7,8 +7,7 @@ sections:
       - title: BuildMark Requirements
         requirements:
           - id: SarifMark-OTS-BuildMark-MarkdownReport
-            title: BuildMark shall generate a markdown report from repository and
-              issue-tracking data.
+            title: BuildMark shall generate a markdown report from repository and issue-tracking data.
             justification: |
               DemaConsulting.BuildMark generates a build-notes markdown document that
               aggregates Git history, GitHub issues, and pull request information for a
