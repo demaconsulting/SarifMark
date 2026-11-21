@@ -5,13 +5,13 @@
 #   Restores dependencies, builds the solution in Release configuration,
 #   and runs all unit tests with TRX output.
 #
-# EXTENSION POINTS:
-#   Search for "[PROJECT-SPECIFIC]" comments to find the designated locations
-#   for adding project-specific build or test operations.
-#
-# MODIFICATION POLICY:
-#   Only modify this file to add project-specific operations at the designated
-#   [PROJECT-SPECIFIC] extension points.
+# CUSTOMIZATION:
+#   This script belongs to the project: extend it as the project grows. Add steps at the
+#   [PROJECT-SPECIFIC] points and add optional parameters that focus a run (for example
+#   -Project <name> in a multi-library repository). Slow or environment-dependent test tiers
+#   (GUI automation, integration) may be opt-in switches.
+#   Run with no arguments it must still build and run the standard test suite (agents rely
+#   on that), and never remove or weaken a test step to make it pass.
 
 $buildError = $false
 
