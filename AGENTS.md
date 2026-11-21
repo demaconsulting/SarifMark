@@ -81,8 +81,8 @@ from `.github/standards/`. Use this matrix to determine which to load:
 - **Verification docs**: `software-items.md`, `verification-documentation.md`, `technical-documentation.md`
 - **Review configuration**: `software-items.md`, `reviewmark-usage.md`
 - **Software structure**: `sysml2-modeling.md`
-- **Diagrams in documentation**: `diagram-documentation.md` (and the `canvasnet` skill for tooling)
 - **Any documentation**: `technical-documentation.md`
+- **Diagrams in documentation**: `diagram-documentation.md` (and the `canvasnet` skill for tooling)
 - **Reading PDF or Office documents**: the `docdown` skill
 
 Load only the standards relevant to your specific task scope.
@@ -159,10 +159,31 @@ requires it and the modification preserves the documented design intent:
 
 - `.reviewmark.yaml`, `.textlint.yaml`, `.editorconfig`
 - `.lintmark.yaml`, `.yamllint.yaml`
-- `requirements.yaml`, `fix.ps1`, `lint.ps1`
+- `requirements.yaml`
+
+# Project Scripts
+
+`build.ps1`, `lint.ps1`, and `fix.ps1` belong to the project: extend them as it grows. Add project-specific
+steps, update tool versions, and add optional parameters that focus a run (for example one library in a
+multi-library repository, or headless tests without GUI automation). Two rules keep them trustworthy:
+
+- Run with no arguments, each script still does its full job (CI and the agents rely on that); slow or
+  environment-dependent test tiers may be opt-in switches of `build.ps1`.
+- Never remove or weaken a check to make lint or tests pass.
 
 # Continuous Compliance Overview
 
 This repository follows the [Continuous Compliance](https://github.com/demaconsulting/ContinuousCompliance)
 approach. Tools: **ReqStream** (requirements traceability), **ReviewMark** (file review enforcement),
 **BuildMark** (tool versions), **VersionMark** (version tracking).
+
+# Repository-Specific Standards Exceptions
+
+## SysML2 package structure (legacy layout, migration pending)
+
+The SysML2 model under `docs/sysml2/` predates the `sysml2-modeling.md` Package Structure rules: package
+`SarifMark` is reopened across 13 files (`model/sarifmark.sysml`, the 11 files under `model/sarifmark/`, and
+`views/design-views.sysml`), shared packages use `SharedDependencies` (not `SharedPackages`), and the views
+live in `SarifMark` (not `SarifMarkDesignViews`). The Package Structure rules and the `sysml2tools-query`
+qualified-name examples apply once the model is migrated in a dedicated PR. Until then, agents use the existing
+package names and must not partially restructure the model.
