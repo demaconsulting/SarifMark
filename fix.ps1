@@ -2,11 +2,15 @@
 #
 # PURPOSE:
 #   Applies all available auto-fixers with progress output. Always exits 0.
-#   Run this after making changes to automatically handle formatting.
+#   Run this after making changes to automatically handle formatting
+#   so agents and developers do not need to respond to lint output.
 #   Handles: dotnet format, LintMark (markdown), yamlfix, YAML line endings.
 #
-# EXTENSION POINTS:
-#   Search for "[PROJECT-SPECIFIC]" comments to add project-specific fixers.
+# CUSTOMIZATION:
+#   This script belongs to the project: extend it as the project grows. Add steps at the
+#   [PROJECT-SPECIFIC] points, update tool versions, and add optional parameters that focus
+#   a run (for example -Project <name> in a multi-library repository).
+#   Run with no arguments it must still apply every fixer, and it always exits 0.
 
 function Get-VenvActivateScript {
     if (Test-Path ".venv/Scripts/Activate.ps1") { return ".venv/Scripts/Activate.ps1" }
