@@ -1,6 +1,11 @@
 package SarifMark {
-    import OtsDependencies::*;
-    import SharedDependencies::*;
+    public import SarifMark_Program::*;
+    public import SarifMark_CliSubsystem::*;
+    public import SarifMark_SarifSubsystem::*;
+    public import SarifMark_SelfTestSubsystem::*;
+    public import SarifMark_UtilitiesSubsystem::*;
+    private import OtsDependencies::*;
+    private import SharedPackages::*;
     private import SoftwareItemMetadata::*;
 
     doc

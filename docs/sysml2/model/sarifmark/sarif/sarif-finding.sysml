@@ -1,4 +1,4 @@
-package SarifMark {
+package SarifMark_SarifFinding {
     private import SoftwareItemMetadata::*;
 
     part def SarifFinding {

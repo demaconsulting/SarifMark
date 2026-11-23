@@ -1,4 +1,5 @@
-package SarifMark {
+package SarifMark_CliSubsystem {
+    public import SarifMark_Context::*;
     private import SoftwareItemMetadata::*;
 
     part def CliSubsystem {

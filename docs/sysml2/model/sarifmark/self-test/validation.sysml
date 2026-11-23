@@ -1,4 +1,4 @@
-package SarifMark {
+package SarifMark_Validation {
     private import SoftwareItemMetadata::*;
 
     part def Validation {
