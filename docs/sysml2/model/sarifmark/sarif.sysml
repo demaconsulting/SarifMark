@@ -1,4 +1,7 @@
-package SarifMark {
+package SarifMark_SarifSubsystem {
+    public import SarifMark_SarifFinding::*;
+    public import SarifMark_SarifRun::*;
+    public import SarifMark_SarifResults::*;
     private import SoftwareItemMetadata::*;
 
     part def SarifSubsystem {

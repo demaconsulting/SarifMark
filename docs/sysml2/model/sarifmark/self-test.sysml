@@ -1,4 +1,5 @@
-package SarifMark {
+package SarifMark_SelfTestSubsystem {
+    public import SarifMark_Validation::*;
     private import SoftwareItemMetadata::*;
 
     part def SelfTestSubsystem {

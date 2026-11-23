@@ -1,4 +1,5 @@
-package SarifMark {
+package SarifMark_UtilitiesSubsystem {
+    public import SarifMark_PathHelpers::*;
     private import SoftwareItemMetadata::*;
 
     part def UtilitiesSubsystem {

@@ -1,4 +1,4 @@
-package SarifMark {
+package SarifMark_Context {
     private import SoftwareItemMetadata::*;
 
     part def Context {
