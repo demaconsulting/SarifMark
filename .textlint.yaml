@@ -42,15 +42,18 @@ words:
   - Checkmarx
   - DEMA
   - demaconsulting
+  - distinguishability
   - lintmark
   - ncipollo
   - nestings
   - netstandard
   - SARIF
+  - Sensmetry
   - shopt
   - slnx
   - snupkg
   - sonarscanner
+  - Syside
   - thirdparty
   - unidirectionality
   - venv
