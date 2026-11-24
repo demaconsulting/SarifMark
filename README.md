@@ -160,7 +160,7 @@ sarifmark --validate --results validation-results.trx
 ## Building
 
 ```pwsh
-pwsh ./build.ps1
+pwsh ./build.ps1 -All
 ```
 
 ## User Guide
