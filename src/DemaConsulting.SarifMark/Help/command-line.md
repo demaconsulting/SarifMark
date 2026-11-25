@@ -50,11 +50,12 @@ Options start with `--` (or a single character after `-`) and may be given in an
 `--report-depth` is an older name of `--depth`, and `--result` of `--results`; both still work.
 
 **Order.** `--version` wins over everything and prints only the version. Otherwise the tool prints a banner, then
-handles the first of `--help`, `--validate`, or the SARIF file. The command that [[#silent-log]] prints writes its
-output to the log file only.
+handles the first of `--help`, `--validate`, or the SARIF file.
+The command that [[#silent-log]] prints writes its output to the log file only.
 
-**Errors.** An unknown argument, or an option without its value, prints `Error: ...` and exits 1
-([[#missing-value]]). A value that is itself an option, as in `--exclude --enforce`, counts as missing.
+**Errors.** An unknown argument, or an option without its value, prints `Error: ...` and exits 1.
+The command that [[#missing-value]] prints shows this.
+A value that is itself an option, as in `--exclude --enforce`, counts as missing.
 
 **Help.** `help` is a command, not an option, and must be the first argument. `--silent` and `--log` do not apply
 to it, and an unknown topic exits 2.

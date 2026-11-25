@@ -25,7 +25,8 @@ CodeQL, SonarQube, and the .NET analyzers write their findings. {{tool}} does no
 that such a tool produced. `--sarif <file>` names one file per run.
 
 **Required structure.** The file is SARIF 2.1.0 JSON with a `version` property and a non-empty `runs` array. Each
-run needs `tool.driver`. A file that is not JSON, or lacks one of these, is an error; see [[troubleshooting]].
+run needs `tool.driver`. A file that is not JSON, or lacks one of these, is an error;
+see [[troubleshooting]].
 
 **What is read.** For each run:
 

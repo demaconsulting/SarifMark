@@ -43,10 +43,9 @@ flowchart TD
 `HelpCommand` (in `Cli`), which answers the `help` command from the built-in help cards.
 Otherwise it constructs a `Context` (via `Cli`) from the command-line arguments, selects the
 execution mode based on the parsed flags, and delegates to the appropriate subsystem. The
-`Sarif` subsystem reads
-SARIF 2.1.0 files and generates markdown reports. The `SelfTest` subsystem exercises the
-tool's own capabilities to confirm it is functioning correctly. The `Utilities` subsystem
-provides path-safety helpers shared across the system.
+`Sarif` subsystem reads SARIF 2.1.0 files and generates markdown reports. The `SelfTest`
+subsystem exercises the tool's own capabilities to confirm it is functioning correctly. The
+`Utilities` subsystem provides path-safety helpers shared across the system.
 
 ## External Interfaces
 

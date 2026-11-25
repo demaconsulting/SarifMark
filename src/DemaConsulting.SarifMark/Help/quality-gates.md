@@ -43,10 +43,13 @@ examples:
           --exclude "**/obj/**" --enforce
 ---
 **Enforce.** `--enforce` makes the run exit 1 when any finding remains after exclusions, and prints
-`Error: Issues found in SARIF file` ([[#enforce]]). Suppressed results never count. The report of `--report` is
-still written, so a failed build keeps the list of findings. A file without findings exits 0 ([[#clean]]).
+`Error: Issues found in SARIF file`, as the command that [[#enforce]] prints shows.
+Suppressed results never count. The report of `--report` is still written, so a failed build keeps the list of
+findings. A file without findings exits 0, as the command
+that [[#clean]] prints shows.
 
-**Exclude.** `--exclude <glob>` leaves out the findings whose file matches the pattern, as [[#exclude]] shows:
+**Exclude.** `--exclude <glob>` leaves out the findings whose file matches the pattern.
+The command that [[#exclude]] prints shows it. The rules:
 
 - the pattern is matched against the file URI of the finding's first location, compared without regard to case
 - `*` matches within one folder and `**` matches any number of folders
@@ -56,5 +59,6 @@ still written, so a failed build keeps the list of findings. A file without find
 
 Quote a pattern in the shell (`"**/obj/**"`) so that the shell does not expand it.
 
-**In a pipeline.** Run the analyzer first, then {{tool}} on its SARIF file. The step in [[#ci-step]] writes the
-report and fails the job when findings remain; publish the report as a build artifact or in the job summary.
+**In a pipeline.** Run the analyzer first, then {{tool}} on its SARIF file.
+The step that [[#ci-step]] prints writes the report and fails the job
+when findings remain; publish the report as a build artifact or in the job summary.

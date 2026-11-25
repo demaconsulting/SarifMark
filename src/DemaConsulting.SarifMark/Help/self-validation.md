@@ -43,7 +43,7 @@ examples:
 so a regulated project can show that the installed version works on its build machine.
 
 **Report.** The output is Markdown. It starts with a heading and a table of the tool version, machine name,
-operating system, .NET runtime, and time stamp. Each test prints one line ending in `Passed` or `Failed`, and the
+operating system, .NET runtime, and time stamp. Each test prints one line with `Passed` or `Failed`, and the
 report ends with `Total Tests`, `Passed`, and `Failed` lines. The exit code is 0 only when every test passes.
 `--depth` sets the heading level of the report that the report self-test writes, and the line `Report heading:`
 shows the heading it got, as [[#depth]] shows.
