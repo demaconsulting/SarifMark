@@ -18,6 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using DemaConsulting.HelpCards.Catalog;
+using DemaConsulting.HelpCards.Testing;
+
 namespace DemaConsulting.SarifMark.Tests;
 
 /// <summary>
@@ -602,6 +605,158 @@ public class IntegrationTests
             {
                 File.Delete(reportFile);
             }
+        }
+    }
+
+    /// <summary>
+    ///     Test that the help verb lists the help topics.
+    /// </summary>
+    [Fact]
+    public void SarifMark_HelpTopics_HelpVerb_ListsTopics()
+    {
+        // Arrange: (none — constructor initializes _dllPath)
+
+        // Act: run the tool with the help verb
+        var exitCode = Runner.Run(
+            out var output,
+            "dotnet",
+            _dllPath,
+            "help");
+
+        // Assert: the topics are listed with their commands, without the banner
+        Assert.Equal(0, exitCode);
+        Assert.Contains("sarifmark help getting-started", output);
+        Assert.DoesNotContain("Copyright", output);
+    }
+
+    /// <summary>
+    ///     Test that a help topic prints the card with its examples, and that one example prints alone.
+    /// </summary>
+    [Fact]
+    public void SarifMark_HelpTopics_CardPath_PrintsCardWithExamples()
+    {
+        // Arrange: (none — constructor initializes _dllPath)
+
+        // Act: print a card, and one of its examples
+        var cardExitCode = Runner.Run(
+            out var card,
+            "dotnet",
+            _dllPath,
+            "help",
+            "reports");
+        var exampleExitCode = Runner.Run(
+            out var example,
+            "dotnet",
+            _dllPath,
+            "help",
+            "getting-started",
+            "--example",
+            "version");
+
+        // Assert: the card prints with its examples, and the example prints only its command
+        Assert.Equal(0, cardExitCode);
+        Assert.Contains("# Markdown reports", card);
+        Assert.Contains("## Examples", card);
+        Assert.Equal(0, exampleExitCode);
+        Assert.Equal("sarifmark --version", example.Trim());
+    }
+
+    /// <summary>
+    ///     Test that help search finds topics and that help writes JSON on request.
+    /// </summary>
+    [Fact]
+    public void SarifMark_HelpTopics_SearchAndJson_FindsCardsAndWritesJson()
+    {
+        // Arrange: (none — constructor initializes _dllPath)
+
+        // Act: search the help, and print the topic index as JSON
+        var searchExitCode = Runner.Run(
+            out var search,
+            "dotnet",
+            _dllPath,
+            "help",
+            "--search",
+            "exclude");
+        var jsonExitCode = Runner.Run(
+            out var json,
+            "dotnet",
+            _dllPath,
+            "help",
+            "--json");
+
+        // Assert: the search finds the quality-gates topic and the JSON is a versioned document
+        Assert.Equal(0, searchExitCode);
+        Assert.Contains("sarifmark help quality-gates", search);
+        Assert.Equal(0, jsonExitCode);
+        Assert.StartsWith("{", json);
+        Assert.Contains("\"helpSchemaVersion\":1", json);
+    }
+
+    /// <summary>
+    ///     Test that an unknown help topic returns the usage-error exit code.
+    /// </summary>
+    [Fact]
+    public void SarifMark_HelpTopics_UnknownTopic_ReturnsUsageError()
+    {
+        // Arrange: (none — constructor initializes _dllPath)
+
+        // Act: ask for a topic that does not exist
+        var exitCode = Runner.Run(
+            out var output,
+            "dotnet",
+            _dllPath,
+            "help",
+            "no-such-topic");
+
+        // Assert: exit code 2 and a message that names the topic
+        Assert.Equal(2, exitCode);
+        Assert.Contains("no-such-topic", output);
+    }
+
+    /// <summary>
+    ///     Test that every command example in the help cards gives the result that its card states.
+    /// </summary>
+    [Fact]
+    public void SarifMark_HelpExamples_AllCommandExamples_GiveStatedResults()
+    {
+        // Arrange: the catalog the tool ships, and the SARIF files that the examples read
+        var catalog = HelpCatalog.Create(HelpCommand.CreateOptions().GetCatalogConfiguration());
+        var exampleDataPath = PathHelpers.SafePathCombine(_testDataPath, "HelpExamples");
+
+        // Act: run every command example against the built tool, in the scratch folder where the runner
+        // saved the card's source examples, after copying the example SARIF files there; the runner
+        // compares the exit codes and the 'expect' fragments
+        var report = HelpExampleRunner.Run(catalog, invocation =>
+        {
+            StageHelpExampleData(exampleDataPath, invocation.WorkingDirectory);
+            var exitCode = Runner.RunInDirectory(
+                out var output,
+                invocation.WorkingDirectory,
+                "dotnet",
+                [_dllPath, .. invocation.Arguments]);
+            return new HelpExampleOutcome(exitCode, output);
+        });
+
+        // Assert: the cards hold command examples, and every one gave the result its card states
+        Assert.True(report.CommandsRun > 0, "The help cards contain no command examples.");
+        report.AssertSucceeded();
+    }
+
+    /// <summary>
+    ///     Copies the input files that the help card examples name into the scratch folder of a card.
+    /// </summary>
+    /// <remarks>
+    ///     The examples read SARIF files that an analyzer would produce, so the files are test data of
+    ///     this project and not part of the cards. They are copied before every command so that a
+    ///     command that overwrites a file cannot affect the next one.
+    /// </remarks>
+    /// <param name="sourceDirectory">The folder that holds the example input files.</param>
+    /// <param name="workingDirectory">The scratch folder in which the example command runs.</param>
+    private static void StageHelpExampleData(string sourceDirectory, string workingDirectory)
+    {
+        foreach (var file in Directory.GetFiles(sourceDirectory))
+        {
+            File.Copy(file, PathHelpers.SafePathCombine(workingDirectory, Path.GetFileName(file)), overwrite: true);
         }
     }
 }
