@@ -25,6 +25,7 @@ This guide covers:
 
 - Installation and setup of SarifMark
 - Command-line options and usage patterns
+- The built-in `sarifmark help` command
 - CI/CD pipeline integration examples
 - Report format and customization options
 - Troubleshooting common issues

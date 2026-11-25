@@ -30,6 +30,8 @@ command line or a CI pipeline, and use the resulting markdown report and pass/fa
 - 🌐 **Multi-Platform** - Builds and runs on Windows, Linux, and macOS with .NET 10 and 11
 - ✅ **Self-Validation** - Built-in tests without requiring external tools
 - 📊 **Detailed Reporting** - Extract tool information, results, and locations
+- 💡 **Built-in Help** - `sarifmark help` serves help topics with runnable examples, search, and JSON output for
+  AI agents
 
 ## Installation
 
@@ -103,6 +105,7 @@ This will display:
 
 ```text
 Usage: sarifmark [options]
+       sarifmark help [topic]
 
 Options:
   -v, --version              Display version information
@@ -117,6 +120,8 @@ Options:
   --report <file>            Export analysis results to markdown file
   --depth <depth>            Markdown header depth for report (1-6, default: 1)
   --heading <text>           Custom heading for report (default: [ToolName] Analysis)
+
+Run 'sarifmark help' for topics and examples.
 ```
 
 ### Quick Start Examples
@@ -156,6 +161,23 @@ sarifmark --validate
 ```bash
 sarifmark --validate --results validation-results.trx
 ```
+
+### Built-in Help
+
+`--help` prints a short usage text that ends with a pointer to the built-in help. The `help` command explains each
+task in a topic with worked examples, for people and for AI agents that have only the installed tool:
+
+| Command | Description |
+| --- | --- |
+| `sarifmark help` | List the help topics |
+| `sarifmark help <topic>` | Print a topic with its examples |
+| `sarifmark help <topic> --example <name>` | Print one example |
+| `sarifmark help --search <words>` | Find the topics that match the words |
+| `sarifmark help --json` | Print any help answer as JSON (add it to the other commands) |
+
+The topics are `getting-started`, `command-line`, `sarif-input`, `reports`, `quality-gates`, `self-validation`, and
+`troubleshooting`. `help` must be the first argument; `--silent` and `--log` do not apply to it. The command exits
+with code 0, or 2 for an unknown topic or a wrong help argument.
 
 ## Building
 

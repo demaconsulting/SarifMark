@@ -19,11 +19,14 @@ Display the installed version:
 sarifmark --version
 ```
 
-Display the built-in help:
+Display the short usage text:
 
 ```shell
 sarifmark --help
 ```
+
+The usage text ends with `Run 'sarifmark help' for topics and examples.`, which points to the
+built-in help (see *Built-in Help* below).
 
 ## Command-Line Options
 
@@ -43,6 +46,45 @@ sarifmark --help
 | `--heading <text>` | Custom heading for the report (default: `[ToolName] Analysis`) |
 | `--report-depth <depth>` | Deprecated alias for `--depth` (supported for backwards compatibility) |
 | `--result <file>` | Deprecated alias for `--results` (supported for backwards compatibility) |
+
+The `help` command is not an option; see *Built-in Help* below.
+
+## Built-in Help
+
+The `help` command prints help topics that explain each task with worked examples. It is meant for
+people and for AI agents that have only the installed tool. List the topics:
+
+```shell
+sarifmark help
+```
+
+Print one topic with its examples, or only one example of a topic:
+
+```shell
+sarifmark help quality-gates
+sarifmark help quality-gates --example exclude
+```
+
+The topics are:
+
+- **`getting-started`** - install the tool, check that it works, and write a first report
+- **`command-line`** - every option, and the order in which a run handles them
+- **`sarif-input`** - which SARIF files the tool reads, and which parts of them it uses
+- **`reports`** - the layout of the Markdown report, and its heading and depth
+- **`quality-gates`** - fail a build when findings remain, and leave out findings by file
+- **`self-validation`** - prove that the installed tool works, and save the evidence as test results
+- **`troubleshooting`** - what the exit codes mean, and how to fix the common error messages
+
+Find the topics that match some words, or get any help answer as JSON by adding `--json`:
+
+```shell
+sarifmark help --search exclude
+sarifmark help reports --json
+```
+
+`help` is a command, not an option: it must be the first argument, and `--silent` and `--log` do not
+apply to it. The command exits with code 0 on success, and with code 2 for an unknown topic or a wrong
+help argument, after printing a hint.
 
 ## Common Usage Patterns
 
@@ -180,4 +222,5 @@ Generated markdown reports include the following sections for each run in the SA
 | --- | --- |
 | `0` | Success — processing completed without errors |
 | `1` | Error — invalid arguments, file not found, or processing error |
+| `2` | Unknown help topic or wrong `help` argument |
 | Non-zero (with `--enforce`) | Issues found in the SARIF file |
