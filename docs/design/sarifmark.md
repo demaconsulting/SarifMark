@@ -12,6 +12,7 @@ flowchart TD
 
     subgraph Cli
         Context["Context\n(Argument parsing, output, exit code)"]
+        HelpCommand["HelpCommand\n(Built-in help)"]
     end
 
     subgraph Sarif
@@ -28,6 +29,7 @@ flowchart TD
         PathHelpers["PathHelpers\n(SafePathCombine)"]
     end
 
+    Program -->|calls| HelpCommand
     Program -->|creates| Context
     Program -->|calls| Validation
     Program -->|calls| SarifResults
@@ -37,9 +39,11 @@ flowchart TD
     Validation -->|calls| Program
 ```
 
-`Program` is the system-level entry point and dispatcher. It constructs a `Context`
-(via `Cli`) from the command-line arguments, selects the execution mode based on the
-parsed flags, and delegates to the appropriate subsystem. The `Sarif` subsystem reads
+`Program` is the system-level entry point and dispatcher. It first offers the arguments to
+`HelpCommand` (in `Cli`), which answers the `help` command from the built-in help cards.
+Otherwise it constructs a `Context` (via `Cli`) from the command-line arguments, selects the
+execution mode based on the parsed flags, and delegates to the appropriate subsystem. The
+`Sarif` subsystem reads
 SARIF 2.1.0 files and generates markdown reports. The `SelfTest` subsystem exercises the
 tool's own capabilities to confirm it is functioning correctly. The `Utilities` subsystem
 provides path-safety helpers shared across the system.
@@ -50,7 +54,8 @@ provides path-safety helpers shared across the system.
 
 - *Type*: CLI
 - *Role*: Provider (the tool accepts arguments from the shell)
-- *Contract*: Accepts flags and parameters (`--sarif`, `--report`, `--depth`, `--heading`,
+- *Contract*: Accepts the `help` command as the first argument (see *Help Command* below), or
+  flags and parameters (`--sarif`, `--report`, `--depth`, `--heading`,
   `--exclude`, `--validate`, `--results`, `--enforce`, `--log`, `--silent`, `--version`, `--help`).
   `--exclude <glob>` is repeatable and removes findings whose `Uri` matches the supplied
   glob pattern before enforcement and report generation.
@@ -60,6 +65,19 @@ provides path-safety helpers shared across the system.
   Exits with code 0 on success and 1 on any error or when `--enforce` detects issues.
 - *Constraints*: Unrecognized arguments cause an `ArgumentException`, producing exit code 1
   with an error message. Value-bearing flags require a following token.
+
+**Help Command**: Built-in help, answered from help cards embedded in the tool assembly.
+
+- *Type*: CLI
+- *Role*: Provider (the tool answers the `help` command from the shell)
+- *Contract*: `sarifmark help` prints the topic index; `sarifmark help <topic>` prints a
+  topic card with its examples; `--example <name>`, `--search <words>`, and `--json` print one
+  example, the matching topics, or any answer as a versioned JSON document. Exits with code 0
+  on success, 2 for a wrong help argument or an unknown topic, and 70 for a defective card
+  catalog.
+- *Constraints*: Answered before the options are parsed, so `--silent` and `--log` do not
+  apply and no banner is printed. The cards are read from the assembly; no file access is
+  needed.
 
 **SARIF File Input**: The SARIF 2.1.0 JSON files read by the analysis mode.
 
@@ -126,6 +144,8 @@ provides path-safety helpers shared across the system.
   serialize test results — see *TestResults Integration Design*
 - **Microsoft.Extensions.FileSystemGlobbing**: the OTS package used by `SarifResults.Exclude` to match finding
   `Uri` values against user-supplied `--exclude` glob patterns — see *FileSystemGlobbing Integration Design*
+- **DemaConsulting.HelpCards**: the OTS package used by `HelpCommand` to load, validate, and serve the built-in
+  help cards for the `help` command — see *HelpCards Integration Design*
 - **SarifMark**: a released version of SarifMark itself, invoked as a shared package in the
   CI pipeline to generate the CodeQL quality report — see *SarifMark Shared Package Integration Design*
 
@@ -138,20 +158,24 @@ N/A - not a safety-classified software item.
 The primary analysis data flow from SARIF input to markdown output:
 
 1. The shell invokes `Program.Main` with command-line arguments.
-2. `Context.Create` parses the arguments, setting mode flags and file paths.
-3. `Program.Run` evaluates flags in priority order (version → help → validate → analysis).
-4. In analysis mode, `SarifResults.Read` validates the file path, parses the JSON, validates
+2. `Program.Main` offers the arguments to `HelpCommand.TryRun`. When the first argument is
+   `help`, the help command builds the card catalog, writes its answer to the console, and
+   `Program.Main` returns its exit code. Any other first argument returns at once without
+   building the catalog.
+3. `Context.Create` parses the arguments, setting mode flags and file paths.
+4. `Program.Run` evaluates flags in priority order (version → help → validate → analysis).
+5. In analysis mode, `SarifResults.Read` validates the file path, parses the JSON, validates
    the SARIF structure, and constructs an immutable graph of `SarifRun` and `SarifFinding`
    records.
-5. If `--exclude` glob patterns were supplied, `SarifResults.Exclude` removes findings whose
+6. If `--exclude` glob patterns were supplied, `SarifResults.Exclude` removes findings whose
    `Uri` matches any of the patterns before enforcement or report generation.
-6. `SarifResults.ToMarkdown` traverses the record graph and produces a UTF-8 markdown string.
-7. If `--report` was supplied, the markdown string is written to the specified file with
+7. `SarifResults.ToMarkdown` traverses the record graph and produces a UTF-8 markdown string.
+8. If `--report` was supplied, the markdown string is written to the specified file with
    `File.WriteAllText`.
-8. If `--enforce` is set and issues were found, `Context.WriteError` sets the exit code to 1.
-9. `Program.Main` returns `Context.ExitCode` to the shell.
+9. If `--enforce` is set and issues were found, `Context.WriteError` sets the exit code to 1.
+10. `Program.Main` returns `Context.ExitCode` to the shell.
 
-The self-validation flow is a separate path in step 3 where `Validation.Run` exercises the
+The self-validation flow is a separate path in step 4 where `Validation.Run` exercises the
 analysis flow end-to-end using a mock SARIF file and verifies the output.
 
 ## Design Constraints

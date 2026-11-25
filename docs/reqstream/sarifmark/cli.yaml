@@ -265,3 +265,21 @@ sections:
             tests:
               - Cli_Create_ExcludeParameter_SetsExcludeGlobs
               - Cli_Create_ExcludeParameter_Repeated_AccumulatesExcludeGlobs
+
+          - id: SarifMark-Cli-HelpTopics
+            title: >-
+              The CLI subsystem shall answer the help command from built-in help cards before the
+              command-line options are parsed, and leave every other argument to the option parser.
+            justification: >-
+              Users and AI agents need help topics with worked examples from the installed tool.
+              The help command must not change how any other argument is parsed, so the option
+              parser keeps handling every run that does not start with help.
+            tags: [public]
+            children:
+              - SarifMark-HelpCommand-HelpVerb
+              - SarifMark-HelpCommand-Search
+              - SarifMark-HelpCommand-DeferredCatalog
+              - SarifMark-HelpCommand-ValidCards
+            tests:
+              - Cli_HelpTopics_HelpVerb_AnsweredBeforeArgumentParsing
+              - Cli_HelpTopics_OtherArguments_LeftToContext

@@ -16,6 +16,7 @@ input-files:
   - docs/verification/sarifmark/program.md
   - docs/verification/sarifmark/cli.md
   - docs/verification/sarifmark/cli/context.md
+  - docs/verification/sarifmark/cli/help-command.md
   - docs/verification/sarifmark/sarif.md
   - docs/verification/sarifmark/sarif/sarif-finding.md
   - docs/verification/sarifmark/sarif/sarif-run.md
@@ -37,6 +38,7 @@ input-files:
   - docs/verification/ots/weasyprint.md
   - docs/verification/ots/test-results.md
   - docs/verification/ots/filesystem-globbing.md
+  - docs/verification/ots/help-cards.md
   - docs/verification/ots/sysml2tools.md
   - docs/verification/shared.md
   - docs/verification/shared/sarifmark.md

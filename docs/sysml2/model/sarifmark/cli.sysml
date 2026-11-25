@@ -1,9 +1,10 @@
 package SarifMark_CliSubsystem {
     public import SarifMark_Context::*;
+    public import SarifMark_HelpCommand::*;
     private import SoftwareItemMetadata::*;
 
     part def CliSubsystem {
-        doc /* Command-line argument parsing and execution context. */
+        doc /* Command-line argument parsing, execution context, and the built-in help command. */
 
         metadata info : SoftwareInfo {
             testFiles = ("test/DemaConsulting.SarifMark.Tests/Cli/CliTests.cs");
@@ -13,5 +14,6 @@ package SarifMark_CliSubsystem {
         }
 
         part context : Context;
+        part helpCommand : HelpCommand;
     }
 }

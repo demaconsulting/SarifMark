@@ -3,6 +3,7 @@ includes:
   - docs/reqstream/sarifmark.yaml
   - docs/reqstream/sarifmark/cli.yaml
   - docs/reqstream/sarifmark/cli/context.yaml
+  - docs/reqstream/sarifmark/cli/help-command.yaml
   - docs/reqstream/sarifmark/sarif.yaml
   - docs/reqstream/sarifmark/sarif/sarif-run.yaml
   - docs/reqstream/sarifmark/sarif/sarif-finding.yaml
@@ -25,6 +26,7 @@ includes:
   - docs/reqstream/ots/fileassert.yaml
   - docs/reqstream/ots/test-results.yaml
   - docs/reqstream/ots/filesystem-globbing.yaml
+  - docs/reqstream/ots/help-cards.yaml
   - docs/reqstream/ots/sysml2tools.yaml
   - docs/reqstream/shared/sarifmark.yaml
 root-tags: [system, quality]

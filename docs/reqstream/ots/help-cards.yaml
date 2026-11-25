@@ -1,0 +1,81 @@
+---
+# DemaConsulting.HelpCards OTS requirements
+#
+# Requirements for the DemaConsulting.HelpCards library, which serves the built-in help of
+# the tool from Markdown help cards embedded in the tool assembly.
+sections:
+  - title: OTS Software Requirements
+    sections:
+      - title: DemaConsulting.HelpCards Requirements
+        requirements:
+          - id: SarifMark-OTS-HelpCards-Cli
+            title: >-
+              DemaConsulting.HelpCards shall answer a help command with a topic index, a card, or
+              an error, and shall build its catalog only after the help verb is recognized.
+            justification: |
+              The tool uses the command-line helper of DemaConsulting.HelpCards to serve
+              'sarifmark help' for people and AI agents. The helper must answer only when the
+              first argument is the help verb, so that every other run of the tool never loads or
+              parses a card, and it must report a wrong topic with its own exit code so scripts
+              can tell a usage error from success.
+            tags: [ots]
+            tests:
+              - HelpCommand_TryRun_HelpVerb_PrintsTopicIndexAndReturnsZero
+              - HelpCommand_TryRun_CardPath_PrintsCardWithExamples
+              - HelpCommand_TryRun_UnknownTopic_ReturnsTwo
+              - HelpCommand_TryRun_NonHelpArguments_ReturnsFalseWithoutBuildingCatalog
+
+          - id: SarifMark-OTS-HelpCards-Catalog
+            title: >-
+              DemaConsulting.HelpCards shall load help cards into a validated catalog that supports
+              search and JSON output.
+            justification: |
+              The tool ships its help as Markdown cards. The catalog turns the embedded cards into
+              one validated structure that the command-line helper renders as text, searches for
+              matching cards, and writes as a versioned JSON document, which is the form an AI
+              agent consumes.
+            tags: [ots]
+            tests:
+              - HelpCommand_TryRun_SearchOption_ListsMatchingCards
+              - HelpCommand_TryRun_JsonOption_WritesJsonDocument
+
+          - id: SarifMark-OTS-HelpCards-Validator
+            title: >-
+              DemaConsulting.HelpCards shall report defects in help cards and in their command
+              examples to the tests of a tool.
+            justification: |
+              Help that disagrees with the tool is worse than no help. The validator lets the test
+              suite fail when a card is defective, too long, carries an unknown or missing purpose
+              tag, breaks the expected set of topics, or holds a command line that cannot be run,
+              so that card defects are caught before release.
+            tags: [ots]
+            tests:
+              - HelpCommand_CreateOptions_ShippedCatalog_PassesValidation
+
+          - id: SarifMark-OTS-HelpCards-ExampleRunner
+            title: >-
+              DemaConsulting.HelpCards shall run every command example of a catalog through a
+              delegate of the tool's test and compare each result with the exit code and the
+              output fragment that the example states.
+            justification: |
+              A worked example is only useful when it works, and a deliberate failure is only a
+              good example when it fails the way the card says. The runner gives each card a fresh
+              folder, calls the test's delegate for each command with the parsed arguments, and
+              reports every difference in the exit code or in the output, so the cards state their
+              own expected results.
+            tags: [ots]
+            tests:
+              - SarifMark_HelpExamples_AllCommandExamples_GiveStatedResults
+
+          - id: SarifMark-OTS-HelpCards-Embedding
+            title: DemaConsulting.HelpCards shall embed the Help folder of the tool project in the tool assembly.
+            justification: |
+              The tool is installed as a single .NET tool package with no loose files. The package
+              build targets embed the card files in the assembly, so 'sarifmark help' works
+              wherever the tool is installed. Tests that load the cards, print one, and run every
+              example prove that the embedded copy is complete.
+            tags: [ots]
+            tests:
+              - HelpCommand_CreateOptions_ShippedCatalog_PassesValidation
+              - HelpCommand_TryRun_CardPath_PrintsCardWithExamples
+              - SarifMark_HelpExamples_AllCommandExamples_GiveStatedResults

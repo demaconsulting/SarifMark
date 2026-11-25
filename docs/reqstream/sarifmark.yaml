@@ -35,6 +35,38 @@ sections:
         tests:
           - SarifMark_HelpFlag_OutputsUsageInformation
 
+      - id: SarifMark-System-HelpTopics
+        title: >-
+          The tool shall answer the help command with a topic index, topic cards with worked
+          examples, search results, and JSON output from built-in help.
+        tags: [system]
+        justification: >-
+          Users and AI agents that have only the installed tool must be able to learn how to
+          use it from the tool itself. The short --help usage text points to help topics that
+          explain each task with worked examples, and the JSON output gives agents a structured
+          form of the same help.
+        children:
+          - SarifMark-Program-HelpCommand
+          - SarifMark-Program-HelpFooter
+          - SarifMark-Cli-HelpTopics
+        tests:
+          - SarifMark_HelpTopics_HelpVerb_ListsTopics
+          - SarifMark_HelpTopics_CardPath_PrintsCardWithExamples
+          - SarifMark_HelpTopics_SearchAndJson_FindsCardsAndWritesJson
+          - SarifMark_HelpTopics_UnknownTopic_ReturnsUsageError
+
+      - id: SarifMark-System-HelpExamples
+        title: The tool shall provide help examples that give the result each example states when run.
+        tags: [system]
+        justification: >-
+          A worked example in the help is only useful when it works. Running every command
+          example against the built tool, and comparing the exit code and output with what the
+          example states, keeps the help in step with the tool.
+        children:
+          - SarifMark-OTS-HelpCards-ExampleRunner
+        tests:
+          - SarifMark_HelpExamples_AllCommandExamples_GiveStatedResults
+
       - id: SarifMark-System-Validate
         title: The tool shall support self-validation mode.
         tags: [system]

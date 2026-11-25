@@ -19,6 +19,7 @@ input-files:
   - docs/design/sarifmark/program.md
   - docs/design/sarifmark/cli.md
   - docs/design/sarifmark/cli/context.md
+  - docs/design/sarifmark/cli/help-command.md
   - docs/design/sarifmark/sarif.md
   - docs/design/sarifmark/sarif/sarif-finding.md
   - docs/design/sarifmark/sarif/sarif-run.md
@@ -40,6 +41,7 @@ input-files:
   - docs/design/ots/xunit-v3.md
   - docs/design/ots/test-results.md
   - docs/design/ots/filesystem-globbing.md
+  - docs/design/ots/help-cards.md
   - docs/design/ots/sysml2tools.md
   - docs/design/shared.md
   - docs/design/shared/sarifmark.md

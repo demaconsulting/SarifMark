@@ -14,6 +14,7 @@ needs-review:
   - docs/verification/**/*.md
   - docs/user_guide/**/*.md
   - docs/sysml2/**/*.sysml
+  - src/**/Help/**
   - '!**/obj/**'
   - '!**/bin/**'
   - '!**/generated/**'
@@ -141,6 +142,21 @@ reviews:
       - docs/verification/sarifmark/cli/context.md
       - src/**/Cli/Context.cs
       - test/**/Cli/ContextTests.cs
+
+  - id: SarifMark-Cli-HelpCommand
+    title: Review that SarifMark Cli HelpCommand Implementation is Correct
+    context:
+      - docs/design/sarifmark.md
+      - docs/reqstream/sarifmark.yaml
+      - docs/design/sarifmark/cli.md
+      - docs/reqstream/sarifmark/cli.yaml
+    paths:
+      - docs/reqstream/sarifmark/cli/help-command.yaml
+      - docs/design/sarifmark/cli/help-command.md
+      - docs/verification/sarifmark/cli/help-command.md
+      - src/**/Cli/HelpCommand.cs
+      - src/**/Help/**
+      - test/**/Cli/HelpCommandTests.cs
 
   # SarifMark - Sarif
   - id: SarifMark-Sarif
@@ -332,6 +348,13 @@ reviews:
       - docs/reqstream/ots/filesystem-globbing.yaml
       - docs/design/ots/filesystem-globbing.md
       - docs/verification/ots/filesystem-globbing.md
+
+  - id: OTS-HelpCards
+    title: Review that HelpCards Provides Required Functionality
+    paths:
+      - docs/reqstream/ots/help-cards.yaml
+      - docs/design/ots/help-cards.md
+      - docs/verification/ots/help-cards.md
 
   # Shared Packages
   - id: Shared-SarifMark

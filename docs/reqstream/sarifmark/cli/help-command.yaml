@@ -1,0 +1,71 @@
+---
+# HelpCommand unit requirements
+#
+# The HelpCommand unit answers the 'sarifmark help' command from the help cards that are
+# embedded in the tool assembly. It is the only unit that uses the HelpCards library.
+
+sections:
+  - title: 'SarifMark Requirements'
+    sections:
+      - title: CLI Requirements
+        sections:
+          - title: HelpCommand Requirements
+            requirements:
+              - id: SarifMark-HelpCommand-HelpVerb
+                title: >-
+                  The HelpCommand unit shall print the topic index for the help verb, print a card
+                  with its examples for a card path, and exit with code 2 for an unknown topic.
+                justification: >-
+                  A user or an AI agent that has only the installed tool must be able to learn it
+                  from sarifmark help: the index lists the topics, a topic prints with worked
+                  examples, and a mistyped topic fails with a distinct exit code and a hint that
+                  scripts can detect.
+                tags: [internal]
+                children:
+                  - SarifMark-OTS-HelpCards-Cli
+                tests:
+                  - HelpCommand_TryRun_HelpVerb_PrintsTopicIndexAndReturnsZero
+                  - HelpCommand_TryRun_CardPath_PrintsCardWithExamples
+                  - HelpCommand_TryRun_UnknownTopic_ReturnsTwo
+
+              - id: SarifMark-HelpCommand-Search
+                title: >-
+                  The HelpCommand unit shall list the cards that match search words and write any
+                  help answer as a versioned JSON document on request.
+                justification: >-
+                  An agent finds the right card by searching for what it wants to do, and it reads
+                  the answer more reliably as structured JSON than as text.
+                tags: [internal]
+                children:
+                  - SarifMark-OTS-HelpCards-Catalog
+                tests:
+                  - HelpCommand_TryRun_SearchOption_ListsMatchingCards
+                  - HelpCommand_TryRun_JsonOption_WritesJsonDocument
+
+              - id: SarifMark-HelpCommand-DeferredCatalog
+                title: >-
+                  The HelpCommand unit shall leave every argument list that does not start with the
+                  help verb unanswered, without writing output or loading the help cards.
+                justification: >-
+                  Every other run of the tool, including every CI run, must not pay for loading or
+                  validating help cards, and a defective card must never break a normal run.
+                tags: [internal]
+                children:
+                  - SarifMark-OTS-HelpCards-Cli
+                tests:
+                  - HelpCommand_TryRun_NonHelpArguments_ReturnsFalseWithoutBuildingCatalog
+
+              - id: SarifMark-HelpCommand-ValidCards
+                title: >-
+                  The HelpCommand unit shall serve only help cards that pass validation with the
+                  expected set of topics and purpose tags.
+                justification: >-
+                  A defective card, a missing topic, or a card without a purpose would give users
+                  wrong or hard-to-find guidance. A test that validates the shipped catalog, with
+                  warnings treated as errors, keeps the help correct before release.
+                tags: [internal]
+                children:
+                  - SarifMark-OTS-HelpCards-Validator
+                  - SarifMark-OTS-HelpCards-Embedding
+                tests:
+                  - HelpCommand_CreateOptions_ShippedCatalog_PassesValidation
