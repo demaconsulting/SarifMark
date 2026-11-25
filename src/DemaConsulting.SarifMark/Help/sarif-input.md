@@ -4,6 +4,8 @@ summary: Which SARIF files the tool reads, and which parts of them it uses.
 aliases:
   - sarif
   - input
+  - suppression
+  - suppressions
 tags:
   - reference
 order: 3
