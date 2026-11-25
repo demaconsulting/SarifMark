@@ -117,6 +117,8 @@ public class ProgramTests
             Assert.Contains("--depth", output);
             Assert.Contains("--heading", output);
             Assert.Contains("--exclude <glob>", output);
+            Assert.Contains($"{HelpCommand.ToolName} help [topic]", output);
+            Assert.EndsWith(HelpCommand.Default.Footer, output.TrimEnd());
         }
         finally
         {
@@ -143,40 +145,8 @@ public class ProgramTests
             // Assert: the topic index is printed without the banner, and the exit code is success
             var output = outWriter.ToString();
             Assert.Equal(0, result);
-            Assert.Contains("sarifmark help getting-started", output);
+            Assert.Contains($"{HelpCommand.ToolName} help {HelpCommand.RootCardIds[0]}", output);
             Assert.DoesNotContain("Copyright", output);
-        }
-        finally
-        {
-            Console.SetOut(originalOut);
-        }
-    }
-
-    /// <summary>
-    ///     Test that Main with --help flag ends the usage information with a pointer to the help command.
-    /// </summary>
-    [Fact]
-    public void Program_Main_HelpFlag_PrintsHelpFooter()
-    {
-        // Arrange: capture console output
-        var originalOut = Console.Out;
-        try
-        {
-            using var outWriter = new StringWriter();
-            Console.SetOut(outWriter);
-
-            // Act: print the usage information
-            var result = Program.Main(["--help"]);
-
-            // Assert: the usage names the help command and its last line points to it
-            var lines = outWriter.ToString()
-                .Split('\n')
-                .Select(line => line.Trim())
-                .Where(line => line.Length > 0)
-                .ToList();
-            Assert.Equal(0, result);
-            Assert.Contains("sarifmark help [topic]", lines);
-            Assert.Equal("Run 'sarifmark help' for topics and examples.", lines[^1]);
         }
         finally
         {

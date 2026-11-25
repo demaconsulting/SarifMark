@@ -54,9 +54,7 @@ internal static class Program
     ///     <para>
     ///         The <c>help</c> command is answered first, by <see cref="HelpCommand"/>, before the
     ///         command-line options are parsed: <c>help</c> is a command and not an option, so
-    ///         <see cref="Context.Create"/> would reject it. Its exit code is returned as is: 0 for
-    ///         success, 2 for a wrong help argument or an unknown topic, and 70 for a defective card
-    ///         catalog.
+    ///         <see cref="Context.Create"/> would reject it. Its exit code is returned as is.
     ///     </para>
     ///     <para>
     ///         Only <see cref="ArgumentException"/> and <see cref="InvalidOperationException"/> are
@@ -75,8 +73,7 @@ internal static class Program
     {
         try
         {
-            // Answer 'sarifmark help ...' from the built-in help cards before the options are parsed;
-            // every other first argument returns at once without building the help catalog
+            // Answer the help command before the options are parsed
             if (HelpCommand.Default.TryRun(args, out var helpExitCode))
             {
                 return helpExitCode;
@@ -174,8 +171,8 @@ internal static class Program
     /// <param name="context">The context for output.</param>
     private static void PrintHelp(Context context)
     {
-        context.WriteLine("Usage: sarifmark [options]");
-        context.WriteLine("       sarifmark help [topic]");
+        context.WriteLine($"Usage: {HelpCommand.ToolName} [options]");
+        context.WriteLine($"       {HelpCommand.ToolName} help [topic]");
         context.WriteLine("");
         context.WriteLine("Options:");
         context.WriteLine("  -v, --version              Display version information");

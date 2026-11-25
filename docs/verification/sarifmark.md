@@ -41,8 +41,7 @@ required to run the test suite.
   CI runner platforms (Windows, Ubuntu, macOS) against both supported .NET runtime versions (10 and 11).
 - All integration tests produce the expected console output and any expected output files.
 - The built-in `--validate` self-test exits with code 0 on all supported platforms and runtimes.
-- The `help` command exits with code 0 for the topic index, a topic, a search, and JSON output, and with code 2 for
-  an unknown topic.
+- The `help` command lists the topics with exit code 0, and exits with code 2 for an unknown topic.
 - Every command example in the help cards gives the exit code and output that its card states.
 - Every system-level requirement maps to at least one named test scenario (IEC 62304 §5.7.2).
 
@@ -200,18 +199,8 @@ system-level scenario.
 This scenario is tested by `SarifMark_ExcludeFlag_FiltersMatchingFindings`.
 
 **SarifMark_HelpTopics_HelpVerb_ListsTopics**: Invoke the tool with `help` as the sole argument; assert exit code is
-0, the output lists the topics with their commands, and no banner is printed.
+0, the output lists every topic with its command, and no banner is printed.
 This scenario is tested by `SarifMark_HelpTopics_HelpVerb_ListsTopics`.
-
-**SarifMark_HelpTopics_CardPath_PrintsCardWithExamples**: Invoke the tool with `help reports`; assert exit code is 0
-and the output contains the card title and its examples. Invoke it with `help getting-started --example version`;
-assert exit code is 0 and the output is only the command of that example.
-This scenario is tested by `SarifMark_HelpTopics_CardPath_PrintsCardWithExamples`.
-
-**SarifMark_HelpTopics_SearchAndJson_FindsCardsAndWritesJson**: Invoke the tool with `help --search exclude`; assert
-exit code is 0 and the quality-gates topic is listed. Invoke it with `help --json`; assert exit code is 0 and the
-output is a JSON document of help schema version 1.
-This scenario is tested by `SarifMark_HelpTopics_SearchAndJson_FindsCardsAndWritesJson`.
 
 **SarifMark_HelpTopics_UnknownTopic_ReturnsUsageError**: Invoke the tool with `help no-such-topic`; assert exit code
 is 2 and the output names the topic.

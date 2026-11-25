@@ -63,20 +63,19 @@ subsystem exercises the tool's own capabilities to confirm it is functioning cor
   omitted from the `--help` output.
   Exits with code 0 on success and 1 on any error or when `--enforce` detects issues.
 - *Constraints*: Unrecognized arguments cause an `ArgumentException`, producing exit code 1
-  with an error message. Value-bearing flags require a following token.
+  with an error message. Value-bearing flags require a following token. Argument errors are
+  found before `--silent` and `--log` take effect, so they are always printed and never logged.
 
 **Help Command**: Built-in help, answered from help cards embedded in the tool assembly.
 
 - *Type*: CLI
 - *Role*: Provider (the tool answers the `help` command from the shell)
-- *Contract*: `sarifmark help` prints the topic index; `sarifmark help <topic>` prints a
-  topic card with its examples; `--example <name>`, `--search <words>`, and `--json` print one
-  example, the matching topics, or any answer as a versioned JSON document. Exits with code 0
-  on success, 2 for a wrong help argument or an unknown topic, and 70 for a defective card
+- *Contract*: `sarifmark help` prints the topic index and `sarifmark help <topic>` prints a
+  topic card with its examples; HelpCards adds `--example`, `--search`, and `--json`. Returns exit
+  code 0 for success, 2 for a wrong help argument or an unknown topic, and 70 for a defective card
   catalog.
-- *Constraints*: Answered before the options are parsed, so `--silent` and `--log` do not
-  apply and no banner is printed. The cards are read from the assembly; no file access is
-  needed.
+- *Constraints*: `help` must be the first argument. It is answered before the options are parsed,
+  so `--silent` and `--log` do not apply and no banner is printed.
 
 **SARIF File Input**: The SARIF 2.1.0 JSON files read by the analysis mode.
 

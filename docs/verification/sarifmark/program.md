@@ -35,12 +35,9 @@ output contains the help topic index, and no banner is printed, confirming the h
 options are parsed.
 This scenario is tested by `Program_Main_HelpVerb_PrintsHelpIndex`.
 
-**Program_Main_HelpFlag_PrintsHelpFooter**: Invoke with `--help`; assert exit code is 0, the usage lists
-`sarifmark help [topic]`, and its last non-empty line is the pointer to the help command.
-This scenario is tested by `Program_Main_HelpFlag_PrintsHelpFooter`.
-
 **Program_Main_HelpFlag_DisplaysHelp**: Invoke with `--help`; assert usage text includes the tool version, copyright
-banner, and all supported flags; assert exit code is 0.
+banner, all supported flags, and the `sarifmark help [topic]` usage line, and ends with the pointer to the help
+command; assert exit code is 0.
 This scenario is tested by `Program_Main_HelpFlag_DisplaysHelp`.
 
 **Program_Main_UnknownArgument_ReturnsError**: Invoke with an unrecognized argument; assert exit code is 1.

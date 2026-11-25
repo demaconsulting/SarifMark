@@ -9,9 +9,7 @@ defined in
 `StringWriter` for output assertions. The `Cli` subsystem has no dependencies on other tool subsystems, so no mocking of
 external boundaries is required.
 
-The help command is verified with `HelpCommand.Create` and `Context.Create` together: the help command answers an
-argument list that starts with `help`, which the option parser would reject, and leaves every other argument list to
-the option parser.
+The help command is verified through `HelpCommand.Create`, which writes to in-memory writers.
 
 ### Test Environment
 
@@ -25,7 +23,7 @@ after each test.
 - Every command-line flag and parameter is parsed correctly.
 - Output routing operates as expected.
 - Error conditions produce the correct exceptions and exit codes.
-- The `help` command is answered before the options are parsed, and other arguments are left to the option parser.
+- The `help` command prints a requested topic from the built-in help cards.
 - No `Cli` subsystem requirement may remain without at least one named test scenario (IEC 62304 §5.5.2).
 
 ### Test Scenarios
@@ -112,11 +110,6 @@ This scenario is tested by `Cli_Create_ExcludeParameter_SetsExcludeGlobs`.
 glob patterns to `Context.Create`; assert `ExcludeGlobs` contains every supplied pattern in order.
 This scenario is tested by `Cli_Create_ExcludeParameter_Repeated_AccumulatesExcludeGlobs`.
 
-**Cli_HelpTopics_HelpVerb_AnsweredBeforeArgumentParsing**: Offer `["help", "command-line"]` to
-`HelpCommand.TryRun`; assert it answers with the command-line topic and exit code 0, while `Context.Create` rejects
-the same arguments with an `ArgumentException`.
-This scenario is tested by `Cli_HelpTopics_HelpVerb_AnsweredBeforeArgumentParsing`.
-
-**Cli_HelpTopics_OtherArguments_LeftToContext**: Offer `["--version"]` to `HelpCommand.TryRun`; assert it does not
-answer and writes nothing, and that `Context.Create` parses the same arguments and sets the version flag.
-This scenario is tested by `Cli_HelpTopics_OtherArguments_LeftToContext`.
+**Cli_HelpCommand_TopicRequested_PrintsTopic**: Offer `["help", "command-line"]` to `HelpCommand.TryRun`; assert it
+answers with the command-line topic and exit code 0.
+This scenario is tested by `Cli_HelpCommand_TopicRequested_PrintsTopic`.

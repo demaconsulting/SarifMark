@@ -1,5 +1,7 @@
 # OTS Dependencies
 
+![OTS Items](OtsView.svg)
+
 SarifMark uses thirteen OTS software items: ten DEMA Consulting pipeline tools, the
 xUnit v3 testing framework, and the runtime packages DemaConsulting.HelpCards and
 Microsoft.Extensions.FileSystemGlobbing. All thirteen items

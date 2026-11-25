@@ -1,5 +1,6 @@
 package SarifMark_HelpCommand {
     private import SoftwareItemMetadata::*;
+    private import OtsDependencies::*;
 
     part def HelpCommand {
         doc /* Built-in help command: answers the help verb from embedded help cards before option parsing. */
@@ -12,4 +13,7 @@ package SarifMark_HelpCommand {
             requirementFiles = ("docs/reqstream/sarifmark/cli/help-command.yaml");
         }
     }
+
+    // Serves the help command from the cards embedded in the assembly
+    dependency HelpCommand to HelpCardsPackage;
 }

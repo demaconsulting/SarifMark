@@ -20,8 +20,8 @@ This property is read-only and is recomputed on every access (no caching).
 **Main**: Top-level entry point invoked by the .NET runtime.
 
 - *Parameters*: `string[] args` — command-line arguments supplied by the shell
-- *Returns*: `int` — exit code; 0 for success, 1 for any error; for the `help` command, 0 for
-  success, 2 for a wrong help argument or an unknown topic, and 70 for a defective card catalog
+- *Returns*: `int` — exit code; 0 for success, 1 for any error; for the `help` command, the exit
+  code of `HelpCommand` (see *Help Command* in the system design)
 - *Preconditions*: None.
 - *Postconditions*: Returns 0 when execution completes without error; returns 1 when
   `ArgumentException` or `InvalidOperationException` is caught; rethrows any other

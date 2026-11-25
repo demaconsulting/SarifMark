@@ -36,26 +36,10 @@ internal static class Runner
     /// <returns>Program exit code.</returns>
     /// <exception cref="InvalidOperationException">Thrown when process fails to start.</exception>
     public static int Run(out string output, string program, params string[] arguments) =>
-        RunCore(out output, workingDirectory: null, program, arguments);
+        RunInDirectory(out output, null, program, arguments);
 
     /// <summary>
     ///     Runs the specified program in a working directory and captures its output.
-    /// </summary>
-    /// <param name="output">Program output (stdout and stderr combined).</param>
-    /// <param name="workingDirectory">Working directory for the process.</param>
-    /// <param name="program">Program name or path.</param>
-    /// <param name="arguments">Program arguments.</param>
-    /// <returns>Program exit code.</returns>
-    /// <exception cref="InvalidOperationException">Thrown when process fails to start.</exception>
-    public static int RunInDirectory(
-        out string output,
-        string workingDirectory,
-        string program,
-        params string[] arguments) =>
-        RunCore(out output, workingDirectory, program, arguments);
-
-    /// <summary>
-    ///     Runs the specified program and captures its output.
     /// </summary>
     /// <param name="output">Program output (stdout and stderr combined).</param>
     /// <param name="workingDirectory">Working directory for the process, or null for the current directory.</param>
@@ -63,7 +47,11 @@ internal static class Runner
     /// <param name="arguments">Program arguments.</param>
     /// <returns>Program exit code.</returns>
     /// <exception cref="InvalidOperationException">Thrown when process fails to start.</exception>
-    private static int RunCore(out string output, string? workingDirectory, string program, string[] arguments)
+    public static int RunInDirectory(
+        out string output,
+        string? workingDirectory,
+        string program,
+        params string[] arguments)
     {
         // Construct the start information
         var startInfo = new ProcessStartInfo(program)

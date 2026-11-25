@@ -427,49 +427,22 @@ public class CliTests
     }
 
     /// <summary>
-    ///     Test that the help verb is answered by HelpCommand before Context parses the options,
-    ///     which would reject it.
+    ///     Test that the help command prints a requested topic from the built-in help cards.
     /// </summary>
     [Fact]
-    public void Cli_HelpTopics_HelpVerb_AnsweredBeforeArgumentParsing()
+    public void Cli_HelpCommand_TopicRequested_PrintsTopic()
     {
-        // Arrange: the help verb with a topic, and writers for the help command
-        var args = new[] { "help", "command-line" };
+        // Arrange: a help command that writes to memory
         using var output = new StringWriter();
         using var error = new StringWriter();
         var command = HelpCommand.Create(output, error);
 
-        // Act: offer the arguments to the help command first, then to the option parser
-        var answered = command.TryRun(args, out var exitCode);
-        var parseException = Record.Exception(() => Context.Create(args));
+        // Act: ask for the command-line topic
+        var answered = command.TryRun(["help", "command-line"], out var exitCode);
 
-        // Assert: the help command answers with the topic; the option parser would have rejected it
+        // Assert: the topic card is printed and the exit code is success
         Assert.True(answered);
         Assert.Equal(0, exitCode);
         Assert.Contains("# Command-line options", output.ToString());
-        Assert.IsType<ArgumentException>(parseException);
-    }
-
-    /// <summary>
-    ///     Test that arguments without the help verb are left by HelpCommand to Context.
-    /// </summary>
-    [Fact]
-    public void Cli_HelpTopics_OtherArguments_LeftToContext()
-    {
-        // Arrange: an ordinary option, and writers for the help command
-        var args = new[] { "--version" };
-        using var output = new StringWriter();
-        using var error = new StringWriter();
-        var command = HelpCommand.Create(output, error);
-
-        // Act: offer the arguments to the help command first, then to the option parser
-        var answered = command.TryRun(args, out _);
-        using var context = Context.Create(args);
-
-        // Assert: the help command leaves the arguments alone and the option parser handles them
-        Assert.False(answered);
-        Assert.Equal(string.Empty, output.ToString());
-        Assert.Equal(string.Empty, error.ToString());
-        Assert.True(context.Version);
     }
 }

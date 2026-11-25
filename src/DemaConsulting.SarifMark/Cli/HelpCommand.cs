@@ -18,59 +18,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Globalization;
-using DemaConsulting.HelpCards.Catalog;
-using DemaConsulting.HelpCards.Composition;
 using DemaConsulting.HelpCards.Integration;
 using DemaConsulting.HelpCards.Loading;
 
 namespace DemaConsulting.SarifMark;
 
 /// <summary>
-///     Answers the <c>sarifmark help</c> command from the built-in help cards, before the
-///     command-line options are parsed.
+///     Answers the <c>sarifmark help</c> command from the help cards embedded in the tool assembly.
 /// </summary>
 /// <remarks>
-///     <para>
-///         <c>HelpCommand</c> is the only unit that references the HelpCards library. It wraps one
-///         <see cref="HelpCli"/> and a <see cref="HelpSource"/> over the <c>Help</c> folder that the
-///         HelpCards build targets embed in the tool assembly. Creating either object performs no
-///         file or console I/O, so the static <see cref="Default"/> instance costs nothing at start-up.
-///     </para>
-///     <para>
-///         The help catalog is built lazily: <see cref="TryRun"/> returns <see langword="false"/>
-///         at once for every first argument other than <c>help</c> (compared without regard to case)
-///         and builds the catalog only after the verb was recognized. A normal run of the tool
-///         therefore never reads or parses a help card.
-///     </para>
-///     <para>
-///         The command bypasses <see cref="Context"/>: <c>--silent</c> and <c>--log</c> do not apply to
-///         it and no banner is printed. The verb is answered before the options are parsed, so no
-///         context exists yet; parsing the options a second time just for help would duplicate
-///         <see cref="Context.Create"/>. The command writes to the console (or to the writers supplied
-///         to <see cref="Create"/>) and reports exit code 0 for success, 2 for a wrong help argument or
-///         an unknown topic, and 70 for a defective card catalog.
-///     </para>
-///     <para>
-///         An instance is immutable after creation and the helper keeps no state between calls, so an
-///         instance can be shared.
-///     </para>
+///     The only unit that references HelpCards. Creating an instance performs no I/O, and the catalog is
+///     built only when the first argument is <c>help</c>. The exit codes and the bypass of <see cref="Context"/>
+///     are described in the HelpCommand design.
 /// </remarks>
 internal sealed class HelpCommand
 {
     /// <summary>
-    ///     The name of the tool as the user types it; used in usage text, command examples, and tokens.
+    ///     The name of the tool as the user types it; the usage lines and the <c>{{tool}}</c> token use it.
     /// </summary>
     internal const string ToolName = "sarifmark";
 
     /// <summary>
-    ///     The closed tag vocabulary: every card carries one of these purpose tags, and no other tag.
-    /// </summary>
-    internal static readonly string[] PurposeTags = ["tutorial", "reference", "troubleshooting"];
-
-    /// <summary>
-    ///     Ids of the root cards, which are the topics listed by <c>sarifmark help</c>. A missing or
-    ///     extra root card fails the catalog.
+    ///     Ids of the root cards: the topics that <c>sarifmark help</c> lists. A missing or extra root card
+    ///     fails the catalog.
     /// </summary>
     internal static readonly string[] RootCardIds =
     [
@@ -84,8 +54,13 @@ internal sealed class HelpCommand
     ];
 
     /// <summary>
-    ///     The cards embedded in the tool assembly. Creating the source reads nothing. Declared
-    ///     before <see cref="Default"/> so that it is initialized first.
+    ///     The closed tag vocabulary: every card carries one of these purpose tags, and no other tag.
+    /// </summary>
+    private static readonly string[] PurposeTags = ["tutorial", "reference", "troubleshooting"];
+
+    /// <summary>
+    ///     The cards embedded in the tool assembly; declared before <see cref="Default"/> so that it is
+    ///     initialized first. Creating the source reads nothing.
     /// </summary>
     private static readonly HelpSource Cards = HelpSource.FromAssembly(typeof(HelpCommand).Assembly);
 
@@ -99,54 +74,37 @@ internal sealed class HelpCommand
     /// </summary>
     /// <param name="output">The writer for output, or <see langword="null"/> for the console output.</param>
     /// <param name="error">The writer for errors, or <see langword="null"/> for the console error.</param>
-    /// <param name="configure">
-    ///     The action that configures the catalog builder, or <see langword="null"/> to use
-    ///     <see cref="Configure"/>. Supplied only by tests.
-    /// </param>
-    private HelpCommand(
-        TextWriter? output,
-        TextWriter? error,
-        Action<HelpCatalogBuilder, CultureInfo?>? configure) =>
-        _cli = HelpCli.Create(CreateOptions(output, error, configure));
+    private HelpCommand(TextWriter? output, TextWriter? error) =>
+        _cli = HelpCli.Create(CreateOptions(output, error));
 
     /// <summary>
-    ///     Gets the instance used by the tool, which writes to the console at the time of the command.
+    ///     Gets the instance used by the tool, which writes to the console.
     /// </summary>
-    internal static HelpCommand Default { get; } = new(null, null, null);
+    internal static HelpCommand Default { get; } = new(null, null);
 
     /// <summary>
-    ///     Gets the sentence that points a reader of the usage text to <c>sarifmark help</c>.
+    ///     Gets the sentence that ends the usage text and points to <c>sarifmark help</c>.
     /// </summary>
-    /// <remarks>
-    ///     The sentence is a constant: reading it never builds the help catalog.
-    /// </remarks>
     public string Footer => _cli.Footer;
 
     /// <summary>
-    ///     Creates the options of the command-line helper. The tool name and the version are set here
-    ///     and nowhere else: the helper gives them to the catalog builder itself.
+    ///     Creates the options of the command-line helper; tests build the shipped catalog from
+    ///     <see cref="HelpCliOptions.GetCatalogConfiguration"/>.
     /// </summary>
     /// <param name="output">The writer for output, or <see langword="null"/> for the console output.</param>
     /// <param name="error">The writer for errors, or <see langword="null"/> for the console error.</param>
-    /// <param name="configure">
-    ///     Optional replacement for <see cref="Configure"/>, used by tests to observe when the catalog
-    ///     is built.
-    /// </param>
-    /// <returns>
-    ///     The options; <see cref="HelpCliOptions.GetCatalogConfiguration"/> gives the tests the
-    ///     composition that the tool ships.
-    /// </returns>
-    internal static HelpCliOptions CreateOptions(
-        TextWriter? output = null,
-        TextWriter? error = null,
-        Action<HelpCatalogBuilder, CultureInfo?>? configure = null) =>
+    /// <returns>The options.</returns>
+    internal static HelpCliOptions CreateOptions(TextWriter? output = null, TextWriter? error = null) =>
         new()
         {
             ToolName = ToolName,
             Version = Program.Version,
-            ConfigureCatalog = configure ?? ((builder, _) => Configure(builder)),
-            UsageLines = ["sarifmark help [topic]", "sarifmark help --search <words>"],
-            IndexPreamble = "Start with 'sarifmark help getting-started'.",
+            ConfigureCatalog = (builder, _) => builder
+                .AddSource(Cards)
+                .TagVocabulary(PurposeTags, PurposeTags)
+                .ExpectedRoots(RootCardIds),
+            UsageLines = [$"{ToolName} help [topic]", $"{ToolName} help --search <words>"],
+            IndexPreamble = $"Start with '{ToolName} help getting-started'.",
             Output = output,
             Error = error
         };
@@ -156,38 +114,17 @@ internal sealed class HelpCommand
     /// </summary>
     /// <param name="output">The writer for output.</param>
     /// <param name="error">The writer for errors.</param>
-    /// <param name="configure">
-    ///     Optional replacement for <see cref="Configure"/>, used by tests to observe when the
-    ///     catalog is built.
-    /// </param>
     /// <returns>The new help command.</returns>
-    internal static HelpCommand Create(
-        TextWriter output,
-        TextWriter error,
-        Action<HelpCatalogBuilder, CultureInfo?>? configure = null) =>
-        new(output, error, configure);
+    internal static HelpCommand Create(TextWriter output, TextWriter error) => new(output, error);
 
     /// <summary>
-    ///     Adds the tool's own part of the catalog configuration to a builder: the embedded cards, the
-    ///     closed tag vocabulary, and the expected set of topics. The tool name and the version are set
-    ///     by the helper from <see cref="CreateOptions"/>.
-    /// </summary>
-    /// <param name="builder">The builder to configure.</param>
-    internal static void Configure(HelpCatalogBuilder builder) =>
-        builder
-            .AddSource(Cards)
-            .TagVocabulary(PurposeTags, PurposeTags)
-            .ExpectedRoots(RootCardIds);
-
-    /// <summary>
-    ///     Runs the help command when the arguments start with the <c>help</c> verb.
+    ///     Runs the help command when the first argument is <c>help</c>.
     /// </summary>
     /// <param name="args">The command-line arguments of the tool.</param>
     /// <param name="exitCode">Receives the exit code when the command was answered.</param>
     /// <returns>
-    ///     <see langword="true"/> when the arguments started with the help verb and were answered;
-    ///     <see langword="false"/> when the tool should continue with its own option parser. Returning
-    ///     <see langword="false"/> never builds the catalog.
+    ///     <see langword="true"/> when the command was answered; <see langword="false"/> when the tool should
+    ///     continue with its own option parser.
     /// </returns>
     public bool TryRun(string[] args, out int exitCode) => _cli.TryRun(args, out exitCode);
 }

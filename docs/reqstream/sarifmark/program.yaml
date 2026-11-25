@@ -127,7 +127,7 @@ sections:
               worked examples are.
             tags: [internal]
             tests:
-              - Program_Main_HelpFlag_PrintsHelpFooter
+              - Program_Main_HelpFlag_DisplaysHelp
 
           - id: SarifMark-Program-Validation
             title: The Program unit shall execute self-validation when the --validate flag is set.
