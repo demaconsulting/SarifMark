@@ -1,0 +1,66 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "CodeQL",
+          "version": "2.20.0"
+        }
+      },
+      "artifacts": [
+        {
+          "location": {
+            "uri": "src/App/Program.cs"
+          }
+        },
+        {
+          "location": {
+            "uri": "src/App/obj/Debug/App.AssemblyInfo.cs"
+          }
+        }
+      ],
+      "results": [
+        {
+          "ruleId": "cs/useless-assignment-to-local",
+          "level": "warning",
+          "message": {
+            "text": "This assignment to 'count' is useless, since its value is never read."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/App/Program.cs"
+                },
+                "region": {
+                  "startLine": 12
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "cs/missing-documentation",
+          "level": "note",
+          "message": {
+            "text": "Generated type has no documentation."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/App/obj/Debug/App.AssemblyInfo.cs"
+                },
+                "region": {
+                  "startLine": 3
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

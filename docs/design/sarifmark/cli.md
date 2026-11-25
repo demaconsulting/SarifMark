@@ -11,9 +11,10 @@ to the console and an optional log file.
 The `Cli` subsystem acts as the primary boundary between the user's shell invocation and
 the tool's internal logic. It owns argument parsing, output formatting, and error tracking.
 All other subsystems receive a `Context` object from `Cli` to read parsed flags and write
-output. The subsystem contains a single unit:
+output. The subsystem also answers the built-in `help` command. It contains two units:
 
 - **Context**: argument parsing, output channels, and exit-code management.
+- **HelpCommand**: the built-in `help` command, answered from embedded help cards.
 
 ### Interfaces
 
@@ -55,10 +56,31 @@ command-line arguments.
 - *Constraints*: Properties are read-only after construction; `Depth` must be a positive
   integer supplied after `--depth` (or legacy `--report-depth`).
 
+**HelpCommand.TryRun**: Answers the `help` command from the built-in help cards.
+
+- *Type*: In-process .NET instance method (on the shared `HelpCommand.Default` instance)
+- *Role*: Provider
+- *Contract*: Returns `false`, writing nothing, when the first argument is not `help`. Otherwise
+  writes the answer to the console, returns `true`, and sets the exit code (see *Help Command* in
+  the system design).
+- *Constraints*: Does not throw for user input; does not use `Context`.
+
+**HelpCommand.Footer**: The sentence that points a reader of the usage text to the help command.
+
+- *Type*: In-process .NET instance property
+- *Role*: Provider
+- *Contract*: Returns the one-line pointer that HelpCards supplies.
+- *Constraints*: Reading it never builds the help catalog.
+
 ### Design
 
-The `Cli` subsystem contains a single unit (`Context`) so there is no inter-unit data flow
-to describe. `Context.Create` is the subsystem entry point:
+`Context` and `HelpCommand` do not call each other. `Program.Main` offers the arguments to
+`HelpCommand.TryRun` first; when the help command answers, the invocation ends with its exit
+code and no `Context` is created. `HelpCommand` writes its answers to the console itself. It is
+the one exception to `Context` owning all output, because the `help` command is answered before
+a `Context` exists.
+
+For every other invocation, `Context.Create` is the subsystem entry point:
 
 1. `Create` receives `string[] args` and delegates to the private `ArgumentParser` inner class.
 2. `ArgumentParser.ParseArguments` iterates tokens in order; value-bearing flags consume the

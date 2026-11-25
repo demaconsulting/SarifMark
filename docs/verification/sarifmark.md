@@ -20,6 +20,13 @@ named integration scenario `SarifMark_ExcludeFlag_FiltersMatchingFindings`, and 
 Verification Design*); the `Microsoft.Extensions.FileSystemGlobbing` OTS dependency it relies on is verified
 separately in *FileSystemGlobbing Verification Design*.
 
+The built-in `help` command is verified by running the compiled tool with `help` arguments. The command examples of
+the help cards are verified with the example runner of `DemaConsulting.HelpCards`: it gives each card a fresh scratch
+folder and calls a test delegate for each command example. The delegate copies the SARIF files that the examples read
+from `test/DemaConsulting.SarifMark.Tests/TestData/HelpExamples/` into that folder, runs the compiled tool there with
+`Runner.RunInDirectory`, and the runner compares the exit code and the output with the `exit` and `expect` values of
+the example.
+
 ## Test Environment
 
 Integration tests execute on Windows, Ubuntu (Linux), and macOS CI runners. Each runner tests against all supported
@@ -34,6 +41,8 @@ required to run the test suite.
   CI runner platforms (Windows, Ubuntu, macOS) against both supported .NET runtime versions (10 and 11).
 - All integration tests produce the expected console output and any expected output files.
 - The built-in `--validate` self-test exits with code 0 on all supported platforms and runtimes.
+- The `help` command lists the topics with exit code 0, and exits with code 2 for an unknown topic.
+- Every command example in the help cards gives the exit code and output that its card states.
 - Every system-level requirement maps to at least one named test scenario (IEC 62304 §5.7.2).
 
 ## Test Scenarios
@@ -188,3 +197,16 @@ This scenario is tested by `SarifMark_ValidateResultsParameter_WritesResultsFile
 confirming that `--exclude` glob-filtering is exercised end-to-end through the compiled binary as a named
 system-level scenario.
 This scenario is tested by `SarifMark_ExcludeFlag_FiltersMatchingFindings`.
+
+**SarifMark_HelpTopics_HelpVerb_ListsTopics**: Invoke the tool with `help` as the sole argument; assert exit code is
+0, the output lists every topic with its command, and no banner is printed.
+This scenario is tested by `SarifMark_HelpTopics_HelpVerb_ListsTopics`.
+
+**SarifMark_HelpTopics_UnknownTopic_ReturnsUsageError**: Invoke the tool with `help no-such-topic`; assert exit code
+is 2 and the output names the topic.
+This scenario is tested by `SarifMark_HelpTopics_UnknownTopic_ReturnsUsageError`.
+
+**SarifMark_HelpExamples_AllCommandExamples_GiveStatedResults**: Build the catalog that the tool ships and run every
+command example of every card against the compiled tool in a scratch folder that holds the example SARIF files;
+assert at least one command example exists and each gives the exit code and output fragment that its card states.
+This scenario is tested by `SarifMark_HelpExamples_AllCommandExamples_GiveStatedResults`.

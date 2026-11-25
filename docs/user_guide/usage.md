@@ -19,11 +19,28 @@ Display the installed version:
 sarifmark --version
 ```
 
-Display the built-in help:
+Display the short usage text:
 
 ```shell
 sarifmark --help
 ```
+
+The usage text ends with a pointer to the built-in help.
+
+## Built-in Help
+
+The `help` command prints help topics that explain each task with worked examples, for people and
+for AI agents that have only the installed tool. List the topics, then print one with its examples:
+
+```shell
+sarifmark help
+sarifmark help getting-started
+```
+
+Add `--search <words>` to find a topic, `--example <name>` to print one example of a topic, and
+`--json` to get any help answer as JSON. `help` is a command, not an option: it must be the first
+argument, and `--silent` and `--log` do not apply to it. An unknown topic or a wrong help argument
+prints a hint and exits with code 2 (see *Exit Codes*).
 
 ## Command-Line Options
 
@@ -128,6 +145,9 @@ Suppress console output and redirect all output to a log file for automated pipe
 sarifmark --sarif analysis.sarif --report report.md --silent --log sarifmark.log
 ```
 
+Argument errors are found before `--silent` and `--log` take effect, so they are always printed and never
+logged.
+
 ## Integration Examples
 
 ### GitHub Actions CI/CD
@@ -180,4 +200,5 @@ Generated markdown reports include the following sections for each run in the SA
 | --- | --- |
 | `0` | Success — processing completed without errors |
 | `1` | Error — invalid arguments, file not found, or processing error |
+| `2` | Unknown help topic or wrong `help` argument |
 | Non-zero (with `--enforce`) | Issues found in the SARIF file |

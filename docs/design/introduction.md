@@ -26,9 +26,10 @@ Local items:
 
 OTS items:
 
-- **BuildMark**, **DemaConsulting.TestResults**, **FileAssert**, **Microsoft.Extensions.FileSystemGlobbing**,
-  **Pandoc**, **ReqStream**, **ReviewMark**, **SonarMark**, **SysML2Tools**, **VersionMark**, **WeasyPrint**,
-  **xUnit v3**: integration and usage design for each OTS software item used in the project pipeline.
+- **BuildMark**, **DemaConsulting.HelpCards**, **DemaConsulting.TestResults**, **FileAssert**,
+  **Microsoft.Extensions.FileSystemGlobbing**, **Pandoc**, **ReqStream**, **ReviewMark**, **SonarMark**,
+  **SysML2Tools**, **VersionMark**, **WeasyPrint**, **xUnit v3**: integration and usage design for each OTS
+  software item used in the project pipeline.
 
 Shared packages:
 
@@ -58,7 +59,8 @@ file into a markdown report and an exit code](architecture.svg)
 
 - **src/** - source files and projects
   - **DemaConsulting.SarifMark/** - main project source
-    - **Cli/** - command-line argument parsing
+    - **Cli/** - command-line argument parsing and the built-in `help` command (`HelpCommand.cs`)
+    - **Help/** - built-in help cards (Markdown with front matter), embedded in the assembly
     - **Sarif/** - SARIF reading and report generation
     - **SelfTest/** - self-validation test runner
     - **Utilities/** - path-safety helpers

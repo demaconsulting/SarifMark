@@ -51,14 +51,21 @@ internal static class Program
     ///     Main entry point for the SarifMark tool.
     /// </summary>
     /// <remarks>
-    ///     Only <see cref="ArgumentException"/> and <see cref="InvalidOperationException"/> are
-    ///     caught and converted to exit code 1. These are the expected user-facing error types:
-    ///     <see cref="ArgumentException"/> represents invalid command-line input, and
-    ///     <see cref="InvalidOperationException"/> represents a recoverable runtime failure such
-    ///     as a malformed SARIF file or an unreadable log file. All other exception types indicate
-    ///     unexpected conditions (bugs or environmental failures) that should surface as unhandled
-    ///     exceptions to aid debugging and generate event-log entries — they are intentionally
-    ///     not swallowed here.
+    ///     <para>
+    ///         The <c>help</c> command is answered first, by <see cref="HelpCommand"/>, before the
+    ///         command-line options are parsed: <c>help</c> is a command and not an option, so
+    ///         <see cref="Context.Create"/> would reject it. Its exit code is returned as is.
+    ///     </para>
+    ///     <para>
+    ///         Only <see cref="ArgumentException"/> and <see cref="InvalidOperationException"/> are
+    ///         caught and converted to exit code 1. These are the expected user-facing error types:
+    ///         <see cref="ArgumentException"/> represents invalid command-line input, and
+    ///         <see cref="InvalidOperationException"/> represents a recoverable runtime failure such
+    ///         as a malformed SARIF file or an unreadable log file. All other exception types indicate
+    ///         unexpected conditions (bugs or environmental failures) that should surface as unhandled
+    ///         exceptions to aid debugging and generate event-log entries — they are intentionally
+    ///         not swallowed here.
+    ///     </para>
     /// </remarks>
     /// <param name="args">Command-line arguments.</param>
     /// <returns>Exit code: 0 for success, non-zero for failure.</returns>
@@ -66,6 +73,12 @@ internal static class Program
     {
         try
         {
+            // Answer the help command before the options are parsed
+            if (HelpCommand.Default.TryRun(args, out var helpExitCode))
+            {
+                return helpExitCode;
+            }
+
             // Create context from arguments
             using var context = Context.Create(args);
 
@@ -147,7 +160,7 @@ internal static class Program
     }
 
     /// <summary>
-    ///     Prints usage information.
+    ///     Prints usage information, ending with a pointer to the built-in help topics.
     /// </summary>
     /// <remarks>
     ///     Deprecated aliases (<c>--report-depth</c> for <c>--depth</c> and <c>--result</c> for
@@ -158,7 +171,8 @@ internal static class Program
     /// <param name="context">The context for output.</param>
     private static void PrintHelp(Context context)
     {
-        context.WriteLine("Usage: sarifmark [options]");
+        context.WriteLine($"Usage: {HelpCommand.ToolName} [options]");
+        context.WriteLine($"       {HelpCommand.ToolName} help [topic]");
         context.WriteLine("");
         context.WriteLine("Options:");
         context.WriteLine("  -v, --version              Display version information");
@@ -173,6 +187,8 @@ internal static class Program
         context.WriteLine("  --report <file>            Export analysis results to markdown file");
         context.WriteLine("  --depth <depth>            Markdown header depth for report (1-6, default: 1)");
         context.WriteLine("  --heading <text>           Custom heading for report (default: [ToolName] Analysis)");
+        context.WriteLine("");
+        context.WriteLine(HelpCommand.Default.Footer);
     }
 
     /// <summary>

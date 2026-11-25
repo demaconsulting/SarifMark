@@ -1,7 +1,10 @@
 # OTS Dependencies
 
-SarifMark uses twelve OTS software items: ten DEMA Consulting pipeline tools, the
-xUnit v3 testing framework, and Microsoft.Extensions.FileSystemGlobbing. All twelve items
+![OTS Items](OtsView.svg)
+
+SarifMark uses thirteen OTS software items: ten DEMA Consulting pipeline tools, the
+xUnit v3 testing framework, and the runtime packages DemaConsulting.HelpCards and
+Microsoft.Extensions.FileSystemGlobbing. All thirteen items
 are consumed as .NET tools or NuGet packages and are managed through the local tool
 manifest and the project dependency lock files. Per-item integration designs are
 documented in the `ots/` sub-folder.
@@ -28,6 +31,10 @@ globbing engine already used throughout the .NET ecosystem, giving users glob se
 they are already familiar with and avoiding hand-rolled glob parsing logic within
 SarifMark.
 
+DemaConsulting.HelpCards is selected because it serves the built-in `help` command from
+Markdown cards embedded in the tool assembly, and ships the test helpers that validate the
+cards and run their command examples against the built tool.
+
 ## Version Management Policy
 
 OTS package versions are managed through Dependabot pull requests for NuGet
@@ -45,7 +52,8 @@ accurate. .NET tool versions are pinned in the local tool manifest.
 All OTS items are consumed as CLI tools invoked from CI/CD pipeline scripts, as a NuGet
 package referenced directly by the main project (DemaConsulting.TestResults, used by the
 SelfTest subsystem to collect and serialize self-validation results; Microsoft.Extensions.FileSystemGlobbing,
-used by `SarifResults.Exclude` to filter findings by glob pattern), or as a NuGet package
+used by `SarifResults.Exclude` to filter findings by glob pattern; DemaConsulting.HelpCards, used by
+`HelpCommand` to serve the built-in help), or as a NuGet package
 referenced by the test project (xUnit v3). No wrapper classes are introduced at the
 application level; tools are invoked directly via `dotnet tool run` or their shell
 command, and packages are referenced through standard NuGet project references.

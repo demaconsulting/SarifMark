@@ -265,3 +265,15 @@ sections:
             tests:
               - Cli_Create_ExcludeParameter_SetsExcludeGlobs
               - Cli_Create_ExcludeParameter_Repeated_AccumulatesExcludeGlobs
+
+          - id: SarifMark-Cli-HelpTopics
+            title: The CLI subsystem shall answer the help command from built-in help cards.
+            justification: >-
+              Users and AI agents need help topics with worked examples from the installed tool.
+            tags: [public]
+            children:
+              - SarifMark-HelpCommand-HelpVerb
+              - SarifMark-HelpCommand-ValidCards
+              - SarifMark-HelpCommand-LineWidth
+            tests:
+              - Cli_HelpCommand_TopicRequested_PrintsTopic

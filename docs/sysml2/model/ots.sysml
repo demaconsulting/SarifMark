@@ -32,4 +32,14 @@ package OtsDependencies {
             requirementFiles = ("docs/reqstream/ots/filesystem-globbing.yaml");
         }
     }
+
+    part def HelpCardsPackage {
+        doc /* OTS: DemaConsulting.HelpCards. */
+
+        metadata info : SoftwareInfo {
+            designFiles = ("docs/design/ots/help-cards.md");
+            verificationFiles = ("docs/verification/ots/help-cards.md");
+            requirementFiles = ("docs/reqstream/ots/help-cards.yaml");
+        }
+    }
 }

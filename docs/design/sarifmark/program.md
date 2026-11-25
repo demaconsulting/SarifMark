@@ -5,8 +5,9 @@
 ### Purpose
 
 `Program` is the top-level entry point for the SarifMark tool. It is a static internal
-class that owns the `Main` method, constructs the `Context`, dispatches to the appropriate
-subsystem based on the parsed flags, and handles top-level exception translation.
+class that owns the `Main` method, hands the `help` command to `HelpCommand`, otherwise
+constructs the `Context`, dispatches to the appropriate subsystem based on the parsed flags,
+and handles top-level exception translation.
 
 ### Data Model
 
@@ -19,14 +20,17 @@ This property is read-only and is recomputed on every access (no caching).
 **Main**: Top-level entry point invoked by the .NET runtime.
 
 - *Parameters*: `string[] args` — command-line arguments supplied by the shell
-- *Returns*: `int` — exit code; 0 for success, 1 for any error
+- *Returns*: `int` — exit code; 0 for success, 1 for any error; for the `help` command, the exit
+  code of `HelpCommand` (see *Help Command* in the system design)
 - *Preconditions*: None.
 - *Postconditions*: Returns 0 when execution completes without error; returns 1 when
   `ArgumentException` or `InvalidOperationException` is caught; rethrows any other
   exception after printing its message to `Console.Error` with an `"Unexpected error:"` prefix.
 
-`Main` constructs a `Context` inside a `using` block (ensuring disposal), calls `Run`,
-and returns `context.ExitCode`.
+`Main` first calls `HelpCommand.Default.TryRun(args, out exitCode)`. The `help` command is not
+an option, so `Context.Create` would reject it; when the help command answers, `Main` returns
+its exit code. Otherwise `Main` constructs a `Context` inside a `using` block (ensuring
+disposal), calls `Run`, and returns `context.ExitCode`.
 
 **Run**: Selects and executes the correct execution mode based on the parsed context.
 
@@ -38,7 +42,9 @@ and returns `context.ExitCode`.
 
 `Run` evaluates conditions in priority order: version flag → print version and return;
 then always print the banner; help flag → print help and return; validate flag → call
-`Validation.Run` and return; default → call `ProcessSarifAnalysis`.
+`Validation.Run` and return; default → call `ProcessSarifAnalysis`. The help text is the
+usage synopsis (including `sarifmark help [topic]`) and the options table, and it ends with
+`HelpCommand.Default.Footer`, the pointer to the help command.
 
 **ProcessSarifAnalysis**: Orchestrates the primary SARIF analysis execution path.
 
@@ -73,6 +79,8 @@ are similarly caught and routed through `context.WriteError`.
 
 ### Dependencies
 
+- **HelpCommand** — answers the `help` command before the options are parsed, and supplies the
+  footer that ends the usage text.
 - **Context** — receives parsed arguments and provides the output channel for all tool output.
 - **SarifResults** — reads SARIF files and generates markdown in analysis mode.
 - **Validation** — runs self-validation tests in validate mode.

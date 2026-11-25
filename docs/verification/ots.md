@@ -7,8 +7,8 @@ Each OTS item is verified using one of three evidence categories matched to its 
 1. **Self-validation output**: Tools that expose a `--validate` flag (BuildMark, FileAssert, ReqStream, ReviewMark,
    VersionMark) are exercised through their own `--validate` self-validation mechanism as separate CI pipeline
    steps; passing output confirms the tool is installed and all advertised features are operational.
-   DemaConsulting.TestResults and Microsoft.Extensions.FileSystemGlobbing are NuGet packages
-   (not CLI tools) and do not expose `--validate`; they are verified through SarifMark's integration and
+   DemaConsulting.HelpCards, DemaConsulting.TestResults, and Microsoft.Extensions.FileSystemGlobbing are NuGet
+   packages (not CLI tools) and do not expose `--validate`; they are verified through SarifMark's integration and
    unit tests.
 2. **Successful CI pipeline completion**: Tools verified by successful CI pipeline execution — each tool produces
    an artifact (document, report, or exit-code assertion) that confirms functional operation. Pandoc and
@@ -48,6 +48,10 @@ For each OTS item, the following evidence is collected during CI pipeline execut
 - **Microsoft.Extensions.FileSystemGlobbing**: Unit tests exercising `SarifResults.Exclude` construct real `Matcher`
   instances with real glob patterns and real candidate `Uri` values; passing results confirm the package matches,
   retains, and case-insensitively compares findings as documented in `docs/design/ots/filesystem-globbing.md`.
+- **DemaConsulting.HelpCards**: Unit tests of `HelpCommand` drive the package with the cards embedded in the tool
+  and validate the shipped catalog with warnings treated as errors; integration tests run the compiled tool with
+  `help` arguments and run every command example of the cards, confirming the package serves, validates, and
+  embeds the cards as documented in `docs/design/ots/help-cards.md`.
 
 ## Regression Approach
 

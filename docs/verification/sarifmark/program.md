@@ -16,7 +16,8 @@ configuration are required.
 
 All `ProgramTests` test methods pass, confirming that every execution path — argument parsing, operation dispatch,
 version display, help display, SARIF processing, error handling, report generation, and enforcement — produces the
-expected exit code and console output.
+expected exit code and console output. `Program.Main` answers the `help` command before the options are parsed, and
+the usage information ends with the pointer to the help command.
 No `Program` unit requirement may remain without at least one named test scenario (IEC 62304 §5.5.2).
 
 ### Test Scenarios
@@ -29,8 +30,14 @@ This scenario is tested by `Program_Main_NoArguments_ReturnsError`.
 output and exit code is 0.
 This scenario is tested by `Program_Main_VersionFlag_DisplaysVersionOnly`.
 
+**Program_Main_HelpVerb_PrintsHelpIndex**: Invoke with `help`, which is not an option; assert exit code is 0, the
+output contains the help topic index, and no banner is printed, confirming the help command is answered before the
+options are parsed.
+This scenario is tested by `Program_Main_HelpVerb_PrintsHelpIndex`.
+
 **Program_Main_HelpFlag_DisplaysHelp**: Invoke with `--help`; assert usage text includes the tool version, copyright
-banner, and all supported flags; assert exit code is 0.
+banner, all supported flags, and the `sarifmark help [topic]` usage line, and ends with the pointer to the help
+command; assert exit code is 0.
 This scenario is tested by `Program_Main_HelpFlag_DisplaysHelp`.
 
 **Program_Main_UnknownArgument_ReturnsError**: Invoke with an unrecognized argument; assert exit code is 1.

@@ -30,6 +30,8 @@ command line or a CI pipeline, and use the resulting markdown report and pass/fa
 - 🌐 **Multi-Platform** - Builds and runs on Windows, Linux, and macOS with .NET 10 and 11
 - ✅ **Self-Validation** - Built-in tests without requiring external tools
 - 📊 **Detailed Reporting** - Extract tool information, results, and locations
+- 💡 **Built-in Help** - `sarifmark help` serves help topics with runnable examples, search, and JSON output for
+  AI agents
 
 ## Installation
 
@@ -103,6 +105,7 @@ This will display:
 
 ```text
 Usage: sarifmark [options]
+       sarifmark help [topic]
 
 Options:
   -v, --version              Display version information
@@ -117,6 +120,8 @@ Options:
   --report <file>            Export analysis results to markdown file
   --depth <depth>            Markdown header depth for report (1-6, default: 1)
   --heading <text>           Custom heading for report (default: [ToolName] Analysis)
+
+Run 'sarifmark help' for topics and examples.
 ```
 
 ### Quick Start Examples
@@ -155,6 +160,13 @@ sarifmark --validate
 
 ```bash
 sarifmark --validate --results validation-results.trx
+```
+
+**List the built-in help topics, then read one:**
+
+```bash
+sarifmark help
+sarifmark help getting-started
 ```
 
 ## Building
