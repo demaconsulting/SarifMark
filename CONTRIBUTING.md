@@ -207,24 +207,28 @@ uses the package.
 
 - **One file per topic.** The path below `Help/`, without `.md`, is the card id. `_source.md` names the source
   (`name:`) and sets `schema: 2`.
-- **Front matter.** Every card has a `title`, a `summary` (at most 80 characters for a topic, 100 otherwise), and a
-  purpose tag from `HelpCommand.PurposeTags` (`tutorial`, `reference`, or `troubleshooting`), the only tags allowed.
-- **New topics.** Add the id of every new top-level card to `HelpCommand.RootCardIds`; a missing or extra topic
-  fails the tests.
-- **Examples.** Give every task a runnable `command` example. Quote the content (`content: '{{tool}} --validate'`),
-  and state the result with `exit:` (default 0) and `expect:` (a quoted output fragment). One command per example:
-  no pipes, redirection, or `&&`. Put an argument with spaces or glob characters in double quotes
-  (`--exclude "**/obj/**"`), which works in every shell.
-- **Input files.** The examples read SARIF files, which analyzers produce. Keep them in
-  `test/DemaConsulting.SarifMark.Tests/TestData/HelpExamples/`; the example-runner test copies them into the
-  folder in which each example runs. Do not show SARIF files or generated reports in a card: describe those formats
-  in prose. Show complete files only for formats that users write.
+- **Front matter.** Every card has a `title`, a `summary` (at most 80 characters for a topic, 100 otherwise), and
+  exactly one purpose tag: `tutorial`, `reference`, or `troubleshooting`.
+- **New topics.** Add the id of every new top-level card to `HelpCommand.RootCardIds`, the one list of topics; a
+  missing or extra topic fails the tests.
+- **Examples.** Give every task a runnable `command` example, one command per example: no pipes, redirection, or
+  `&&`. Wrap `content` in single quotes and use double quotes inside the command, which bash, PowerShell, and cmd
+  read alike. State the result when it matters with `exit:` (default 0) and `expect:`, a short fragment that must
+  appear somewhere in the console output; `expect` cannot check a file that the command writes. Keep each
+  `description` to about 50 characters.
+- **Input files.** The examples read SARIF files, which analyzers produce, so the cards describe SARIF files and
+  generated reports in prose and show complete files only for formats that users write. Keep the SARIF files in
+  `test/DemaConsulting.SarifMark.Tests/TestData/HelpExamples/`; the example-runner test copies them into
+  `invocation.WorkingDirectory` before running the tool.
+- **Width.** A printed card may not be wider than 120 characters. Links print as full commands (`[[#name]]` as
+  about 50 characters) and `{{version}}` of a development build as about 46, so keep body lines near 75 characters
+  with at most one link each.
 - **Text.** Cards are linted and spell-checked like any Markdown file: no body line starting with `#`, no wide
   tables, and every fenced block names its language.
 
-Run `pwsh ./build.ps1 -Changed` after changing a card. The `HelpCommand` unit tests validate the cards with warnings
-treated as errors, and the integration tests run every command example against the built tool and compare the
-result with the card.
+Run `pwsh ./build.ps1 -Changed` after changing a card. The `HelpCommand` unit tests validate every card, with
+warnings treated as errors, and check its printed width; an integration test runs every command example against
+the built tool and compares the result with the card.
 
 ## Quality Checks
 

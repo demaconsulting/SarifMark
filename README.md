@@ -162,22 +162,12 @@ sarifmark --validate
 sarifmark --validate --results validation-results.trx
 ```
 
-### Built-in Help
+**List the built-in help topics, then read one:**
 
-`--help` prints a short usage text that ends with a pointer to the built-in help. The `help` command explains each
-task in a topic with worked examples, for people and for AI agents that have only the installed tool:
-
-| Command | Description |
-| --- | --- |
-| `sarifmark help` | List the help topics |
-| `sarifmark help <topic>` | Print a topic with its examples |
-| `sarifmark help <topic> --example <name>` | Print one example |
-| `sarifmark help --search <words>` | Find the topics that match the words |
-| `sarifmark help --json` | Print any help answer as JSON (add it to the other commands) |
-
-The topics are `getting-started`, `command-line`, `sarif-input`, `reports`, `quality-gates`, `self-validation`, and
-`troubleshooting`. `help` must be the first argument; `--silent` and `--log` do not apply to it. The command exits
-with code 0, or 2 for an unknown topic or a wrong help argument.
+```bash
+sarifmark help
+sarifmark help getting-started
+```
 
 ## Building
 

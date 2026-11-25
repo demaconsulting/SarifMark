@@ -25,8 +25,22 @@ Display the short usage text:
 sarifmark --help
 ```
 
-The usage text ends with `Run 'sarifmark help' for topics and examples.`, which points to the
-built-in help (see *Built-in Help* below).
+The usage text ends with a pointer to the built-in help.
+
+## Built-in Help
+
+The `help` command prints help topics that explain each task with worked examples, for people and
+for AI agents that have only the installed tool. List the topics, then print one with its examples:
+
+```shell
+sarifmark help
+sarifmark help getting-started
+```
+
+Add `--search <words>` to find a topic, `--example <name>` to print one example of a topic, and
+`--json` to get any help answer as JSON. `help` is a command, not an option: it must be the first
+argument, and `--silent` and `--log` do not apply to it. An unknown topic or a wrong help argument
+prints a hint and exits with code 2 (see *Exit Codes*).
 
 ## Command-Line Options
 
@@ -46,45 +60,6 @@ built-in help (see *Built-in Help* below).
 | `--heading <text>` | Custom heading for the report (default: `[ToolName] Analysis`) |
 | `--report-depth <depth>` | Deprecated alias for `--depth` (supported for backwards compatibility) |
 | `--result <file>` | Deprecated alias for `--results` (supported for backwards compatibility) |
-
-The `help` command is not an option; see *Built-in Help* below.
-
-## Built-in Help
-
-The `help` command prints help topics that explain each task with worked examples. It is meant for
-people and for AI agents that have only the installed tool. List the topics:
-
-```shell
-sarifmark help
-```
-
-Print one topic with its examples, or only one example of a topic:
-
-```shell
-sarifmark help quality-gates
-sarifmark help quality-gates --example exclude
-```
-
-The topics are:
-
-- **`getting-started`** - install the tool, check that it works, and write a first report
-- **`command-line`** - every option, and the order in which a run handles them
-- **`sarif-input`** - which SARIF files the tool reads, and which parts of them it uses
-- **`reports`** - the layout of the Markdown report, and its heading and depth
-- **`quality-gates`** - fail a build when findings remain, and leave out findings by file
-- **`self-validation`** - prove that the installed tool works, and save the evidence as test results
-- **`troubleshooting`** - what the exit codes mean, and how to fix the common error messages
-
-Find the topics that match some words, or get any help answer as JSON by adding `--json`:
-
-```shell
-sarifmark help --search exclude
-sarifmark help reports --json
-```
-
-`help` is a command, not an option: it must be the first argument, and `--silent` and `--log` do not
-apply to it. The command exits with code 0 on success, and with code 2 for an unknown topic or a wrong
-help argument, after printing a hint.
 
 ## Common Usage Patterns
 
@@ -169,6 +144,9 @@ Suppress console output and redirect all output to a log file for automated pipe
 ```shell
 sarifmark --sarif analysis.sarif --report report.md --silent --log sarifmark.log
 ```
+
+Argument errors are found before `--silent` and `--log` take effect, so they are always printed and never
+logged.
 
 ## Integration Examples
 
