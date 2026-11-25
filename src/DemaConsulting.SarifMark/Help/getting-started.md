@@ -31,9 +31,9 @@ examples:
     content: '{{tool}} help command-line'
     expect: '--sarif'
 ---
-{{tool}} {{version}} is a .NET tool. It reads the SARIF file that a static analysis
-tool, such as CodeQL, writes and turns its findings into a Markdown report. The examples read `results.sarif`, a
-SARIF file of such a tool.
+{{tool}} {{version}} is a .NET tool.
+It reads the SARIF file that a static analysis tool, such as CodeQL, writes and turns its findings into a Markdown
+report. The examples read `results.sarif`, a SARIF file of such a tool.
 
 1. **Install it.** Install the tool from NuGet, globally or in a local tool manifest:
 

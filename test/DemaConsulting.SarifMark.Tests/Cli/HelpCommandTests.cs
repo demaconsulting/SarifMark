@@ -19,6 +19,7 @@
 // SOFTWARE.
 
 using DemaConsulting.HelpCards.Catalog;
+using DemaConsulting.HelpCards.Integration;
 using DemaConsulting.HelpCards.Testing;
 
 namespace DemaConsulting.SarifMark.Tests;
@@ -32,6 +33,13 @@ public class HelpCommandTests
     ///     The widest line a printed help card may have.
     /// </summary>
     private const int MaxLineWidth = 120;
+
+    /// <summary>
+    ///     The version the width test prints for the <c>{{version}}</c> token: a long prerelease version
+    ///     with a commit hash, fixed so that the measured width does not depend on how the build stamps the
+    ///     tool (a local build prints <c>0.0.0+hash</c>, a CI build <c>0.0.0-run.N+hash</c>).
+    /// </summary>
+    private const string RepresentativeVersion = "10.0.0-preview.123+0123456789abcdef0123456789abcdef01234567";
 
     /// <summary>
     ///     Test that the help verb alone prints the topic index and exits with code 0.
@@ -83,12 +91,24 @@ public class HelpCommandTests
         // Arrange: the cards the tool ships
         var catalog = HelpCatalog.Create(HelpCommand.CreateOptions().GetCatalogConfiguration());
 
-        // Act: print every card, with its links and tokens expanded, and measure its widest line
+        // Act: print every card with the shipped options but a fixed version, with its links and tokens
+        // expanded, and measure its widest line
         var widths = catalog.Cards.Select(card =>
         {
             using var output = new StringWriter();
             using var error = new StringWriter();
-            HelpCommand.Create(output, error).TryRun(["help", card.Id], out var exitCode);
+            var shipped = HelpCommand.CreateOptions(output, error);
+            var cli = HelpCli.Create(new HelpCliOptions
+            {
+                ToolName = shipped.ToolName,
+                Version = RepresentativeVersion,
+                ConfigureCatalog = shipped.ConfigureCatalog,
+                CommandTemplate = shipped.CommandTemplate,
+                DefaultWidth = shipped.DefaultWidth,
+                Output = output,
+                Error = error
+            });
+            cli.TryRun(["help", card.Id], out var exitCode);
             return (card.Id, ExitCode: exitCode, Width: output.ToString().Split('\n').Max(line => line.TrimEnd('\r').Length));
         }).ToList();
 
